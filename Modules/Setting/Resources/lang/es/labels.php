@@ -19,5 +19,9 @@ return [
     'country' => 'País',
     'department' => 'Departamento',
     'province' => 'Provincia',
-    'district' => 'Distrito'
+    'district' => 'Distrito',
+    'establishment' => ' Establecimientos',
+    'phone' => 'Telefono',
+    'msg_success' => 'Datos guardados correctamente.',
+    'msg_update' => 'Datos Actualizados correctamente.'
 ];

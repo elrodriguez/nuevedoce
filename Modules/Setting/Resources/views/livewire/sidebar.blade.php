@@ -53,6 +53,24 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                    <i class="fal fa-home-lg"></i>
+                    <span class="nav-link-text" data-i18n="nav.empresa">{{ __('setting::labels.establishment') }}</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('setting_establishment') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado</span>
+                        </a>
+                    </li>
+                    <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('setting_establishment_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="{{ $path[0] == 'setting' && $path[1] == 'users' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
                     <i class="fal fa-users"></i>
@@ -64,6 +82,7 @@
                             <span class="nav-link-text" data-i18n="nav.listado_de_usuarios">Listado de Usuarios</span>
                         </a>
                     </li>
+                    
                     <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'create' ? 'active' : '' }}">
                         <a href="{{ route('setting_users_create') }}" title="Nuevo Usuarios" data-filter-tags="Nuevo Usuarios">
                             <span class="nav-link-text" data-i18n="nav.nuevo_usuarios">Nuevo Usuarios</span>

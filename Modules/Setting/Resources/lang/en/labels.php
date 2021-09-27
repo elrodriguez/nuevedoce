@@ -19,5 +19,9 @@ return [
     'country' => 'Country',
     'department' => 'Department',
     'province' => 'Province',
-    'district' => 'District'
+    'district' => 'District',
+    'establishment' => ' Establishment',
+    'phone' => 'Phone',
+    'msg_success' => 'Data saved correctly.',
+    'msg_update' => 'Data updated correctly.'
 ];

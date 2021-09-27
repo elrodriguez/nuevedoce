@@ -9,7 +9,20 @@ class SetEstablishment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'address',
+        'phone',
+        'observation',
+        'state',
+        'company_id',
+        'country_id',
+        'department_id',
+        'province_id',
+        'district_id',
+        'web_page',
+        'email',
+        'map'
+    ];
     
     protected static function newFactory()
     {
