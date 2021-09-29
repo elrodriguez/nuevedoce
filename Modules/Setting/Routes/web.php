@@ -27,4 +27,14 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
         Route::get('create', 'SetEstablishmentController@create')->name('setting_establishment_create');
         Route::get('edit/{id}', 'SetEstablishmentController@edit')->name('setting_establishment_edit');
     });
+    Route::group(['prefix' => 'modules'], function() {
+        Route::get('list', 'ModulesController@index')->name('setting_modules');
+        Route::get('create', 'ModulesController@create')->name('setting_modules_create');
+        Route::get('edit/{id}', 'ModulesController@edit')->name('setting_modules_edit');
+        Route::get('permissions/{id}', 'ModulesController@permissions')->name('setting_modules_permissions');
+    });
+    Route::group(['prefix' => 'roles'], function() {
+        Route::get('list', 'RolesController@index')->name('setting_roles');
+        Route::get('permissions/{id}', 'RolesController@permissions')->name('setting_roles_permissions');
+    });
 });

@@ -9,7 +9,13 @@ class SetModule extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'uuid',
+        'logo',
+        'label',
+        'destination_route',
+        'status'
+    ];
     
     protected static function newFactory()
     {

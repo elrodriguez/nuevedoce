@@ -15,7 +15,9 @@ class CreateSetModulePermissionsTable extends Migration
     {
         Schema::create('set_module_permissions', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('module_id');
+            $table->unsignedBigInteger('permission_id');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

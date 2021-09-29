@@ -9,7 +9,11 @@ class SetModulePermission extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'module_id',
+        'permission_id',
+        'status'
+    ];
     
     protected static function newFactory()
     {

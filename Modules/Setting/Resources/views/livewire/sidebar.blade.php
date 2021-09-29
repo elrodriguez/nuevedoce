@@ -71,10 +71,16 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ $path[0] == 'setting' && $path[1] == 'roles' ? 'active' : '' }}">
+                <a href="{{ route('setting_roles') }}" title="roles" data-filter-tags="roles">
+                    <i class="fal fa-user-tie"></i>
+                    <span class="nav-link-text" data-i18n="nav.roles">{{ __('setting::labels.roles') }}</span>
+                </a>
+            </li>
             <li class="{{ $path[0] == 'setting' && $path[1] == 'users' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                <a href="javascript:void(0);" title="usuarios" data-filter-tags="usuarios">
                     <i class="fal fa-users"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">Usuarios</span>
+                    <span class="nav-link-text" data-i18n="nav.usuarios">Usuarios</span>
                 </a>
                 <ul>
                     <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'list' ? 'active' : '' }}">
@@ -86,6 +92,25 @@
                     <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'create' ? 'active' : '' }}">
                         <a href="{{ route('setting_users_create') }}" title="Nuevo Usuarios" data-filter-tags="Nuevo Usuarios">
                             <span class="nav-link-text" data-i18n="nav.nuevo_usuarios">Nuevo Usuarios</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="modulos" data-filter-tags="modulos">
+                    <i class="fal fa-cubes"></i>
+                    <span class="nav-link-text" data-i18n="nav.modulos">{{ __('setting::labels.modules') }}</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('setting_modules') }}" title="Listado de modulos" data-filter-tags="Listado de modulos">
+                            <span class="nav-link-text" data-i18n="nav.listado_de_modulos">Listado de Modulos</span>
+                        </a>
+                    </li>
+                    
+                    <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('setting_modules_create') }}" title="Nuevo Modulo" data-filter-tags="Nuevo Modulo">
+                            <span class="nav-link-text" data-i18n="nav.nuevo_modulo">Nuevo Modulo</span>
                         </a>
                     </li>
                 </ul>
