@@ -55,8 +55,8 @@
                                     <a href="{{ route('setting_users_edit',$user->id) }}" class="dropdown-item">
                                         <i class="fal fa-pencil-alt mr-1"></i>Editar
                                     </a>
-                                    <a href="{{ route('setting_users_permissions',$user->id) }}" class="dropdown-item">
-                                        <i class="fal fa-lock-open-alt mr-1"></i>{{ __('setting::labels.permissions') }}
+                                    <a href="{{ route('setting_users_roles',$user->id) }}" class="dropdown-item">
+                                        <i class="fal fa-lock-open-alt mr-1"></i>{{ __('setting::labels.roles') }}
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $user->id }})" type="button" class="dropdown-item text-danger">

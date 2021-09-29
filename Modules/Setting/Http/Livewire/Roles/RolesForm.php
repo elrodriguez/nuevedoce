@@ -17,6 +17,9 @@ class RolesForm extends Component
     }
 
     public function addRole(){
+        $this->validate([
+            'name' => 'required|unique:roles,name'
+        ]);
         Role::create(['name' => $this->name]);
     }
 

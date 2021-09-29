@@ -43,7 +43,10 @@ return [
     'msg_not_peptra' => 'No se puede eliminar porque tiene registro asociados',
     'roles' => 'Roles',
     'error' => 'Error',
-    'went_wrong' => 'Went wrong',
+    'went_wrong' => 'Salió mal',
     'save' => 'Guardar',
-    'users' => 'Usuarios'
+    'users' => 'Usuarios',
+    'user' => 'Usuario',
+    'about' => 'Acerca de',
+    'the' => 'los'
 ];

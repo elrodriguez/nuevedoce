@@ -31,9 +31,9 @@ class UsersController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function permissions($id)
+    public function roles($id)
     {
-        return view('setting::user.permissions')->with('id',$id);
+        return view('setting::user.roles')->with('id',$id);
     }
 
     /**
