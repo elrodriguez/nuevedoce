@@ -21,6 +21,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
         Route::get('list', 'UsersController@index')->name('setting_users');
         Route::get('create', 'UsersController@create')->name('setting_users_create');
         Route::get('edit/{id}', 'UsersController@edit')->name('setting_users_edit');
+        Route::get('permissions/{id}', 'UsersController@permissions')->name('setting_users_permissions');
     });
     Route::group(['prefix' => 'establishment'], function() {
         Route::get('list', 'SetEstablishmentController@index')->name('setting_establishment');

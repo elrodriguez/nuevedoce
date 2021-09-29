@@ -31,9 +31,9 @@ class UsersController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function permissions($id)
     {
-        return view('setting::show');
+        return view('setting::user.permissions')->with('id',$id);
     }
 
     /**
@@ -45,13 +45,5 @@ class UsersController extends Controller
     {
         return view('setting::user.edit')->with('id',$id);
     }
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
 }

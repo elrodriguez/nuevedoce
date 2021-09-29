@@ -44,5 +44,6 @@ return [
     'roles' => 'Roles',
     'error' => 'Error',
     'went_wrong' => 'Went wrong',
-    'save' => 'Guardar'
+    'save' => 'Guardar',
+    'users' => 'Usuarios'
 ];
