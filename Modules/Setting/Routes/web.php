@@ -15,10 +15,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
     Route::get('dashboard', 'SettingController@index')->name('setting_dashboard');
 
     Route::group(['prefix' => 'company'], function() {
-        Route::middleware(['middleware' => 'role_or_permission:setting_empresas'])->get('data', 'SetCompanyController@index')->name('setting_company');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas'])->get('data', 'SetCompanyController@index')->name('setting_company');
     });
     Route::group(['prefix' => 'users'], function() {
-        Route::get('list', 'UsersController@index')->name('setting_users');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios'])->get('list', 'UsersController@index')->name('setting_users');
         Route::get('create', 'UsersController@create')->name('setting_users_create');
         Route::get('edit/{id}', 'UsersController@edit')->name('setting_users_edit');
         Route::get('roles/{id}', 'UsersController@roles')->name('setting_users_roles');
