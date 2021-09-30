@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreatePeopleTable extends Migration
 {
@@ -45,6 +46,26 @@ class CreatePeopleTable extends Migration
             $table->foreign('person_id','users_person_id_foreign')->references('id')->on('people');
         });
 
+        DB::table('people')->insert([
+            'country_id' => 'PE',
+            'department_id' => '02',
+            'province_id' => '0218',
+            'district_id' => '021801',
+            'identity_document_type_id' => '0',
+            'number' => '00000000',
+            'names' => 'Super',
+            'last_name_father' => 'Admin',
+            'last_name_mother' => null,
+            'full_name' => 'Super Admin',
+            'trade_name' => null,
+            'address' => 'web',
+            'email' => 'admin@gmail.com',
+            'telephone' => null,
+            'sex' => 'M',
+            'birth_date' => '2000-09-30'
+        ]);
+
+        DB::table('users')->where('id', 1)->update(['person_id' => 1]);
     }
 
     /**

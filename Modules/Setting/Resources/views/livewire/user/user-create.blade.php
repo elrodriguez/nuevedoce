@@ -1,6 +1,28 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-body">
+            <div class="alert alert-primary alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fal fa-times"></i>
+                    </span>
+                </button>
+                <div class="d-flex flex-start w-100">
+                    <div class="mr-2 hidden-md-down">
+                        <span class="icon-stack icon-stack-lg">
+                            <i class="base base-6 icon-stack-3x opacity-100 color-primary-500"></i>
+                            <i class="base base-10 icon-stack-2x opacity-100 color-primary-300 fa-flip-vertical"></i>
+                            <i class="fal fa-info icon-stack-1x opacity-100 color-white"></i>
+                        </span>
+                    </div>
+                    <div class="d-flex flex-fill">
+                        <div class="flex-fill">
+                            <span class="h5">{{ __('setting::labels.about') }}</span>
+                            <p>Para el acceso al sistema el nombre de usuario sera su numero de identificacion y su clave 12345678 </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
@@ -118,7 +140,6 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="telephone">@lang('setting::labels.telephone') </label>
                         <input wire:model="telephone" type="text" class="form-control" id="telephone">
@@ -126,7 +147,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="sex">@lang('setting::labels.sex') <span class="text-danger">*</span> </label>
                         <div class="frame-wrap">
                             <div class="custom-control custom-radio custom-control-inline">
@@ -139,6 +160,13 @@
                             </div>
                         </div>
                         @error('sex')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="photo">@lang('setting::labels.photo') </label>
+                        <input wire:model="photo" type="file" id="photo">
+                        @error('photo')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

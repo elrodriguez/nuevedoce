@@ -11,9 +11,12 @@ use App\Models\Person;
 use App\Models\Province;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Livewire\WithFileUploads;
 
 class UserCreate extends Component
 {
+    use WithFileUploads;
+
     public $names;
     public $last_name_father;
     public $last_name_mother;
@@ -33,6 +36,7 @@ class UserCreate extends Component
     public $departments = [];
     public $provinces = [];
     public $districts = [];
+    public $photo;
 
     public function mount(){
         $this->document_types = IdentityDocumentType::where('active',true)->get();
@@ -94,6 +98,11 @@ class UserCreate extends Component
             'username' => $this->number,
             'person_id' => $person->id
         ]);
+
+        if($this->photo){
+            $this->photo->storeAs('person/'.$person->id.'/', $person->id.'.png','public');
+        }
+
         $this->clearForm();
         $this->dispatchBrowserEvent('set-user-save', ['msg' => 'Datos guardados correctamente.']);
     }
@@ -123,5 +132,6 @@ class UserCreate extends Component
         $this->district_id = null;
         $this->identity_document_type_id = null;
         $this->number = null;
+        $this->photo = null;
     }
 }

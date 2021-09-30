@@ -33,88 +33,104 @@
             </a>
         </div>
         <ul id="js-nav-menu" class="nav-menu">
+            @can('configuraciones_dashboard')
             <li class="{{ $path[0] == 'setting' && $path[1] == 'dashboard' ? 'active' : '' }}">
                 <a href="{{ route('setting_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
                     <i class="fal fa-tachometer-alt-fast"></i>
                     <span class="nav-link-text" data-i18n="nav.blankpage">DashBoard</span>
                 </a>
             </li>
+            @endcan
             <li class="nav-title">Navegación</li>
-            <li class="{{ $path[0] == 'setting' && $path[1] == 'company' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-home-lg"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">Empresa</span>
-                </a>
-                <ul>
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'company' && $path[2] == 'data' ? 'active' : '' }}">
-                        <a href="{{ route('setting_company') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Datos Generales</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-home-lg"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">{{ __('setting::labels.establishment') }}</span>
-                </a>
-                <ul>
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('setting_establishment') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado</span>
-                        </a>
-                    </li>
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('setting_establishment_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="{{ $path[0] == 'setting' && $path[1] == 'roles' ? 'active' : '' }}">
-                <a href="{{ route('setting_roles') }}" title="roles" data-filter-tags="roles">
-                    <i class="fal fa-user-tie"></i>
-                    <span class="nav-link-text" data-i18n="nav.roles">{{ __('setting::labels.roles') }}</span>
-                </a>
-            </li>
-            <li class="{{ $path[0] == 'setting' && $path[1] == 'users' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="usuarios" data-filter-tags="usuarios">
-                    <i class="fal fa-users"></i>
-                    <span class="nav-link-text" data-i18n="nav.usuarios">Usuarios</span>
-                </a>
-                <ul>
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('setting_users') }}" title="Listado de Usuarios" data-filter-tags="Listado de Usuarios">
-                            <span class="nav-link-text" data-i18n="nav.listado_de_usuarios">Listado de Usuarios</span>
-                        </a>
-                    </li>
-                    
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('setting_users_create') }}" title="Nuevo Usuarios" data-filter-tags="Nuevo Usuarios">
-                            <span class="nav-link-text" data-i18n="nav.nuevo_usuarios">Nuevo Usuarios</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="modulos" data-filter-tags="modulos">
-                    <i class="fal fa-cubes"></i>
-                    <span class="nav-link-text" data-i18n="nav.modulos">{{ __('setting::labels.modules') }}</span>
-                </a>
-                <ul>
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('setting_modules') }}" title="Listado de modulos" data-filter-tags="Listado de modulos">
-                            <span class="nav-link-text" data-i18n="nav.listado_de_modulos">Listado de Modulos</span>
-                        </a>
-                    </li>
-                    
-                    <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('setting_modules_create') }}" title="Nuevo Modulo" data-filter-tags="Nuevo Modulo">
-                            <span class="nav-link-text" data-i18n="nav.nuevo_modulo">Nuevo Modulo</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            @can('configuraciones_empresas')
+                <li class="{{ $path[0] == 'setting' && $path[1] == 'company' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                        <i class="fal fa-home-lg"></i>
+                        <span class="nav-link-text" data-i18n="nav.empresa">Empresa</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'company' && $path[2] == 'data' ? 'active' : '' }}">
+                            <a href="{{ route('setting_company') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                                <span class="nav-link-text" data-i18n="nav.datos_generales">Datos Generales</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
+            @can('configuraciones_establecimientos')
+                <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                        <i class="fal fa-home-lg"></i>
+                        <span class="nav-link-text" data-i18n="nav.empresa">{{ __('setting::labels.establishment') }}</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('setting_establishment') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                                <span class="nav-link-text" data-i18n="nav.datos_generales">Listado</span>
+                            </a>
+                        </li>
+                        @can('configuraciones_establecimientos_nuevo')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('setting_establishment_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                                <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('configuraciones_roles')
+                <li class="{{ $path[0] == 'setting' && $path[1] == 'roles' ? 'active' : '' }}">
+                    <a href="{{ route('setting_roles') }}" title="roles" data-filter-tags="roles">
+                        <i class="fal fa-user-tie"></i>
+                        <span class="nav-link-text" data-i18n="nav.roles">{{ __('setting::labels.roles') }}</span>
+                    </a>
+                </li>
+            @endcan
+            @can('configuraciones_usuarios')
+                <li class="{{ $path[0] == 'setting' && $path[1] == 'users' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="usuarios" data-filter-tags="usuarios">
+                        <i class="fal fa-users"></i>
+                        <span class="nav-link-text" data-i18n="nav.usuarios">Usuarios</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('setting_users') }}" title="Listado de Usuarios" data-filter-tags="Listado de Usuarios">
+                                <span class="nav-link-text" data-i18n="nav.listado_de_usuarios">Listado de Usuarios</span>
+                            </a>
+                        </li>
+                        @can('configuraciones_usuarios_nuevo')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('setting_users_create') }}" title="Nuevo Usuarios" data-filter-tags="Nuevo Usuarios">
+                                <span class="nav-link-text" data-i18n="nav.nuevo_usuarios">Nuevo Usuarios</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('configuraciones_modulos')
+                <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="modulos" data-filter-tags="modulos">
+                        <i class="fal fa-cubes"></i>
+                        <span class="nav-link-text" data-i18n="nav.modulos">{{ __('setting::labels.modules') }}</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('setting_modules') }}" title="Listado de modulos" data-filter-tags="Listado de modulos">
+                                <span class="nav-link-text" data-i18n="nav.listado_de_modulos">Listado de Modulos</span>
+                            </a>
+                        </li>
+                        @can('configuraciones_modulos_nuevo')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'modules' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('setting_modules_create') }}" title="Nuevo Modulo" data-filter-tags="Nuevo Modulo">
+                                <span class="nav-link-text" data-i18n="nav.nuevo_modulo">Nuevo Modulo</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>
