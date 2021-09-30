@@ -8,7 +8,7 @@ use Modules\Inventory\Entities\InvCategory;
 class CategoryCreate extends Component
 {
     public $description;
-    public $status;
+    public $status = true;
 
     public function mount(){
     }
@@ -24,6 +24,8 @@ class CategoryCreate extends Component
             'description' => 'required',
             'status' => 'required'
         ]);
+
+        dd($this->description);
         
         InvCategory::create([
             'description' => $this->description,

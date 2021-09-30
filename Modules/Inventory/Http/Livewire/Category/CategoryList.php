@@ -31,7 +31,6 @@ class CategoryList extends Component
 
     public function getCategories(){
         return InvCategory::where('description','like','%'.$this->search.'%')
-            ->where('id','<>',1)
             ->paginate($this->show);
     }
 

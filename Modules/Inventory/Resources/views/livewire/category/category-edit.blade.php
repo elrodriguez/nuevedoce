@@ -4,7 +4,7 @@
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="description">@lang('inventory::labels.description') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="description">@lang('setting::labels.description') <span class="text-danger">*</span> </label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -21,7 +21,6 @@
                         @enderror
                     </div>
                 </div>
-               
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">

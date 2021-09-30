@@ -62,7 +62,14 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $category->description }}</td>
-                        <td class="align-middle">{{ $category->status }}</td>
+                        
+                        <td class="align-middle">
+                            @if($category->status)
+                            <span class="badge badge-warning">{{ __('setting::labels.active') }}</span>
+                            @else
+                            <span class="badge badge-danger">{{ __('setting::labels.inactive') }}</span>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
