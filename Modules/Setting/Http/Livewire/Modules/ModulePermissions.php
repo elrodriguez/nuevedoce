@@ -20,7 +20,7 @@ class ModulePermissions extends Component
     public function mount($module_id){
         $this->module_id = $module_id;
         $this->module = SetModule::find($this->module_id);
-        $this->module_name = strtolower(str_replace(' ','_',$this->module->label)).'_';
+        $this->module_name = cctom($this->module->label).'_';
         $permissions = SetModulePermission::join('permissions','permission_id','permissions.id')
             ->select(
                 'set_module_permissions.id',
