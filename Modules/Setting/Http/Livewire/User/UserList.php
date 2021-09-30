@@ -4,6 +4,7 @@ namespace Modules\Setting\Http\Livewire\User;
 
 use App\Models\Person;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -30,8 +31,12 @@ class UserList extends Component
     }
 
     public function getUsers(){
+        $uid = Auth::id();
+
         return User::where('name','like','%'.$this->search.'%')
-            ->where('id','<>',1)
+            ->when($uid != 1, function ($query) {
+                return $query->where('id','<>',1);
+            })
             ->paginate($this->show);
     }
 

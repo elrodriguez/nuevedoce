@@ -26,6 +26,11 @@ return [
     'msg_not_peptra' => 'It cannot be deleted because it has associated records',
     'roles' => 'Roles',
     'error' => 'Error',
-    'went_wrong' => 'Salió mal',
-    'save' => 'Save'
+    'went_wrong' => 'Went wrong',
+    'save' => 'Save',
+    'users' => 'Users',
+    'user' => 'User',
+    'about' => 'About',
+    'the' => 'The'
+
 ];
