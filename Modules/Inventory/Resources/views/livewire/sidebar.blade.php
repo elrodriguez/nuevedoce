@@ -52,8 +52,27 @@
                         </a>
                     </li>
                     <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_category') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                        <a href="{{ route('inventory_category_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
                             <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Categoria</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                    <i class="fal fa-home-lg"></i>
+                    <span class="nav-link-text" data-i18n="nav.empresa">Marca</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_brand') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Marca</span>
+                        </a>
+                    </li>
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_brand_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Marca</span>
                         </a>
                     </li>
                 </ul>

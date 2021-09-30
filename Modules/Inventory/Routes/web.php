@@ -19,5 +19,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::get('create', 'CategoryController@create')->name('inventory_category_create');
         Route::get('edit/{id}', 'CategoryController@edit')->name('inventory_category_edit');
     });
+
+    Route::group(['prefix' => 'brand'], function() {
+        Route::get('list', 'BrandController@index')->name('inventory_brand');
+        Route::get('create', 'BrandController@create')->name('inventory_brand_create');
+        Route::get('edit/{id}', 'BrandController@edit')->name('inventory_brand_edit');
+    });
     
 });
