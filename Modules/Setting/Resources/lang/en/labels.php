@@ -3,25 +3,8 @@
 return [
 
     'name' => 'Name',
-    'names' => 'Names',
-    'name_short' => 'Short name',
-    'tradename' => 'Tradename',
-    'username' => 'Username',
-    'surname_father' => 'Last name',
-    'surname_mother' => 'Mothers last name',
-    'address' => 'Address',
-    'email' => 'Email',
-    'telephone' => 'Telephone',
-    'sex' => 'Sex',
-    'date_of_birth' => 'Date of birth',
-    'identity_document_type' =>'Identity document type',
-    'number' => 'Number',
-    'country' => 'Country',
-    'department' => 'Department',
-    'province' => 'Province',
-    'district' => 'District',
-    'establishment' => ' Establishment',
-    'phone' => 'Phone',
+    'description' = 'Description',
+    'status' = 'Estado',
     'msg_success' => 'Data saved correctly.',
     'msg_update' => 'Data updated correctly.',
     'msg_delete' => 'Data deleted successfully.',
@@ -43,6 +26,11 @@ return [
     'msg_not_peptra' => 'It cannot be deleted because it has associated records',
     'roles' => 'Roles',
     'error' => 'Error',
-    'went_wrong' => 'Salió mal',
-    'save' => 'Save'
+    'went_wrong' => 'Went wrong',
+    'save' => 'Save',
+    'users' => 'Users',
+    'user' => 'User',
+    'about' => 'About',
+    'the' => 'The'
+
 ];
