@@ -11,7 +11,7 @@
                         <label class="form-label" for="names">@lang('personal::labels.lbl_names') <span class="text-danger">*</span> </label>
                         <input wire:model="names" type="text" class="form-control" id="names" required="">
                         @error('names')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
@@ -195,7 +195,7 @@
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="cv">@lang('personal::labels.lbl_cv') <span class="text-danger">*</span> </label>
-                        <div class="custom-file">
+                        <div class="custom-file" wire:ignore>
                             <input wire:model="cv" type="file" class="custom-file-input" id="cv">
                             <label class="custom-file-label" for="customFile">@lang('personal::labels.lbl_choose_file')</label>
                         </div>

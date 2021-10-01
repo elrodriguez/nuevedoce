@@ -30,14 +30,13 @@ class SeedModulePermissionsTableSeeder extends Seeder
 
         array_push($permissions,Permission::create(['name' => 'personal_dashboard','guard_name' => 'sanctum']));
 
+        $role = Role::find(1);
         foreach($permissions as $permission){
             SetModulePermission::create([
                 'module_id' => $module->id,
                 'permission_id' => $permission->id
             ]);
+            $role->givePermissionTo($permission->name);
         }
-        
-        $role = Role::find(1);
-        $role->syncPermissions($permissions);
     }
 }
