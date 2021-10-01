@@ -13,6 +13,11 @@ return [
     'parts' => 'Parts',
     'assent' => 'Assent',
     'assents' => 'Assents',
+    'success' => 'Success',
+    'excellent' => 'Excellent',
+    'error' => 'Error',
+    'went_wrong' => 'Went wrong',
+    'msg_not_peptra' => 'It cannot be deleted because it has associated records',
     'msg_success' => 'Data saved correctly.',
     'msg_update' => 'Data updated correctly.'
 ];
