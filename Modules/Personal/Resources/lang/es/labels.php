@@ -53,7 +53,7 @@ return [
     'btn_yes'           => 'Si',
     'btn_not'           => 'No',
     'btn_save'          => 'Guardar',
-
+    'btn_update'        => 'Actualizar',
 
     'msg_0001'          => '¿Desea eliminar estos datos?',
     'msg_0002'          => '¡Esta acción no se puede deshacer!',
@@ -63,6 +63,4 @@ return [
     'msg_search_ok_a'   => 'Ya existe una persona registrada con ese número de documento. ¿Desea registrarlo como empleado?',
     'msg_search_ok_b'   => 'Ya existe un empleado registrado con ese número de documento. ¿Desea modificar sus datos?',
     'msg_search_not'    => 'No existe un registro con ese número de documento. ¿Desea continuar el registro de uno nuevo?'
-
-    //'lbl_list'          => 'Disponibles para el usuario'
 ];

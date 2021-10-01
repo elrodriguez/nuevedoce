@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('personal')->group(funct
 
     Route::group(['prefix' => 'employees'], function() {
         Route::get('list', 'EmployeeController@index')->name('personal_employees_index');
-        Route::get('create', 'EmployeeController@create')->name('personal_employees_create');
+        Route::get('create/{id}', 'EmployeeController@create')->name('personal_employees_create');
         Route::get('edit/{id}', 'EmployeeController@edit')->name('personal_employees_edit');
         Route::get('search', 'EmployeeController@search')->name('personal_employees_search');
     });

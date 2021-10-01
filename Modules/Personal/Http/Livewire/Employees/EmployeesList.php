@@ -34,6 +34,7 @@ class EmployeesList extends Component
             ->select(
                 'per_employees.id',
                 'people.full_name',
+                'people.number',
                 'per_employees.admission_date',
                 'per_occupations.name AS name_occupation',
                 'set_companies.name AS name_company',
@@ -57,7 +58,7 @@ class EmployeesList extends Component
         $employee = PerEmployee::find($id);
         $person_id = $employee->person_id;
         $employee->delete();
-        Person::find($person_id)->delete();
+        #Person::find($person_id)->delete();
 
         $this->dispatchBrowserEvent('per-employees-delete', ['msg' => Lang::get('personal::labels.msg_delete')]);
     }

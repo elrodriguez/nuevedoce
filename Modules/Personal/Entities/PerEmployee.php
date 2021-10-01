@@ -11,9 +11,12 @@ class PerEmployee extends Model
 
     protected $fillable = [
         'admission_date',
-        'employee_type_id',
+        'person_id',
         'company_id',
-        'activitie_id',
+        'occupation_id',
+        'employee_type_id',
+        'cv',
+        'photo',
         'state'
     ];
 

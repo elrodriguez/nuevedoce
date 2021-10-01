@@ -101,7 +101,7 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="number">@lang('personal::labels.lbl_number') <span class="text-danger">*</span> </label>
-                        <input wire:model="number" type="text" class="form-control" id="number" required="">
+                        <input wire:model="number" type="text" class="form-control" id="number" required="" {{ $this->person_id ? 'readonly' : '' }}>
                         @error('number')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
@@ -196,7 +196,7 @@
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="cv">@lang('personal::labels.lbl_cv') <span class="text-danger">*</span> </label>
                         <div class="custom-file">
-                            <input wire:model="" type="file" class="custom-file-input" id="customFile">
+                            <input wire:model="cv" type="file" class="custom-file-input" id="cv">
                             <label class="custom-file-label" for="customFile">@lang('personal::labels.lbl_choose_file')</label>
                         </div>
                         @error('cv')
@@ -212,11 +212,11 @@
         </div>
     </div>
     <script type="text/javascript">
-        document.addEventListener('set-user-save', event => {
+        document.addEventListener('per-employees-type-save', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",
-                message: "<span><strong>Excelente... </strong>"+event.detail.msg+"</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('personal::labels.lbl_success')}}!</span>",
+                message: "<span><strong>{{__('personal::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false

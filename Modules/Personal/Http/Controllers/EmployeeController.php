@@ -21,9 +21,9 @@ class EmployeeController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function create($id)
     {
-        return view('personal::employees.create');
+        return view('personal::employees.create')->with(['id' => $id]);
     }
 
     /**
