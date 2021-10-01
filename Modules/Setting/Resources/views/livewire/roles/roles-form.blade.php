@@ -37,13 +37,17 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                    @can('configuraciones_roles_permisos')
                                     <a href="{{ route('setting_roles_permissions',$role->id) }}" class="dropdown-item">
                                         <i class="fal fa-lock-open-alt mr-1"></i>{{ __('setting::labels.permissions') }}
                                     </a>
+                                    @endcan
+                                    @can('configuraciones_roles_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $role->id }})" type="button" class="dropdown-item text-danger">
                                         <i class="fal fa-trash-alt mr-1"></i>{{ __('setting::labels.delete') }}
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                         </td>

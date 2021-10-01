@@ -16,6 +16,8 @@ class SettingDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call([
+            SeedModulePermissionsTableSeeder::class
+        ]);
     }
 }

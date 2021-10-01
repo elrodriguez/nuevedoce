@@ -48,5 +48,6 @@ return [
     'users' => 'Usuarios',
     'user' => 'Usuario',
     'about' => 'Acerca de',
-    'the' => 'los'
+    'the' => 'los',
+    'photo' => 'Foto'
 ];

@@ -43,9 +43,6 @@
         <div>
             <a href="#" data-toggle="dropdown" title="drlantern@gotbootstrap.com" class="header-icon d-flex align-items-center justify-content-center ml-2">
                 <img src="{{ url('themes/smart-admin/img/demo/avatars/avatar-admin.png') }}" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
-                <!-- you can also add username next to the avatar with the codes below:
-                <span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
-                <i class="ni ni-chevron-down hidden-xs-down"></i> -->
             </a>
             <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
                 <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">

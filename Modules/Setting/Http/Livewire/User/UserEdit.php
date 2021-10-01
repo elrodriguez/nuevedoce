@@ -11,9 +11,12 @@ use App\Models\Person;
 use App\Models\Province;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Livewire\WithFileUploads;
 
 class UserEdit extends Component
 {
+    use WithFileUploads;
+
     public $user;
     public $person;
     public $person_id;
@@ -36,6 +39,8 @@ class UserEdit extends Component
     public $departments = [];
     public $provinces = [];
     public $districts = [];
+    public $photo;
+    public $photo_view;
 
     public function mount($user_id){
         $this->document_types = IdentityDocumentType::where('active',true)->get();
@@ -44,27 +49,32 @@ class UserEdit extends Component
 
         $this->user = User::find($user_id);
         $this->person = Person::find($this->user->person_id);
+        if($this->person){
+            $ddate = null;
+            if($this->person->birth_date){
+                list($Y,$m,$d) = explode('-',$this->person->birth_date);
+                $ddate = $d.'/'.$m.'/'. $Y;
+            }
 
-        $ddate = null;
-        if($this->person->birth_date){
-            list($Y,$m,$d) = explode('-',$this->person->birth_date);
-            $ddate = $d.'/'.$m.'/'. $Y;
+            $this->names = $this->person->names;
+            $this->last_name_father = $this->person->last_name_father;
+            $this->last_name_mother= $this->person->last_name_mother;
+            $this->address = $this->person->address;
+            $this->telephone = $this->person->telephone;
+            $this->email = $this->person->email;
+            $this->sex = $this->person->sex;
+            $this->birth_date = $ddate;
+            $this->country_id = $this->person->country_id;
+            $this->department_id = $this->person->department_id;
+            $this->province_id = $this->person->province_id;
+            $this->district_id = $this->person->district_id;
+            $this->identity_document_type_id = $this->person->identity_document_type_id;
+            $this->number = $this->person->number;
         }
-
-        $this->names = $this->person->names;
-        $this->last_name_father = $this->person->last_name_father;
-        $this->last_name_mother= $this->person->last_name_mother;
-        $this->address = $this->person->address;
-        $this->telephone = $this->person->telephone;
-        $this->email = $this->person->email;
-        $this->sex = $this->person->sex;
-        $this->birth_date = $ddate;
-        $this->country_id = $this->person->country_id;
-        $this->department_id = $this->person->department_id;
-        $this->province_id = $this->person->province_id;
-        $this->district_id = $this->person->district_id;
-        $this->identity_document_type_id = $this->person->identity_document_type_id;
-        $this->number = $this->person->number;
+        
+        if(file_exists(public_path('storage/person/'.$this->person->id.'/'.$this->person->id.'.png'))){
+            $this->photo_view = url('storage/person/'.$this->person->id.'/'.$this->person->id.'.png');
+        }
 
         $this->getProvinves();
         $this->getPDistricts();
@@ -98,6 +108,7 @@ class UserEdit extends Component
             list($d,$m,$y) = explode('/',$this->birth_date);
             $ddate = $y.'-'.$m.'-'. $d;
         }
+
         $this->person->update([
             'country_id' => $this->country_id,
             'department_id' => $this->department_id,
@@ -116,14 +127,20 @@ class UserEdit extends Component
             'sex' => $this->sex,
             'birth_date' => $ddate
         ]);
-
-        $this->user->update([
-            'name' => $this->names.' '.$this->last_name_father,
-            'email' => $this->email,
-            'password' => Hash::make('12345678'),
-            'username' => $this->number
-        ]);
         
+        if($this->user->id != 1){
+            $this->user->update([
+                'name' => $this->names.' '.$this->last_name_father,
+                'email' => $this->email,
+                'password' => Hash::make('12345678'),
+                'username' => $this->number
+            ]);
+        }
+        
+        if($this->photo){
+            $this->photo->storeAs('person/'.$this->person->id.'/', $this->person->id.'.png','public');
+        }
+
         $this->dispatchBrowserEvent('set-user-save', ['msg' => 'Datos Actualizados correctamente.']);
     }
 
