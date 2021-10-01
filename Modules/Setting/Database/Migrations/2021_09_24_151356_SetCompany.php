@@ -25,6 +25,7 @@ class SetCompany extends Migration
             $table->string('phone_mobile');
             $table->string('representative_name');
             $table->string('representative_number');
+            $table->boolean('main')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

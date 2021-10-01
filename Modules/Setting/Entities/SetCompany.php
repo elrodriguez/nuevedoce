@@ -19,7 +19,8 @@ class SetCompany extends Model
         'phone',
         'phone_mobile',
         'representative_name',
-        'representative_number'
+        'representative_number',
+        'main'
     ];
     
     protected static function newFactory()

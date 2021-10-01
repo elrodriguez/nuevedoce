@@ -4,13 +4,19 @@ namespace Modules\Setting\Http\Livewire\Establishment;
 
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
+use Modules\Setting\Entities\SetCompany;
 use Modules\Setting\Entities\SetEstablishment;
-
 class EstablishmentCreate extends Component
 {
+    public $companies;
+    public $company_id;
     public $address;
     public $phone;
     public $email;
+
+    public function mount(){
+        $this->companies = SetCompany::all();
+    }
 
     public function render()
     {

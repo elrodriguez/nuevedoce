@@ -8,7 +8,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-users'></i>{{ __('setting::labels.establishment') }} <sup class='badge badge-primary fw-500'>New</sup>
+        <i class='subheader-icon fal fa-store-alt'></i>{{ __('setting::labels.establishment') }} <sup class='badge badge-primary fw-500'>New</sup>
         <small>Disponibles para el usuario</small>
     </h1>
     <div class="subheader-block">

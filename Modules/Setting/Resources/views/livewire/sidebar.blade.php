@@ -45,22 +45,29 @@
             @can('configuraciones_empresas')
                 <li class="{{ $path[0] == 'setting' && $path[1] == 'company' ? 'active open' : '' }}">
                     <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                        <i class="fal fa-home-lg"></i>
+                        <i class="fal fa-city"></i>
                         <span class="nav-link-text" data-i18n="nav.empresa">Empresa</span>
                     </a>
                     <ul>
-                        <li class="{{ $path[0] == 'setting' && $path[1] == 'company' && $path[2] == 'data' ? 'active' : '' }}">
-                            <a href="{{ route('setting_company') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                                <span class="nav-link-text" data-i18n="nav.datos_generales">Datos Generales</span>
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'company' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('setting_company') }}" title="empresas" data-filter-tags="Datos Generales">
+                                <span class="nav-link-text" data-i18n="nav.datos_generales">{{ __('setting::labels.companies_list') }}</span>
                             </a>
                         </li>
+                        @can('configuraciones_empresas_nuevo')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'company' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('setting_company_create') }}" title="empresas" data-filter-tags="nueva empresa">
+                                <span class="nav-link-text" data-i18n="nav.nueva_empresa">{{ __('setting::labels.companies_create') }}</span>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan
             @can('configuraciones_establecimientos')
                 <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' ? 'active open' : '' }}">
                     <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                        <i class="fal fa-home-lg"></i>
+                        <i class="fal fa-store-alt"></i>
                         <span class="nav-link-text" data-i18n="nav.empresa">{{ __('setting::labels.establishment') }}</span>
                     </a>
                     <ul>
