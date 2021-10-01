@@ -35,9 +35,14 @@ class CategoryList extends Component
     }
 
     public function deleteCategory($id){
-        InvCategory::find($id)->delete();
-        
-        $this->dispatchBrowserEvent('set-user-delete', ['msg' => 'Datos eliminados correctamente.']);
+        try {
+            InvCategory::find($id)->delete();
+            $res = 'success';
+        } catch (\Illuminate\Database\QueryException $e) {
+            $res = 'error';
+        }
+        $this->dispatchBrowserEvent('set-category-delete', ['res' => $res]);
+
     }
 
 }

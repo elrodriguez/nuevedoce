@@ -34,7 +34,12 @@ class BrandList extends Component
     }
 
     public function deleteBrands($id){
-        InvBrand::find($id)->delete();
-        $this->dispatchBrowserEvent('set-user-delete', ['msg' => 'Datos eliminados correctamente.']);
+        try {
+            InvBrand::find($id)->delete();
+            $res = 'success';
+        } catch (\Illuminate\Database\QueryException $e) {
+            $res = 'error';
+        }
+        $this->dispatchBrowserEvent('set-brand-delete', ['res' => $res]);
     }
 }

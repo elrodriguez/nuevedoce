@@ -3,19 +3,17 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
-use Modules\Setting\Entities\SetCompany;
 
-class CompanyLogo extends Component
+class info-card-user extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public $company;
     public function __construct()
     {
-        $this->company = SetCompany::where('main',true)->first();
+        //
     }
 
     /**
@@ -25,6 +23,6 @@ class CompanyLogo extends Component
      */
     public function render()
     {
-        return view('components.company-logo');
+        return view('components.info-card-user');
     }
 }

@@ -111,16 +111,31 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
+
         document.addEventListener('set-brand-delete', event => {
-            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
-            let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",
-                message: "<span><strong>Excelente... </strong>"+event.detail.msg+"</span>",
-                centerVertical: true,
-                className: "modal-alert",
-                closeButton: false
-            });
-            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+            let res = event.detail.res;
+
+            if(res == 'success'){
+                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
+                let box = bootbox.alert({
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ ('setting::labels.success') }}!</span>",
+                    message: "<span><strong>{{ ('setting::labels.excellent') }}... </strong>{{ ('setting::labels.msg_delete') }}</span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+            }else{
+                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+                let box = bootbox.alert({
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ ('setting::labels.error') }}!</span>",
+                    message: "<span><strong>{{ ('setting::labels.went_wrong') }}... </strong>{{ ('setting::labels.msg_not_peptra') }}</span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+            }
         });
     </script>
 </div>

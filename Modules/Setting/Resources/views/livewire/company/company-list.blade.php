@@ -38,8 +38,11 @@
                         <th class="text-center">#</th>
                         <th class="text-center">Acciones</th>
                         <th>Nombre</th>
-                        <th>Usuario</th>
-                        <th>Email</th>
+                        <th>RUC</th>
+                        <th>{{ __('setting::labels.tradename') }}</th>
+                        <th>{{ __('setting::labels.telephone') }}</th>
+                        <th>{{ __('setting::labels.email') }}</th>
+                        <th>Representante</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -66,9 +69,12 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $company->address }}</td>
+                        <td class="align-middle">{{ $company->name }}</td>
+                        <td class="align-middle">{{ $company->number }}</td>
+                        <td class="align-middle">{{ $company->tradename }}</td>
                         <td class="align-middle">{{ $company->phone }}</td>
                         <td class="align-middle">{{ $company->email }}</td>
+                        <td class="align-middle">{{ $company->representative_name }}</td>
                     </tr>
                     @endforeach
                 </tbody>
