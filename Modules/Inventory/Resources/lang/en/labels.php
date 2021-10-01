@@ -4,6 +4,8 @@ return [
 
     'name' => 'Name',
     'description' => 'Description',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
     'status' => 'Status',
     'weight' => 'Weight',
     'width' => 'Width',
@@ -19,5 +21,6 @@ return [
     'went_wrong' => 'Went wrong',
     'msg_not_peptra' => 'It cannot be deleted because it has associated records',
     'msg_success' => 'Data saved correctly.',
-    'msg_update' => 'Data updated correctly.'
+    'msg_update' => 'Data updated correctly.',
+    'msg_delete' => 'Data deleted successfully.'
 ];

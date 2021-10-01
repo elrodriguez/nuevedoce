@@ -4,6 +4,8 @@ return [
 
     'name' => 'Nombre',
     'description' => 'Descricion',
+    'active' => 'Activo',
+    'inactive' => 'Inactivo',
     'status' => 'Estado',
     'weight' => 'Peso',
     'width' => 'Ancho',
@@ -19,5 +21,6 @@ return [
     'went_wrong' => 'Salió mal',
     'msg_not_peptra' => 'No se puede eliminar porque tiene registro asociados.',
     'msg_success' => 'Datos guardados correctamente.',
-    'msg_update' => 'Datos Actualizados correctamente.'
+    'msg_update' => 'Datos Actualizados correctamente.',
+    'msg_delete' => 'Datos eliminados correctamente.'
 ];

@@ -29,6 +29,20 @@ class SeedModulePermissionsTableSeeder extends Seeder
         $permissions = [];
 
         array_push($permissions,Permission::create(['name' => 'inventario_dashboard','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_categorias','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_categorias_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_categorias_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_categorias_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_marcas','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_marcas_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_marcas_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_marcas_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_activos','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_activos_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_activos_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_activos_eliminar','guard_name' => 'sanctum']));
+        
+
         $role = Role::find(1);
         foreach($permissions as $permission){
             SetModulePermission::create([
