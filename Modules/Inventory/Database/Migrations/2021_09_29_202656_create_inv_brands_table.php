@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvCategoriesTable extends Migration
+class CreateInvBrandsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInvCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('inv_categories', function (Blueprint $table) {
+        Schema::create('inv_brands', function (Blueprint $table) {
             $table->id();
             $table->string('description');
             $table->boolean('status')->default(true);
@@ -29,6 +29,6 @@ class CreateInvCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inv_categories');
+        Schema::dropIfExists('inv_brands');
     }
 }
