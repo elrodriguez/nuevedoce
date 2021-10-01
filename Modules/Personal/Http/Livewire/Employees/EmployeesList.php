@@ -22,16 +22,26 @@ class EmployeesList extends Component
 
     public function render()
     {
-        dd($this->getEmployees());
         return view('personal::livewire.employees.employees-list', ['employees' => $this->getEmployees()]);
     }
 
     public function getEmployees(){
         return PerEmployee::where('admission_date','like','%'.$this->search.'%')
             ->join('people', 'person_id', 'people.id')
-            ->join('per_activities', 'activitie_id', 'per_activities.id')
-            ->select('people.full_name')
-            ->paginate($this->show);
+            ->join('per_occupations', 'occupation_id', 'per_occupations.id')
+            ->join('set_companies', 'company_id', 'set_companies.id')
+            ->join('per_employee_types', 'employee_type_id', 'per_employee_types.id')
+            ->select(
+                'per_employees.id',
+                'people.full_name',
+                'per_employees.admission_date',
+                'per_occupations.name AS name_occupation',
+                'set_companies.name AS name_company',
+                'per_employee_types.name AS name_employee_type',
+                'per_employees.state',
+                'per_employees.cv',
+                'per_employees.photo'
+            )->paginate($this->show);
     }
 
     public function people(){

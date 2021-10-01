@@ -24,10 +24,10 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="activitiesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('personal::labels.lbl_type_here')}}">
+                <input wire:keydown.enter="employeesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('personal::labels.lbl_type_here')}}">
                 <div class="input-group-append">
-                    <button wire:click="activitiesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
-                    <a href="{{ route('personal_employee-type_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('personal::labels.btn_new')</a>
+                    <button wire:click="employeesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
+                    <a href="{{ route('personal_employees_search') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('personal::labels.btn_new')</a>
                 </div>
             </div>
         </div>
@@ -40,7 +40,8 @@
                     <th>@lang('personal::labels.lbl_name')</th>
                     <th>@lang('personal::labels.lbl_admission_date')</th>
                     <th>@lang('personal::labels.lbl_employee_type')</th>
-                    <th>@lang('personal::labels.lbl_activities')</th>
+                    <th>@lang('personal::labels.lbl_occupation')</th>
+                    <th>@lang('personal::labels.lbl_company')</th>
                     <th class="text-center">{{ __('setting::labels.state') }}</th>
                 </tr>
                 </thead>
@@ -54,7 +55,7 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    <a href="{{ route('personal_employee-type_edit',$employee->id) }}" class="dropdown-item">
+                                    <a href="{{ route('personal_employees_edit',$employee->id) }}" class="dropdown-item">
                                         <i class="fal fa-pencil-alt mr-1"></i>@lang('personal::labels.btn_edit')
                                     </a>
                                     <div class="dropdown-divider"></div>
@@ -64,10 +65,11 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $employee->people_id }}</td>
-                        <td class="align-middle">{{ $employee->admission_date }}</td>
-                        <td class="align-middle">{{ $employee->employee_type_id }}</td>
-                        <td class="align-middle">{{ $employee->activitie_id }}</td>
+                        <td class="align-middle">{{ $employee->full_name }}</td>
+                        <td class="align-middle">{{ date('d-m-Y', strtotime($employee->admission_date)) }}</td>
+                        <td class="align-middle">{{ $employee->name_employee_type }}</td>
+                        <td class="align-middle">{{ $employee->name_occupation }}</td>
+                        <td class="align-middle">{{ $employee->name_company }}</td>
                         <td class="text-center align-middle">
                             @if($employee->state)
                                 <span class="badge badge-success">{{ __('personal::labels.lbl_active') }}</span>
@@ -89,7 +91,7 @@
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
                 title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('personal::labels.msg_0001')}}",
-                message: "<span><strong>Advertencia: </strong> {{__('personal::labels.msg_0002')}}</span>",
+                message: "<span><strong>{{__('personal::labels.lbl_warning')}}: </strong> {{__('personal::labels.msg_0002')}}</span>",
                 centerVertical: true,
                 swapButtonOrder: true,
                 buttons:
