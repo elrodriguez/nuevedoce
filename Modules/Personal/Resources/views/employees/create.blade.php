@@ -19,7 +19,7 @@
     </div>
 @endsection
 @section('content')
-    @livewire('personal::employees.employees-create')
+    @livewire('personal::employees.employees-create', ['id' => $id])
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>

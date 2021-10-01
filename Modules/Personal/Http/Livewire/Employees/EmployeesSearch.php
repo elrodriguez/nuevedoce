@@ -58,9 +58,9 @@ class EmployeesSearch extends Component
 
     public function searchPerson(){
         $this->validate([
-            'number_search' => 'required|numeric'
+            'number_search' => 'required|numeric|min:3'
         ]);
-        $this->person_search = Person::where('number','like','%'.$this->number_search.'%')->get();
+        $this->person_search = Person::where('number',$this->number_search)->get();
         $encuentra = '';
         $encuentra_e = '';
         foreach ($this->person_search as $key => $personSearch){

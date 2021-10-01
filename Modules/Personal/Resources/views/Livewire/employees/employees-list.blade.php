@@ -38,6 +38,7 @@
                     <th class="text-center">#</th>
                     <th class="text-center">@lang('personal::labels.lbl_actions')</th>
                     <th>@lang('personal::labels.lbl_name')</th>
+                    <th>@lang('personal::labels.lbl_number')</th>
                     <th>@lang('personal::labels.lbl_admission_date')</th>
                     <th>@lang('personal::labels.lbl_employee_type')</th>
                     <th>@lang('personal::labels.lbl_occupation')</th>
@@ -66,6 +67,7 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $employee->full_name }}</td>
+                        <td class="align-middle text-center">{{ $employee->number }}</td>
                         <td class="align-middle">{{ date('d-m-Y', strtotime($employee->admission_date)) }}</td>
                         <td class="align-middle">{{ $employee->name_employee_type }}</td>
                         <td class="align-middle">{{ $employee->name_occupation }}</td>
