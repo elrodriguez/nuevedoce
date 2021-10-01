@@ -15,7 +15,7 @@ class CompanyName extends Component
     public $company;
     public function __construct()
     {
-        $this->company = SetCompany::first();
+        $this->company = SetCompany::where('main',true)->first();
     }
 
     /**

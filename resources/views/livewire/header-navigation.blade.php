@@ -42,17 +42,25 @@
         <!-- app user menu -->
         <div>
             <a href="#" data-toggle="dropdown" title="drlantern@gotbootstrap.com" class="header-icon d-flex align-items-center justify-content-center ml-2">
-                <img src="{{ url('themes/smart-admin/img/demo/avatars/avatar-admin.png') }}" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
+            @if(file_exists(public_path('storage/person/'.auth()->user()->person_id.'/'.auth()->user()->person_id.'.png')))
+            <img src="{{ asset('storage/person/'.auth()->user()->person_id.'/'.auth()->user()->person_id.'.png') }}" style="width:32px;height: 32px;" class="profile-image rounded-circle" alt="{{ auth()->user()->name }}">
+            @else
+            <img src="{{ ui_avatars_url(auth()->user()->name,32,'none') }}" style="width:32px;height: 32px;" class="profile-image rounded-circle" alt="{{ auth()->user()->name }}">
+            @endif
             </a>
             <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
                 <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
                     <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
                         <span class="mr-2">
-                            <img src="{{ url('themes/smart-admin/img/demo/avatars/avatar-admin.png') }}" class="rounded-circle profile-image" alt="Dr. Codex Lantern">
+                            @if(file_exists(public_path('storage/person/'.auth()->user()->person_id.'/'.auth()->user()->person_id.'.png')))
+                            <img src="{{ asset('storage/person/'.auth()->user()->person_id.'/'.auth()->user()->person_id.'.png') }}" style="width:50px;height: 50px;" class="rounded-circle profile-image" alt="{{ auth()->user()->name }}">
+                            @else
+                            <img src="{{ ui_avatars_url(auth()->user()->name,50,'none') }}" style="width:50px;height: 50px;" class="rounded-circle profile-image" alt="{{ auth()->user()->name }}">
+                            @endif
                         </span>
                         <div class="info-card-text">
-                            <div class="fs-lg text-truncate text-truncate-lg">Dr. Codex Lantern</div>
-                            <span class="text-truncate text-truncate-md opacity-80">drlantern@gotbootstrap.com</span>
+                            <div class="fs-lg text-truncate text-truncate-lg">{{ auth()->user()->name }}</div>
+                            <span class="text-truncate text-truncate-md opacity-80">{{ auth()->user()->email }}</span>
                         </div>
                     </div>
                 </div>
