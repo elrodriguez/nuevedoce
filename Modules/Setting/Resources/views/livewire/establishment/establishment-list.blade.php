@@ -52,13 +52,17 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                    @can('configuraciones_establecimientos_editar')
                                     <a href="{{ route('setting_establishment_edit',$establishment->id) }}" class="dropdown-item">
                                         <i class="fal fa-pencil-alt mr-1"></i>Editar
                                     </a>
+                                    @endcan
+                                    @can('configuraciones_establecimientos_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $establishment->id }})" type="button" class="dropdown-item text-danger">
                                         <i class="fal fa-trash-alt mr-1"></i>Eliminar
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                         </td>

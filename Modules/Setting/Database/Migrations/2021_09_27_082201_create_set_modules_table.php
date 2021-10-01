@@ -25,27 +25,6 @@ class CreateSetModulesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::table('set_modules')->insert([
-            [
-                'uuid'=> Str::uuid(),
-                'logo'=>'fal fa-cogs',
-                'label'=>'Configuraciones',
-                'destination_route' => 'setting_dashboard'
-            ],
-            [
-                'uuid'=> Str::uuid(),
-                'logo'=>'fal fa-restroom',
-                'label'=>'Personal',
-                'destination_route' => null
-            ],
-            [
-                'uuid'=> Str::uuid(),
-                'logo'=>'fal fa-cubes',
-                'label'=>'Inventario',
-                'destination_route' => null
-            ]
-        ]);
     }
 
     /**

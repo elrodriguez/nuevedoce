@@ -31,6 +31,6 @@ return [
     'users' => 'Users',
     'user' => 'User',
     'about' => 'About',
-    'the' => 'The'
-
+    'the' => 'The',
+    'photo' => 'Photo'
 ];

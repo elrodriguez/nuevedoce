@@ -19,23 +19,23 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
     });
     Route::group(['prefix' => 'users'], function() {
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios'])->get('list', 'UsersController@index')->name('setting_users');
-        Route::get('create', 'UsersController@create')->name('setting_users_create');
-        Route::get('edit/{id}', 'UsersController@edit')->name('setting_users_edit');
-        Route::get('roles/{id}', 'UsersController@roles')->name('setting_users_roles');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_nuevo'])->get('create', 'UsersController@create')->name('setting_users_create');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_editar'])->get('edit/{id}', 'UsersController@edit')->name('setting_users_edit');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_roles'])->get('roles/{id}', 'UsersController@roles')->name('setting_users_roles');
     });
     Route::group(['prefix' => 'establishment'], function() {
-        Route::get('list', 'SetEstablishmentController@index')->name('setting_establishment');
-        Route::get('create', 'SetEstablishmentController@create')->name('setting_establishment_create');
-        Route::get('edit/{id}', 'SetEstablishmentController@edit')->name('setting_establishment_edit');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_establecimientos'])->get('list', 'SetEstablishmentController@index')->name('setting_establishment');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_establecimientos_nuevo'])->get('create', 'SetEstablishmentController@create')->name('setting_establishment_create');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_establecimientos_editar'])->get('edit/{id}', 'SetEstablishmentController@edit')->name('setting_establishment_edit');
     });
     Route::group(['prefix' => 'modules'], function() {
-        Route::get('list', 'ModulesController@index')->name('setting_modules');
-        Route::get('create', 'ModulesController@create')->name('setting_modules_create');
-        Route::get('edit/{id}', 'ModulesController@edit')->name('setting_modules_edit');
-        Route::get('permissions/{id}', 'ModulesController@permissions')->name('setting_modules_permissions');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_modulos'])->get('list', 'ModulesController@index')->name('setting_modules');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_modulos_nuevo'])->get('create', 'ModulesController@create')->name('setting_modules_create');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_modulos_editar'])->get('edit/{id}', 'ModulesController@edit')->name('setting_modules_edit');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_modulos_eliminar'])->get('permissions/{id}', 'ModulesController@permissions')->name('setting_modules_permissions');
     });
     Route::group(['prefix' => 'roles'], function() {
-        Route::get('list', 'RolesController@index')->name('setting_roles');
-        Route::get('permissions/{id}', 'RolesController@permissions')->name('setting_roles_permissions');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_roles'])->get('list', 'RolesController@index')->name('setting_roles');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_roles_permisos'])->get('permissions/{id}', 'RolesController@permissions')->name('setting_roles_permissions');
     });
 });
