@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class BrandController extends Controller
+class AssetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return view('inventory::brand.index');
+        return view('inventory::index');
     }
 
     /**
@@ -23,10 +23,9 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('inventory::brand.create');
+        return view('inventory::create');
     }
 
-  
     /**
      * Show the form for editing the specified resource.
      * @param int $id
@@ -34,8 +33,7 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        return view('inventory::brand.edit')->with('id',$id);
+        return view('inventory::edit')->with('id',$id);
     }
 
- 
 }

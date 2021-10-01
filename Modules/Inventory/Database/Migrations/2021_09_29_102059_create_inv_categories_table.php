@@ -16,7 +16,7 @@ class CreateInvCategoriesTable extends Migration
         Schema::create('inv_categories', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->boolean('status')->dafault(true);
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

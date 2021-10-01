@@ -16,7 +16,7 @@ class CreateInvBrandsTable extends Migration
         Schema::create('inv_brands', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->boolean('status')->dafault(true);
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

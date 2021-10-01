@@ -42,7 +42,7 @@
             <li class="nav-title">Navegación</li>
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-home-lg"></i>
+                    <i class="ni ni-book-open"></i>
                     <span class="nav-link-text" data-i18n="nav.empresa">Categoria</span>
                 </a>
                 <ul>
@@ -61,7 +61,7 @@
 
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-home-lg"></i>
+                    <i class="ni ni-tag"></i>
                     <span class="nav-link-text" data-i18n="nav.empresa">Marca</span>
                 </a>
                 <ul>
