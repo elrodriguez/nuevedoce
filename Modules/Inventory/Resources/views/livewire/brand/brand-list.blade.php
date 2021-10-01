@@ -24,10 +24,10 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="moduleSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
+                <input wire:keydown.enter="brandSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
                 <div class="input-group-append">
-                    <button wire:click="moduleSearch" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
-                    <a href="{{ route('setting_modules_create') }}" class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
+                    <button wire:click="brandSearch" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
+                    <a href="{{ route('inventory_brand_create') }}" class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
                 </div>
             </div>
         </div>
@@ -35,15 +35,14 @@
             <table class="table m-0">
                 <thead>
                     <tr>
-                        <th class="text-center">{{ __('setting::labels.thnum') }}</th>
-                        <th class="text-center">{{ __('setting::labels.actions') }}</th>
-                        <th>{{ __('setting::labels.name') }}</th>
-                        <th class="text-center">{{ __('setting::labels.icon') }}</th>
-                        <th class="text-center">{{ __('setting::labels.state') }}</th>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Acciones</th>
+                        <th>Descripcion</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach($modules as $key => $module)
+                    @foreach($brands as $key => $brand)
                     <tr>
                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                         <td class="text-center tdw-50 align-middle">
@@ -52,29 +51,20 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('configuraciones_modulos_editar')
-                                    <a href="{{ route('setting_modules_edit',$module->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i>{{ __('setting::labels.edit') }}
+                                    <a href="{{ route('inventory_brand_edit',$brand->id) }}" class="dropdown-item">
+                                        <i class="fal fa-pencil-alt mr-1"></i>Editar
                                     </a>
-                                    @endcan
-                                    @can('configuraciones_modulos_permisos')
-                                    <a href="{{ route('setting_modules_permissions',$module->id) }}" class="dropdown-item">
-                                        <i class="fal fa-lock-open-alt mr-1"></i>{{ __('setting::labels.permissions') }}
-                                    </a>
-                                    @endcan
-                                    @can('configuraciones_modulos_eliminar')
                                     <div class="dropdown-divider"></div>
-                                    <button onclick="confirmDelete({{ $module->id }})" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i>{{ __('setting::labels.delete') }}
+                                    <button onclick="confirmDelete({{ $brand->id }})" type="button" class="dropdown-item text-danger">
+                                        <i class="fal fa-trash-alt mr-1"></i>Eliminar
                                     </button>
-                                    @endcan
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $module->label }}</td>
-                        <td class="text-center align-middle"><i class="{{ $module->logo }}"></i></td>
-                        <td class="text-center align-middle">
-                            @if($module->status)
+                        <td class="align-middle">{{ $brand->description }}</td>
+                        
+                        <td class="align-middle">
+                            @if($brand->status)
                             <span class="badge badge-warning">{{ __('setting::labels.active') }}</span>
                             @else
                             <span class="badge badge-danger">{{ __('setting::labels.inactive') }}</span>
@@ -86,7 +76,7 @@
             </table>
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
-            <div class="ml-auto">{{ $modules->links() }}</div>
+            <div class="ml-auto">{{ $brands->links() }}</div>
         </div>
     </div>
     <script type="text/javascript">
@@ -115,17 +105,17 @@
                 callback: function(result)
                 {
                     if(result){
-                        @this.deleteModule(id)
+                        @this.deleteBrand(id)
                     }
                 }
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
-        document.addEventListener('set-module-delete', event => {
+        document.addEventListener('set-brand-delete', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.success') }}!</span>",
-                message: "<span><strong>{{ __('setting::labels.excellent') }}... </strong>"+event.detail.msg+"</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",
+                message: "<span><strong>Excelente... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false

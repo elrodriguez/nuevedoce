@@ -1,21 +1,18 @@
 <?php
 
-namespace Modules\Inventory\Http\Livewire\Category;
+namespace Modules\Inventory\Http\Livewire\Brand;
 
 use Livewire\Component;
-use Modules\Inventory\Entities\InvCategory;
+use Modules\Inventory\Entities\InvBrand;
 
-class CategoryCreate extends Component
+class BrandCreate extends Component
 {
     public $description;
     public $status = true;
 
-    public function mount(){
-    }
-
     public function render()
     {
-        return view('inventory::livewire.category.category-create');
+        return view('inventory::livewire.brand.brand-create');
     }
 
     public function save(){
@@ -24,15 +21,16 @@ class CategoryCreate extends Component
             'description' => 'required',
             'status' => 'required'
         ]);
-       
+
         
-        InvCategory::create([
+        
+        InvBrand::create([
             'description' => $this->description,
             'status' => $this->status
         ]);
 
         $this->clearForm();
-        $this->dispatchBrowserEvent('set-category-save', ['msg' => 'Datos guardados correctamente.']);
+        $this->dispatchBrowserEvent('set-brand-save', ['msg' => 'Datos guardados correctamente.']);
     }
     
     
@@ -42,15 +40,5 @@ class CategoryCreate extends Component
         $this->status = null;
         
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-

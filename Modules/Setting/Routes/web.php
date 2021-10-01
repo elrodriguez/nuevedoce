@@ -15,7 +15,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
     Route::get('dashboard', 'SettingController@index')->name('setting_dashboard');
 
     Route::group(['prefix' => 'company'], function() {
-        Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas'])->get('data', 'SetCompanyController@index')->name('setting_company');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas'])->get('list', 'SetCompanyController@index')->name('setting_company');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas_nuevo'])->get('create', 'SetCompanyController@create')->name('setting_company_create');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas_editar'])->get('edit/{id}', 'SetCompanyController@edit')->name('setting_company_edit');
     });
     Route::group(['prefix' => 'users'], function() {
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios'])->get('list', 'UsersController@index')->name('setting_users');

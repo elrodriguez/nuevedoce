@@ -49,5 +49,11 @@ return [
     'user' => 'Usuario',
     'about' => 'Acerca de',
     'the' => 'los',
-    'photo' => 'Foto'
+    'photo' => 'Foto',
+    'thnum' => rlang('labels.thnum'),
+    'companies' => rlang('labels.companies'),
+    'company' => rlang('labels.company'),
+    'companies_list' => 'Listado de empresas',
+    'companies_create' => 'Nueva empresa',
+    
 ];

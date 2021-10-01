@@ -16,4 +16,12 @@ class SetCompanyController extends Controller
     {
         return view('setting::company.index');
     }
+    public function create()
+    {
+        return view('setting::company.create');
+    }
+    public function edit($id)
+    {
+        return view('setting::company.edit')->with('id',$id);
+    }
 }
