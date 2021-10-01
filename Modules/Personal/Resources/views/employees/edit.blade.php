@@ -1,4 +1,7 @@
 @extends('personal::layouts.master')
+@section('styles')
+    <link rel="stylesheet" media="screen, print" href="{{ url('themes/smart-admin/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
+@endsection
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('personal::labels.lbl_personal')</li>
@@ -16,8 +19,10 @@
     </div>
 @endsection
 @section('content')
-    @livewire('personal::employees.employees-edit',['occupation_id' => $id])
+    @livewire('personal::employees.employees-edit',['id' => $id])
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
+    <script src="{{ url('themes/smart-admin/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ url('themes/smart-admin/js/formplugins/bootstrap-datepicker/locales/bootstrap-datepicker.'.Lang::locale().'.min.js') }}"></script>
 @endsection
