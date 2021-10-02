@@ -32,7 +32,7 @@ class CreatePeopleTable extends Migration
             $table->string('telephone')->nullable();
             $table->char('sex',1)->default('M');
             $table->date('birth_date')->nullable();
-            $table->unsignedBigInteger('type_person_id')->nullable(); //Type Person
+            $table->unsignedBigInteger('type_person_id')->default('1')->nullable(); //Type Person
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('identity_document_type_id')->references('id')->on('identity_document_types');
