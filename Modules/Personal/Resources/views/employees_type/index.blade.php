@@ -7,7 +7,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-users'></i>{{ __('personal::labels.lbl_employee_type') }} <sup class='badge badge-primary fw-500'>{{__('personal::labels.lbl_list')}}</sup>
+        <i class='subheader-icon fal fa-people-arrows'></i>{{ __('personal::labels.lbl_employee_type') }} <sup class='badge badge-primary fw-500'>{{__('personal::labels.lbl_list')}}</sup>
         <small>Disponibles para el usuario</small>
     </h1>
     <div class="subheader-block">

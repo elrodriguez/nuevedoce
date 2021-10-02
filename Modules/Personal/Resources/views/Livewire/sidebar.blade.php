@@ -45,7 +45,7 @@
             @can('personal_tipo_empleados')
             <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Tipo de Empleado" data-filter-tags="Tipo de Empleado">
-                    <i class="fal fa-home-lg"></i>
+                    <i class="fal fa-people-arrows"></i>
                     <span class="nav-link-text" data-i18n="nav.tipo_empleado">@lang('personal::labels.lbl_employee_type')</span>
                 </a>
                 <ul>
@@ -67,7 +67,7 @@
             @can('personal_ocupaciones')
             <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="ocupaciones" data-filter-tags="ocupaciones">
-                    <i class="fal fa-home-lg"></i>
+                    <i class="fal fa-person-dolly"></i>
                     <span class="nav-link-text" data-i18n="nav.ocupaciones">@lang('personal::labels.lbl_occupations')</span>
                 </a>
                 <ul>

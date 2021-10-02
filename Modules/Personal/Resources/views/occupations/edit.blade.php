@@ -8,7 +8,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-users'></i>@lang('personal::labels.lbl_occupations') <sup class='badge badge-primary fw-500'>@lang('personal::labels.lbl_edit')</sup>
+        <i class='subheader-icon fal fa-person-dolly'></i>@lang('personal::labels.lbl_occupations') <sup class='badge badge-primary fw-500'>@lang('personal::labels.lbl_edit')</sup>
         <small>@lang('personal::labels.lbl_available_user')</small>
     </h1>
     <div class="subheader-block">
