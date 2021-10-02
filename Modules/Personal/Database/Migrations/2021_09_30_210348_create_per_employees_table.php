@@ -26,7 +26,7 @@ class CreatePerEmployeesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('person_id')->references('id')->on('people');
-            $table->foreign('company_id')->references('id')->on('set_companies');
+            $table->foreign('company_id')->references('id')->on('people');
             $table->foreign('occupation_id')->references('id')->on('per_occupations');
             $table->foreign('employee_type_id')->references('id')->on('per_employee_types');
         });

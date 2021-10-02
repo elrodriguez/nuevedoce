@@ -108,7 +108,7 @@
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="birth_date">@lang('personal::labels.lbl_date_of_birth') <span class="text-danger">*</span> </label>
-                        <input wire:model="birth_date" onchange="this.dispatchEvent(new InputEvent('input'))" type="text" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" id="txtDate_of_birth">
+                        <input wire:model="birth_date" required="" onchange="this.dispatchEvent(new InputEvent('input'))" type="text" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" id="txtDate_of_birth">
                         @error('birth_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -175,11 +175,11 @@
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label class="form-label" for="company_id">@lang('personal::labels.lbl_company') <span class="text-danger">*</span> </label>
-                        <select wire:model="company_id" id="company_id" class="custom-select" required="">
+                        <label class="form-label" for="company_id">@lang('personal::labels.lbl_company') </label>
+                        <select wire:model="company_id" id="company_id" class="custom-select">
                             <option value="">@lang('personal::labels.lbl_select')</option>
                             @foreach($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                <option value="{{ $company->id }}">{{ $company->full_name }}</option>
                             @endforeach
                         </select>
                         @error('company_id')
@@ -188,7 +188,7 @@
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="admission_date">@lang('personal::labels.lbl_admission_date') <span class="text-danger">*</span> </label>
-                        <input wire:model="admission_date" onchange="this.dispatchEvent(new InputEvent('input'))" type="text" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" id="txtAdmisionDate">
+                        <input wire:model="admission_date" required="" onchange="this.dispatchEvent(new InputEvent('input'))" type="text" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" id="txtAdmisionDate">
                         @error('admission_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

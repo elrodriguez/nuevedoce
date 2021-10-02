@@ -29,7 +29,7 @@ class EmployeesList extends Component
         return PerEmployee::where('admission_date','like','%'.$this->search.'%')
             ->join('people', 'person_id', 'people.id')
             ->join('per_occupations', 'occupation_id', 'per_occupations.id')
-            ->join('set_companies', 'company_id', 'set_companies.id')
+            ->leftJoin('people as per_companies', 'company_id', 'per_companies.id')
             ->join('per_employee_types', 'employee_type_id', 'per_employee_types.id')
             ->select(
                 'per_employees.id',
@@ -37,12 +37,13 @@ class EmployeesList extends Component
                 'people.number',
                 'per_employees.admission_date',
                 'per_occupations.name AS name_occupation',
-                'set_companies.name AS name_company',
+                'per_companies.full_name AS name_company',
                 'per_employee_types.name AS name_employee_type',
                 'per_employees.state',
                 'per_employees.cv',
                 'per_employees.photo'
-            )->paginate($this->show);
+            )
+            ->paginate($this->show);
     }
 
     public function people(){

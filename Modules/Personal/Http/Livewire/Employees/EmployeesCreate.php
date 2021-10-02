@@ -64,7 +64,8 @@ class EmployeesCreate extends Component
         $this->document_types = IdentityDocumentType::where('active',true)->get();
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
-        $this->companies = SetCompany::all();
+        //$this->companies = SetCompany::all();
+        $this->companies = Person::where('identity_document_type_id', '6')->get(); #codigo-> 6:RUC
         $this->occupations = PerOccupation::where('state',true)->get();
         $this->employees_types = PerEmployeeType::where('state',true)->get();
         $this->language = Lang::locale();
@@ -135,7 +136,7 @@ class EmployeesCreate extends Component
 
                 'employee_type_id' => 'required',
                 'occupation_id' => 'required',
-                'company_id' => 'required',
+                //'company_id' => 'required',
                 'admission_date' => 'required',
                 'cv' => 'required|mimes:pdf|max:5120'
             ]);
@@ -158,7 +159,7 @@ class EmployeesCreate extends Component
 
                 'employee_type_id' => 'required',
                 'occupation_id' => 'required',
-                'company_id' => 'required',
+                //'company_id' => 'required',
                 'admission_date' => 'required',
                 'cv' => 'required|mimes:pdf|max:5120'
             ]);
