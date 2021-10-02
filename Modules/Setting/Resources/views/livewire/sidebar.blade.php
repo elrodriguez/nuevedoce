@@ -32,7 +32,7 @@
                 <li class="{{ $path[0] == 'setting' && $path[1] == 'company' ? 'active open' : '' }}">
                     <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
                         <i class="fal fa-city"></i>
-                        <span class="nav-link-text" data-i18n="nav.empresa">Empresa</span>
+                        <span class="nav-link-text" data-i18n="nav.empresa">{{ __('setting::labels.my_company') }}</span>
                     </a>
                     <ul>
                         <li class="{{ $path[0] == 'setting' && $path[1] == 'company' && $path[2] == 'list' ? 'active' : '' }}">

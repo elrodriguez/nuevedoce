@@ -54,5 +54,6 @@ return [
     'companies' => rlang('labels.companies'),
     'company' => rlang('labels.company'),
     'companies_list' => 'Companies list',
-    'companies_create' => 'New company'
+    'companies_create' => 'New company',
+    'my_company' => 'My company'
 ];
