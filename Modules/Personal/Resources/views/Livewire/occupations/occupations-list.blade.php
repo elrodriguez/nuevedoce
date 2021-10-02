@@ -27,7 +27,9 @@
                 <input wire:keydown.enter="occupationsSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('personal::labels.lbl_type_here')}}">
                 <div class="input-group-append">
                     <button wire:click="occupationsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
+                    @can('personal_ocupaciones_nuevo')
                     <a href="{{ route('personal_occupation_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('personal::labels.btn_new')</a>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -52,13 +54,17 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                    @can('personal_ocupaciones_editar')
                                     <a href="{{ route('personal_occupation_edit',$occupation->id) }}" class="dropdown-item">
                                         <i class="fal fa-pencil-alt mr-1"></i>@lang('personal::labels.btn_edit')
                                     </a>
+                                    @endcan
+                                    @can('personal_ocupaciones_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $occupation->id }})" type="button" class="dropdown-item text-danger">
                                         <i class="fal fa-trash-alt mr-1"></i>@lang('personal::labels.btn_delete')
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                         </td>

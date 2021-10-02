@@ -33,13 +33,16 @@
             </a>
         </div>
         <ul id="js-nav-menu" class="nav-menu">
+            @can('personal_dashboard')
             <li class="{{ $path[0] == 'personal' && $path[1] == 'dashboard' ? 'active' : '' }}">
                 <a href="{{ route('personal_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
                     <i class="fal fa-tachometer-alt-fast"></i>
-                    <span class="nav-link-text" data-i18n="nav.blankpage">DashBoard</span>
+                    <span class="nav-link-text" data-i18n="nav.blankpage">@lang('personal::labels.lbl_dashBoard')</span>
                 </a>
             </li>
-            <li class="nav-title">Navegación</li>
+            @endcan
+            <li class="nav-title">@lang('personal::labels.lbl_navigation')</li>
+            @can('personal_tipo_empleados')
             <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Tipo de Empleado" data-filter-tags="Tipo de Empleado">
                     <i class="fal fa-home-lg"></i>
@@ -51,13 +54,17 @@
                             <span class="nav-link-text" data-i18n="nav.datos_listar_tipo_empleado">@lang('personal::labels.lbl_to_list')</span>
                         </a>
                     </li>
+                    @can('personal_tipo_empleados_nuevo')
                     <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
                         <a href="{{ route('personal_employee-type_create') }}" title="Nuevo Tipo de Empleado" data-filter-tags="Nuevo Tipo de Empleado">
                             <span class="nav-link-text" data-i18n="nav.nuevo_tipo_empleado">@lang('personal::labels.lbl_new')</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
+            @endcan
+            @can('personal_ocupaciones')
             <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="ocupaciones" data-filter-tags="ocupaciones">
                     <i class="fal fa-home-lg"></i>
@@ -69,13 +76,17 @@
                             <span class="nav-link-text" data-i18n="nav.listado">@lang('personal::labels.lbl_to_list')</span>
                         </a>
                     </li>
+                    @can('personal_ocupaciones_nuevo')
                     <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' && $path[2] == 'create' ? 'active' : '' }}">
                         <a href="{{ route('personal_occupation_create') }}" title="Nueva Ocupación" data-filter-tags="Nueva Ocupación">
                             <span class="nav-link-text" data-i18n="nav.nueva_ocupacion">@lang('personal::labels.lbl_new')</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
+            @endcan
+            @can('personal_empleados')
             <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Empleados" data-filter-tags="Empleados">
                     <i class="fal fa-users"></i>
@@ -87,13 +98,16 @@
                             <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('personal::labels.lbl_to_list')</span>
                         </a>
                     </li>
+                    @can('personal_empleados_nuevo')
                     <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' && $path[2] == 'create' ? 'active' : '' }}">
                         <a href="{{ route('personal_employees_search') }}" title="Nuevo Empleado" data-filter-tags="Nuevo Empleado">
                             <span class="nav-link-text" data-i18n="nav.nuevo_empleado">@lang('personal::labels.lbl_new')</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
+            @endcan
         </ul>
     </nav>
 </div>

@@ -29,6 +29,19 @@ class SeedModulePermissionsTableSeeder extends Seeder
         $permissions = [];
 
         array_push($permissions,Permission::create(['name' => 'personal_dashboard','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_tipo_empleados','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_tipo_empleados_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_tipo_empleados_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_tipo_empleados_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_ocupaciones','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_ocupaciones_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_ocupaciones_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_ocupaciones_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empleados','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empleados_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empleados_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empleados_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empleados_buscar','guard_name' => 'sanctum']));
 
         $role = Role::find(1);
         foreach($permissions as $permission){

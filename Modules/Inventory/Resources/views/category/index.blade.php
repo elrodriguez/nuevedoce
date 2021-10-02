@@ -7,7 +7,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-users'></i>Categorias<sup class='badge badge-primary fw-500'>List</sup>   
+        <i class="subheader-icon ni ni-book-open"></i></i>Categorias<sup class='badge badge-primary fw-500'>List</sup>   
     </h1>
     <div class="subheader-block">
         Listado

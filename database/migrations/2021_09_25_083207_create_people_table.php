@@ -32,6 +32,7 @@ class CreatePeopleTable extends Migration
             $table->string('telephone')->nullable();
             $table->char('sex',1)->default('M');
             $table->date('birth_date')->nullable();
+            $table->unsignedBigInteger('type_person_id')->default('1')->nullable(); //Type Person
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('identity_document_type_id')->references('id')->on('identity_document_types');
@@ -39,6 +40,7 @@ class CreatePeopleTable extends Migration
             $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');
+            $table->foreign('type_person_id')->references('id')->on('per_type_people');
         });
 
         Schema::table('users', function (Blueprint $table) {

@@ -33,7 +33,7 @@ class BrandList extends Component
             ->paginate($this->show);
     }
 
-    public function deleteBrands($id){
+    public function deleteBrand($id){
         try {
             InvBrand::find($id)->delete();
             $res = 'success';

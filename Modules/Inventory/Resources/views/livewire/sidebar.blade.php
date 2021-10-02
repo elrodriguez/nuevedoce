@@ -17,29 +17,18 @@
                 </a>
             </div>
         </div>
-        <div class="info-card">
-            <img src="{{ url('themes/smart-admin/img/demo/avatars/avatar-admin.png') }}" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
-            <div class="info-card-text">
-                <a href="#" class="d-flex align-items-center text-white">
-                    <span class="text-truncate text-truncate-sm d-inline-block">
-                        {{ auth()->user()->name }}
-                    </span>
-                </a>
-                <span class="d-inline-block text-truncate text-truncate-sm">{{ auth()->user()->email }}</span>
-            </div>
-            <img src="{{ url('themes/smart-admin/img/card-backgrounds/cover-2-lg.png') }}" class="cover" alt="cover">
-            <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
-                <i class="fal fa-angle-down"></i>
-            </a>
-        </div>
+        <x-info-card-user></x-info-card-user>
         <ul id="js-nav-menu" class="nav-menu">
+            @can('inventario_dashboard')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'dashboard' ? 'active' : '' }}">
                 <a href="{{ route('inventory_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
                     <i class="fal fa-tachometer-alt-fast"></i>
                     <span class="nav-link-text" data-i18n="nav.blankpage">DashBoard</span>
                 </a>
             </li>
+            @endcan
             <li class="nav-title">Navegación</li>
+            @can('inventario_categorias')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
                     <i class="ni ni-book-open"></i>
@@ -51,14 +40,17 @@
                             <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Categoria</span>
                         </a>
                     </li>
+                    @can('inventario_categorias_nuevo')
                     <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' && $path[2] == 'create' ? 'active' : '' }}">
                         <a href="{{ route('inventory_category_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
                             <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Categoria</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
-
+            @endcan
+            @can('inventario_marcas')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
                     <i class="ni ni-tag"></i>
@@ -70,13 +62,16 @@
                             <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Marca</span>
                         </a>
                     </li>
+                    @can('inventario_marcas_nuevo')
                     <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' && $path[2] == 'create' ? 'active' : '' }}">
                         <a href="{{ route('inventory_brand_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
                             <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Marca</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
+            @endcan
            
             
         </ul>

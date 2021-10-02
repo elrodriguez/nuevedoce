@@ -8,7 +8,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-users'></i>Nueva <span class='fw-300'>Marca</span> <sup class='badge badge-primary fw-500'>New</sup>
+        <i class="subheader-icon ni ni-tag"></i>Nueva <span class='fw-300'>Marca</span> <sup class='badge badge-primary fw-500'>New</sup>
         
     </h1>
     <div class="subheader-block">

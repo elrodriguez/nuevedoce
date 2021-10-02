@@ -27,7 +27,9 @@
                 <input wire:keydown.enter="brandSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
                 <div class="input-group-append">
                     <button wire:click="brandSearch" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
+                    @can('inventario_marcas_nuevo')
                     <a href="{{ route('inventory_brand_create') }}" class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -51,13 +53,17 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                    @can('inventario_marcas_editar')
                                     <a href="{{ route('inventory_brand_edit',$brand->id) }}" class="dropdown-item">
                                         <i class="fal fa-pencil-alt mr-1"></i>Editar
                                     </a>
+                                    @endcan
                                     <div class="dropdown-divider"></div>
+                                    @can('inventario_marcas_eliminar')
                                     <button onclick="confirmDelete({{ $brand->id }})" type="button" class="dropdown-item text-danger">
                                         <i class="fal fa-trash-alt mr-1"></i>Eliminar
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                         </td>
@@ -65,9 +71,9 @@
                         
                         <td class="align-middle">
                             @if($brand->status)
-                            <span class="badge badge-warning">{{ __('setting::labels.active') }}</span>
+                            <span class="badge badge-warning">{{ __('inventory::labels.active') }}</span>
                             @else
-                            <span class="badge badge-danger">{{ __('setting::labels.inactive') }}</span>
+                            <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
                             @endif
                         </td>
                     </tr>
@@ -118,8 +124,8 @@
             if(res == 'success'){
                 initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
                 let box = bootbox.alert({
-                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ ('setting::labels.success') }}!</span>",
-                    message: "<span><strong>{{ ('setting::labels.excellent') }}... </strong>{{ ('setting::labels.msg_delete') }}</span>",
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.success') }}!</span>",
+                    message: "<span><strong>{{ __('inventory::labels.excellent') }}... </strong>{{ __('inventory::labels.msg_delete') }}</span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false
@@ -128,8 +134,8 @@
             }else{
                 initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
                 let box = bootbox.alert({
-                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ ('setting::labels.error') }}!</span>",
-                    message: "<span><strong>{{ ('setting::labels.went_wrong') }}... </strong>{{ ('setting::labels.msg_not_peptra') }}</span>",
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.error') }}!</span>",
+                    message: "<span><strong>{{ __('inventory::labels.went_wrong') }}... </strong>{{ __('inventory::labels.msg_not_peptra') }}</span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false

@@ -45,6 +45,8 @@ return [
     'lbl_cv'            => 'Curriculum Vitae',
     'lbl_choose_file'   => 'Elija el archivo',
     'lbl_enter_identity_document_number'   => 'Ingrese número documento de Identidad',
+    'lbl_navigation'    => 'Navigation',
+    'lbl_dashBoard'     => 'Tablero',
 
     'btn_edit'          => 'Editar',
     'btn_delete'        => 'Eliminar',
