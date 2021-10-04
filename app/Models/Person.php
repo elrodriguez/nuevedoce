@@ -27,6 +27,7 @@ class Person extends Model
         'email',
         'telephone',
         'sex',
+        'type_person_id',
         'birth_date'
     ];
 }

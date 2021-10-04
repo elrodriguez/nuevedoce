@@ -32,5 +32,12 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('personal')->group(funct
         Route::middleware(['middleware' => 'role_or_permission:personal_empleados_editar'])->get('edit/{id}', 'EmployeeController@edit')->name('personal_employees_edit');
         Route::middleware(['middleware' => 'role_or_permission:personal_empleados_buscar'])->get('search', 'EmployeeController@search')->name('personal_employees_search');
     });
+
+    Route::group(['prefix' => 'companies'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:personal_empresas'])->get('list', 'CompanyController@index')->name('personal_companies_index');
+        Route::middleware(['middleware' => 'role_or_permission:personal_empresas_nuevo'])->get('create/{id}', 'CompanyController@create')->name('personal_companies_create');
+        Route::middleware(['middleware' => 'role_or_permission:personal_empresas_editar'])->get('edit/{id}', 'CompanyController@edit')->name('personal_companies_edit');
+        Route::middleware(['middleware' => 'role_or_permission:personal_empresas_buscar'])->get('search', 'CompanyController@search')->name('personal_companies_search');
+    });
 });
 
