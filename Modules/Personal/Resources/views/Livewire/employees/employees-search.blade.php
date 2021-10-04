@@ -1,18 +1,17 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-body">
-                <div class="form-row needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
-                    <div class="input-group bg-white shadow-inset-2">
-                        <input wire:keydown.enter="searchPerson" wire:model="number_search" maxlength="11" type="text" class="form-control border-left-1 bg-transparent pl-1" id="number_search" required="" placeholder="{{__('personal::labels.lbl_enter_identity_document_number')}}">
-                        @error('number_search')
-                        <div class="invalid-feedback-2">{{ $message }}</div>
-                        @enderror
+            <div class="form-row needs-validation input-group {{ $errors->any()?'was-validated':'' }}" novalidate="">
+                <div class="input-group bg-white shadow-inset-2">
+                    <input wire:keydown.enter="searchPerson" wire:model="number_search" maxlength="11" type="text" class="form-control border-left-1 bg-transparent pl-1" id="number_search" required="" placeholder="{{__('personal::labels.lbl_enter_identity_document_number')}}">
+                    @error('number_search')
+                    <div class="invalid-feedback-2">{{ $message }}</div>
+                    @enderror
+                    <div class="input-group-append">
+                        <button wire:click="searchPerson" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('personal::labels.btn_search')</button>
                     </div>
                 </div>
-        </div>
-        <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('personal_employees_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('personal::labels.lbl_list')</a>
-            <button wire:click="searchPerson" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('personal::labels.btn_search')</button>
+            </div>
         </div>
     </div>
     <script type="text/javascript">

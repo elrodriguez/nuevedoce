@@ -56,6 +56,7 @@ return [
     'btn_not'           => 'No',
     'btn_save'          => 'Guardar',
     'btn_update'        => 'Actualizar',
+    'btn_ok'            => 'Ok',
 
     'msg_0001'          => '¿Desea eliminar estos datos?',
     'msg_0002'          => '¡Esta acción no se puede deshacer!',

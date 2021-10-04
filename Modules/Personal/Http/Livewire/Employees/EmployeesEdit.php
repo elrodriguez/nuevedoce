@@ -179,6 +179,11 @@ class EmployeesEdit extends Component
             'birth_date' => $ddate
         ]);
 
+        //Validando si empleado es Interno no vaya con empresa
+        if($this->employee_type_id == '1'){
+            $this->company_id = null;
+        }
+
         $this->employee_search->update([
             'admission_date' => $ddate_ad,
             'person_id' => $this->person_id,

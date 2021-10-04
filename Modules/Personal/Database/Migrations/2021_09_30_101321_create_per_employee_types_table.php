@@ -23,6 +23,21 @@ class CreatePerEmployeeTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::table('per_type_people')->insert([
+            [
+                'name' => 'Interno',
+                'description' => 'Personal Interno',
+                'person_create' => '0',
+                'state' => true
+            ],
+            [
+                'name' => 'Externo',
+                'description' => 'Personal Externo',
+                'person_create' => '0',
+                'state' => true
+            ]
+        ]);
     }
 
     /**

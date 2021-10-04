@@ -56,6 +56,7 @@ return [
     'btn_not'           => 'Not',
     'btn_save'          => 'Save',
     'btn_update'        => 'Update',
+    'btn_ok'            => 'Ok',
 
     'msg_0001'          => '¿Do you want to delete this data?',
     'msg_0002'          => '¡This action can not be undone!',
