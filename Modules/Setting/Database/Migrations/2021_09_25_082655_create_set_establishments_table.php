@@ -16,17 +16,19 @@ class CreateSetEstablishmentsTable extends Migration
         Schema::create('set_establishments', function (Blueprint $table) {
             $table->id();
             $table->string('address');
-            $table->string('phone');
-            $table->string('observation');
+            $table->string('phone')->nullable();
+            $table->string('observation')->nullable();
             $table->boolean('state')->default(true);
             $table->unsignedBigInteger('company_id')->nullable();
             $table->char('country_id',2)->nullable();
             $table->char('department_id',2)->nullable();
             $table->char('province_id',4)->nullable();
             $table->char('district_id',6)->nullable();
-            $table->string('web_page');
-            $table->string('email');
-            $table->text('map');
+            $table->string('web_page')->nullable();
+            $table->string('email')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->text('map')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('set_companies');

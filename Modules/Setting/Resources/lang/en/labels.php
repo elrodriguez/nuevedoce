@@ -55,5 +55,11 @@ return [
     'company' => rlang('labels.company'),
     'companies_list' => 'Companies list',
     'companies_create' => 'New company',
-    'my_company' => 'My company'
+    'my_company' => 'My company',
+    'web_page' => 'Web page',
+    'latitude' => 'Latitude',
+    'longitude' => 'latitude',
+    'map' => 'Map',
+    'yes' => 'Yes',
+    'observation' => 'Observation'
 ];
