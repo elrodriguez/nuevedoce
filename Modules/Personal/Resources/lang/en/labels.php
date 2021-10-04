@@ -47,6 +47,10 @@ return [
     'lbl_enter_identity_document_number'   => 'Enter Identity Document Number',
     'lbl_navigation'    => 'Navegación',
     'lbl_dashBoard'     => 'Dashboard',
+    'lbl_companies'     => 'Companies',
+    'lbl_type_person'   => 'Type Person',
+    'lbl_internal'      => 'Internal',
+    'lbl_external'      => 'External',
 
     'btn_edit'          => 'Edit',
     'btn_delete'        => 'Delete',
@@ -56,6 +60,7 @@ return [
     'btn_not'           => 'Not',
     'btn_save'          => 'Save',
     'btn_update'        => 'Update',
+    'btn_ok'            => 'Ok',
 
     'msg_0001'          => '¿Do you want to delete this data?',
     'msg_0002'          => '¡This action can not be undone!',
@@ -64,5 +69,7 @@ return [
     'msg_update'        => 'Data updated correctly.',
     'msg_search_ok_a'   => 'There is already a person registered with that document number. ¿Do you want to register as an employee?',
     'msg_search_ok_b'   => 'There is already an employee registered with that document number. ¿Do you want to modify your data?',
-    'msg_search_not'    => 'There is no record with that document number. ¿Do you want to continue registering a new one?'
+    'msg_search_not'    => 'There is no record with that document number. ¿Do you want to continue registering a new one?',
+    'msg_search_company_ok'   => 'There is already a company registered with that document number. Do you want to modify your data?',
+    'msg_search_company_not'    => 'There is no company with that document number. ¿Do you want to continue registering a new one?'
 ];

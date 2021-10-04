@@ -26,7 +26,7 @@ class EmployeesList extends Component
     }
 
     public function getEmployees(){
-        return PerEmployee::where('admission_date','like','%'.$this->search.'%')
+        return PerEmployee::where('people.full_name','like','%'.$this->search.'%')
             ->join('people', 'person_id', 'people.id')
             ->join('per_occupations', 'occupation_id', 'per_occupations.id')
             ->leftJoin('people as per_companies', 'company_id', 'per_companies.id')

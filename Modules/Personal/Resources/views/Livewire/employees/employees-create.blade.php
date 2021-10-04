@@ -174,7 +174,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3" id="xyDivCompany" wire:ignore>
                         <label class="form-label" for="company_id">@lang('personal::labels.lbl_company')</label>
                         <select wire:model="company_id" id="company_id" class="custom-select">
                             <option value="">@lang('personal::labels.lbl_select')</option>
@@ -200,7 +200,7 @@
                             <label class="custom-file-label" for="customFile">@lang('personal::labels.lbl_choose_file')</label>
                         </div>
                         @error('cv')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -219,11 +219,24 @@
                 message: "<span><strong>{{__('personal::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
-                closeButton: false
+                closeButton: false,
+                callback: function () {
+                    let url = "{{ route('personal_employees_search') }}";
+                    window.location.href = url;
+                }
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
         document.addEventListener('livewire:load', function () {
+            $("#employee_type_id").change(function (){
+                if($(this).val() == "1"){
+                    $("#xyDivCompany").css("display", "none");
+                    $("#company_id").val("");
+                }else{
+                    $("#xyDivCompany").css("display", "block");
+                }
+            });
+
             $(":input").inputmask();
             var controls = {
                 leftArrow: "<i class='fal fa-angle-left' style='font-size: 1.25rem'></i>",

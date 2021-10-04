@@ -197,6 +197,11 @@ class EmployeesCreate extends Component
                 'birth_date' => $ddate
             ]);
 
+            //Validando si empleado es Interno no vaya con empresa
+            if($this->employee_type_id == '1'){
+                $this->company_id = null;
+            }
+
             $employee_save = PerEmployee::create([
                 'admission_date' => $ddate_ad,
                 'person_id' => $person->id,
@@ -230,6 +235,11 @@ class EmployeesCreate extends Component
                 'birth_date' => $ddate
             ]);
 
+            //Validando si empleado es Interno no vaya con empresa
+            if($this->employee_type_id == '1'){
+                $this->company_id = null;
+            }
+
             $employee_save = PerEmployee::create([
                 'admission_date' => $ddate_ad,
                 'person_id' => $this->person_id,
@@ -248,7 +258,7 @@ class EmployeesCreate extends Component
         }
         $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('personal::labels.msg_success')]);
         $this->clearForm();
-        return redirect('personal/employees/search');
+        //return redirect('personal/employees/search');
     }
 
     public function getProvinves(){
