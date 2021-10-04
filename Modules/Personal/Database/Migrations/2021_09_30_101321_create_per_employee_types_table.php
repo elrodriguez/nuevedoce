@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreatePerEmployeeTypesTable extends Migration
 {
@@ -16,7 +17,7 @@ class CreatePerEmployeeTypesTable extends Migration
         Schema::create('per_employee_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->boolean('state')->default(true);
@@ -24,7 +25,7 @@ class CreatePerEmployeeTypesTable extends Migration
             $table->softDeletes();
         });
 
-        DB::table('per_type_people')->insert([
+        DB::table('per_employee_types')->insert([
             [
                 'name' => 'Interno',
                 'description' => 'Personal Interno',
