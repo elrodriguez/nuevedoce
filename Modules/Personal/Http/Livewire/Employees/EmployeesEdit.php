@@ -13,7 +13,6 @@ use App\Models\Province;
 use Modules\Personal\Entities\PerEmployee;
 use Modules\Personal\Entities\PerEmployeeType;
 use Modules\Personal\Entities\PerOccupation;
-use Modules\Setting\Entities\SetCompany;
 use Livewire\WithFileUploads;
 
 class EmployeesEdit extends Component
@@ -50,6 +49,7 @@ class EmployeesEdit extends Component
     public $cv;
     public $photo;
     public $language;
+    public $extension_photo;
 
     //Combos Data:
     public $companies;
@@ -60,6 +60,7 @@ class EmployeesEdit extends Component
     public $search;
     public $option;
     public $cv_view;
+    public $photo_view;
 
     public function mount($id){
         $this->document_types = IdentityDocumentType::where('active',true)->get();
@@ -85,7 +86,7 @@ class EmployeesEdit extends Component
         $this->occupation_id = $this->employee_search->occupation_id;
         $this->employee_type_id = $this->employee_search->employee_type_id;
         $this->cv = $this->employee_search->cv;
-        $this->photo = $this->employee_search->photo;
+        $this->extension_photo = $this->employee_search->photo;
         $this->state = $this->employee_search->state;
 
         //Data Person
@@ -115,6 +116,10 @@ class EmployeesEdit extends Component
             $this->cv_view = url('storage/employee_cv/'.$this->employee_id.'/'.$this->employee_id.'.pdf');
         }
 
+        if(file_exists(public_path('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo))){
+            $this->photo_view = url('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo);
+        }
+
         $this->getProvinves();
         $this->getPDistricts();
 
@@ -141,11 +146,13 @@ class EmployeesEdit extends Component
             //'telephone' => 'required|min:3|max:255',
             'sex' => 'required',
             'birth_date' => 'required',
+            'photo' => 'nullable|image|max:1024',
 
             'employee_type_id' => 'required',
             'occupation_id' => 'required',
             //'company_id' => 'required',
-            'admission_date' => 'required'
+            'admission_date' => 'required',
+            'cv' => 'nullable|mimes:pdf|max:5120'
         ]);
 
         $ddate = null;
@@ -184,6 +191,10 @@ class EmployeesEdit extends Component
             $this->company_id = null;
         }
 
+        if($this->photo){
+            $this->extension_photo = $this->photo->extension();
+        }
+
         $this->employee_search->update([
             'admission_date' => $ddate_ad,
             'person_id' => $this->person_id,
@@ -191,12 +202,16 @@ class EmployeesEdit extends Component
             'occupation_id' => $this->occupation_id,
             'employee_type_id' => $this->employee_type_id,
             'cv' => '',
-            'photo' => '',
+            'photo' => $this->extension_photo,
             'state' => $this->state
         ]);
 
         if($this->cv){
             $this->cv->storeAs('employee_cv/'.$this->employee_id.'/', $this->employee_id.'.pdf','public');
+        }
+
+        if($this->photo){
+            $this->photo->storeAs('employees_photo/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
         }
 
         $this->dispatchBrowserEvent('per-employees-type-edit', ['msg' => Lang::get('personal::labels.msg_update')]);
@@ -210,5 +225,20 @@ class EmployeesEdit extends Component
     public function getPDistricts(){
         $this->districts = District::where('province_id',$this->province_id)
             ->where('active',true)->get();
+    }
+
+    public function deletePhotoEmployee(){
+        if(file_exists(public_path('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo))){
+            $result = unlink('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo);
+            if($result){
+                $this->photo_view = '';
+                $this->extension_photo = '';
+                $this->photo = '';
+                $this->employee_search->update([
+                    'photo' => ''
+                ]);
+                $this->dispatchBrowserEvent('per-employees-delete-photo');
+            }
+        }
     }
 }

@@ -51,6 +51,7 @@ return [
     'lbl_type_person'   => 'Type Person',
     'lbl_internal'      => 'Internal',
     'lbl_external'      => 'External',
+    'lbl_photo'         => 'Photo',
 
     'btn_edit'          => 'Edit',
     'btn_delete'        => 'Delete',
@@ -63,6 +64,7 @@ return [
     'btn_ok'            => 'Ok',
 
     'msg_0001'          => '¿Do you want to delete this data?',
+    'msg_delete_photo'  => 'Do you want to delete the photo of this employee?',
     'msg_0002'          => '¡This action can not be undone!',
     'msg_success'       => 'Data saved correctly.',
     'msg_delete'        => 'Data removed successfully.',

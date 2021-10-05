@@ -13,7 +13,6 @@ use App\Models\Province;
 use Modules\Personal\Entities\PerEmployee;
 use Modules\Personal\Entities\PerEmployeeType;
 use Modules\Personal\Entities\PerOccupation;
-use Modules\Setting\Entities\SetCompany;
 use Livewire\WithFileUploads;
 
 class EmployeesCreate extends Component
@@ -51,6 +50,7 @@ class EmployeesCreate extends Component
     public $cv;
     public $photo;
     public $language;
+    public $extension_photo;
 
     //Combos Data:
     public $companies;
@@ -133,12 +133,13 @@ class EmployeesCreate extends Component
                 //'telephone' => 'required|min:3|max:255',
                 'sex' => 'required',
                 'birth_date' => 'required',
+                'photo' => 'nullable|image|max:1024',
 
                 'employee_type_id' => 'required',
                 'occupation_id' => 'required',
                 //'company_id' => 'required',
                 'admission_date' => 'required',
-                'cv' => 'required|mimes:pdf|max:5120'
+                'cv' => 'nullable|mimes:pdf|max:5120'
             ]);
         }else{
             $this->validate([
@@ -156,12 +157,13 @@ class EmployeesCreate extends Component
                 //'telephone' => 'required|min:3|max:255',
                 'sex' => 'required',
                 'birth_date' => 'required',
+                'photo' => 'nullable|image|max:1024',
 
                 'employee_type_id' => 'required',
                 'occupation_id' => 'required',
                 //'company_id' => 'required',
                 'admission_date' => 'required',
-                'cv' => 'required|mimes:pdf|max:5120'
+                'cv' => 'nullable|mimes:pdf|max:5120'
             ]);
         }
 
@@ -240,6 +242,10 @@ class EmployeesCreate extends Component
                 $this->company_id = null;
             }
 
+            if($this->photo){
+                $this->extension_photo = $this->photo->extension();
+            }
+
             $employee_save = PerEmployee::create([
                 'admission_date' => $ddate_ad,
                 'person_id' => $this->person_id,
@@ -247,7 +253,7 @@ class EmployeesCreate extends Component
                 'occupation_id' => $this->occupation_id,
                 'employee_type_id' => $this->employee_type_id,
                 'cv' => '',
-                'photo' => '',
+                'photo' => $this->extension_photo,
                 'state' => $this->state
             ]);
             $this->employee_id = $employee_save->id;
@@ -256,9 +262,13 @@ class EmployeesCreate extends Component
         if($this->cv){
             $this->cv->storeAs('employee_cv/'.$this->employee_id.'/', $this->employee_id.'.pdf','public');
         }
+
+        if($this->photo){
+            $this->photo->storeAs('employees_photo/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
+        }
+
         $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('personal::labels.msg_success')]);
         $this->clearForm();
-        //return redirect('personal/employees/search');
     }
 
     public function getProvinves(){

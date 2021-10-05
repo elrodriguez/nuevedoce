@@ -7,6 +7,24 @@
                 </h4>
                 <hr class="mb-0 mt-4">
                 <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <div id="xyDivUploadPhoto" wire:ignore>
+                        <label class="form-label" for="photo">@lang('personal::labels.lbl_photo') <span class="text-danger">*</span> </label>
+                        <div class="custom-file">
+                            <input wire:model="photo" type="file" class="custom-file-input" id="photo">
+                            <label class="custom-file-label" for="customFile">@lang('personal::labels.lbl_choose_file')</label>
+                        </div>
+                        </div>
+                        @error('photo')
+                        <div class="invalid-feedback-2" id="xyDivErrorPhoto">{{ $message }}</div>
+                        @enderror
+                        <div class="d-flex flex-column align-items-center justify-content-center" wire:ignore style="display: none !important;" id="xyDivPreviewPhoto">
+                            <img src="" id="preview-image-before-upload" class="rounded-circle shadow-2 img-thumbnail" style="width: 80px;height: 70px" alt="">
+                            <a href="javascript:void(0);" onclick="deletePhoto()" class="btn btn-outline-danger btn-xs btn-icon rounded-circle waves-effect waves-themed">
+                                <i class="fal fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="names">@lang('personal::labels.lbl_names') <span class="text-danger">*</span> </label>
                         <input wire:model="names" type="text" class="form-control" id="names" required="">
@@ -25,6 +43,20 @@
                         <label class="form-label" for="last_name_mother">@lang('personal::labels.lbl_surname_mother') <span class="text-danger">*</span> </label>
                         <input wire:model="last_name_mother" type="text" class="form-control" id="last_name_mother" required="">
                         @error('last_name_mother')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="address">@lang('personal::labels.lbl_address') <span class="text-danger">*</span> </label>
+                        <input wire:model="address" type="text" class="form-control" id="address" required="">
+                        @error('address')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="telephone">@lang('personal::labels.lbl_telephone') </label>
+                        <input wire:model="telephone" type="text" class="form-control" id="telephone">
+                        @error('telephone')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -78,10 +110,19 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label" for="address">@lang('personal::labels.lbl_address') <span class="text-danger">*</span> </label>
-                        <input wire:model="address" type="text" class="form-control" id="address" required="">
-                        @error('address')
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="sex">@lang('personal::labels.lbl_sex') <span class="text-danger">*</span> </label>
+                        <div class="frame-wrap">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="man" name="sex" wire:model="sex" value="H">
+                                <label class="custom-control-label" for="man">@lang('personal::labels.lbl_man')</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="woman" name="sex" wire:model="sex" value="M" >
+                                <label class="custom-control-label" for="woman">@lang('personal::labels.lbl_woman')</label>
+                            </div>
+                        </div>
+                        @error('sex')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -118,31 +159,6 @@
                         <input wire:model="email" type="text" class="form-control" id="email" required="">
                         @error('email')
                         <div class="invalid-feedback-2">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label" for="telephone">@lang('personal::labels.lbl_telephone') </label>
-                        <input wire:model="telephone" type="text" class="form-control" id="telephone">
-                        @error('telephone')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="sex">@lang('personal::labels.lbl_sex') <span class="text-danger">*</span> </label>
-                        <div class="frame-wrap">
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="man" name="sex" wire:model="sex" value="H">
-                                <label class="custom-control-label" for="man">@lang('personal::labels.lbl_man')</label>
-                            </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="woman" name="sex" wire:model="sex" value="M" >
-                                <label class="custom-control-label" for="woman">@lang('personal::labels.lbl_woman')</label>
-                            </div>
-                        </div>
-                        @error('sex')
-                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -212,6 +228,12 @@
         </div>
     </div>
     <script type="text/javascript">
+        function deletePhoto(){
+            $('#xyDivPreviewPhoto').attr('style', 'display: none !important');
+            $("#xyDivUploadPhoto").css('display', 'block');
+            $("xyDivErrorPhoto").html("");
+        }
+
         document.addEventListener('per-employees-type-save', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
@@ -228,6 +250,16 @@
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
         document.addEventListener('livewire:load', function () {
+            $('#photo').change(function(e){
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    $('#preview-image-before-upload').attr('src', e.target.result);
+                    $("#xyDivPreviewPhoto").css('display', 'block');
+                    $("#xyDivUploadPhoto").css('display', 'none');
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
+
             $("#employee_type_id").change(function (){
                 if($(this).val() == "1"){
                     $("#xyDivCompany").css("display", "none");
