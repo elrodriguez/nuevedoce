@@ -142,7 +142,7 @@ class EmployeesEdit extends Component
             'last_name_father' => 'required|min:3|max:255',
             'last_name_mother' => 'required|min:3|max:255',
             'address' => 'required|min:3|max:255',
-            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
+            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email,'.$this->person_search->id,
             //'telephone' => 'required|min:3|max:255',
             'sex' => 'required',
             'birth_date' => 'required',
