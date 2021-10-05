@@ -167,7 +167,6 @@ return [
          */
         Laraveles\Spanish\SpanishServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-        GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
         /*
          * Application Service Providers...
          */
