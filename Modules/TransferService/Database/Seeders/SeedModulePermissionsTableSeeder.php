@@ -29,6 +29,11 @@ class SeedModulePermissionsTableSeeder extends Seeder
         $permissions = [];
 
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_dashboard','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_clientes','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_clientes_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_clientes_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_clientes_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_clientes_buscar','guard_name' => 'sanctum']));
 
         $role = Role::find(1);
         foreach($permissions as $permission){

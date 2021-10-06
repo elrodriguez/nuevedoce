@@ -45,12 +45,13 @@ return [
     'lbl_cv'            => 'Curriculum Vitae',
     'lbl_choose_file'   => 'Elija el archivo',
     'lbl_enter_identity_document_number'   => 'Ingrese número documento de Identidad',
-    'lbl_navigation'    => 'Navigation',
+    'lbl_navigation'    => 'Navegación',
     'lbl_dashBoard'     => 'Tablero',
     'lbl_companies'     => 'Empresas',
     'lbl_type_person'   => 'Tipo de Persona',
     'lbl_internal'      => 'Interno',
     'lbl_external'      => 'Externo',
+    'lbl_photo'         => 'Foto',
 
     'btn_edit'          => 'Editar',
     'btn_delete'        => 'Eliminar',
@@ -63,6 +64,7 @@ return [
     'btn_ok'            => 'Ok',
 
     'msg_0001'          => '¿Desea eliminar estos datos?',
+    'msg_delete_photo'  => '¿Desea eliminar la foto de este empleado?',
     'msg_0002'          => '¡Esta acción no se puede deshacer!',
     'msg_success'       => 'Datos guardados correctamente.',
     'msg_delete'        => 'Datos eliminados correctamente.',

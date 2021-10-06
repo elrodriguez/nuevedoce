@@ -1,14 +1,14 @@
 <?php
 
-namespace Modules\Personal\Http\Livewire\Employees;
+namespace Modules\TransferService\Http\Livewire\Customers;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use Modules\Personal\Entities\PerEmployee;
 use App\Models\Person;
 use Illuminate\Support\Facades\Lang;
+use Modules\TransferService\Entities\SerCustomer;
 
-class EmployeesList extends Component
+class CustomersList extends Component
 {
     public $show;
     public $search;
@@ -22,26 +22,20 @@ class EmployeesList extends Component
 
     public function render()
     {
-        return view('personal::livewire.employees.employees-list', ['employees' => $this->getEmployees()]);
+        return view('transferservice::livewire.customers.customers-list', ['customers' => $this->getCustomers()]);
     }
 
-    public function getEmployees(){
-        return PerEmployee::where('people.full_name','like','%'.$this->search.'%')
+    public function getCustomers(){
+        return SerCustomer::where('people.full_name','like','%'.$this->search.'%')
             ->join('people', 'person_id', 'people.id')
-            ->join('per_occupations', 'occupation_id', 'per_occupations.id')
-            ->leftJoin('people as per_companies', 'company_id', 'per_companies.id')
-            ->join('per_employee_types', 'employee_type_id', 'per_employee_types.id')
+            ->join('identity_document_types', 'people.identity_document_type_id', 'identity_document_types.id')
             ->select(
-                'per_employees.id',
+                'ser_customers.id',
                 'people.full_name',
+                'identity_document_types.description as name_type_document',
                 'people.number',
-                'per_employees.admission_date',
-                'per_occupations.name AS name_occupation',
-                'per_companies.full_name AS name_company',
-                'per_employee_types.name AS name_employee_type',
-                'per_employees.state',
-                'per_employees.cv',
-                'per_employees.photo'
+                'ser_customers.direct',
+                'ser_customers.state'
             )
             ->paginate($this->show);
     }
@@ -50,7 +44,7 @@ class EmployeesList extends Component
         return $this->hasOne(Person::class); #belongsTo
     }
 
-    public function employeesSearch()
+    public function customersSearch()
     {
         $this->resetPage();
     }
@@ -78,14 +72,14 @@ class EmployeesList extends Component
         return rmdir($dir);
     }
 
-    public function deleteEmployee($id){
-        $employee = PerEmployee::find($id);
+    public function deleteCustomer($id){
+        $employee = SerCustomer::find($id);
         $person_id = $employee->person_id;
         $employee->delete();
         #Person::find($person_id)->delete();
         //Eliminar archivos y direcctorio
-        $this->deleteDirectory('storage/employees_photo/'.$id);
+        $this->deleteDirectory('storage/customers_photo/'.$id);
 
-        $this->dispatchBrowserEvent('per-employees-delete', ['msg' => Lang::get('personal::labels.msg_delete')]);
+        $this->dispatchBrowserEvent('ser-customers-delete', ['msg' => Lang::get('transferservice::messages.msg_delete')]);
     }
 }

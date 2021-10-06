@@ -1,7 +1,8 @@
 <?php
 
-namespace Modules\Personal\Http\Livewire\Employees;
+namespace Modules\TransferService\Http\Livewire\Customers;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Country;
@@ -10,12 +11,10 @@ use App\Models\District;
 use App\Models\IdentityDocumentType;
 use App\Models\Person;
 use App\Models\Province;
-use Modules\Personal\Entities\PerEmployee;
-use Modules\Personal\Entities\PerEmployeeType;
-use Modules\Personal\Entities\PerOccupation;
 use Livewire\WithFileUploads;
+use Modules\TransferService\Entities\SerCustomer;
 
-class EmployeesEdit extends Component
+class CustomersEdit extends Component
 {
     use WithFileUploads;
     public $names;
@@ -38,56 +37,34 @@ class EmployeesEdit extends Component
     public $provinces = [];
     public $districts = [];
 
-    //For Employee
+    //For Customer
     public $state = true;
-    public $employee_id;
-    public $admission_date;
+    public $customer_id;
+    public $direct;
     public $person_id;
-    public $company_id;
-    public $occupation_id;
-    public $employee_type_id;
-    public $cv;
     public $photo;
-    public $language;
     public $extension_photo;
 
     //Combos Data:
-    public $companies;
-    public $occupations;
-    public $employees_types;
     public $person_search;
-    public $employee_search;
+    public $customer_search;
     public $search;
     public $option;
-    public $cv_view;
     public $photo_view;
 
     public function mount($id){
         $this->document_types = IdentityDocumentType::where('active',true)->get();
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
-        //$this->companies = SetCompany::all();
-        $this->companies = Person::where('identity_document_type_id', '6')->get(); #codigo-> 6:RUC
-        $this->occupations = PerOccupation::where('state',true)->get();
-        $this->employees_types = PerEmployeeType::where('state',true)->get();
-        $this->language = Lang::locale();
 
-        //Data Of Employee
-        $this->employee_id = $id;
-        $this->employee_search = PerEmployee::find($id);
-        $ddate_ad = null;
-        if($this->employee_search->admission_date){
-            list($Y,$m,$d) = explode('-',$this->employee_search->admission_date);
-            $ddate_ad = $d.'/'.$m.'/'. $Y;
-        }
-        $this->admission_date = $ddate_ad;
-        $this->person_id = $this->employee_search->person_id;
-        $this->company_id = $this->employee_search->company_id;
-        $this->occupation_id = $this->employee_search->occupation_id;
-        $this->employee_type_id = $this->employee_search->employee_type_id;
-        $this->cv = $this->employee_search->cv;
-        $this->extension_photo = $this->employee_search->photo;
-        $this->state = $this->employee_search->state;
+        //Data Of Customer
+        $this->customer_id = $id;
+        $this->customer_search = SerCustomer::find($id);
+
+        $this->person_id = $this->customer_search->person_id;
+        $this->extension_photo = $this->customer_search->photo;
+        $this->direct = $this->customer_search->direct;
+        $this->state = $this->customer_search->state;
 
         //Data Person
         $this->person_search = Person::find($this->person_id);
@@ -112,12 +89,8 @@ class EmployeesEdit extends Component
         $this->identity_document_type_id = $this->person_search->identity_document_type_id;
         $this->number = $this->person_search->number;
 
-        if(file_exists(public_path('storage/employee_cv/'.$this->employee_id.'/'.$this->employee_id.'.pdf'))){
-            $this->cv_view = url('storage/employee_cv/'.$this->employee_id.'/'.$this->employee_id.'.pdf');
-        }
-
-        if(file_exists(public_path('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo))){
-            $this->photo_view = url('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo);
+        if(file_exists(public_path('storage/customers_photo/'.$this->customer_id.'/'.$this->customer_id.'.'.$this->extension_photo))){
+            $this->photo_view = url('storage/customers_photo/'.$this->customer_id.'/'.$this->customer_id.'.'.$this->extension_photo);
         }
 
         $this->getProvinves();
@@ -127,7 +100,7 @@ class EmployeesEdit extends Component
 
     public function render()
     {
-        return view('personal::livewire.employees.employees-edit');
+        return view('transferservice::livewire.customers.customers-edit');
     }
 
     public function save(){
@@ -146,25 +119,13 @@ class EmployeesEdit extends Component
             //'telephone' => 'required|min:3|max:255',
             'sex' => 'required',
             'birth_date' => 'required',
-            'photo' => 'nullable|image|max:1024',
-
-            'employee_type_id' => 'required',
-            'occupation_id' => 'required',
-            //'company_id' => 'required',
-            'admission_date' => 'required',
-            'cv' => 'nullable|mimes:pdf|max:5120'
+            'photo' => 'nullable|image|max:1024'
         ]);
 
         $ddate = null;
         if($this->birth_date){
             list($d,$m,$y) = explode('/',$this->birth_date);
             $ddate = $y.'-'.$m.'-'. $d;
-        }
-
-        $ddate_ad = null;
-        if ($this->admission_date) {
-            list($d, $m, $y) = explode('/', $this->admission_date);
-            $ddate_ad = $y . '-' . $m . '-' . $d;
         }
 
         $this->person_search->update([
@@ -186,35 +147,23 @@ class EmployeesEdit extends Component
             'birth_date' => $ddate
         ]);
 
-        //Validando si empleado es Interno no vaya con empresa
-        if($this->employee_type_id == '1'){
-            $this->company_id = null;
-        }
-
         if($this->photo){
             $this->extension_photo = $this->photo->extension();
         }
 
-        $this->employee_search->update([
-            'admission_date' => $ddate_ad,
-            'person_id' => $this->person_id,
-            'company_id' => $this->company_id,
-            'occupation_id' => $this->occupation_id,
-            'employee_type_id' => $this->employee_type_id,
-            'cv' => '',
-            'photo' => $this->extension_photo,
-            'state' => $this->state
+        $this->customer_search->update([
+            'person_id'     => $this->person_id,
+            'direct'        => $this->direct,
+            'photo'         => $this->extension_photo,
+            'state'         => $this->state,
+            'person_edit'   =>  Auth::user()->person_id
         ]);
 
-        if($this->cv){
-            $this->cv->storeAs('employee_cv/'.$this->employee_id.'/', $this->employee_id.'.pdf','public');
-        }
-
         if($this->photo){
-            $this->photo->storeAs('employees_photo/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
+            $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');
         }
 
-        $this->dispatchBrowserEvent('per-employees-type-edit', ['msg' => Lang::get('personal::labels.msg_update')]);
+        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('personal::labels.msg_update')]);
     }
 
     public function getProvinves(){
@@ -227,17 +176,17 @@ class EmployeesEdit extends Component
             ->where('active',true)->get();
     }
 
-    public function deletePhotoEmployee(){
-        if(file_exists(public_path('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo))){
-            $result = unlink('storage/employees_photo/'.$this->employee_id.'/'.$this->employee_id.'.'.$this->extension_photo);
+    public function deletePhotoCustomer(){
+        if(file_exists(public_path('storage/customers_photo/'.$this->customer_id.'/'.$this->customer_id.'.'.$this->extension_photo))){
+            $result = unlink('storage/customers_photo/'.$this->customer_id.'/'.$this->customer_id.'.'.$this->extension_photo);
             if($result){
                 $this->photo_view = '';
                 $this->extension_photo = '';
                 $this->photo = '';
-                $this->employee_search->update([
+                $this->customer_search->update([
                     'photo' => ''
                 ]);
-                $this->dispatchBrowserEvent('per-employees-delete-photo');
+                $this->dispatchBrowserEvent('ser-customers-delete-photo');
             }
         }
     }
