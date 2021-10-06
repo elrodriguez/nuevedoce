@@ -45,7 +45,7 @@ return [
     'lbl_cv'            => 'Curriculum Vitae',
     'lbl_choose_file'   => 'Choose File',
     'lbl_enter_identity_document_number'   => 'Enter Identity Document Number',
-    'lbl_navigation'    => 'Navegación',
+    'lbl_navigation'    => 'Navigation',
     'lbl_dashBoard'     => 'Dashboard',
     'lbl_companies'     => 'Companies',
     'lbl_type_person'   => 'Type Person',

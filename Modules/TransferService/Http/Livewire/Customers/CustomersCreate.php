@@ -1,7 +1,8 @@
 <?php
 
-namespace Modules\Personal\Http\Livewire\Employees;
+namespace Modules\TransferService\Http\Livewire\Customers;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Country;
@@ -14,8 +15,9 @@ use Modules\Personal\Entities\PerEmployee;
 use Modules\Personal\Entities\PerEmployeeType;
 use Modules\Personal\Entities\PerOccupation;
 use Livewire\WithFileUploads;
+use Modules\TransferService\Entities\SerCustomer;
 
-class EmployeesCreate extends Component
+class CustomersCreate extends Component
 {
     use WithFileUploads;
 
@@ -39,23 +41,17 @@ class EmployeesCreate extends Component
     public $provinces = [];
     public $districts = [];
 
-    //For Employee
+    //For Customer
     public $state = true;
-    public $employee_id;
-    public $admission_date;
+    public $customer_id;
+    public $direct = false;
     public $person_id;
-    public $company_id;
-    public $occupation_id;
-    public $employee_type_id;
-    public $cv;
     public $photo;
-    public $language;
     public $extension_photo;
 
     //Combos Data:
     public $companies;
     public $occupations;
-    public $employees_types;
     public $person_search;
     public $search;
     public $option;
@@ -64,11 +60,6 @@ class EmployeesCreate extends Component
         $this->document_types = IdentityDocumentType::where('active',true)->get();
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
-        //$this->companies = SetCompany::all();
-        $this->companies = Person::where('identity_document_type_id', '6')->get(); #codigo-> 6:RUC
-        $this->occupations = PerOccupation::where('state',true)->get();
-        $this->employees_types = PerEmployeeType::where('state',true)->get();
-        $this->language = Lang::locale();
 
         $param = explode('_', $id);
         $this->option = isset($param[0])?$param[0]:'';
@@ -100,20 +91,15 @@ class EmployeesCreate extends Component
                 $this->identity_document_type_id = $this->person_search->identity_document_type_id;
                 $this->number = $this->person_search->number;
 
-//                if(file_exists(public_path('storage/person/'.$this->person->id.'/'.$this->person->id.'.png'))){
-//                    $this->photo_view = url('storage/person/'.$this->person->id.'/'.$this->person->id.'.png');
-//                }
-
                 $this->getProvinves();
                 $this->getPDistricts();
             }
         }
-
     }
 
     public function render()
     {
-        return view('personal::livewire.employees.employees-create');
+        return view('transferservice::livewire.customers.customers-create');
     }
 
     public function save(){
@@ -133,13 +119,7 @@ class EmployeesCreate extends Component
                 //'telephone' => 'required|min:3|max:255',
                 'sex' => 'required',
                 'birth_date' => 'required',
-                'photo' => 'nullable|image|max:1024',
-
-                'employee_type_id' => 'required',
-                'occupation_id' => 'required',
-                //'company_id' => 'required',
-                'admission_date' => 'required',
-                'cv' => 'nullable|mimes:pdf|max:5120'
+                'photo' => 'nullable|image|max:1024'
             ]);
         }else{
             $this->validate([
@@ -157,13 +137,7 @@ class EmployeesCreate extends Component
                 //'telephone' => 'required|min:3|max:255',
                 'sex' => 'required',
                 'birth_date' => 'required',
-                'photo' => 'nullable|image|max:1024',
-
-                'employee_type_id' => 'required',
-                'occupation_id' => 'required',
-                //'company_id' => 'required',
-                'admission_date' => 'required',
-                'cv' => 'nullable|mimes:pdf|max:5120'
+                'photo' => 'nullable|image|max:1024'
             ]);
         }
 
@@ -171,12 +145,6 @@ class EmployeesCreate extends Component
         if($this->birth_date){
             list($d,$m,$y) = explode('/',$this->birth_date);
             $ddate = $y.'-'.$m.'-'. $d;
-        }
-
-        $ddate_ad = null;
-        if ($this->admission_date) {
-            list($d, $m, $y) = explode('/', $this->admission_date);
-            $ddate_ad = $y . '-' . $m . '-' . $d;
         }
 
         if($this->option == 'A') {
@@ -199,27 +167,21 @@ class EmployeesCreate extends Component
                 'birth_date' => $ddate
             ]);
 
-            //Validando si empleado es Interno no vaya con empresa
-            if($this->employee_type_id == '1'){
-                $this->company_id = null;
-            }
-
             if($this->photo){
                 $this->extension_photo = $this->photo->extension();
+            }else{
+                $this->extension_photo = '';
             }
 
-            $employee_save = PerEmployee::create([
-                'admission_date' => $ddate_ad,
+            $customer_save = SerCustomer::create([
                 'person_id' => $person->id,
-                'company_id' => $this->company_id,
-                'occupation_id' => $this->occupation_id,
-                'employee_type_id' => $this->employee_type_id,
-                'cv' => '',
+                'direct' => $this->direct,
                 'photo' => $this->extension_photo,
-                'state' => $this->state
+                'state' => $this->state,
+                'person_create' =>  Auth::user()->person_id
             ]);
             $this->person_id = $person->id;
-            $this->employee_id = $employee_save->id;
+            $this->customer_id = $customer_save->id;
 
         }elseif($this->option == 'B'){
             $this->person_search->update([
@@ -241,37 +203,28 @@ class EmployeesCreate extends Component
                 'birth_date' => $ddate
             ]);
 
-            //Validando si empleado es Interno no vaya con empresa
-            if($this->employee_type_id == '1'){
-                $this->company_id = null;
-            }
-
             if($this->photo){
                 $this->extension_photo = $this->photo->extension();
+            }else{
+                $this->extension_photo = '';
             }
 
-            $employee_save = PerEmployee::create([
-                'admission_date' => $ddate_ad,
+            $customer_save = SerCustomer::create([
                 'person_id' => $this->person_id,
-                'company_id' => $this->company_id,
-                'occupation_id' => $this->occupation_id,
-                'employee_type_id' => $this->employee_type_id,
-                'cv' => '',
+                'direct' => $this->direct,
                 'photo' => $this->extension_photo,
-                'state' => $this->state
+                'state' => $this->state,
+                'person_create' =>  Auth::user()->person_id
             ]);
-            $this->employee_id = $employee_save->id;
-        }
 
-        if($this->cv){
-            $this->cv->storeAs('employee_cv/'.$this->employee_id.'/', $this->employee_id.'.pdf','public');
+            $this->customer_id = $customer_save->id;
         }
 
         if($this->photo){
-            $this->photo->storeAs('employees_photo/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
+            $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');
         }
 
-        $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('personal::labels.msg_success')]);
+        $this->dispatchBrowserEvent('ser-customers-type-save', ['msg' => Lang::get('transferservice::messages.msg_success')]);
         $this->clearForm();
     }
 
@@ -301,13 +254,9 @@ class EmployeesCreate extends Component
         $this->identity_document_type_id = null;
         $this->number = null;
 
-        //Employee:
-        $this->admission_date = null;
+        //Customer:
         $this->person_id = null;
-        $this->company_id = null;
-        $this->employee_type_id = null;
-        $this->occupation_id = null;
-        $this->cv = '';
+        $this->direct = false;
         $this->photo = '';
     }
 }
