@@ -6,9 +6,10 @@
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="company_id">@lang('setting::labels.company') <span class="text-danger">*</span> </label>
                         <select wire:model="company_id" class="custom-select" id="company_id" required="">
-                        @foreach($companies as $company)
+                            <option value="">Seleccionar</option>
+                            @foreach($companies as $company)
                             <option value="{{ $company->id }}" {{ $company->main ? 'selected' : '' }} >{{ $company->name }}</option>
-                        @endforeach
+                            @endforeach
                         </select>
                         @error('company_id')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -108,15 +109,19 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="observation">@lang('setting::labels.observation') </label>
                         <textarea wire:model="observation" class="form-control" id="observation" required=""></textarea>
-                        @error('observation')
-                        <div class="invalid-feedback-2">{{ $message }}</div>
-                        @enderror
+                        
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="observation">@lang('setting::labels.map') </label>
+                        <textarea wire:model="map" class="form-control" id="map" required=""></textarea>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="observation">@lang('setting::labels.observation') </label>
-                        <div id="map"></div>
+                        <div wire:ignore>
+                            <div id="map"></div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -141,5 +146,5 @@
         
         
     </script>
-    
+
 </div>

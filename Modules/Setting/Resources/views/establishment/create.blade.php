@@ -29,28 +29,10 @@
 @livewire('setting::establishment.establishment-create')
 @endsection
 @section('script')
-<script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8pwR-4eX6K60OuUCrR1gIN0YU9AEMU0c&callback=initMap2&libraries=&v=weekly"
-      async
-    ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACWgWHx0R0SxRW3U_dVDdHWaMNETIjwUM&callback=initMap" async defer></script>
     <script>
-        function initMap2() {
-            console.log('empieza')
-            // The location of Uluru
-            const uluru = { lat: -25.344, lng: 131.036 };
-            // The map, centered at Uluru
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 4,
-                center: uluru,
-            });
-            console.log('sigue')
-            // The marker, positioned at Uluru
-            const marker = new google.maps.Marker({
-                position: uluru,
-                map: map,
-            });
-            console.log(marker)
-            console.log(map)
+        function initMap() {
+            
         }
     </script>
 @endsection

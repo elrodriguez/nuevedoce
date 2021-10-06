@@ -28,28 +28,7 @@
             </li>
             @endcan
             <li class="nav-title">Navegación</li>
-            @can('serviciodetraslados_dashboard')
-                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'company' ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                        <i class="fal fa-city"></i>
-                        <span class="nav-link-text" data-i18n="nav.empresa">{{ __('transferservice::labels.my_company') }}</span>
-                    </a>
-                    <ul>
-                        <li class="{{ $path[0] == 'transferservice' && $path[1] == 'company' && $path[2] == 'list' ? 'active' : '' }}">
-                            <a href="{{ route('transferservice_company') }}" title="empresas" data-filter-tags="Datos Generales">
-                                <span class="nav-link-text" data-i18n="nav.datos_generales">{{ __('transferservice::labels.companies_list') }}</span>
-                            </a>
-                        </li>
-                        @can('configuraciones_empresas_nuevo')
-                        <li class="{{ $path[0] == 'transferservice' && $path[1] == 'company' && $path[2] == 'create' ? 'active' : '' }}">
-                            <a href="{{ route('transferservice_company_create') }}" title="empresas" data-filter-tags="nueva empresa">
-                                <span class="nav-link-text" data-i18n="nav.nueva_empresa">{{ __('transferservice::labels.companies_create') }}</span>
-                            </a>
-                        </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
+
         </ul>
     </nav>
 </div>

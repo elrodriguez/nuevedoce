@@ -63,7 +63,7 @@ class EstablishmentCreate extends Component
             'email' => $this->email,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'map' => $this->map,
+            'map' => html_entity_decode($this->map, ENT_QUOTES | ENT_XML1, 'UTF-8'),
             'state' => $this->state ? true : false
         ]);
 
@@ -75,6 +75,15 @@ class EstablishmentCreate extends Component
         $this->address = null;
         $this->email = null;
         $this->phone = null;
+        $this->address = null;
+        $this->department_id = null;
+        $this->province_id = null;
+        $this->district_id = null;
+        $this->web_page = null;
+        $this->latitude = null;
+        $this->longitude = null;
+        $this->observation = null;
+        $this->map = null;
     }
 
     public function getProvinves(){
