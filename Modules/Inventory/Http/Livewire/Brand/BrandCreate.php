@@ -18,8 +18,7 @@ class BrandCreate extends Component
     public function save(){
 
         $this->validate([
-            'description' => 'required',
-            'status' => 'required'
+            'description' => 'required'
         ]);
 
         
@@ -37,7 +36,7 @@ class BrandCreate extends Component
     
     public function clearForm(){
         $this->description = null;
-        $this->status = null;
+        $this->status = true;
         
     }
 
