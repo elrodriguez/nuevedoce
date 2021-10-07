@@ -26,10 +26,9 @@ class CategoryEdit extends Component
     public function save(){
 
         $this->validate([
-            'description' => 'required',
-            'status' => 'required'
+            'description' => 'required'
         ]);
-
+       
         $this->category->update([
             'description' => $this->description,
             'status' => $this->status

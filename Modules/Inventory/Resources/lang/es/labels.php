@@ -3,7 +3,7 @@
 return [
 
     'name' => 'Nombre',
-    'description' => 'Descricion',
+    'description' => 'Descripción',
     'active' => 'Activo',
     'inactive' => 'Inactivo',
     'status' => 'Estado',
