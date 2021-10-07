@@ -19,6 +19,7 @@
     </div>
 @endsection
 @section('content')
+    @livewire('personal::employees.employees-search')
     @livewire('personal::employees.employees-create', ['id' => $id])
 @endsection
 @section('script')

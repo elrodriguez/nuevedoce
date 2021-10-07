@@ -42,6 +42,11 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'personal_empleados_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'personal_empleados_eliminar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'personal_empleados_buscar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empresas','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empresas_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empresas_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empresas_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'personal_empresas_buscar','guard_name' => 'sanctum']));
 
         $role = Role::find(1);
         foreach($permissions as $permission){

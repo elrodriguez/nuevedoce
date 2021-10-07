@@ -26,7 +26,7 @@ class EmployeesList extends Component
     }
 
     public function getEmployees(){
-        return PerEmployee::where('admission_date','like','%'.$this->search.'%')
+        return PerEmployee::where('people.full_name','like','%'.$this->search.'%')
             ->join('people', 'person_id', 'people.id')
             ->join('per_occupations', 'occupation_id', 'per_occupations.id')
             ->leftJoin('people as per_companies', 'company_id', 'per_companies.id')
@@ -55,11 +55,36 @@ class EmployeesList extends Component
         $this->resetPage();
     }
 
+    public function deleteDirectory($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+
+        }
+
+        return rmdir($dir);
+    }
+
     public function deleteEmployee($id){
         $employee = PerEmployee::find($id);
         $person_id = $employee->person_id;
         $employee->delete();
         #Person::find($person_id)->delete();
+        //Eliminar archivos y direcctorio
+        $this->deleteDirectory('storage/employees_photo/'.$id);
 
         $this->dispatchBrowserEvent('per-employees-delete', ['msg' => Lang::get('personal::labels.msg_delete')]);
     }

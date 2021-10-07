@@ -108,6 +108,28 @@
                 </ul>
             </li>
             @endcan
+            @can('personal_empresas')
+                <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Empresas" data-filter-tags="Empresas">
+                        <i class="fal fa-landmark"></i>
+                        <span class="nav-link-text" data-i18n="nav.empresas">@lang('personal::labels.lbl_companies')</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('personal_companies_index') }}" title="Listado de Empresas" data-filter-tags="Listado de Empresas">
+                                <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('personal::labels.lbl_to_list')</span>
+                            </a>
+                        </li>
+                        @can('personal_empresas_nuevo')
+                            <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('personal_companies_search') }}" title="Nueva Empresa" data-filter-tags="Nueva Empresa">
+                                    <span class="nav-link-text" data-i18n="nav.nueva_empresa">@lang('personal::labels.lbl_new')</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>

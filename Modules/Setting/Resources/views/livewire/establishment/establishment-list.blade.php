@@ -37,8 +37,8 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">Acciones</th>
-                        <th>Nombre</th>
-                        <th>Usuario</th>
+                        <th>{{ __('setting::labels.address') }}</th>
+                        <th>{{ __('setting::labels.telephone') }}</th>
                         <th>Email</th>
                     </tr>
                 </thead>

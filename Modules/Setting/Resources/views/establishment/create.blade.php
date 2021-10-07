@@ -1,4 +1,14 @@
 @extends('setting::layouts.master')
+@section('style')
+<style type="text/css">
+    #map {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+    }
+</style>
+@endsection
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">Configuraciones</li>
@@ -17,5 +27,13 @@
 @endsection
 @section('content')
 @livewire('setting::establishment.establishment-create')
+@endsection
+@section('script')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACWgWHx0R0SxRW3U_dVDdHWaMNETIjwUM&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            
+        }
+    </script>
 @endsection
 

@@ -21,6 +21,8 @@ class SetEstablishment extends Model
         'district_id',
         'web_page',
         'email',
+        'latitude',
+        'longitude',
         'map'
     ];
     

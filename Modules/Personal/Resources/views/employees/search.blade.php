@@ -20,6 +20,9 @@
 @endsection
 @section('content')
     @livewire('personal::employees.employees-search')
+    <div class="card-footer d-flex flex-row align-items-center">
+        <a href="{{ route('personal_employees_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('personal::labels.lbl_list')</a>
+    </div>
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>

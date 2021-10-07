@@ -7,6 +7,24 @@
                 </h4>
                 <hr class="mb-0 mt-4">
                 <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <div id="xyDivUploadPhoto" wire:ignore style="{{ $extension_photo!=''?'display:none':'' }}">
+                            <label class="form-label" for="photo">@lang('personal::labels.lbl_photo') <span class="text-danger">*</span> </label>
+                            <div class="custom-file">
+                                <input wire:model="photo" type="file" class="custom-file-input" id="photo">
+                                <label class="custom-file-label" for="customFile">@lang('personal::labels.lbl_choose_file')</label>
+                            </div>
+                        </div>
+                        @error('photo')
+                        <div class="invalid-feedback-2" id="xyDivErrorPhoto">{{ $message }}</div>
+                        @enderror
+                        <div class="d-flex flex-column align-items-center justify-content-center" wire:ignore id="xyDivPreviewPhoto" style="{{ $extension_photo==''?'display:none !important;':'' }}">
+                            <img src="{{ $photo_view }}" id="preview-image-before-upload" class="rounded-circle shadow-2 img-thumbnail" style="width: 80px;height: 70px" alt="">
+                            <a href="javascript:void(0);" onclick="confirmDeletePhoto()" class="btn btn-outline-danger btn-xs btn-icon rounded-circle waves-effect waves-themed">
+                                <i class="fal fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="names">@lang('personal::labels.lbl_names') <span class="text-danger">*</span> </label>
                         <input wire:model="names" type="text" class="form-control" id="names" required="">
@@ -25,6 +43,20 @@
                         <label class="form-label" for="last_name_mother">@lang('personal::labels.lbl_surname_mother') <span class="text-danger">*</span> </label>
                         <input wire:model="last_name_mother" type="text" class="form-control" id="last_name_mother" required="">
                         @error('last_name_mother')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="address">@lang('personal::labels.lbl_address') <span class="text-danger">*</span> </label>
+                        <input wire:model="address" type="text" class="form-control" id="address" required="">
+                        @error('address')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="telephone">@lang('personal::labels.lbl_telephone') </label>
+                        <input wire:model="telephone" type="text" class="form-control" id="telephone">
+                        @error('telephone')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -66,7 +98,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="district_id">@lang('personal::labels.lbl_district') <span class="text-danger">*</span> </label>
                         <select wire:model="district_id" id="district_id" class="custom-select" required="">
                             <option value="">Seleccionar</option>
@@ -78,10 +110,19 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label" for="address">@lang('personal::labels.lbl_address') <span class="text-danger">*</span> </label>
-                        <input wire:model="address" type="text" class="form-control" id="address" required="">
-                        @error('address')
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="sex">@lang('personal::labels.lbl_sex') <span class="text-danger">*</span> </label>
+                        <div class="frame-wrap">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="man" name="sex" wire:model="sex" value="H">
+                                <label class="custom-control-label" for="man">@lang('personal::labels.lbl_man')</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="woman" name="sex" wire:model="sex" value="M" >
+                                <label class="custom-control-label" for="woman">@lang('personal::labels.lbl_woman')</label>
+                            </div>
+                        </div>
+                        @error('sex')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -121,31 +162,6 @@
                         @enderror
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label" for="telephone">@lang('personal::labels.lbl_telephone') </label>
-                        <input wire:model="telephone" type="text" class="form-control" id="telephone">
-                        @error('telephone')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="sex">@lang('personal::labels.lbl_sex') <span class="text-danger">*</span> </label>
-                        <div class="frame-wrap">
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="man" name="sex" wire:model="sex" value="H">
-                                <label class="custom-control-label" for="man">@lang('personal::labels.lbl_man')</label>
-                            </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" id="woman" name="sex" wire:model="sex" value="M" >
-                                <label class="custom-control-label" for="woman">@lang('personal::labels.lbl_woman')</label>
-                            </div>
-                        </div>
-                        @error('sex')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
                 <h4 class="panel-hdr">
                     <i class="fal fa-user-cog"></i> @lang('personal::labels.lbl_employee_data')
                 </h4>
@@ -174,7 +190,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3" id="xyDivCompany" wire:ignore style="{{ $employee_type_id == 1 ? 'display:none' : '' }}">
                         <label class="form-label" for="company_id">@lang('personal::labels.lbl_company') </label>
                         <select wire:model="company_id" id="company_id" class="custom-select">
                             <option value="">@lang('personal::labels.lbl_select')</option>
@@ -215,6 +231,45 @@
         </div>
     </div>
     <script type="text/javascript">
+        function confirmDeletePhoto(){
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
+            let box = bootbox.confirm({
+                title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('personal::labels.msg_delete_photo')}}",
+                message: "<span><strong>{{__('personal::labels.lbl_warning')}}: </strong> {{__('personal::labels.msg_0002')}}</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons:
+                    {
+                        confirm:
+                            {
+                                label: '{{__('personal::labels.btn_yes')}}',
+                                className: 'btn-danger shadow-0'
+                            },
+                        cancel:
+                            {
+                                label: '{{__('personal::labels.btn_not')}}',
+                                className: 'btn-default'
+                            }
+                    },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function(result)
+                {
+                    if(result){
+                        @this.deletePhotoEmployee();
+                    }
+                }
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
+            box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
+        }
+
+        document.addEventListener('per-employees-delete-photo', function(){
+            $('#xyDivPreviewPhoto').attr('style', 'display: none !important');
+            $("#xyDivUploadPhoto").css('display', 'block');
+            $("xyDivErrorPhoto").html("");
+        });
+
         document.addEventListener('per-employees-type-edit', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
@@ -227,6 +282,25 @@
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
         document.addEventListener('livewire:load', function () {
+            $('#photo').change(function(e){
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    $('#preview-image-before-upload').attr('src', e.target.result);
+                    $("#xyDivPreviewPhoto").css('display', 'block');
+                    $("#xyDivUploadPhoto").css('display', 'none');
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
+
+            $("#employee_type_id").change(function (){
+                if($(this).val() == "1"){
+                    $("#xyDivCompany").css("display", "none");
+                    $("#company_id").val("");
+                }else{
+                    $("#xyDivCompany").css("display", "block");
+                }
+            });
+
             $(":input").inputmask();
             var controls = {
                 leftArrow: "<i class='fal fa-angle-left' style='font-size: 1.25rem'></i>",

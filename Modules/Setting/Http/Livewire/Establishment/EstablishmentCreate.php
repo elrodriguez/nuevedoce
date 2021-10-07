@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Setting\Entities\SetCompany;
 use Modules\Setting\Entities\SetEstablishment;
+use App\Models\Country;
+use App\Models\Department;
+use App\Models\District;
+use App\Models\Province;
 class EstablishmentCreate extends Component
 {
     public $companies;
@@ -13,9 +17,26 @@ class EstablishmentCreate extends Component
     public $address;
     public $phone;
     public $email;
+    public $country_id = 'PE';
+    public $department_id = null;
+    public $province_id;
+    public $district_id;
+    public $web_page;
+    public $latitude;
+    public $longitude;
+    public $observation;
+    public $map;
+
+    public $countries = [];
+    public $departments = [];
+    public $provinces = [];
+    public $districts = [];
+    public $state;
 
     public function mount(){
         $this->companies = SetCompany::all();
+        $this->countries = Country::where('active',true)->get();
+        $this->departments = Department::where('active',true)->get();
     }
 
     public function render()
@@ -32,15 +53,18 @@ class EstablishmentCreate extends Component
         SetEstablishment::create([
             'address' => $this->address,
             'phone' => $this->phone,
-            'observation' => 'dese',
-            'company_id',
-            'country_id',
-            'department_id',
-            'province_id',
-            'district_id',
-            'web_page' => 'dese',
+            'observation' => $this->observation,
+            'company_id' => $this->company_id,
+            'country_id' => $this->country_id,
+            'department_id' => $this->department_id,
+            'province_id' => $this->province_id,
+            'district_id' => $this->district_id,
+            'web_page' => $this->web_page,
             'email' => $this->email,
-            'map' => 'ddd'
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'map' => html_entity_decode($this->map, ENT_QUOTES | ENT_XML1, 'UTF-8'),
+            'state' => $this->state ? true : false
         ]);
 
         $this->clearForm();
@@ -51,5 +75,25 @@ class EstablishmentCreate extends Component
         $this->address = null;
         $this->email = null;
         $this->phone = null;
+        $this->address = null;
+        $this->department_id = null;
+        $this->province_id = null;
+        $this->district_id = null;
+        $this->web_page = null;
+        $this->latitude = null;
+        $this->longitude = null;
+        $this->observation = null;
+        $this->map = null;
+    }
+
+    public function getProvinves(){
+        $this->provinces = Province::where('department_id',$this->department_id)
+            ->where('active',true)->get();
+        $this->districts = [];
+    }
+
+    public function getPDistricts(){
+        $this->districts = District::where('province_id',$this->province_id)
+            ->where('active',true)->get();
     }
 }
