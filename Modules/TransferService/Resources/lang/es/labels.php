@@ -48,5 +48,10 @@ return [
     'lbl_direct'        => 'Directo',
     'lbl_yes'           => 'Si',
     'lbl_not'           => 'No',
-    'lbl_customer'      => 'Cliente'
+    'lbl_customer'      => 'Cliente',
+    'lbl_locals'        => 'Locales',
+    'lbl_local'         => 'Local',
+    'lbl_reference'     => 'Referencia',
+    'lbl_latitude'      => 'Latitud',
+    'lbl_longitude'     => 'Longitud'
 ];

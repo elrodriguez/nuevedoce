@@ -163,7 +163,7 @@ class CustomersEdit extends Component
             $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');
         }
 
-        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('personal::labels.msg_update')]);
+        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('transferservice::messages.msg_update')]);
     }
 
     public function getProvinves(){

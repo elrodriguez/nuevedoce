@@ -47,8 +47,12 @@ return [
     'lbl_photo'         => 'Photo',
     'lbl_customers'     => 'Customers',
     'lbl_direct'        => 'Direct',
-    'lbl_direct'        => 'Directo',
     'lbl_yes'           => 'Yes',
     'lbl_not'           => 'Not',
-    'lbl_customer'      => 'Customer'
+    'lbl_customer'      => 'Customer',
+    'lbl_locals'        => 'Locals',
+    'lbl_local'         => 'Local',
+    'lbl_reference'     => 'Reference',
+    'lbl_latitude'      => 'Latitude',
+    'lbl_longitude'     => 'Longitude'
 ];
