@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-
+use Elrod\UserActivity\Activity;
 class UserList extends Component
 {
     public $show;
@@ -22,11 +22,18 @@ class UserList extends Component
 
     public function render()
     {
+        
         return view('setting::livewire.user.user-list',['users' => $this->getUsers()]);
     }
 
     public function userSearch()
     {
+        $activity = new activity;
+        $activity->log('Realizo la busqueda de: '.$this->search);
+        $activity->logType('search');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
         $this->resetPage();
     }
 
@@ -43,6 +50,15 @@ class UserList extends Component
     public function deleteUser($id){
         $user = User::find($id);
         $person_id = $user->person_id;
+
+        $activity = new activity;
+        $activity->log('Elimino un usuario');
+        $activity->modelOn(User::class,$id,'users');
+        $activity->dataOld($user); //si el modelo usa el softDeletes no es nesesario
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
         $user->delete();
         Person::find($person_id)->delete();
         

@@ -12,6 +12,8 @@ use App\Models\Province;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 
 class UserCreate extends Component
 {
@@ -37,8 +39,9 @@ class UserCreate extends Component
     public $provinces = [];
     public $districts = [];
     public $photo;
-
+    
     public function mount(){
+
         $this->document_types = IdentityDocumentType::where('active',true)->get();
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
@@ -91,7 +94,7 @@ class UserCreate extends Component
             'birth_date' => $ddate
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $this->names.' '.$this->last_name_father,
             'email' => $this->email,
             'password' => Hash::make('12345678'),
@@ -102,6 +105,14 @@ class UserCreate extends Component
         if($this->photo){
             $this->photo->storeAs('person/'.$person->id.'/', $person->id.'.png','public');
         }
+
+        $activity = new Activity;
+        $activity->modelOn(User::class,$user->id,'users');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_users_create'));
+        $activity->logType('create');
+        $activity->log('creó un nuevo usuario');
+        $activity->save();
 
         $this->clearForm();
         $this->dispatchBrowserEvent('set-user-save', ['msg' => 'Datos guardados correctamente.']);
