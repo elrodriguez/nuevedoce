@@ -111,7 +111,7 @@ class UserEdit extends Component
         }
 
         $activity = new Activity;
-        $activity->dataOld(User::find($this->user->id));
+        $activity->dataOld(['user' => User::find($this->user->id), 'person' => Person::find($this->person->id)]);
 
         $this->person->update([
             'country_id' => $this->country_id,
@@ -140,18 +140,19 @@ class UserEdit extends Component
                 'username' => $this->number
             ]);
         }
-        
+        $msg = 'Actualizo datos del usuario';
         if($this->photo){
             $this->photo->storeAs('person/'.$this->person->id.'/', $this->person->id.'.png','public');
+            $msg .= ' y cambio de foto';
         }
 
         
         $activity->modelOn(User::class,$this->user->id,'users');
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('setting_users_edit',$this->user->id));
-        $activity->dataUpdated($this->user);
+        $activity->dataUpdated(['user'=> $this->user,'person' => $this->person]);
         $activity->logType('edit');
-        $activity->log('creó un nuevo usuario');
+        $activity->log($msg);
         $activity->save();
 
         $this->dispatchBrowserEvent('set-user-save', ['msg' => 'Datos Actualizados correctamente.']);

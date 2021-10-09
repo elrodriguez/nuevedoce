@@ -5,7 +5,8 @@ namespace Modules\Setting\Http\Livewire\User;
 use App\Models\User;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class UserRoles extends Component
 {
     public $user_name;
@@ -39,10 +40,23 @@ class UserRoles extends Component
     }
 
     public function assignRole($id,$name){
+        $activity = new Activity;
+        $msg = '';
         if($this->checked[$id]){
             $this->user->assignRole($name);
+            
+            $msg = 'Se le asigna el rol '.$name;
         }else{
             $this->user->removeRole($name);
+
+            $msg = 'Se le quito el rol '.$name;
         }
+
+        $activity->modelOn(User::class,$this->user->id,'users');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_users_roles',$this->user->id));
+        $activity->logType('assign');
+        $activity->log($msg);
+        $activity->save();
     }
 }
