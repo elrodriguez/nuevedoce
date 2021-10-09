@@ -27,7 +27,6 @@
                 </a>
             </li>
             @endcan
-            <li class="nav-title">Navegación</li>
             <li class="nav-title">{{ __('transferservice::labels.lbl_navigation') }}</li>
             @can('serviciodetraslados_clientes')
                 <li class="{{ $path[0] == 'transferservice' && $path[1] == 'customers' ? 'active open' : '' }}">
@@ -49,6 +48,30 @@
                                 <span class="nav-link-text" data-i18n="nav.nuevo_cliente">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_customer') }}</span>
                             </a>
                         </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('serviciodetraslados_locales')
+                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'locals' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Locales" data-filter-tags="Locales">
+                        <i class="fal fa-store-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.locales">{{ __('transferservice::labels.lbl_locals') }}</span>
+                    </a>
+                    <ul>
+                        @can('serviciodetraslados_locales')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'locals' && $path[2] == 'list' ? 'active' : '' }}">
+                                <a href="{{ route('service_locals_index') }}" title="Listar Locales" data-filter-tags="Listar Locales">
+                                    <span class="nav-link-text" data-i18n="nav.listar_locales">{{ __('transferservice::labels.lbl_to_list') }} {{ __('transferservice::labels.lbl_local') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('serviciodetraslados_locales_nuevo')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'locals' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('service_locals_create', '') }}" title="Nuevo Local" data-filter-tags="Nuevo Local">
+                                    <span class="nav-link-text" data-i18n="nav.nuevo_local">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_local') }}</span>
+                                </a>
+                            </li>
                         @endcan
                     </ul>
                 </li>

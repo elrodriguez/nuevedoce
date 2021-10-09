@@ -20,4 +20,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_clientes_editar'])->get('edit/{id}', 'CustomerController@edit')->name('service_customers_edit');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_clientes_buscar'])->get('search', 'CustomerController@search')->name('service_customers_search');
     });
+
+    Route::group(['prefix' => 'locals'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_locales'])->get('list', 'LocalController@index')->name('service_locals_index');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_locales_nuevo'])->get('create', 'LocalController@create')->name('service_locals_create');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_locales_editar'])->get('edit/{id}', 'LocalController@edit')->name('service_locals_edit');
+    });
 });
