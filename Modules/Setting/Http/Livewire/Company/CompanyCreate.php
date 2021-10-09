@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Setting\Entities\SetCompany;
 use Livewire\WithFileUploads;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class CompanyCreate extends Component
 {
     use WithFileUploads;
@@ -58,7 +59,7 @@ class CompanyCreate extends Component
             SetCompany::where('main',true)->update(['main' => false]);
         }
 
-        SetCompany::create([
+        $company = SetCompany::create([
             'name' => $this->name,
             'number' => $this->number,
             'email' => $this->email,
@@ -71,6 +72,14 @@ class CompanyCreate extends Component
             'logo_store' => $logo_store_name.DIRECTORY_SEPARATOR.'logo_store.jpg',
             'main' => ($this->main ? true : false)
         ]);
+
+        $activity = new Activity;
+        $activity->modelOn(SetCompany::class,$company->id,'set_companies');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_company_create'));
+        $activity->logType('create');
+        $activity->log('creó una nueva empresa');
+        $activity->save();
 
         $this->dispatchBrowserEvent('set-company-save', ['msg' => Lang::get('setting::labels.msg_success')]);
     }
