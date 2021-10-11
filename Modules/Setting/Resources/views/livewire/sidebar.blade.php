@@ -99,6 +99,13 @@
                             </a>
                         </li>
                         @endcan
+                        @can('configuraciones_usuarios_actividades')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'users' && $path[2] == 'activities' ? 'active' : '' }}">
+                            <a href="{{ route('setting_users_activities') }}" title="Actividades en el sistema" data-filter-tags="Actividades en el sistema">
+                                <span class="nav-link-text" data-i18n="nav.actividades_en_el_sistema">{{ __('setting::labels.activities_system') }}</span>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan

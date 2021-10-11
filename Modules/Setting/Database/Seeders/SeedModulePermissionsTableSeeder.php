@@ -44,6 +44,7 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'configuraciones_usuarios_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_usuarios_eliminar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_usuarios_roles','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'configuraciones_usuarios_actividades','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_modulos','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_modulos_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_modulos_editar','guard_name' => 'sanctum']));

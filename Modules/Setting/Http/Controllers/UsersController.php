@@ -48,4 +48,7 @@ class UsersController extends Controller
         return view('setting::user.edit')->with('id',$id);
     }
 
+    public function activities($id = null){
+        return view('setting::user.activities')->with('id',$id);
+    }
 }

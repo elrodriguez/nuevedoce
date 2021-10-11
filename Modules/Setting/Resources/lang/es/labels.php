@@ -61,5 +61,6 @@ return [
     'longitude' => 'longitud',
     'map' => 'Mapa',
     'yes' => 'Si',
-    'observation' => 'Observación'
+    'observation' => 'Observación',
+    'activities_system' => 'Actividades en el sistema'
 ];

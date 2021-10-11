@@ -28,7 +28,7 @@ class RolesForm extends Component
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('setting_roles'));
         $activity->logType('create');
-        $activity->log('creó un nuevo rol '.$this->name]);
+        $activity->log('creó un nuevo rol '.$this->name);
         $activity->save();
     }
 

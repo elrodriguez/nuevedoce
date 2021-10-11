@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Setting\Entities\SetModule;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class ModuleList extends Component
 {
     public $show;
@@ -35,7 +36,17 @@ class ModuleList extends Component
 
     public function deleteModule($id){
         
-        SetModule::find($id)->delete();
+        $module = SetModule::find($id);
+
+        $activity = new activity;
+        $activity->log('Elimino un modulo');
+        $activity->modelOn(SetModule::class,$id,'set_modules');
+        $activity->dataOld($module); 
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
+        $module->delete();
 
         $this->dispatchBrowserEvent('set-module-delete', ['msg' => Lang::get('setting::labels.msg_delete')]);
     }

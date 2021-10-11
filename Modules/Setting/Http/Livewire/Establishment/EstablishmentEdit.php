@@ -91,7 +91,7 @@ class EstablishmentEdit extends Component
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('setting_establishment_edit',$this->establishment->id));
         $activity->logType('edit');
-        $activity->dataUpdated($this->company);
+        $activity->dataUpdated($this->establishment);
         $activity->log('se actualizo datos del estableciemiento');
         $activity->save();
 

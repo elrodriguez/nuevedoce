@@ -85,7 +85,7 @@ class EstablishmentCreate extends Component
         $this->address = null;
         $this->email = null;
         $this->phone = null;
-        $this->address 
+        $this->address = null;
         $this->department_id = null;
         $this->province_id = null;
         $this->district_id = null;
