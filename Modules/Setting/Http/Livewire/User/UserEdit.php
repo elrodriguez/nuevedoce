@@ -12,7 +12,8 @@ use App\Models\Province;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class UserEdit extends Component
 {
     use WithFileUploads;
@@ -109,6 +110,9 @@ class UserEdit extends Component
             $ddate = $y.'-'.$m.'-'. $d;
         }
 
+        $activity = new Activity;
+        $activity->dataOld(['user' => User::find($this->user->id), 'person' => Person::find($this->person->id)]);
+
         $this->person->update([
             'country_id' => $this->country_id,
             'department_id' => $this->department_id,
@@ -136,10 +140,20 @@ class UserEdit extends Component
                 'username' => $this->number
             ]);
         }
-        
+        $msg = 'Actualizo datos del usuario';
         if($this->photo){
             $this->photo->storeAs('person/'.$this->person->id.'/', $this->person->id.'.png','public');
+            $msg .= ' y cambio de foto';
         }
+
+        
+        $activity->modelOn(User::class,$this->user->id,'users');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_users_edit',$this->user->id));
+        $activity->dataUpdated(['user'=> $this->user,'person' => $this->person]);
+        $activity->logType('edit');
+        $activity->log($msg);
+        $activity->save();
 
         $this->dispatchBrowserEvent('set-user-save', ['msg' => 'Datos Actualizados correctamente.']);
     }

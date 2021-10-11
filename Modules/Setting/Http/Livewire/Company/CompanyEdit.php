@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Setting\Entities\SetCompany;
 use Livewire\WithFileUploads;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class CompanyEdit extends Component
 {
     use WithFileUploads;
@@ -88,6 +89,8 @@ class CompanyEdit extends Component
         if($this->main){
             SetCompany::where('main',true)->update(['main' => false]);
         }
+        $activity = new Activity;
+        $activity->dataOld(SetCompany::find($this->company->id));
 
         $this->company->update([
             'name' => $this->name,
@@ -103,6 +106,15 @@ class CompanyEdit extends Component
             'main' => ($this->main ? true : false)
         ]);
         
+        
+        $activity->modelOn(SetCompany::class,$this->company->id,'set_companies');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_company_edit',$this->company->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->company);
+        $activity->log('se actualizo datos de la empresa');
+        $activity->save();
+
         $this->dispatchBrowserEvent('set-company-update', ['msg' => Lang::get('setting::labels.msg_update')]);
     }
 }
