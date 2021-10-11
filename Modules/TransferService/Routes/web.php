@@ -26,4 +26,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_locales_nuevo'])->get('create', 'LocalController@create')->name('service_locals_create');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_locales_editar'])->get('edit/{id}', 'LocalController@edit')->name('service_locals_edit');
     });
+
+    Route::group(['prefix' => 'vehicles'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_vehiculos'])->get('list', 'VehicleController@index')->name('service_vehicles_index');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_vehiculos_nuevo'])->get('create', 'VehicleController@create')->name('service_vehicles_create');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_vehiculos_editar'])->get('edit/{id}', 'VehicleController@edit')->name('service_vehicles_edit');
+    });
 });

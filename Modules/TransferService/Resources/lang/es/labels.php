@@ -53,5 +53,20 @@ return [
     'lbl_local'         => 'Local',
     'lbl_reference'     => 'Referencia',
     'lbl_latitude'      => 'Latitud',
-    'lbl_longitude'     => 'Longitud'
+    'lbl_longitude'     => 'Longitud',
+    'lbl_vehicle_type'  => 'Tipo de Vehículo',
+    'lbl_vehicle'       => 'Vehículo',
+    'lbl_vehicles'      => 'Vehículos',
+    'lbl_license_plate' => 'Placa',
+    'lbl_mark'          => 'Marca',
+    'lbl_model'         => 'Modelo',
+    'lbl_year'          => 'Año',
+    'lbl_length'        => 'Longitud',
+    'lbl_width'         => 'Ancho',
+    'lbl_high'          => 'Alto',
+    'lbl_color'         => 'Color',
+    'lbl_features'      => 'Caracteristicas',
+    'lbl_tare_weight'   => 'Peso Tara',
+    'lbl_net_weight'    => 'Peso Neto',
+    'lbl_gross_weight'  => 'Peso Bruto'
 ];
