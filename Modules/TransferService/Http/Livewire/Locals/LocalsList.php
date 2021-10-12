@@ -2,6 +2,8 @@
 
 namespace Modules\TransferService\Http\Livewire\Locals;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\TransferService\Entities\SerLocal;
@@ -34,7 +36,17 @@ class LocalsList extends Component
     }
 
     public function deleteLocal($id){
-        SerLocal::find($id)->delete();
+        $local = SerLocal::find($id);
+
+        $activity = new activity;
+        $activity->log('Eliminó el Local');
+        $activity->modelOn(SerLocal::class,$id,'ser_locals');
+        $activity->dataOld($local);
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
+        $local->delete();
 
         $this->dispatchBrowserEvent('ser-locals-delete', ['msg' => Lang::get('transferservice::messages.msg_delete')]);
     }

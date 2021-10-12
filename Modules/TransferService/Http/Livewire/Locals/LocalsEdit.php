@@ -2,6 +2,7 @@
 
 namespace Modules\TransferService\Http\Livewire\Locals;
 
+use Elrod\UserActivity\Activity;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -41,6 +42,9 @@ class LocalsEdit extends Component
             'reference' => 'required|min:3|max:255'
         ]);
 
+        $activity = new Activity;
+        $activity->dataOld(SerLocal::find($this->local_search->id));
+
         $this->local_search->update([
             'name' => $this->name,
             'address' => $this->address,
@@ -50,6 +54,14 @@ class LocalsEdit extends Component
             'state' => $this->state,
             'person_edit'   =>  Auth::user()->person_id
         ]);
+
+        $activity->modelOn(SerLocal::class,$this->local_search->id,'ser_locals');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('service_locals_edit',$this->local_search->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->local_search);
+        $activity->log('se actualizo datos del Local');
+        $activity->save();
 
         $this->dispatchBrowserEvent('ser-locals-edit', ['msg' => Lang::get('transferservice::messages.msg_update')]);
     }
