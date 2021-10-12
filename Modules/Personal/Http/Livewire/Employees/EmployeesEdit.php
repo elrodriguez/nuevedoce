@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Employees;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Country;
@@ -167,6 +169,9 @@ class EmployeesEdit extends Component
             $ddate_ad = $y . '-' . $m . '-' . $d;
         }
 
+        $activity = new Activity;
+        $activity->dataOld(PerEmployee::find($this->employee_search->id));
+
         $this->person_search->update([
             'country_id' => $this->country_id,
             'department_id' => $this->department_id,
@@ -205,6 +210,14 @@ class EmployeesEdit extends Component
             'photo' => $this->extension_photo,
             'state' => $this->state
         ]);
+
+        $activity->modelOn(PerEmployee::class,$this->employee_search->id,'per_employees');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('personal_employees_edit',$this->employee_search->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->employee_search);
+        $activity->log('Se actualizo datos del empleado');
+        $activity->save();
 
         if($this->cv){
             $this->cv->storeAs('employee_cv/'.$this->employee_id.'/', $this->employee_id.'.pdf','public');

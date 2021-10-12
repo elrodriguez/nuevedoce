@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Occupations;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -34,7 +36,17 @@ class OccupationsList extends Component
     }
 
     public function deleteOccupations($id){
-        PerOccupation::find($id)->delete();
+        $occupation = PerOccupation::find($id);
+
+        $activity = new activity;
+        $activity->log('Se eliminó la Ocupación');
+        $activity->modelOn(PerOccupation::class,$id,'per_occupations');
+        $activity->dataOld($occupation);
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
+        $occupation->delete();
 
         $this->dispatchBrowserEvent('per-occupations-delete', ['msg' => Lang::get('personal::labels.msg_delete')]);
     }

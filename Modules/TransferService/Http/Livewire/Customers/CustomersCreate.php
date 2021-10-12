@@ -2,6 +2,7 @@
 
 namespace Modules\TransferService\Http\Livewire\Customers;
 
+use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
@@ -219,6 +220,14 @@ class CustomersCreate extends Component
 
             $this->customer_id = $customer_save->id;
         }
+
+        $activity = new Activity;
+        $activity->modelOn(SerCustomer::class,$this->customer_id,'ser_customers');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('service_customers_create', ''));
+        $activity->logType('create');
+        $activity->log('creó un nuevo Clinte');
+        $activity->save();
 
         if($this->photo){
             $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');

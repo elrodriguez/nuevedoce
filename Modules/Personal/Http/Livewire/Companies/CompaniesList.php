@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Companies;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Person;
@@ -49,7 +51,17 @@ class CompaniesList extends Component
     }
 
     public function deleteCompany($id){
-        Person::find($id)->delete();
+        $people = Person::find($id);
+
+        $activity = new activity;
+        $activity->log('Se eliminó la Empresa');
+        $activity->modelOn(Person::class,$id,'people');
+        $activity->dataOld($people);
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
+        $people->delete();
 
         $this->dispatchBrowserEvent('per-companies-delete', ['msg' => Lang::get('personal::labels.msg_delete')]);
     }

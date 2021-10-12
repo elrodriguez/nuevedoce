@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Companies;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Country;
@@ -81,7 +83,7 @@ class CompaniesCreate extends Component
             'type_person_id' => 'required'
         ]);
 
-        Person::create([
+        $company = Person::create([
             'country_id' => $this->country_id,
             'department_id' => $this->department_id,
             'province_id' => $this->province_id,
@@ -100,6 +102,14 @@ class CompaniesCreate extends Component
             'type_person_id' => $this->type_person_id,
             'birth_date' => null
         ]);
+
+        $activity = new Activity;
+        $activity->modelOn(Person::class,$company->id,'people');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('personal_companies_create', ''));
+        $activity->logType('create');
+        $activity->log('Se Creó una nueva Empresa');
+        $activity->save();
 
         $this->dispatchBrowserEvent('per-companies-type-save', ['msg' => Lang::get('personal::labels.msg_success')]);
         $this->clearForm();

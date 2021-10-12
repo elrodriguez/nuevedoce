@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Companies;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Country;
@@ -97,6 +99,9 @@ class CompaniesEdit extends Component
         ]);
 
         $ddate = null;
+        $activity = new Activity;
+        $activity->dataOld(Person::find($this->person_search->id));
+
         #dd($this->identity_document_type_id);
         $this->person_search->update([
             'country_id' => $this->country_id,
@@ -117,6 +122,14 @@ class CompaniesEdit extends Component
             'type_person_id' => $this->type_person_id,
             'birth_date' => $ddate
         ]);
+
+        $activity->modelOn(Person::class,$this->person_search->id,'people');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('personal_companies_edit',$this->person_search->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->person_search);
+        $activity->log('Se actualizo datos de la Empresa');
+        $activity->save();
 
         $this->dispatchBrowserEvent('per-companies-type-edit', ['msg' => Lang::get('personal::labels.msg_update')]);
     }

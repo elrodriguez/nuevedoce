@@ -2,6 +2,7 @@
 
 namespace Modules\Personal\Http\Livewire\EmployeesType;
 
+use Elrod\UserActivity\Activity;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -33,12 +34,24 @@ class EmployeesTypeEdit extends Component
             'description' => 'max:255'
         ]);
 
+        $activity = new Activity;
+        $activity->dataOld(PerEmployeeType::find($this->employee_type->id));
+
         $this->employee_type->update([
             'name'           => $this->name,
             'description'    => $this->description,
             'state'          => $this->state,
             'person_edit'      => Auth::user()->person_id
         ]);
+
+        $activity->modelOn(PerEmployeeType::class,$this->employee_type->id, 'per_employee_types');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('personal_employee-type_edit',$this->employee_type->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->employee_type);
+        $activity->log('Se actualizo datos del tipo de empleado');
+        $activity->save();
+
         $this->dispatchBrowserEvent('per-employees-type-update', ['msg' => Lang::get('personal::labels.msg_update')]);
     }
 }
