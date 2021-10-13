@@ -68,5 +68,16 @@ return [
     'lbl_features'      => 'Caracteristicas',
     'lbl_tare_weight'   => 'Peso Tara',
     'lbl_net_weight'    => 'Peso Neto',
-    'lbl_gross_weight'  => 'Peso Bruto'
+    'lbl_gross_weight'  => 'Peso Bruto',
+    'lbl_odt_requests'  => 'Solicitudes ODT',
+    'lbl_odt_request'   => 'Solicitud ODT',
+    'lbl_company'       => 'Empresa',
+    'lbl_supervisor'    => 'Supervisor',
+    'lbl_wholesaler'    => 'Mayorista',
+    'lbl_event_date'    => 'Fecha del Evento',
+    'lbl_transfer_date' => 'Fecha de Transferencia',
+    'lbl_pick_up_date'  => 'Fecha de Recojo',
+    'lbl_application_date'  => 'Fecha de Solicitud',
+    'lbl_additional_information'  => 'Información Adicional',
+    'lbl_file'          => 'Archivo'
 ];
