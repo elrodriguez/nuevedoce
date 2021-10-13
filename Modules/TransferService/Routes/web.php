@@ -32,4 +32,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_vehiculos_nuevo'])->get('create', 'VehicleController@create')->name('service_vehicles_create');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_vehiculos_editar'])->get('edit/{id}', 'VehicleController@edit')->name('service_vehicles_edit');
     });
+
+    Route::group(['prefix' => 'odt_requests'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_solicitudes_odt'])->get('list', 'OdtRequestController@index')->name('service_odt_requests_index');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_solicitudes_odt_nuevo'])->get('create', 'OdtRequestController@create')->name('service_odt_requests_create');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_solicitudes_odt_editar'])->get('edit/{id}', 'OdtRequestController@edit')->name('service_odt_requests_edit');
+        Route::get('search', 'OdtRequestController@autocomplete')->name('service_odt_requests_search');
+    });
 });
