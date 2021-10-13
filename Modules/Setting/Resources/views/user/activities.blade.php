@@ -1,7 +1,8 @@
 @extends('setting::layouts.master')
 @section('styles')
     <link rel="stylesheet" media="screen, print" href="{{ asset('themes/smart-admin/css/formplugins/bootstrap-daterangepicker/bootstrap-daterangepicker.css') }}">
-@endsection
+    <link rel="stylesheet" media="screen, print" href="{{ asset('themes/smart-admin/css/datagrid/datatables/datatables.bundle.css') }}">
+ @endsection
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">{{ __('setting::labels.settings') }}</li>
@@ -25,4 +26,5 @@
     <script src="{{ asset('themes/smart-admin/js/dependency/moment/moment.js') }}" defer></script>
     <script src="{{ asset('themes/smart-admin/js/formplugins/bootstrap-daterangepicker/bootstrap-daterangepicker.js') }}" defer></script>
     <script src="{{ asset('themes/smart-admin/js/formplugins/autocomplete-bootstrap/bootstrap-autocomplete.min.js') }}" defer></script>
+    <script src="{{ asset('themes/smart-admin/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 @endsection

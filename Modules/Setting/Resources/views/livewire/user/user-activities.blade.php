@@ -2,13 +2,13 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4" wire:ignore>
                     <label for="datepicker-1" class="form-label">{{ __('setting::labels.user') }}</label>
                     <input class="form-control basicAutoComplete" type="text" placeholder="" data-url="{{ route('setting_users_search') }}" autocomplete="off" />
                 </div>
                 <div class="col-md-4">
                     <label for="datepicker-1" class="form-label">Seleccionar fechas</label>
-                    <div class="input-group">
+                    <div class="input-group" wire:ignore>
                         <input type="text" class="form-control" id="datepicker-1">
                         <div class="input-group-append">
                             <span class="input-group-text fs-xl">
@@ -16,15 +16,6 @@
                             </span>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <label for="datepicker-1" class="form-label">Sesiones</label>
-                    <select class="custom-select" wire:model.defer="session_id">
-                        <option value="">Seleccionar</option>
-                        @foreach($sessions as $session)
-                            <option value="{{ $session->id }}">{{ $session->hour_session }}</option>
-                        @endforeach
-                    </select> 
                 </div>
             </div>
         </div>
@@ -37,8 +28,8 @@
     </div>
 
     <div class="card mt-3">
-        <div class="card-body p-0">
-            <table class="table m-0">
+        <div class="card-body">
+            <table role="grid" class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline collapsed" id="table-activities">
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
@@ -48,29 +39,50 @@
                         <th>Entidad</th>
                         <th>Tabla</th>
                         <th>Identificador</th>
-                        <th>Datos</th>
-                        <th>Fecha y hora</th>
                     </tr>
                 </thead>
                 <tbody class="">
                     @if($activities)
                         @foreach($activities as $key => $activity)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td>{{ $activity->type_activity}}</td>
+                        <tr role="row" class="odd">
+                            <td class="text-center">{{ $key + 1 }}</td>
+                            <td><span class="badge badge-secondary">{{ $activity->type_activity}}</span></td>
                             <td>{{ $activity->description}}</td>
                             <td><a href="{{ $activity->route }}">{{ $activity->route }}</a></td>
-                            <td>{{ $activity->model_name }}</td>
-                            <td>{{ $activity->table_name }}</td>
-                            <td class="text-center">
+                            <td><code>{{ $activity->model_name }}</code></td>
+                            <td><code>{{ $activity->table_name }}</code></td>
+                            <td>
                                 @if($activity->table_column_id)
-                                <button onclick="openModalData('{{ $activity->data_json_old }}')" class="btn btn-danger btn-sm btn-icon waves-effect waves-themed">
-                                    {{ $activity->table_column_id }}
-                                </button>
+                                    <button data-toggle="modal" data-target="#data-modal-transparent-{{ $key }}" class="btn btn-danger btn-sm btn-icon waves-effect waves-themed" title="Ver datalles">
+                                        {{ $activity->table_column_id }}
+                                    </button>
+                                    <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="data-modal-transparent-{{ $key }}">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">
+                                                        Datos de la tabla
+                                                    </h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label>Datos registrados</label>
+                                                    <code class="code-kbd">{{ $activity->data_json_old }}</code>
+                                                    <br>
+                                                    <label>Datos modificados</label>
+                                                    <code class="code-kbd">{{ $activity->data_json_updated }}</code>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary waves-effect waves-themed" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @endif
                             </td>
-                            <td>{{ $activity->description }}</td>
-                            <td>{{ $activity->description }}</td>
                         </tr>
                         @endforeach
                     @else
@@ -82,32 +94,12 @@
             </table>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <script>
         document.addEventListener('livewire:load', function () {
-
+            
             $('.basicAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
                 @this.set('user_id',item.value);
-                @this.getSessions();
             });
 
             $('#datepicker-1').daterangepicker({
@@ -127,13 +119,8 @@
                 }, function(start, end, label){
                     @this.set('start',start.format('YYYY-MM-DD'));
                     @this.set('end',end.format('YYYY-MM-DD'));
-                    @this.getSessions();
             });
         });
-        function openModalData(old) {
-            alert(old)
-            $('#staticBackdrop').modal('show');
-        }
-
+       
     </script>
 </div>

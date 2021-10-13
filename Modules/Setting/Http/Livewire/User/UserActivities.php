@@ -33,26 +33,24 @@ class UserActivities extends Component
 
     public function render()
     {
+        $this->getActivities();
         return view('setting::livewire.user.user-activities');
     }
 
-    public function getSessions(){
-        $this->sessions = UserSession::select(
-                'id',
-                DB::raw('DATE_FORMAT(created_at,"%Y/%m/%d %h:%i:%s") AS hour_session')
-            )
-            ->where('user_id',$this->user_id)
-            ->whereRaw('DATE(created_at) >= ? AND DATE(created_at) <= ?',[$this->start,$this->end])
-            ->get();
-    }
-
     public function getActivities(){
-        $this->user_Sessions = UserSession::find($this->session_id);
 
         $activity = new Activity;
 
-        $this->activities = $activity->getByUserAndDate($this->user_id,$this->start,$this->end);
+        $this->sessions = UserSession::select(
+            'id',
+            DB::raw('DATE_FORMAT(created_at,"%Y/%m/%d %h:%i:%s") AS hour_session')
+        )
+        ->where('user_id',$this->user_id)
+        ->whereRaw('DATE(created_at) >= ? AND DATE(created_at) <= ?',[$this->start,$this->end])
+        ->get();
 
+        $this->activities = $activity->getByUserAndDate($this->user_id,$this->start,$this->end);
+        $this->dispatchBrowserEvent('set-table-reload');
     }
 
 
