@@ -29,7 +29,10 @@ class LoginForm extends Component
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->header('User-Agent')
             ]);
-            $this->redirect('dashboard');
+            request()->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+            //$this->redirect('dashboard');
         }else{
             $this->dispatchBrowserEvent('login-error', ['msg' => 'email and password are wrong.']);
         }

@@ -28,8 +28,8 @@
     </div>
 
     <div class="card mt-3">
-        <div class="card-body">
-            <table role="grid" class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline collapsed" id="table-activities">
+        <div class="card-body p-0">
+            <table role="grid" class="table m-0" id="table-activities">
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
