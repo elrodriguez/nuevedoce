@@ -76,6 +76,30 @@
                     </ul>
                 </li>
             @endcan
+                @can('serviciodetraslados_vehiculos')
+                    <li class="{{ $path[0] == 'transferservice' && $path[1] == 'vehicles' ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" title="Vehiculos" data-filter-tags="Vehiculos">
+                            <i class="fal fa-truck"></i>
+                            <span class="nav-link-text" data-i18n="nav.vehiculos">{{ __('transferservice::labels.lbl_vehicles') }}</span>
+                        </a>
+                        <ul>
+                            @can('serviciodetraslados_vehiculos')
+                                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'vehicles' && $path[2] == 'list' ? 'active' : '' }}">
+                                    <a href="{{ route('service_vehicles_index') }}" title="Listar Vehiculos" data-filter-tags="Listar Vehiculos">
+                                        <span class="nav-link-text" data-i18n="nav.listar_vehiculos">{{ __('transferservice::labels.lbl_to_list') }} {{ __('transferservice::labels.lbl_vehicle') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('serviciodetraslados_vehiculos_nuevo')
+                                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'vehicles' && $path[2] == 'create' ? 'active' : '' }}">
+                                    <a href="{{ route('service_vehicles_create', '') }}" title="Nuevo Vehiculo" data-filter-tags="Nuevo Vehiculo">
+                                        <span class="nav-link-text" data-i18n="nav.nuevo_vehiculo">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_vehicle') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
         </ul>
     </nav>
 </div>
