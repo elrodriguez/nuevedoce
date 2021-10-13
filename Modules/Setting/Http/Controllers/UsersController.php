@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
 class UsersController extends Controller
 {
     /**
