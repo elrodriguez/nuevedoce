@@ -16,9 +16,6 @@
     </div>
 @endsection
 @section('content')
-@php
-    print_r($_SESSION['er_sitemap']);
-@endphp
 @livewire('setting::user.user-create')
 @endsection
 @section('script')
