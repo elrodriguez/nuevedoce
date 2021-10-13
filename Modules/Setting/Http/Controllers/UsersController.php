@@ -2,6 +2,7 @@
 
 namespace Modules\Setting\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -50,5 +51,17 @@ class UsersController extends Controller
 
     public function activities($id = null){
         return view('setting::user.activities')->with('id',$id);
+    }
+
+    public function autocomplete(Request $request){
+        $search = $request->input('q');
+        $user = User::select(
+                'id AS value',
+                'name AS text'
+            )
+            ->where('name','like','%'.$search.'%')
+            ->where('username','=',$search)
+            ->get();
+        return response()->json($user, 200);
     }
 }

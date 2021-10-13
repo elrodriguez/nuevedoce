@@ -62,5 +62,6 @@ return [
     'map' => 'Map',
     'yes' => 'Yes',
     'observation' => 'Observation',
-    'activities_system' => 'Activities in the system'
+    'activities_system' => 'Activities in the system',
+    'description' => 'Description'
 ];
