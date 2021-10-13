@@ -119,7 +119,7 @@ class OdtrequestsCreate extends Component
         ]);
 
         if($this->file){
-            $this->file->storeAs('requests_odt_file/'.$odtRequest->id.'/', $odtRequest->id.'.'.$this->extension,'public');
+            $resul = $this->file->storeAs('requests_odt_file/'.$odtRequest->id, $odtRequest->id.'.'.$this->extension, 'public');
         }
 
         $activity = new Activity;

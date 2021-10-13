@@ -95,11 +95,11 @@ class OdtrequestsEdit extends Component
 
         $this->description = $this->odtRequest_search->description;
         $this->additional_information = $this->odtRequest_search->additional_information;
-        $this->extension = $this->odtRequest_search->extension;
+        $this->extension = $this->odtRequest_search->file;
         $this->state = $this->odtRequest_search->state;
 
         if(file_exists(public_path('storage/requests_odt_file/'.$id.'/'.$id.'.'.$this->extension))){
-            $this->file_view = url('storage/requests_odt_file/'.$id.'/'.$id.'.', $this->extension);
+            $this->file_view = url('storage/requests_odt_file/'.$id.'/'.$id.'.'.$this->extension);
         }
     }
 
@@ -179,7 +179,7 @@ class OdtrequestsEdit extends Component
         ]);
 
         if($this->file){
-            $result = $this->file->storeAs('requests_odt_file/'.$this->odtRequest_search->id, $this->odtRequest_search->id.'.'.$this->extension,'public');
+            $this->file->storeAs('requests_odt_file/'.$this->odtRequest_search->id, $this->odtRequest_search->id.'.'.$this->extension,'public');
         }
 
         $activity->modelOn(SerOdtRequest::class, $this->odtRequest_search->id,'ser_odt_requests');
@@ -191,7 +191,7 @@ class OdtrequestsEdit extends Component
         $activity->save();
 
         if(file_exists(public_path('storage/requests_odt_file/'.$this->odtRequest_search->id.'/'.$this->odtRequest_search->id.'.'.$this->extension))){
-            $this->file_view = url('storage/requests_odt_file/'.$this->odtRequest_search->id.'/'.$this->odtRequest_search->id.'.', $this->extension);
+            $this->file_view = url('storage/requests_odt_file/'.$this->odtRequest_search->id.'/'.$this->odtRequest_search->id.'.'.$this->extension);
         }
 
         $this->dispatchBrowserEvent('ser-odtrequests-edit', ['msg' => Lang::get('transferservice::messages.msg_update')]);

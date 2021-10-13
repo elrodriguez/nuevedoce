@@ -105,10 +105,9 @@
                             <label class="form-label" for="file">@lang('transferservice::labels.lbl_file') <span class="text-danger">*</span> </label>
                             <div class="custom-file">
                                 <input wire:model="file" type="file" class="custom-file-input" id="file">
-                                <div wire:loading wire:target="file">Uploading...</div>
                                 <label class="custom-file-label" for="customFile">@lang('transferservice::labels.lbl_choose_file')</label>
                                 @if($file_view)
-                                    <a href="{{ $file_view }}" alt="Archivo" target="_blank" class="btn btn-success waves-effect waves-themed" width="150px"><span class="fal fa-download mr-1"></span> @lang('personal::labels.lbl_file')</a>
+                                    <a href="{{ $file_view }}" alt="Archivo" target="_blank" class="btn btn-success waves-effect waves-themed" width="150px"><span class="fal fa-download mr-1"></span> @lang('transferservice::labels.lbl_file')</a>
                                 @endif
                             </div>
                         </div>
