@@ -20,6 +20,7 @@ class CreateUserSessionsTable extends Migration
             $table->text('user_agent');
             $table->string('longitude')->nullable();
             $table->string('latitude')->nullable();
+            $table->boolean('state')->default(true);
             $table->timestamps();
         });
     }

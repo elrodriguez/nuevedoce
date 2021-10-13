@@ -41,7 +41,8 @@ class SetCompany extends Migration
             'phone' => '123456',
             'phone_mobile' => '123456789',
             'representative_name' => 'Ivan Gerente',
-            'representative_number' => '12345678'
+            'representative_number' => '12345678',
+            'main' => true
         ]);
     }
 

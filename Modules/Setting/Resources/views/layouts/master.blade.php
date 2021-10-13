@@ -22,6 +22,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="{{ url('themes/smart-admin/img/favicon/favicon-32x32.png') }}">
         <link rel="mask-icon" href="{{ url('themes/smart-admin/img/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
         <!-- You can add your own stylesheet here to override any styles that comes before it-->
+        <link rel="stylesheet" media="screen, print" href="{{ url('themes/smart-admin/css/fa-solid.css') }}">
 		<link rel="stylesheet" media="screen, print" href="{{ url('themes/smart-admin/css/your_styles.css') }}">
         @yield('styles')
     </head>

@@ -12,4 +12,34 @@
     <div class="subheader-block">
         Dashboard
     </div>
+
+@endsection
+@section('content')
+<div class="row">
+    <div class="col-sm-6 col-xl-3">
+        @livewire('setting::company.company-data')
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        @livewire('setting::establishment.establishment-quantity')
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4 col-xl-3">
+        @livewire('setting::roles.roles-quantity')
+    </div>
+    <div class="col-sm-4 col-xl-3">
+        @livewire('setting::modules.module-quantity')
+    </div>
+    <div class="col-sm-4 col-xl-3">
+        @livewire('setting::user.user-quantity')
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-xl-3">
+        @livewire('setting::user.user-sessions')
+    </div>
+    <div class="col-sm-6 col-xl-3">
+
+    </div>
+</div>
 @endsection
