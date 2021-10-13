@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
-
 class UserCreate extends Component
 {
     use WithFileUploads;
@@ -41,7 +40,7 @@ class UserCreate extends Component
     public $photo;
     
     public function mount(){
-
+        
         $this->document_types = IdentityDocumentType::where('active',true)->get();
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
