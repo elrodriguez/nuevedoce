@@ -28,7 +28,7 @@ class OdtrequestsList extends Component
 
     public function getOdtRequests(){
         return SerOdtRequest::where('ser_odt_requests.description','like','%'.$this->search.'%')
-            ->join('set_companies', 'ser_odt_requests.company_id', 'set_companies.id')
+            ->join('people AS companies', 'ser_odt_requests.company_id', 'companies.id')
 
             ->join('per_employees', 'ser_odt_requests.supervisor_id', 'per_employees.id')
             ->join('people AS employee', 'per_employees.person_id', 'employee.id')
@@ -40,7 +40,7 @@ class OdtrequestsList extends Component
             ->join('people AS wholesaler', 'ser_odt_requests.wholesaler_id', 'wholesaler.id')
             ->select(
                 'ser_odt_requests.id',
-                'set_companies.name AS name_company',
+                'companies.full_name AS name_company',
                 'employee.full_name AS name_employee',
                 'customer.full_name AS name_customer',
                 'ser_locals.name AS name_local',

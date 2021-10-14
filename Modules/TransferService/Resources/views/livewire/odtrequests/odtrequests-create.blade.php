@@ -15,7 +15,7 @@
                         <select wire:model="company_id" id="company_id" class="custom-select" required="">
                             <option value="">@lang('transferservice::labels.lbl_select')</option>
                             @foreach($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                <option value="{{ $company->id }}">{{ $company->number }} - {{ $company->name }}</option>
                             @endforeach
                         </select>
                         @error('company_id')

@@ -42,13 +42,17 @@ class OdtrequestsCreate extends Component
     public $wholesalers = [];
 
     public function mount(){
-        $this->companies    = SetCompany::all();
         $this->locals       = SerLocal::where('state', true)->get();
         $this->wholesalers  = Person::where('identity_document_type_id', '6')->get();
     }
 
     public function render()
     {
+        //$this->companies    = SetCompany::all();
+        $this->companies    = Person::where('identity_document_type_id', '6')
+            ->select('id', 'full_name AS name', 'number')
+            ->get();
+
         $this->supervisors  = PerEmployee::where('state', true)
             ->join('people', 'person_id', 'people.id')
             ->select('per_employees.id', 'people.full_name')
