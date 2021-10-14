@@ -5,6 +5,7 @@ namespace Modules\TransferService\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Personal\Entities\PerEmployee;
 
 class VehicleController extends Controller
 {
@@ -25,17 +26,6 @@ class VehicleController extends Controller
     {
         return view('transferservice::vehicles.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Show the specified resource.
      * @param int $id
@@ -56,24 +46,24 @@ class VehicleController extends Controller
         return view('transferservice::vehicles.edit')->with('id', $id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function crew($id)
     {
-        //
+        return view('transferservice::vehicles.crew')->with('id', $id);
+    }
+
+    public function searchEmployee(Request $request){
+        $search = $request->input('q');
+        $employees = PerEmployee::join('people','person_id','people.id')
+            ->select('per_employees.id AS value')
+            ->selectRaw('CONCAT(people.number," - ",people.full_name) AS text')
+            ->where('people.full_name','like','%'.$search.'%')
+            ->get();
+        return response()->json($employees, 200);
     }
 }

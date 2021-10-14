@@ -79,5 +79,10 @@ return [
     'lbl_pick_up_date'  => 'Fecha de Recojo',
     'lbl_application_date'  => 'Fecha de Solicitud',
     'lbl_additional_information'  => 'Información Adicional',
-    'lbl_file'          => 'Archivo'
+    'lbl_file'          => 'Archivo',
+    'lbl_crew'          => 'Tripulación',
+    'lbl_worker'        => 'Trabajador',
+    'lbl_identification_number' => 'Número de identificación',
+    'lbl_full_name'     => 'Nombre completo',
+    'lbl_occupation'    => 'Ocupación'
 ];

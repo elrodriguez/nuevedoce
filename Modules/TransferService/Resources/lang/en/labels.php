@@ -80,5 +80,10 @@ return [
     'lbl_pick_up_date'  => 'Pick Up Date',
     'lbl_application_date'  => 'Application Date',
     'lbl_additional_information'  => 'Additional Information',
-    'lbl_file'          => 'File'
+    'lbl_file'          => 'File',
+    'lbl_crew'          => 'Crew',
+    'lbl_worker'        => 'Worker',
+    'lbl_identification_number' => 'Identification number',
+    'lbl_full_name'     => 'Full name',
+    'lbl_occupation'    => 'Occupation'
 ];

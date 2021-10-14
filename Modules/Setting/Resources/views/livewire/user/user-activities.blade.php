@@ -29,6 +29,7 @@
 
     <div class="card mt-3">
         <div class="card-body p-0">
+            <div class="table-responsive">
             <table role="grid" class="table m-0" id="table-activities">
                 <thead>
                     <tr>
@@ -92,6 +93,7 @@
                     @endif
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 

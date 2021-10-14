@@ -64,6 +64,11 @@
                                             <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
                                         </a>
                                     @endcan
+                                    @can('serviciodetraslados_vehiculos_tripulacion')
+                                        <a href="{{ route('service_vehicles_crew',$vehicle->id) }}" class="dropdown-item">
+                                            <i class="fal fa-user-hard-hat mr-1"></i>@lang('transferservice::buttons.btn_crew')
+                                        </a>
+                                    @endcan
                                     @can('serviciodetraslados_vehiculos_eliminar')
                                         <div class="dropdown-divider"></div>
                                         <button onclick="confirmDelete({{ $vehicle->id }})" type="button" class="dropdown-item text-danger">

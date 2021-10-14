@@ -29,9 +29,9 @@ class VehiclesEdit extends Component
 
     public $vehicle_types = [];
 
-    public function mount($id){
+    public function mount($vehicle_id){
         $this->vehicle_types = SerVehicleType::where('state',true)->get();
-        $this->vehicle_search = SerVehicle::find($id);
+        $this->vehicle_search = SerVehicle::find($vehicle_id);
         $this->vehicle_type_id = $this->vehicle_search->vehicle_type_id;
         $this->license_plate = $this->vehicle_search->license_plate;
         $this->mark = $this->vehicle_search->mark;

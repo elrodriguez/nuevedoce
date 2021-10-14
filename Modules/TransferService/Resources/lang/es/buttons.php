@@ -12,4 +12,5 @@ return [
     'btn_yes'           => 'Si',
     'btn_not'           => 'No',
     'btn_ok'            => 'Ok',
+    'btn_crew'          => 'Tripulación'
 ];
