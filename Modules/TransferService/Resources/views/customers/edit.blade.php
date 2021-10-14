@@ -7,7 +7,7 @@
     <li class="breadcrumb-item">@lang('transferservice::labels.service_title')</li>
     <li class="breadcrumb-item"><a href="{{ route('service_customers_index') }}">{{ __('transferservice::labels.lbl_customers') }}</a></li>
     <li class="breadcrumb-item active">@lang('transferservice::labels.lbl_edit')</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">

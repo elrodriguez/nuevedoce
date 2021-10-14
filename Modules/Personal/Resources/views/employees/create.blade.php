@@ -7,7 +7,7 @@
     <li class="breadcrumb-item">@lang('personal::labels.lbl_personal')</li>
     <li class="breadcrumb-item"><a href="{{ route('personal_employees_index') }}">{{ __('personal::labels.lbl_employees') }}</a></li>
     <li class="breadcrumb-item active">@lang('personal::labels.lbl_new')</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
