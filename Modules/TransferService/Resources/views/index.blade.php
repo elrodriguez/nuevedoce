@@ -13,3 +13,21 @@
         {{ __('transferservice::labels.lbl_dashBoard') }}
     </div>
 @endsection
+@section('content')
+    <div class="row">
+        <div class="col-sm-6 col-xl-3">
+            @livewire('transferservice::customers.customers-quantity')
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            @livewire('transferservice::locals.locals-quantity')
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-xl-3">
+            @livewire('transferservice::odtrequests.odtrequests-quantity')
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            @livewire('transferservice::vehicles.vehicles-quantity')
+        </div>
+    </div>
+@endsection
