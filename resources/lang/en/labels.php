@@ -597,5 +597,8 @@ return [
     'restore_message' => 'Restore message',
     'refresh' => 'Refresh',
     'reply_mail' => 'Reply mail',
-    'message' => 'Message'
+    'message' => 'Message',
+    'about' => 'About',
+    'license' => 'License',
+    'documentation' => 'Documentation'
 ];

@@ -598,5 +598,8 @@ return [
     'restore_message' => 'Restaurar mensaje',
     'refresh' => 'Refrescar',
     'reply_mail' => 'Correo de respuesta',
-    'message' => 'Mensaje'
+    'message' => 'Mensaje',
+    'about' => 'Sobre',
+    'license' => 'Licencia',
+    'documentation' => 'Documentación'
 ];
