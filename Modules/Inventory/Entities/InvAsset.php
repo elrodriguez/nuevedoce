@@ -9,7 +9,8 @@ class InvAsset extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['name','description','part','weight','width','high','long','number_parts','status','asset_id','brand_id','category_id'];
+
     
     protected static function newFactory()
     {

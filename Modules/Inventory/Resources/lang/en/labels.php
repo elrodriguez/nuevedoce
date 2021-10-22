@@ -19,8 +19,18 @@ return [
     'excellent' => 'Excellent',
     'error' => 'Error',
     'went_wrong' => 'Went wrong',
+    'category' => 'Category',
+    'categories' => 'Categories',
+    'brand' => 'Brand',
+    'brands' => 'Brands',
+
     'msg_not_peptra' => 'It cannot be deleted because it has associated records',
     'msg_success' => 'Data saved correctly.',
     'msg_update' => 'Data updated correctly.',
-    'msg_delete' => 'Data deleted successfully.'
+    'msg_delete' => 'Data deleted successfully.',
+
+    'lbl_select' => 'Select',
+    'lbl_choose_file'   => 'Choose File',
+    'lbl_image' => 'Image',
+    'lbl_images' => 'Images'
 ];

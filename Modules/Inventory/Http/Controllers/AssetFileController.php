@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class AssetController extends Controller
+class AssetFileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class AssetController extends Controller
      */
     public function index()
     {
-        return view('inventory::asset.index');
+        return view('inventory::asset_file.index');
     }
 
     /**
@@ -23,8 +23,10 @@ class AssetController extends Controller
      */
     public function create()
     {
-        return view('inventory::asset.create');
+        return view('inventory::asset_file.create');
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -33,7 +35,7 @@ class AssetController extends Controller
      */
     public function edit($id)
     {
-        return view('inventory::asset.edit')->with('id',$id);
+        return view('inventory::asset_file.edit');
     }
 
-}
+   

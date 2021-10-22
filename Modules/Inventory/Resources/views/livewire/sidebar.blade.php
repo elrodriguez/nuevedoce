@@ -72,7 +72,28 @@
                 </ul>
             </li>
             @endcan
-           
+            @can('inventario_activos')
+            <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                    <i class="ni ni-social-dropbox"></i>
+                    <span class="nav-link-text" data-i18n="nav.empresa">Activos</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_asset') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Activos</span>
+                        </a>
+                    </li>
+                    @can('inventario_marcas_nuevo')
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_asset_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
+                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Activo</span>
+                        </a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcan
             
         </ul>
     </nav>

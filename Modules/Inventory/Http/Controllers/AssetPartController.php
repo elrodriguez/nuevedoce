@@ -6,15 +6,16 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class AssetController extends Controller
+class AssetPartController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param int $id_asset
      * @return Renderable
      */
-    public function index()
+    public function index($id_asset)
     {
-        return view('inventory::asset.index');
+        return view('inventory::asset_part.index')->with('id_asset',$id_asset);
     }
 
     /**
@@ -23,7 +24,7 @@ class AssetController extends Controller
      */
     public function create()
     {
-        return view('inventory::asset.create');
+        return view('inventory::asset_part.create');
     }
 
     /**
@@ -33,7 +34,6 @@ class AssetController extends Controller
      */
     public function edit($id)
     {
-        return view('inventory::asset.edit')->with('id',$id);
+        return view('inventory::asset_part.edit')->with('id',$id);
     }
-
 }
