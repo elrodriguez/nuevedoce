@@ -3,7 +3,7 @@
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('personal::labels.lbl_personal')</li>
     <li class="breadcrumb-item">{{ __('personal::labels.lbl_employee_type') }}</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">

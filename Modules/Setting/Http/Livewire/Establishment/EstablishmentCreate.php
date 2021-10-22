@@ -10,6 +10,8 @@ use App\Models\Country;
 use App\Models\Department;
 use App\Models\District;
 use App\Models\Province;
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class EstablishmentCreate extends Component
 {
     public $companies;
@@ -50,7 +52,7 @@ class EstablishmentCreate extends Component
             'address' => 'required|max:255'
         ]);
 
-        SetEstablishment::create([
+        $establishment = SetEstablishment::create([
             'address' => $this->address,
             'phone' => $this->phone,
             'observation' => $this->observation,
@@ -66,6 +68,14 @@ class EstablishmentCreate extends Component
             'map' => html_entity_decode($this->map, ENT_QUOTES | ENT_XML1, 'UTF-8'),
             'state' => $this->state ? true : false
         ]);
+
+        $activity = new Activity;
+        $activity->modelOn(SetEstablishment::class,$establishment->id,'set_establishments');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_establishment_create'));
+        $activity->logType('create');
+        $activity->log('creó un nuevo establecimiento');
+        $activity->save();
 
         $this->clearForm();
         $this->dispatchBrowserEvent('set-establishmente-save', ['msg' => Lang::get('setting::labels.msg_success')]);

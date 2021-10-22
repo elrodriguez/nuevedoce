@@ -61,6 +61,8 @@ class ModulePermissions extends Component
             'permission_id' => $permission->id
         ];
         array_push($this->permissions,$data);
+
+        $this->name = null;
     }
 
     public function removePermission($key,$id,$permission_id){

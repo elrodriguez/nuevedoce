@@ -2,6 +2,8 @@
 
 namespace Modules\TransferService\Http\Livewire\Customers;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Person;
@@ -75,6 +77,15 @@ class CustomersList extends Component
     public function deleteCustomer($id){
         $employee = SerCustomer::find($id);
         $person_id = $employee->person_id;
+
+        $activity = new activity;
+        $activity->log('Eliminó el Cliente');
+        $activity->modelOn(SerVehicle::class,$id,'ser_customers');
+        $activity->dataOld($employee);
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
         $employee->delete();
         #Person::find($person_id)->delete();
         //Eliminar archivos y direcctorio

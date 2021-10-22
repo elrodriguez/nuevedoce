@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Employees;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Country;
@@ -50,7 +52,7 @@ class EmployeesCreate extends Component
     public $cv;
     public $photo;
     public $language;
-    public $extension_photo;
+    public $extension_photo = '';
 
     //Combos Data:
     public $companies;
@@ -270,6 +272,14 @@ class EmployeesCreate extends Component
         if($this->photo){
             $this->photo->storeAs('employees_photo/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
         }
+
+        $activity = new Activity;
+        $activity->modelOn(PerEmployee::class,$this->employee_id,'per_employees');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('personal_employees_create', ''));
+        $activity->logType('create');
+        $activity->log('Se creó un nuevo empleado');
+        $activity->save();
 
         $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('personal::labels.msg_success')]);
         $this->clearForm();

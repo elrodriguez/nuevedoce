@@ -5,7 +5,8 @@ namespace Modules\Setting\Http\Livewire\Company;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Setting\Entities\SetCompany;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class CompanyList extends Component
 {
     public $show;
@@ -34,7 +35,17 @@ class CompanyList extends Component
 
     public function deleteCompanies($id){
         try {
-            SetCompany::find($id)->delete();
+            $comapny = SetCompany::find($id);
+            $activity = new activity;
+            $activity->log('Elimino la empresa');
+            $activity->modelOn(SetCompany::class,$id,'set_companies');
+            $activity->dataOld($comapny); 
+            $activity->logType('delete');
+            $activity->causedBy(Auth::user());
+            $activity->save();
+
+            $comapny->delete();
+
             $res = 'success';
         } catch (\Illuminate\Database\QueryException $e) {
             $res = 'error';

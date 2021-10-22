@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\EmployeesType;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Personal\Entities\PerEmployeeType;
@@ -34,8 +36,17 @@ class EmployeesTypeList extends Component
     }
 
     public function deleteEmployeeType($id){
+        $employee_type = PerEmployeeType::find($id);
 
-        PerEmployeeType::find($id)->delete();
+        $activity = new activity;
+        $activity->log('Se eliminó el tipo de empleado');
+        $activity->modelOn(PerEmployeeType::class, $id,'per_employee_types');
+        $activity->dataOld($employee_type);
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
+        $employee_type->delete();
 
         $this->dispatchBrowserEvent('per-employees-type-delete', ['msg' => Lang::get('personal::labels.msg_delete')]);
     }

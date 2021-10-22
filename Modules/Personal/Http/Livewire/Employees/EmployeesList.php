@@ -2,6 +2,8 @@
 
 namespace Modules\Personal\Http\Livewire\Employees;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Personal\Entities\PerEmployee;
@@ -81,6 +83,15 @@ class EmployeesList extends Component
     public function deleteEmployee($id){
         $employee = PerEmployee::find($id);
         $person_id = $employee->person_id;
+
+        $activity = new activity;
+        $activity->log('Se eliminó el empleado');
+        $activity->modelOn(PerEmployee::class,$id,'per_employees');
+        $activity->dataOld($employee);
+        $activity->logType('delete');
+        $activity->causedBy(Auth::user());
+        $activity->save();
+
         $employee->delete();
         #Person::find($person_id)->delete();
         //Eliminar archivos y direcctorio

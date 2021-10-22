@@ -4,7 +4,7 @@
     <li class="breadcrumb-item">Inventario</li>
     <li class="breadcrumb-item"><a href="{{ route('inventory_brand') }}">Marcas</a></li>
     <li class="breadcrumb-item active">Nuevo</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">

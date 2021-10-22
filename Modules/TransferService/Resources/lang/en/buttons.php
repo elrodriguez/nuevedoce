@@ -12,4 +12,5 @@ return [
     'btn_yes'           => 'Yes',
     'btn_not'           => 'Not',
     'btn_ok'            => 'Ok',
+    'btn_crew'          => 'Crew'
 ];

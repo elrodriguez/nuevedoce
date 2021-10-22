@@ -10,7 +10,8 @@ use App\Models\Country;
 use App\Models\Department;
 use App\Models\District;
 use App\Models\Province;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class EstablishmentEdit extends Component
 {
     public $companies;
@@ -66,6 +67,9 @@ class EstablishmentEdit extends Component
             'address' => 'required|max:255'
         ]);
 
+        $activity = new Activity;
+        $activity->dataOld(SetEstablishment::find($this->establishment->id));
+
         $this->establishment->update([
             'address' => $this->address,
             'phone' => $this->phone,
@@ -82,6 +86,15 @@ class EstablishmentEdit extends Component
             'map' => html_entity_decode($this->map, ENT_QUOTES | ENT_XML1, 'UTF-8'),
             'state' => $this->state ? true : false
         ]);
+
+        $activity->modelOn(SetEstablishment::class,$this->establishment->id,'set_establishments');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_establishment_edit',$this->establishment->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->establishment);
+        $activity->log('se actualizo datos del estableciemiento');
+        $activity->save();
+
         $this->dispatchBrowserEvent('set-establishmente-update', ['msg' => Lang::get('setting::labels.msg_update')]);
     }
 

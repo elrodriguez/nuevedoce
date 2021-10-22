@@ -6,7 +6,8 @@ use Livewire\Component;
 use Modules\Setting\Entities\SetModule;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
-
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 class ModuleEdit extends Component
 {
     public $module;
@@ -36,12 +37,23 @@ class ModuleEdit extends Component
             'destination_route' => 'required|max:255'
         ]);
 
+        $activity = new Activity;
+        $activity->dataOld(SetModule::find($this->module->id));
+
         $this->module->update([
             'logo' => $this->logo,
             'label' => $this->label,
             'destination_route' => $this->destination_route,
             'status' => $this->status
         ]);
+
+        $activity->modelOn(SetModule::class,$this->module->id,'set_modules');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_modules_edit',$this->establishment->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->module);
+        $activity->log('se actualizo datos del modulo');
+        $activity->save();
 
         $this->dispatchBrowserEvent('set-modules-save', ['msg' => Lang::get('setting::labels.msg_update')]);
     }

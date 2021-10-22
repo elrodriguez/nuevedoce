@@ -27,7 +27,6 @@
                 </a>
             </li>
             @endcan
-            <li class="nav-title">Navegación</li>
             <li class="nav-title">{{ __('transferservice::labels.lbl_navigation') }}</li>
             @can('serviciodetraslados_clientes')
                 <li class="{{ $path[0] == 'transferservice' && $path[1] == 'customers' ? 'active open' : '' }}">
@@ -49,6 +48,78 @@
                                 <span class="nav-link-text" data-i18n="nav.nuevo_cliente">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_customer') }}</span>
                             </a>
                         </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('serviciodetraslados_locales')
+                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'locals' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Locales" data-filter-tags="Locales">
+                        <i class="fal fa-store-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.locales">{{ __('transferservice::labels.lbl_locals') }}</span>
+                    </a>
+                    <ul>
+                        @can('serviciodetraslados_locales')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'locals' && $path[2] == 'list' ? 'active' : '' }}">
+                                <a href="{{ route('service_locals_index') }}" title="Listar Locales" data-filter-tags="Listar Locales">
+                                    <span class="nav-link-text" data-i18n="nav.listar_locales">{{ __('transferservice::labels.lbl_to_list') }} {{ __('transferservice::labels.lbl_local') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('serviciodetraslados_locales_nuevo')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'locals' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('service_locals_create', '') }}" title="Nuevo Local" data-filter-tags="Nuevo Local">
+                                    <span class="nav-link-text" data-i18n="nav.nuevo_local">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_local') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('serviciodetraslados_vehiculos')
+                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'vehicles' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Vehiculos" data-filter-tags="Vehiculos">
+                        <i class="fal fa-truck"></i>
+                        <span class="nav-link-text" data-i18n="nav.vehiculos">{{ __('transferservice::labels.lbl_vehicles') }}</span>
+                    </a>
+                    <ul>
+                        @can('serviciodetraslados_vehiculos')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'vehicles' && $path[2] == 'list' ? 'active' : '' }}">
+                                <a href="{{ route('service_vehicles_index') }}" title="Listar Vehiculos" data-filter-tags="Listar Vehiculos">
+                                    <span class="nav-link-text" data-i18n="nav.listar_vehiculos">{{ __('transferservice::labels.lbl_to_list') }} {{ __('transferservice::labels.lbl_vehicle') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('serviciodetraslados_vehiculos_nuevo')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'vehicles' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('service_vehicles_create', '') }}" title="Nuevo Vehiculo" data-filter-tags="Nuevo Vehiculo">
+                                    <span class="nav-link-text" data-i18n="nav.nuevo_vehiculo">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_vehicle') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('serviciodetraslados_solicitudes_odt')
+                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'odt_requests' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Solicitudes ODT" data-filter-tags="Solicitudes ODT">
+                        <i class="fal fa-paper-plane"></i>
+                        <span class="nav-link-text" data-i18n="nav.solicitudes_odt">{{ __('transferservice::labels.lbl_odt_requests') }}</span>
+                    </a>
+                    <ul>
+                        @can('serviciodetraslados_solicitudes_odt')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'odt_requests' && $path[2] == 'list' ? 'active' : '' }}">
+                                <a href="{{ route('service_odt_requests_index') }}" title="Listar Solicitudes ODT" data-filter-tags="Listar Solicitudes ODT">
+                                    <span class="nav-link-text" data-i18n="nav.listar_solicitudes_odt">{{ __('transferservice::labels.lbl_to_list') }} {{ __('transferservice::labels.lbl_odt_request') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('serviciodetraslados_solicitudes_odt_nuevo')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'odt_requests' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('service_odt_requests_create', '') }}" title="Nueva Solicitud ODT" data-filter-tags="Nueva Solicitud ODT">
+                                    <span class="nav-link-text" data-i18n="nav.nuevo_solicitud_odt">{{ __('transferservice::labels.lbl_new') }} {{ __('transferservice::labels.lbl_odt_request') }}</span>
+                                </a>
+                            </li>
                         @endcan
                     </ul>
                 </li>

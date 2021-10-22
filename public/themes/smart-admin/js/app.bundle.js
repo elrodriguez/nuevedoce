@@ -1224,14 +1224,30 @@ var initApp = (function(app) {
 		
 		/* Add app date to js-get-date */
 		if ( myapp_config.appDateHook.length ) {
-			var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-				day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-				now = new Date(),
-				formatted = day[now.getDay()] + ', ' +  
-							months[now.getMonth()] + ' ' +  
+
+            let lang = 'en';
+
+            if ( $('#lang-get-date').length > 0 ) {
+                lang =  $('#lang-get-date').attr('lang');
+            }
+
+            if(lang == 'es'){
+                var months = ['Enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+				    day = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+            }else if(lang == 'en'){
+                var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+				    day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            }
+
+            var now = new Date(),
+
+
+				formatted = day[now.getDay()] + ', ' +
+							months[now.getMonth()] + ' ' +
 							now.getDate() + ', ' +
 							now.getFullYear();
-			myapp_config.appDateHook.text(formatted);				
+
+			myapp_config.appDateHook.text(formatted);
 		}
 
 		/* Check conflicting classes to build/destroy slimscroll */

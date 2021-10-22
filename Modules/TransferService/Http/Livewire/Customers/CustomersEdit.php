@@ -2,6 +2,7 @@
 
 namespace Modules\TransferService\Http\Livewire\Customers;
 
+use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
@@ -128,6 +129,9 @@ class CustomersEdit extends Component
             $ddate = $y.'-'.$m.'-'. $d;
         }
 
+        $activity = new Activity;
+        $activity->dataOld(SerCustomer::find($this->customer_search->id));
+
         $this->person_search->update([
             'country_id' => $this->country_id,
             'department_id' => $this->department_id,
@@ -159,11 +163,19 @@ class CustomersEdit extends Component
             'person_edit'   =>  Auth::user()->person_id
         ]);
 
+        $activity->modelOn(SerCustomer::class, $this->customer_search->id,'ser_customers');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('service_customers_edit', $this->customer_search->id));
+        $activity->logType('edit');
+        $activity->dataUpdated($this->customer_search);
+        $activity->log('se actualizo datos del Cliente');
+        $activity->save();
+
         if($this->photo){
             $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');
         }
 
-        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('personal::labels.msg_update')]);
+        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('transferservice::messages.msg_update')]);
     }
 
     public function getProvinves(){

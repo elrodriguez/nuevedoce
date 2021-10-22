@@ -24,6 +24,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_nuevo'])->get('create', 'UsersController@create')->name('setting_users_create');
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_editar'])->get('edit/{id}', 'UsersController@edit')->name('setting_users_edit');
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_roles'])->get('roles/{id}', 'UsersController@roles')->name('setting_users_roles');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios_actividades'])->get('activities/{id?}', 'UsersController@activities')->name('setting_users_activities');
+        Route::get('search', 'UsersController@autocomplete')->name('setting_users_search');
     });
     Route::group(['prefix' => 'establishment'], function() {
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_establecimientos'])->get('list', 'SetEstablishmentController@index')->name('setting_establishment');
