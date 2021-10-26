@@ -30,7 +30,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos'])->get('list', 'AssetController@index')->name('inventory_asset');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_nuevo'])->get('create', 'AssetController@create')->name('inventory_asset_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_editar'])->get('edit/{id}', 'AssetController@edit')->name('inventory_asset_edit');
-        Route::middleware(['middleware' => 'role_or_permission:inventario_activos'])->get('part_list/{id_asset}', 'AssetPartController@index')->name('inventory_asset_part');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_activos'])->get('part_list/{asset_id}', 'AssetPartController@index')->name('inventory_asset_part');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_nuevo'])->get('part_create', 'AssetPartController@create')->name('inventory_asset_part_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_editar'])->get('part_edit/{id}', 'AssetPartController@edit')->name('inventory_asset_part_edit');
     });

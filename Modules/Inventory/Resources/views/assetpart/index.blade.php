@@ -4,7 +4,7 @@
     <li class="breadcrumb-item">Inventario</li>
     <li class="breadcrumb-item">Activo</li>
     <li class="breadcrumb-item">Partes</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+    <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
@@ -15,5 +15,5 @@
     </div>
 @endsection
 @section('content')
-@livewire('inventory::asset_part.asset-list')
+@livewire('inventory::assetpart.asset-list')
 @endsection

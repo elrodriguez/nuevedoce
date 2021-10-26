@@ -13,9 +13,9 @@ class AssetPartController extends Controller
      * @param int $id_asset
      * @return Renderable
      */
-    public function index($id_asset)
+    public function index($asset_id)
     {
-        return view('inventory::asset_part.index')->with('id_asset',$id_asset);
+        return view('inventory::assetpart.index')->with('asset_id',$asset_id);
     }
 
     /**
@@ -24,7 +24,7 @@ class AssetPartController extends Controller
      */
     public function create()
     {
-        return view('inventory::asset_part.create');
+        return view('inventory::assetpart.create');
     }
 
     /**
@@ -34,6 +34,6 @@ class AssetPartController extends Controller
      */
     public function edit($id)
     {
-        return view('inventory::asset_part.edit')->with('id',$id);
+        return view('inventory::assetpart.edit')->with('id',$id);
     }
 }
