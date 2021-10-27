@@ -88,5 +88,12 @@ return [
     'lbl_occupation'    => 'Occupation',
     'lbl_load_order'    => 'Load order',
     'lbl_maximum_vehicle_load' => 'Maximum vehicle load',
-    'lbl_event'         => 'Event'
+    'lbl_event'         => 'Event',
+    'lbl_code_backus'   => 'Code backus',
+    'lbl_code_internal' => 'Código interno',
+    'lbl_date_start'    => 'Start date',
+    'lbl_date_end'      => 'End date',
+    'lbl_pending'       => 'Pending',
+    'lbl_attended'      => 'Attended',
+    'lbl_rejected'      => 'Rejected'
 ];

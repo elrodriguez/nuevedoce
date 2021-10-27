@@ -12,7 +12,7 @@
                             @endforeach
                         </select>
                         @error('vehicle_type_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
@@ -26,14 +26,14 @@
                         <label class="form-label" for="mark">@lang('transferservice::labels.lbl_mark') <span class="text-danger">*</span> </label>
                         <input wire:model="mark" type="text" class="form-control" id="mark" required="">
                         @error('mark')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="model">@lang('transferservice::labels.lbl_model') <span class="text-danger">*</span> </label>
                         <input wire:model="model" type="text" class="form-control" id="model" required="">
                         @error('model')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
@@ -68,14 +68,14 @@
                         <label class="form-label" for="color">@lang('transferservice::labels.lbl_color') <span class="text-danger">*</span></label>
                         <input wire:model="color" type="text" class="form-control" id="color" required="">
                         @error('color')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="features">@lang('transferservice::labels.lbl_features') <span class="text-danger">*</span></label>
                         <input wire:model="features" type="text" class="form-control" id="features" required="">
                         @error('features')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
@@ -106,7 +106,7 @@
                             <label class="custom-control-label" for="state">@lang('transferservice::labels.lbl_active')</label>
                         </div>
                         @error('state')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

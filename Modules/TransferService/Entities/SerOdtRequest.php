@@ -15,20 +15,24 @@ class SerOdtRequest extends Model
         'customer_id',
         'local_id',
         'wholesaler_id',
-        'event_date',
-        'transfer_date',
-        'pick_up_date',
-        'application_date',
+        'date_start',
+        'date_end',
         'description',
         'additional_information',
         'file',
         'person_create',
         'person_edit',
-        'state'
+        'state',
+        'backus_id',
+        'internal_id'
     ];
 
     protected static function newFactory()
     {
         return \Modules\TransferService\Database\factories\SerOdtRequestFactory::new();
+    }
+
+    public function getCode(){
+        return 'hola';
     }
 }

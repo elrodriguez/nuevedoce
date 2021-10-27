@@ -15,21 +15,21 @@ class CreateSerOdtRequestsTable extends Migration
     {
         Schema::create('ser_odt_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_id')->nullable(); //Empresa id
-            $table->unsignedBigInteger('supervisor_id')->nullable(); //Supervisor id
-            $table->unsignedBigInteger('customer_id')->nullable(); //Cliente id
-            $table->unsignedBigInteger('local_id')->nullable(); //Local id
-            $table->unsignedBigInteger('wholesaler_id')->nullable(); //Mayorista id
-            $table->date('event_date')->nullable(); //Fecha del evento
-            $table->date('transfer_date')->nullable(); //Fecha de Traslado
-            $table->date('pick_up_date')->nullable(); //Fecha de Recojo
-            $table->date('application_date')->nullable(); //Fecha de Solicitud
-            $table->string('description')->nullable(); //Descripcion del Evento
-            $table->string('additional_information')->nullable(); //Información Adicional
-            $table->string('file')->nullable(); //Archivo Ajunto img|pdf
+            $table->unsignedBigInteger('company_id')->nullable()->comment('Empresa id');
+            $table->unsignedBigInteger('supervisor_id')->nullable()->comment('Supervisor id');
+            $table->unsignedBigInteger('customer_id')->nullable()->comment('Cliente id');
+            $table->unsignedBigInteger('local_id')->nullable()->comment('Local id');
+            $table->unsignedBigInteger('wholesaler_id')->nullable()->comment('Mayorista id');
+            $table->date('date_start')->nullable()->comment('Fecha inicio del evento');
+            $table->date('date_end')->nullable()->comment('Fecha finaliza el evento');
+            $table->string('description')->nullable()->comment('Descripcion del Evento');
+            $table->string('additional_information')->nullable()->comment('Información Adicional');
+            $table->string('file')->nullable()->comment('Archivo Ajunto img|pdf');
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
-            $table->boolean('state')->default(true);
+            $table->char('state',1)->default('P')->comment('P=pendiente,A=atendido,R=rechazado');
+            $table->string('backus_id')->nullable()->comment('elcodigo que backus o la empresa solicitante maneja');
+            $table->string('internal_id')->nullable()->comment('conformado por el año y un correlativo 2021000001');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('people');

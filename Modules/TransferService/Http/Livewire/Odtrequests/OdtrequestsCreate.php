@@ -25,15 +25,15 @@ class OdtrequestsCreate extends Component
     public $customer_text;
     public $local_id;
     public $wholesaler_id;
-    public $event_date;
-    public $transfer_date;
-    public $pick_up_date;
-    public $application_date;
+    public $date_start;
+    public $date_end;
     public $description;
     public $additional_information;
     public $file;
     public $extension = '';
     public $state = true;
+    public $backus_id;
+    public $internal_id;
 
     public $companies = [];
     public $supervisors = [];
@@ -48,7 +48,7 @@ class OdtrequestsCreate extends Component
 
     public function render()
     {
-        //$this->companies    = SetCompany::all();
+
         $this->companies    = Person::where('identity_document_type_id', '6')
             ->select('id', 'full_name AS name', 'number')
             ->get();
@@ -57,6 +57,17 @@ class OdtrequestsCreate extends Component
             ->join('people', 'person_id', 'people.id')
             ->select('per_employees.id', 'people.full_name')
             ->get();
+
+        $anio = date('Y');
+        $code = SerOdtRequest::whereRaw('LEFT(internal_id,4) = ?',[$anio])
+            ->max('internal_id');
+        
+        if($code){
+            $this->internal_id = $code + 1;
+        }else{
+            $this->internal_id = $anio.substr(str_repeat(0, 6).'1', - 6);
+        }
+
         return view('transferservice::livewire.odtrequests.odtrequests-create');
     }
 
@@ -68,37 +79,23 @@ class OdtrequestsCreate extends Component
             'customer_text' => 'required|min:3',
             'local_id' => 'required',
             'wholesaler_id' => 'required',
-            'event_date' => 'required',
-//            'transfer_date' => 'required',
-//            'pick_up_date' => 'required',
-//            'application_date' => 'required',
+            'date_start' => 'required',
+            'date_end' => 'required',
             'description' => 'required|min:3|max:255',
-//            'additional_information' => 'required',
+            'backus_id' => 'required|unique:ser_odt_requests,backus_id',
             'file' => 'nullable|mimes:jpg,bmp,png,pdf|max:2048'
         ]);
 
-        $eventDate = null;
-        if($this->event_date){
-            list($d,$m,$y) = explode('/', $this->event_date);
-            $eventDate = $y.'-'.$m.'-'. $d;
+        $date_start = null;
+        if($this->date_start){
+            list($d,$m,$y) = explode('/', $this->date_start);
+            $date_start = $y.'-'.$m.'-'. $d;
         }
 
-        $transferDate = null;
-        if($this->transfer_date){
-            list($d,$m,$y) = explode('/', $this->transfer_date);
-            $transferDate = $y.'-'.$m.'-'. $d;
-        }
-
-        $pickUpDate = null;
-        if($this->pick_up_date){
-            list($d,$m,$y) = explode('/', $this->pick_up_date);
-            $pickUpDate = $y.'-'.$m.'-'. $d;
-        }
-
-        $applicationDate = null;
-        if($this->application_date){
-            list($d,$m,$y) = explode('/', $this->application_date);
-            $applicationDate = $y.'-'.$m.'-'. $d;
+        $date_end = null;
+        if($this->date_end){
+            list($d,$m,$y) = explode('/', $this->date_end);
+            $date_end = $y.'-'.$m.'-'. $d;
         }
 
         if($this->file){
@@ -111,15 +108,15 @@ class OdtrequestsCreate extends Component
             'customer_id'               => $this->customer_id,
             'local_id'                  => $this->local_id,
             'wholesaler_id'             => $this->wholesaler_id,
-            'event_date'                => $eventDate,
-            'transfer_date'             => $transferDate,
-            'pick_up_date'              => $pickUpDate,
-            'application_date'          => $applicationDate,
+            'date_start'                => $date_start,
+            'date_end'                  => $date_end,
             'description'               => $this->description,
             'additional_information'    => $this->additional_information,
             'file'                      => $this->extension,
             'state'                     => $this->state,
-            'person_create'             =>  Auth::user()->person_id
+            'backus_id'                 => $this->backus_id,
+            'internal_id'               => $this->internal_id,
+            'person_create'             => Auth::user()->person_id
         ]);
 
         if($this->file){
@@ -129,7 +126,7 @@ class OdtrequestsCreate extends Component
         $activity = new Activity;
         $activity->modelOn(SerOdtRequest::class, $odtRequest->id,'ser_odt_requests');
         $activity->causedBy(Auth::user());
-        $activity->routeOn(route('service_odt_requests_create', ''));
+        $activity->routeOn(route('service_odt_requests_create'));
         $activity->logType('create');
         $activity->log('Se creó una nueva Solicitud ODT');
         $activity->save();
@@ -146,14 +143,13 @@ class OdtrequestsCreate extends Component
         $this->customer_text           = null;
         $this->local_id                = null;
         $this->wholesaler_id           = null;
-        $this->event_date              = null;
-        $this->transfer_date           = null;
-        $this->pick_up_date            = null;
-        $this->application_date        = null;
+        $this->date_start              = null;
+        $this->date_end                = null;
         $this->description             = null;
         $this->additional_information  = null;
         $this->file                    = null;
         $this->extension               = '';
         $this->state                   = true;
+        $this->backus_id               = null;
     }
 }

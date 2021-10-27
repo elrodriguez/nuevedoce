@@ -79,12 +79,14 @@
                         <td class="align-middle">{{ $odt_request->name_customer }}</td>
                         <td class="align-middle">{{ $odt_request->name_local }}</td>
                         <td class="align-middle">{{ $odt_request->name_wholesaler }}</td>
-                        <td class="align-middle text-center">{{ date('d-m-Y', strtotime($odt_request->event_date)) }}</td>
+                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt_request->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt_request->date_end)->format('d/m/Y') }}</td>
                         <td class="text-center align-middle">
-                            @if($odt_request->state)
-                                <span class="badge badge-success">{{ __('transferservice::labels.lbl_active') }}</span>
-                            @else
-                                <span class="badge badge-danger">{{ __('transferservice::labels.lbl_inactive') }}</span>
+                            @if($odt_request->state == 'P')
+                                <span class="badge badge-success">{{ __('transferservice::labels.lbl_pending') }}</span>
+                            @elseif($odt_request->state == 'A')
+                                <span class="badge badge-primary">{{ __('transferservice::labels.lbl_attended') }}</span>
+                            @elseif($odt_request->state == 'R')
+                                <span class="badge badge-danger">{{ __('transferservice::labels.lbl_rejected') }}</span>
                             @endif
                         </td>
                     </tr>

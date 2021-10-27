@@ -25,10 +25,8 @@ class OdtrequestsEdit extends Component
     public $customer_text;
     public $local_id;
     public $wholesaler_id;
-    public $event_date;
-    public $transfer_date;
-    public $pick_up_date;
-    public $application_date;
+    public $date_start;
+    public $date_end;
     public $description;
     public $additional_information;
     public $file;
@@ -42,6 +40,8 @@ class OdtrequestsEdit extends Component
     public $locals = [];
     public $wholesalers = [];
     public $file_view;
+    public $backus_id;
+    public $internal_id;
 
     public function mount($id){
         $this->locals       = SerLocal::where('state', true)->get();
@@ -64,38 +64,26 @@ class OdtrequestsEdit extends Component
         $this->local_id = $this->odtRequest_search->local_id;
         $this->wholesaler_id = $this->odtRequest_search->wholesaler_id;
 
-        $eventDate = null;
-        if($this->odtRequest_search->event_date){
-            list($Y,$m,$d) = explode('-', $this->odtRequest_search->event_date);
-            $eventDate = $d.'/'.$m.'/'. $Y;
+        $date_start = null;
+        if($this->odtRequest_search->date_start){
+            list($Y,$m,$d) = explode('-', $this->odtRequest_search->date_start);
+            $date_start = $d.'/'.$m.'/'. $Y;
         }
-        $this->event_date = $eventDate;
+        $this->date_start = $date_start;
 
-        $transferDate = null;
-        if($this->odtRequest_search->transfer_date){
-            list($Y,$m,$d) = explode('-', $this->odtRequest_search->transfer_date);
-            $transferDate = $d.'/'.$m.'/'. $Y;
+        $date_end = null;
+        if($this->odtRequest_search->date_end){
+            list($Y,$m,$d) = explode('-', $this->odtRequest_search->date_end);
+            $date_end = $d.'/'.$m.'/'. $Y;
         }
-        $this->transfer_date = $transferDate;
-
-        $pickUpDate = null;
-        if($this->odtRequest_search->pick_up_date){
-            list($Y,$m,$d) = explode('-', $this->odtRequest_search->pick_up_date);
-            $pickUpDate = $d.'/'.$m.'/'. $Y;
-        }
-        $this->pick_up_date = $pickUpDate;
-
-        $applicationDate = null;
-        if($this->odtRequest_search->application_date){
-            list($Y,$m,$d) = explode('-', $this->odtRequest_search->application_date);
-            $applicationDate = $d.'/'.$m.'/'. $Y;
-        }
-        $this->application_date = $applicationDate;
+        $this->date_end = $date_end;
 
         $this->description = $this->odtRequest_search->description;
         $this->additional_information = $this->odtRequest_search->additional_information;
         $this->extension = $this->odtRequest_search->file;
         $this->state = $this->odtRequest_search->state;
+        $this->backus_id = $this->odtRequest_search->backus_id;
+        $this->internal_id = $this->odtRequest_search->internal_id;
 
         if(file_exists(public_path('storage/requests_odt_file/'.$id.'/'.$id.'.'.$this->extension))){
             $this->file_view = url('storage/requests_odt_file/'.$id.'/'.$id.'.'.$this->extension);
@@ -125,38 +113,25 @@ class OdtrequestsEdit extends Component
             'customer_text' => 'required|min:3',
             'local_id' => 'required',
             'wholesaler_id' => 'required',
-//            'event_date' => 'required',
-//            'transfer_date' => 'required',
-//            'pick_up_date' => 'required',
-//            'application_date' => 'required',
+            'date_start' => 'required',
+            'date_end' => 'required',
             'description' => 'required|min:3|max:255',
-//            'additional_information' => 'required',
+            'backus_id' => 'required|unique:ser_odt_requests,backus_id,'.$this->odtRequest_search->id,
             'file' => 'nullable|mimes:jpg,bmp,png,pdf|max:2048'
         ]);
 
-        $eventDate = null;
-        if($this->event_date){
-            list($d,$m,$y) = explode('/', $this->event_date);
-            $eventDate = $y.'-'.$m.'-'. $d;
+        $date_start = null;
+        if($this->date_start){
+            list($d,$m,$y) = explode('/', $this->date_start);
+            $date_start = $y.'-'.$m.'-'. $d;
         }
 
-        $transferDate = null;
-        if($this->transfer_date){
-            list($d,$m,$y) = explode('/', $this->transfer_date);
-            $transferDate = $y.'-'.$m.'-'. $d;
+        $date_end = null;
+        if($this->date_end){
+            list($d,$m,$y) = explode('/', $this->date_end);
+            $date_end = $y.'-'.$m.'-'. $d;
         }
 
-        $pickUpDate = null;
-        if($this->pick_up_date){
-            list($d,$m,$y) = explode('/', $this->pick_up_date);
-            $pickUpDate = $y.'-'.$m.'-'. $d;
-        }
-
-        $applicationDate = null;
-        if($this->application_date){
-            list($d,$m,$y) = explode('/', $this->application_date);
-            $applicationDate = $y.'-'.$m.'-'. $d;
-        }
 
         if($this->file){
             $this->extension = $this->file->extension();
@@ -171,15 +146,14 @@ class OdtrequestsEdit extends Component
             'customer_id'               => $this->customer_id,
             'local_id'                  => $this->local_id,
             'wholesaler_id'             => $this->wholesaler_id,
-            'event_date'                => $eventDate,
-            'transfer_date'             => $transferDate,
-            'pick_up_date'              => $pickUpDate,
-            'application_date'          => $applicationDate,
+            'date_start'                => $date_start,
+            'date_end'                  => $date_end,
             'description'               => $this->description,
             'additional_information'    => $this->additional_information,
             'file'                      => $this->extension,
             'state'                     => $this->state,
-            'person_edit'               =>  Auth::user()->person_id
+            'person_edit'               =>  Auth::user()->person_id,
+            'backus_id'                 => $this->backus_id,
         ]);
 
         if($this->file){

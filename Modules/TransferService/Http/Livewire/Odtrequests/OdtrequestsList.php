@@ -45,15 +45,16 @@ class OdtrequestsList extends Component
                 'customer.full_name AS name_customer',
                 'ser_locals.name AS name_local',
                 'wholesaler.full_name AS name_wholesaler',
-                'ser_odt_requests.event_date',
-                'ser_odt_requests.transfer_date',
-                'ser_odt_requests.pick_up_date',
-                'ser_odt_requests.application_date',
+                'ser_odt_requests.date_start',
+                'ser_odt_requests.date_end',
                 'ser_odt_requests.description',
                 'ser_odt_requests.additional_information',
                 'ser_odt_requests.file',
-                'ser_odt_requests.state'
+                'ser_odt_requests.state',
+                'ser_odt_requests.backus_id',
+                'ser_odt_requests.internal_id'
             )
+            ->orderBy('ser_odt_requests.date_end','DESC')
             ->paginate($this->show);
     }
 
