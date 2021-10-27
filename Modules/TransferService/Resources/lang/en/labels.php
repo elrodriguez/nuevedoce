@@ -95,5 +95,6 @@ return [
     'lbl_date_end'      => 'End date',
     'lbl_pending'       => 'Pending',
     'lbl_attended'      => 'Attended',
-    'lbl_rejected'      => 'Rejected'
+    'lbl_rejected'      => 'Rejected',
+    'lbl_asset'         => 'Assets'
 ];

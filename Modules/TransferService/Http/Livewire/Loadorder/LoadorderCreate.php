@@ -19,4 +19,8 @@ class LoadorderCreate extends Component
     {
         return view('transferservice::livewire.loadorder.loadorder-create');
     }
+
+    public function selWeight(){
+        $this->vehicle_load = SerVehicle::find($this->vehicle_id)->gross_weight;
+    }
 }

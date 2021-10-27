@@ -1,25 +1,25 @@
 <div>
     <div class="card mb-g rounded-top">
-        <div class="card-body">
+        <div class="card-body p-0">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
-                <div class="form-row">
+                <div class="form-row p-3">
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="vehicle_type_id">@lang('transferservice::labels.lbl_vehicle') <span class="text-danger">*</span> </label>
-                        <select wire:model="vehicle_id" id="vehicle_id" class="custom-select" required="">
+                        <select wire:model="vehicle_id" wire:change="selWeight" id="vehicle_id" class="custom-select" required="">
                             <option value="">@lang('transferservice::labels.lbl_select')</option>
                             @foreach($vehicles as $vehicle)
-                                <option value="{{ $vehicle->id }}">{{ $vehicle->license_plate.'-'.$vehicle->mark.'-'.$vehicle->model }}</option>
+                                <option value="{{ $vehicle->id }}">{{ $vehicle->license_plate.' - '.$vehicle->mark.' - '.$vehicle->model.' - '.$vehicle->color }}</option>
                             @endforeach
                         </select>
                         @error('vehicle_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="vehicle_type_id">@lang('transferservice::labels.lbl_maximum_vehicle_load') <span class="text-danger">*</span> </label>
-                        <input wire:model.defer="vehicle_load" type="text" class="form-control" readonly />
+                        <input wire:model="vehicle_load" type="text" class="form-control" readonly />
                         @error('vehicle_load')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

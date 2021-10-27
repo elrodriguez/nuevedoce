@@ -1,8 +1,8 @@
 <div>
     <div class="card mb-g rounded-top">
-        <div class="card-body">
+        <div class="card-body p-0">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
-                <div class="form-row">
+                <div class="form-row p-3">
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="description">@lang('transferservice::labels.lbl_code_internal') <span class="text-danger">*</span> </label>
                         <input wire:model="internal_id" disabled type="text" class="form-control" id="internal_id" required="">
@@ -123,6 +123,28 @@
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div> --}}
+                    <div class="col-md-5 mb-3">
+                        <label class="form-label" for="asset_id">@lang('transferservice::labels.lbl_asset') </label>
+                        <input wire:model="customer_text" id="customer_text" class="form-control basicAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_requests_search') }}" autocomplete="off" />
+                        @error('asset_id')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">{{ __('labels.actions') }}</th>
+                                        <th class="text-center">{{ __('labels.name') }}</th>
+                                        <th class="text-center">{{ __('labels.quantity') }}</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

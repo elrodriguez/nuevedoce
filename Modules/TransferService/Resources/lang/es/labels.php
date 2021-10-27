@@ -89,10 +89,11 @@ return [
     'lbl_maximum_vehicle_load' => 'Carga máxima del vehículo',
     'lbl_event'         => 'Evento',
     'lbl_code_backus'   => 'Código backus',
-    'lbl_code_internal'   => 'Código interno',
+    'lbl_code_internal' => 'Código interno',
     'lbl_date_start'    => 'Fecha inicio',
     'lbl_date_end'      => 'Fecha fin',
     'lbl_pending'       => 'Pendiente',
     'lbl_attended'      => 'Atendido',
-    'lbl_rejected'      => 'Rechazado'
+    'lbl_rejected'      => 'Rechazado',
+    'lbl_asset'         => 'Activos'
 ];
