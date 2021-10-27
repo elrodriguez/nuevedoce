@@ -124,6 +124,30 @@
                     </ul>
                 </li>
             @endcan
+            @can('serviciodetraslados_orden_carga')
+                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'load_order' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="{{ __('transferservice::labels.lbl_load_order') }}" data-filter-tags="{{ __('transferservice::labels.lbl_load_order') }}">
+                        <i class="fal fa-person-dolly"></i>
+                        <span class="nav-link-text" data-i18n="nav.orden_carga">{{ __('transferservice::labels.lbl_load_order') }}</span>
+                    </a>
+                    <ul>
+                        @can('serviciodetraslados_orden_carga')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'load_order' && $path[2] == 'list' ? 'active' : '' }}">
+                                <a href="{{ route('service_load_order_index') }}" title="Listar orden carga" data-filter-tags="Listar orden carga">
+                                    <span class="nav-link-text" data-i18n="nav.listar_orden_carga">{{ __('transferservice::labels.lbl_list') }} </span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('serviciodetraslados_orden_carga_nuevo')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'load_order' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('service_load_order_create') }}" title="Nueva orden carga" data-filter-tags="Nueva orden carga">
+                                    <span class="nav-link-text" data-i18n="nav.nuevo_orden_carga">{{ __('transferservice::labels.lbl_new') }} </span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>

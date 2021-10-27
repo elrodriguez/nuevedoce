@@ -41,4 +41,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_solicitudes_odt_editar'])->get('edit/{id}', 'OdtRequestController@edit')->name('service_odt_requests_edit');
         Route::get('search', 'OdtRequestController@autocomplete')->name('service_odt_requests_search');
     });
+
+    Route::group(['prefix' => 'load_order'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga'])->get('list', 'LoadOrderController@index')->name('service_load_order_index');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_nuevo'])->get('create', 'LoadOrderController@create')->name('service_load_order_create');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_editar'])->get('edit/{id}', 'LoadOrderController@edit')->name('service_load_order_edit');
+    });
 });

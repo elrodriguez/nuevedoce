@@ -84,5 +84,8 @@ return [
     'lbl_worker'        => 'Trabajador',
     'lbl_identification_number' => 'Número de identificación',
     'lbl_full_name'     => 'Nombre completo',
-    'lbl_occupation'    => 'Ocupación'
+    'lbl_occupation'    => 'Ocupación',
+    'lbl_load_order'    => 'Orden de carga',
+    'lbl_maximum_vehicle_load' => 'Carga máxima del vehículo',
+    'lbl_event'         => 'Evento'
 ];
