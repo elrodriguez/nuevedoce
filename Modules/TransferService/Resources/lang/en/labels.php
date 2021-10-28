@@ -96,5 +96,6 @@ return [
     'lbl_pending'       => 'Pending',
     'lbl_attended'      => 'Attended',
     'lbl_rejected'      => 'Rejected',
-    'lbl_asset'         => 'Assets'
+    'lbl_asset'         => 'Assets',
+    'lbl_programming'   => 'Programming'
 ];

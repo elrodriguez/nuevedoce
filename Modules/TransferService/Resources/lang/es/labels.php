@@ -95,5 +95,6 @@ return [
     'lbl_pending'       => 'Pendiente',
     'lbl_attended'      => 'Atendido',
     'lbl_rejected'      => 'Rechazado',
-    'lbl_asset'         => 'Activos'
+    'lbl_asset'         => 'Activos',
+    'lbl_programming'   => 'Programación'
 ];

@@ -48,9 +48,12 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <input id="pac-input" class="form-control" type="text" placeholder="Search Box"/>
+                        <div id="map" style="height: 400px;" wire:ignore></div>
+                    </div>
                 </div>
-                <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
-                <div id="map" style="height: 400px;" wire:ignore></div>
+                
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">

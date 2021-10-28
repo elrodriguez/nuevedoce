@@ -1,6 +1,5 @@
 @extends('transferservice::layouts.master')
 @section('styles')
-@endsection
 <style>
     #description {
         font-family: Roboto;
@@ -76,6 +75,7 @@
         width: 345px;
     }
 </style>
+@endsection
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('transferservice::labels.service_title')</li>

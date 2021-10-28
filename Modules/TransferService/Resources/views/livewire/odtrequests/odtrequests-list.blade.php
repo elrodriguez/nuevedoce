@@ -1,7 +1,7 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-header">
-            <div class="input-group bg-white shadow-inset-2">
+            <div class="input-group input-group-multi-transition">
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-default dropdown-toggle waves-effect waves-themed" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $show }}</button>
                     <div class="dropdown-menu" style="">
@@ -14,17 +14,19 @@
                     </div>
                 </div>
                 <div class="input-group-prepend">
-                    @if($search)
-                        <button wire:click="$set('search', '')" type="button" class="input-group-text bg-transparent border-right-0 py-1 px-3 text-danger">
+                    @if($search || $date_start || $date_end)
+                        <button wire:click="clearInput" type="button" class="input-group-text text-danger">
                             <i class="fal fa-times"></i>
                         </button>
                     @else
-                        <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                        <span class="input-group-text text-success">
                             <i wire:loading.class="spinner-border spinner-border-sm" wire:loading.remove.class="fal fa-search" class="fal fa-search"></i>
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="odtRequestSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('transferservice::labels.lbl_type_here')}}">
+                <input wire:model="date_start" wire:keydown.enter="odtRequestSearch" type="text" class="form-control" id="date_start" onchange="this.dispatchEvent(new InputEvent('input'))" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" placeholder="Desde">
+                <input wire:model="date_end" wire:keydown.enter="odtRequestSearch" type="text" class="form-control" id="date_end" onchange="this.dispatchEvent(new InputEvent('input'))" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" placeholder="Hasta">
+                <input wire:keydown.enter="odtRequestSearch" wire:model.defer="search" type="text" class="form-control" placeholder="{{__('transferservice::labels.lbl_type_here')}} {{__('transferservice::labels.lbl_name')}} {{__('transferservice::labels.lbl_event')}}">
                 <div class="input-group-append">
                     <button wire:click="customersSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_search')</button>
                     @can('serviciodetraslados_solicitudes_odt_nuevo')
@@ -74,11 +76,11 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $odt_request->description }}</td>
-                        <td class="align-middle">{{ $odt_request->name_company }}</td>
-                        <td class="align-middle">{{ $odt_request->name_employee }}</td>
-                        <td class="align-middle">{{ $odt_request->name_customer }}</td>
-                        <td class="align-middle">{{ $odt_request->name_local }}</td>
-                        <td class="align-middle">{{ $odt_request->name_wholesaler }}</td>
+                        <td class="align-middle"><a href="javascript:void(0)" type="button">{{ $odt_request->name_company }}</a></td>
+                        <td class="align-middle"><a href="javascript:void(0)" type="button">{{ $odt_request->name_employee }}</a></td>
+                        <td class="align-middle"><a href="javascript:void(0)" type="button">{{ $odt_request->name_customer }}</a></td>
+                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_local }},4)" href="javascript:void(0)" type="button">{{ $odt_request->name_local }}</a></td>
+                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_wholesaler }},5)" href="javascript:void(0)" type="button">{{ $odt_request->name_wholesaler }}</a></td>
                         <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt_request->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt_request->date_end)->format('d/m/Y') }}</td>
                         <td class="text-center align-middle">
                             @if($odt_request->state == 'P')
@@ -98,6 +100,25 @@
             <div class="ml-auto">{{ $odt_requests->links() }}</div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetailsLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalDetailsBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         function confirmDelete(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
@@ -110,12 +131,12 @@
                     {
                         confirm:
                             {
-                                label: '{{__('transferservice::buttons.btn_yes')}}',
+                                label: '{{ __('transferservice::buttons.btn_yes') }}',
                                 className: 'btn-danger shadow-0'
                             },
                         cancel:
                             {
-                                label: '{{__('transferservice::buttons.btn_not')}}',
+                                label: '{{ __('transferservice::buttons.btn_not') }}',
                                 className: 'btn-default'
                             }
                     },
@@ -142,5 +163,59 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
+        document.addEventListener('livewire:load', function () {
+            $(":input").inputmask();
+            var controls = {
+                leftArrow: "<i class='fal fa-angle-left' style='font-size: 1.25rem'></i>",
+                rightArrow: "<i class='fal fa-angle-right' style='font-size: 1.25rem'></i>"
+            }
+
+            $("#date_start").datepicker({
+                todayHighlight: true,
+                orientation: "bottom left",
+                templates: controls,
+                language: "es",
+                autoclose: true
+            }).on('hide', function(e){
+                @this.set('date_start',this.value);
+            });
+
+            $("#date_end").datepicker({
+                todayHighlight: true,
+                orientation: "bottom left",
+                templates: controls,
+                language: "es",
+                autoclose: true
+            }).on('hide', function(e){
+                @this.set('date_end', this.value);
+            });
+
+        });
+        document.addEventListener('ser-odtrequests-details', event => {
+            $('#modalDetailsLabel').html(event.detail.label)
+            $('#modalDetailsBody').html(event.detail.body)
+            $('#modalDetails').modal('show');
+
+            initMap(event.detail.lat,event.detail.lng,event.detail.label);
+            
+        });
+
+        function initMap(xlat,xlng,label) {
+            
+            var myLatLng = {lat: xlat, lng: xlng};
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: myLatLng,
+                scrollwheel: false,
+                zoom: 16,
+            });
+
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: label
+            });
+        }
+
     </script>
 </div>

@@ -47,6 +47,7 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_solicitudes_odt_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_solicitudes_odt_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_solicitudes_odt_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_solicitudes_odt_nuevo_programacion','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_orden_carga','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_orden_carga_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_orden_carga_editar','guard_name' => 'sanctum']));
