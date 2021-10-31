@@ -24,11 +24,11 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="assetSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="@lang('inventory::labels.lbl_type_here')">
+                <input wire:keydown.enter="itemSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="@lang('inventory::labels.lbl_type_here')">
                 <div class="input-group-append">
-                    <button wire:click="assetSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
-                    @can('inventario_activos_nuevo')
-                    <a href="{{ route('inventory_asset_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('inventory::labels.btn_new')</a>
+                    <button wire:click="itemSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
+                    @can('inventario_items_nuevo')
+                        <a href="{{ route('inventory_item_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('inventory::labels.btn_new')</a>
                     @endcan
                 </div>
             </div>
@@ -36,18 +36,20 @@
         <div class="card-body p-0">
             <table class="table m-0">
                 <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th class="text-center">@lang('inventory::labels.lbl_actions')</th>
-                        <th>@lang('inventory::labels.name')</th>
-                        <th>@lang('inventory::labels.category')</th>
-                        <th>@lang('inventory::labels.description')</th>
-                        <th>@lang('inventory::labels.brand')</th>
-                        <th>@lang('inventory::labels.status')</th>
-                    </tr>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">@lang('inventory::labels.lbl_actions')</th>
+                    <th>@lang('inventory::labels.name')</th>
+                    <th>@lang('inventory::labels.category')</th>
+                    <th>@lang('inventory::labels.description')</th>
+                    <th>@lang('inventory::labels.brand')</th>
+                    <th class="text-center">@lang('inventory::labels.lbl_part')</th>
+                    <th class="text-center">@lang('inventory::labels.lbl_assigned')</th>
+                    <th class="text-center">@lang('inventory::labels.status')</th>
+                </tr>
                 </thead>
                 <tbody class="">
-                    @foreach($assets as $key => $asset)
+                @foreach($items as $key => $item)
                     <tr>
                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                         <td class="text-center tdw-50 align-middle">
@@ -56,49 +58,64 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('inventario_activos_editar')
-                                    <a href="{{ route('inventory_asset_edit',$asset->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
-                                    </a>
+                                    @can('inventario_items_editar')
+                                        <a href="{{ route('inventory_item_edit',$item->id) }}" class="dropdown-item">
+                                            <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
+                                        </a>
                                     @endcan
-                                    @can('inventario_activos_item')
-                                    <a href="{{ route('inventory_asset_part',$asset->id) }}" class="dropdown-item">
-                                        <i class="ni ni-layers"></i> @lang('inventory::labels.parts')
-                                    </a>
+                                    @can('inventario_items_parte')
+                                        @if(!$item->part)
+                                        <a href="{{ route('inventory_item_part',$item->id) }}" class="dropdown-item">
+                                            <i class="ni ni-layers"></i> @lang('inventory::labels.parts')
+                                        </a>
+                                        @endif
                                     @endcan
-                                    @can('inventario_activos_fotos')
-                                    <a href="{{ route('inventory_asset_file',$asset->id) }}" class="dropdown-item">
-                                        <i class="ni ni-picture"></i> @lang('inventory::labels.lbl_images')
-                                    </a>
+                                    @can('inventario_items_fotos')
+                                        <a href="{{ route('inventory_item_file',$item->id) }}" class="dropdown-item">
+                                            <i class="ni ni-picture"></i> @lang('inventory::labels.lbl_images')
+                                        </a>
                                     @endcan
                                     <div class="dropdown-divider"></div>
-                                    @can('inventario_activos_eliminar')
-                                    <button onclick="confirmDelete({{ $asset->id }})" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
-                                    </button>
+                                    @can('inventario_items_eliminar')
+                                        <button onclick="confirmDelete({{ $item->id }})" type="button" class="dropdown-item text-danger">
+                                            <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
+                                        </button>
                                     @endcan
-
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $asset->name }}</td>
-                        <td class="align-middle">{{ $asset->name_category }}</td>
-                        <td class="align-middle">{{ $asset->description }}</td>
-                        <td class="align-middle">{{ $asset->name_brand }}</td>
-                        <td class="align-middle">
-                            @if($asset->status)
-                            <span class="badge badge-success">{{ __('inventory::labels.active') }}</span>
+                        <td class="align-middle">{{ $item->name }}</td>
+                        <td class="align-middle">{{ $item->name_category }}</td>
+                        <td class="align-middle">{{ $item->description }}</td>
+                        <td class="align-middle">{{ $item->name_brand }}</td>
+                        <td class="text-center align-middle">
+                            @if($item->part)
+                                <span class="badge badge-success">{{ __('inventory::labels.btn_yes') }}</span>
                             @else
-                            <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
+                                <span class="badge badge-danger">{{ __('inventory::labels.btn_not') }}</span>
+                            @endif
+                        </td>
+                        <td class="text-center align-middle">
+                            @if($item->item_id)
+                                <span class="badge badge-success">{{ __('inventory::labels.btn_yes') }}</span>
+                            @else
+                                <span class="badge badge-danger">{{ __('inventory::labels.btn_not') }}</span>
+                            @endif
+                        </td>
+                        <td class="text-center align-middle">
+                            @if($item->status)
+                                <span class="badge badge-success">{{ __('inventory::labels.active') }}</span>
+                            @else
+                                <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
                             @endif
                         </td>
                     </tr>
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
-            <div class="ml-auto">{{ $assets->links() }}</div>
+            <div class="ml-auto">{{ $items->links() }}</div>
         </div>
     </div>
     <script type="text/javascript">
@@ -110,31 +127,31 @@
                 centerVertical: true,
                 swapButtonOrder: true,
                 buttons:
-                {
-                    confirm:
                     {
-                        label: '{{__('inventory::labels.btn_yes')}}',
-                        className: 'btn-danger shadow-0'
+                        confirm:
+                            {
+                                label: '{{__('inventory::labels.btn_yes')}}',
+                                className: 'btn-danger shadow-0'
+                            },
+                        cancel:
+                            {
+                                label: '{{__('inventory::labels.btn_not')}}',
+                                className: 'btn-default'
+                            }
                     },
-                    cancel:
-                    {
-                        label: '{{__('inventory::labels.btn_not')}}',
-                        className: 'btn-default'
-                    }
-                },
                 className: "modal-alert",
                 closeButton: false,
                 callback: function(result)
                 {
                     if(result){
-                        @this.deleteAsset(id)
+                    @this.deleteItem(id)
                     }
                 }
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
 
-        document.addEventListener('set-asset-delete', event => {
+        document.addEventListener('set-item-delete', event => {
             let res = event.detail.res;
 
             if(res == 'success'){

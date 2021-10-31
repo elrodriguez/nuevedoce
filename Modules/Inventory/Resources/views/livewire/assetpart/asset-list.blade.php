@@ -1,3 +1,0 @@
-<div>
-    {{-- livewire view --}}
-</div>

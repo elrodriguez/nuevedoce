@@ -6,7 +6,7 @@ use Livewire\Component;
 use Modules\Inventory\Entities\InvCategory;
 use Modules\Inventory\Entities\InvBrand;
 use Modules\Inventory\Entities\InvAsset;
-use Modules\Inventory\Entities\InvAssetFile;
+use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
 
 class AssetEdit extends Component
@@ -57,17 +57,17 @@ class AssetEdit extends Component
         return view('inventory::livewire.asset.asset-edit');
     }
 
-    
+
     public function save(){
 
         $this->validate([
             'name' => 'required|min:3|max:255',
             'description' => 'required',
             'images.*' => 'image|max:1024'
-            
+
             //'photo' => 'nullable|image|max:1024',
         ]);
-        
+
         $this->asset->update([
             'name' => $this->name,
             'description' => $this->description,
@@ -82,17 +82,17 @@ class AssetEdit extends Component
             'brand_id' => $this->brand_id,
             'category_id' => $this->category_id
         ]);
-         
+
          if($this->image){
             $this->extension_photo = $this->image->extension();
-            
-                InvAssetFile::update([
+
+                InvItemFile::update([
                 'name' => $this->image->getClientOriginalName(),
                 'route' => 'asset_images/'.$this->name.'/',
                 'extension' => $this->extension_photo,
                 'asset_id' => $this->asset_save->id
             ]);
-             
+
             $this->image->storeAs('asset_images/'.$this->name.'/', $this->asset_save->id.'.'.$this->extension_photo,'public');
         }
 
@@ -109,5 +109,5 @@ class AssetEdit extends Component
         $this->dispatchBrowserEvent('set-asset-save', ['msg' => 'Datos actualizados correctamente.']);
     }
 
- 
+
 }

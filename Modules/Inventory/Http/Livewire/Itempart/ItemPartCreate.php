@@ -1,17 +1,19 @@
 <?php
 
-namespace Modules\Inventory\Http\Livewire\Asset;
+namespace Modules\Inventory\Http\Livewire\Itempart;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Inventory\Entities\InvCategory;
 use Modules\Inventory\Entities\InvBrand;
-use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
 
-class AssetCreate extends Component
+class ItemPartCreate extends Component
 {
-
     use WithFileUploads;
 
     public $name;
@@ -19,11 +21,11 @@ class AssetCreate extends Component
     public $part = false;
     public $weight;
     public $width;
+    public $amount;
     public $high;
     public $long;
-    public $number_parts;
+    public $number_parts = 0;
     public $status = true;
-    public $asset_id;
     public $brand_id;
     public $category_id;
     //images
@@ -34,31 +36,34 @@ class AssetCreate extends Component
     public $brands;
     //Category
     public $categories;
-    public $asset_save;
+    public $item_save;
 
-    public function mount(){
+    public $id_item;
+    public $name_item;
+
+    public function mount($item_id){
         $this->categories = InvCategory::where('status',true)->get();
         $this->brands = InvBrand::where('status',true)->get();
 
+        $item = InvItem::find($item_id);
+        $this->id_item = $item_id;
+        $this->name_item = $item->name;
     }
 
     public function render()
     {
-        return view('inventory::livewire.asset.asset-create');
+        return view('inventory::livewire.itempart.item-part-create');
     }
 
-
     public function save(){
-
         $this->validate([
             'name' => 'required|min:3|max:255',
             'description' => 'required',
+            'amount' => 'required|integer',
             'images.*' => 'image|max:1024'
-
-            //'photo' => 'nullable|image|max:1024',
         ]);
 
-        $this->asset_save = InvAsset::create([
+        $this->item_save = InvItem::create([
             'name' => $this->name,
             'description' => $this->description,
             'part' => $this->part,
@@ -67,39 +72,37 @@ class AssetCreate extends Component
             'high' => $this->high,
             'long' => $this->long,
             'number_parts' => $this->number_parts,
+            'amount' => $this->amount,
             'status' => $this->status,
-            'asset_id' => $this->asset_id,
+            'item_id' => $this->id_item,
             'category_id' => $this->category_id,
-            'brand_id' => $this->brand_id
+            'brand_id' => $this->brand_id,
+            'person_create'=> Auth::user()->person_id
         ]);
 
-         if($this->image){
-            $this->extension_photo = $this->image->extension();
+        $activity = new Activity;
+        $activity->modelOn(InvItem::class, $this->item_save->id,'inv_items');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('inventory_item_part_create'));
+        $activity->logType('create');
+        $activity->log('Se creó una nueva parte de Item');
+        $activity->save();
 
-                InvItemFile::create([
+        if($this->image){
+            $this->extension_photo = $this->image->extension();
+            InvItemFile::create([
                 'name' => $this->image->getClientOriginalName(),
-                'route' => 'asset_images/'.$this->name.'/',
+                'route' => 'items_images/'.$this->name.'/',
                 'extension' => $this->extension_photo,
-                'asset_id' => $this->asset_save->id
+                'item_id' => $this->item_save->id
             ]);
 
-            $this->image->storeAs('asset_images/'.$this->name.'/', $this->asset_save->id.'.'.$this->extension_photo,'public');
+            $this->image->storeAs('items_images/'.$this->name.'/', $this->item_save->id.'.'.$this->extension_photo,'public');
         }
 
-
-        /*
-        if($this->images){
-            foreach ($this->images as $image) {
-            $this->extension_photo = $image->extension();
-            //dd($this->extension_photo);
-                $this->image->storeAs('asset_images/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
-            }
-        }*/
-
         $this->clearForm();
-        $this->dispatchBrowserEvent('set-asset-save', ['msg' => 'Datos guardados correctamente.']);
+        $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
     }
-
 
 
     public function clearForm(){
@@ -112,11 +115,8 @@ class AssetCreate extends Component
         $this->long = null;
         $this->number_parts = null;
         $this->status = true;
-        $this->asset_id = null;
         $this->brand_id = null;
         $this->category_id = null;
         $this->image = '';
-
     }
-
 }

@@ -1,17 +1,18 @@
 <?php
 
-namespace Modules\Inventory\Http\Livewire\Asset;
+namespace Modules\Inventory\Http\Livewire\Item;
 
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Modules\Inventory\Entities\InvCategory;
 use Modules\Inventory\Entities\InvBrand;
-use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
 
-class AssetCreate extends Component
+class ItemCreate extends Component
 {
-
     use WithFileUploads;
 
     public $name;
@@ -23,7 +24,7 @@ class AssetCreate extends Component
     public $long;
     public $number_parts;
     public $status = true;
-    public $asset_id;
+    public $item_id;
     public $brand_id;
     public $category_id;
     //images
@@ -34,7 +35,9 @@ class AssetCreate extends Component
     public $brands;
     //Category
     public $categories;
-    public $asset_save;
+    public $item_save;
+    public $part_text;
+    public $part_id;
 
     public function mount(){
         $this->categories = InvCategory::where('status',true)->get();
@@ -44,21 +47,17 @@ class AssetCreate extends Component
 
     public function render()
     {
-        return view('inventory::livewire.asset.asset-create');
+        return view('inventory::livewire.item.item-create');
     }
 
-
     public function save(){
-
         $this->validate([
             'name' => 'required|min:3|max:255',
             'description' => 'required',
             'images.*' => 'image|max:1024'
-
-            //'photo' => 'nullable|image|max:1024',
         ]);
 
-        $this->asset_save = InvAsset::create([
+        $this->item_save = InvItem::create([
             'name' => $this->name,
             'description' => $this->description,
             'part' => $this->part,
@@ -68,22 +67,31 @@ class AssetCreate extends Component
             'long' => $this->long,
             'number_parts' => $this->number_parts,
             'status' => $this->status,
-            'asset_id' => $this->asset_id,
+            'item_id' => $this->item_id,
             'category_id' => $this->category_id,
-            'brand_id' => $this->brand_id
+            'brand_id' => $this->brand_id,
+            'person_create'=> Auth::user()->person_id
         ]);
 
-         if($this->image){
+        $activity = new Activity;
+        $activity->modelOn(InvItem::class, $this->item_save->id,'inv_items');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('inventory_item_create'));
+        $activity->logType('create');
+        $activity->log('Se creó un nuevo Item');
+        $activity->save();
+
+        if($this->image){
             $this->extension_photo = $this->image->extension();
 
-                InvItemFile::create([
+            InvItemFile::create([
                 'name' => $this->image->getClientOriginalName(),
-                'route' => 'asset_images/'.$this->name.'/',
+                'route' => 'items_images/'.$this->name.'/',
                 'extension' => $this->extension_photo,
-                'asset_id' => $this->asset_save->id
+                'item_id' => $this->item_save->id
             ]);
 
-            $this->image->storeAs('asset_images/'.$this->name.'/', $this->asset_save->id.'.'.$this->extension_photo,'public');
+            $this->image->storeAs('items_images/'.$this->name.'/', $this->item_save->id.'.'.$this->extension_photo,'public');
         }
 
 
@@ -92,12 +100,12 @@ class AssetCreate extends Component
             foreach ($this->images as $image) {
             $this->extension_photo = $image->extension();
             //dd($this->extension_photo);
-                $this->image->storeAs('asset_images/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
+                $this->image->storeAs('items_images/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
             }
         }*/
 
         $this->clearForm();
-        $this->dispatchBrowserEvent('set-asset-save', ['msg' => 'Datos guardados correctamente.']);
+        $this->dispatchBrowserEvent('set-item-save', ['msg' => 'Datos guardados correctamente.']);
     }
 
 
@@ -112,11 +120,9 @@ class AssetCreate extends Component
         $this->long = null;
         $this->number_parts = null;
         $this->status = true;
-        $this->asset_id = null;
+        $this->item_id = null;
         $this->brand_id = null;
         $this->category_id = null;
         $this->image = '';
-
     }
-
 }

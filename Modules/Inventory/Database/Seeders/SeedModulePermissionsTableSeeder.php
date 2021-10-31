@@ -41,7 +41,15 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'inventario_activos_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'inventario_activos_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'inventario_activos_eliminar','guard_name' => 'sanctum']));
-        
+        array_push($permissions,Permission::create(['name' => 'inventario_items','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_fotos','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_parte','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_parte_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_parte_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_items_parte_eliminar','guard_name' => 'sanctum']));
 
         $role = Role::find(1);
         foreach($permissions as $permission){
@@ -51,6 +59,6 @@ class SeedModulePermissionsTableSeeder extends Seeder
             ]);
             $role->givePermissionTo($permission->name);
         }
-      
+
     }
 }

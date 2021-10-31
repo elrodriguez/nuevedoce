@@ -72,6 +72,28 @@
                 </ul>
             </li>
             @endcan
+            @can('inventario_items')
+                <li class="{{ $path[0] == 'inventory' && $path[1] == 'item' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Items" data-filter-tags="Items">
+                        <i class="ni ni-social-dropbox"></i>
+                        <span class="nav-link-text" data-i18n="nav.items">@lang('inventory::labels.lbl_items')</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'inventory' && $path[1] == 'item' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('inventory_item') }}" title="Listado de Items" data-filter-tags="Listado de Items">
+                                <span class="nav-link-text" data-i18n="nav.listado_items">@lang('inventory::labels.lbl_list') @lang('inventory::labels.lbl_items')</span>
+                            </a>
+                        </li>
+                        @can('inventario_items_nuevo')
+                            <li class="{{ $path[0] == 'inventory' && $path[1] == 'item' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('inventory_item_create') }}" title="Nuevo Item" data-filter-tags="Nuevo Item">
+                                    <span class="nav-link-text" data-i18n="nav.item_nuevo">@lang('inventory::labels.btn_new') @lang('inventory::labels.lbl_item')</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
             @can('inventario_activos')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
@@ -94,7 +116,7 @@
                 </ul>
             </li>
             @endcan
-            
+
         </ul>
     </nav>
 </div>

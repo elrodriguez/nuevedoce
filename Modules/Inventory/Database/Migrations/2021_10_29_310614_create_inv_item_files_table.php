@@ -13,15 +13,17 @@ class CreateInvAssetFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('inv_asset_files', function (Blueprint $table) {
+        Schema::create('inv_item_files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('route');
             $table->string('extension');
-            $table->unsignedBigInteger('asset_id')->nullable();
+            $table->unsignedBigInteger('item_id')->nullable();
+            $table->unsignedBigInteger('person_create')->nullable();
+            $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('asset_id')->references('id')->on('inv_assets');
+            $table->foreign('item_id')->references('id')->on('inv_items');
         });
     }
 
@@ -32,6 +34,6 @@ class CreateInvAssetFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inv_asset_files');
+        Schema::dropIfExists('inv_item_files');
     }
 }
