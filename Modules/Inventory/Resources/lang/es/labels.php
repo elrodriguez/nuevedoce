@@ -69,5 +69,7 @@ return [
     'lbl_delete'        => 'Eliminar',
     'lbl_amount'        => 'Cantidad',
     'lbl_assigned'      => 'Asignado',
-    'lbl_main_item'     => 'Item Principal'
+    'lbl_main_item'     => 'Item Principal',
+    'lbl_is_a_part'     => '¿Es una parte?',
+    'lbl_yes'           => 'Si'
 ];

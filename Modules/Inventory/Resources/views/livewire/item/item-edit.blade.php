@@ -60,10 +60,10 @@
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3" wire:ignore>
-                        <label class="form-label">@lang('inventory::labels.parts') <span class="text-danger">*</span> </label>
+                        <label class="form-label">@lang('inventory::labels.lbl_is_a_part') <span class="text-danger">*</span> </label>
                         <div class="custom-control custom-checkbox">
                             <input wire:model="part" type="checkbox" class="custom-control-input" id="part" checked="">
-                            <label class="custom-control-label" for="part">@lang('inventory::labels.active')</label>
+                            <label class="custom-control-label" for="part">@lang('inventory::labels.lbl_yes')</label>
                         </div>
                         @error('part')
                         <div class="invalid-feedback">{{ $message }}</div>

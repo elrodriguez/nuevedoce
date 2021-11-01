@@ -69,5 +69,7 @@ return [
     'lbl_delete'        => 'Delete',
     'lbl_amount'        => 'Amount',
     'lbl_assigned'      => 'Assigned',
-    'lbl_main_item'     => 'Main Item'
+    'lbl_main_item'     => 'Main Item',
+    'lbl_is_a_part'     => 'Is a part?',
+    'lbl_yes'           => 'Yes'
 ];

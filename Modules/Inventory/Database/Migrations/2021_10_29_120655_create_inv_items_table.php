@@ -22,7 +22,7 @@ class CreateInvItemsTable extends Migration
             $table->decimal('width', 10, 2)->nullable();
             $table->decimal('high', 10, 2)->nullable();
             $table->decimal('long', 10, 2)->nullable();
-            $table->integer('number_parts')->default(0);
+            $table->integer('number_parts')->nullable();
             $table->integer('amount')->default(0);
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('item_id')->nullable();
