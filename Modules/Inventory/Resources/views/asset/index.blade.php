@@ -1,16 +1,16 @@
 @extends('inventory::layouts.master')
 @section('breadcrumb')
     <x-company-name></x-company-name>
-    <li class="breadcrumb-item">Inventario</li>
-    <li class="breadcrumb-item">Activo</li>
+    <li class="breadcrumb-item">@lang('inventory::labels.lbl_inventory')</li>
+    <li class="breadcrumb-item">@lang('inventory::labels.assents')</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class="ni ni-social-dropbox"></i></i>Activos<sup class='badge badge-primary fw-500'>List</sup>   
+        <i class="fal fa-boxes"></i></i> @lang('inventory::labels.assents')<sup class='badge badge-primary fw-500'>@lang('inventory::labels.lbl_list')</sup>
     </h1>
     <div class="subheader-block">
-        Listado
+        @lang('inventory::labels.lbl_list')
     </div>
 @endsection
 @section('content')

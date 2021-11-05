@@ -74,5 +74,7 @@ return [
     'lbl_assigned'      => 'Assigned',
     'lbl_main_item'     => 'Main Item',
     'lbl_is_a_part'     => 'Is a part?',
-    'lbl_yes'           => 'Yes'
+    'lbl_yes'           => 'Yes',
+    'lbl_patrimonial_code' => 'Patrimonial Code',
+    'lbl_asset_type'    => 'Asset Type'
 ];

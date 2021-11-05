@@ -97,7 +97,7 @@
             @can('inventario_activos')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="ni ni-social-dropbox"></i>
+                    <i class="fal fa-boxes"></i>
                     <span class="nav-link-text" data-i18n="nav.empresa">Activos</span>
                 </a>
                 <ul>

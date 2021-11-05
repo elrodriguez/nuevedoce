@@ -2,54 +2,44 @@
 
 namespace Modules\Inventory\Http\Livewire\Asset;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
-use Modules\Inventory\Entities\InvCategory;
-use Modules\Inventory\Entities\InvBrand;
+use Modules\Inventory\Entities\InvAssetType;
 use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
 
 class AssetEdit extends Component
 {
+    use WithFileUploads;
+
+    public $patrimonial_code;
+    public $patrimonial_code_aux;
+    public $item_id;
+    public $item_id_aux;
+    public $item_text;
+    public $asset_type_id;
+    public $status;
     public $asset;
-    public $name;
-    public $description;
-    public $part = false;
-    public $weight;
-    public $width;
-    public $high;
-    public $long;
-    public $number_parts;
-    public $status = true;
-    public $asset_id;
-    public $brand_id;
-    public $category_id;
-    //images
-    public $images = [];
-    public $image;
-    public $extension_photo;
-    //Brand
-    public $brands;
-    //Category
-    public $categories;
-    public $asset_save;
+
+    public $asset_types = [];
 
     public function mount($asset_id){
-        $this->categories = InvCategory::where('status',true)->get();
-        $this->brands = InvBrand::where('status',true)->get();
-
+        $this->asset_types = InvAssetType::where('state',true)->get();
         $this->asset = InvAsset::find($asset_id);
-        $this->name = $this->asset->name;
-        $this->description = $this->asset->description;
-        $this->part = $this->asset->part;
-        $this->weight = $this->asset->weight;
-        $this->width = $this->asset->width;
-        $this->high = $this->asset->high;
-        $this->long = $this->asset->long;
-        $this->number_parts = $this->asset->number_parts;
-        $this->status = $this->asset->status;
-        $this->brand_id = $this->asset->brand_id;
-        $this->category_id = $this->asset->category_id;
+        $this->patrimonial_code = $this->asset->patrimonial_code;
+        $this->patrimonial_code_aux = $this->asset->patrimonial_code;
+        $this->item_id = $this->asset->item_id;
+        $this->item_id_aux = $this->asset->item_id;
+        $this->asset_type_id = $this->asset->asset_type_id;
+        $this->status = $this->asset->state;
+
+        $nameItem = InvItem::where('id', $this->asset->item_id)->get();
+        foreach ($nameItem as $row){
+            $this->item_text = $row->name;
+        }
     }
 
     public function render()
@@ -57,57 +47,21 @@ class AssetEdit extends Component
         return view('inventory::livewire.asset.asset-edit');
     }
 
-
     public function save(){
-
         $this->validate([
-            'name' => 'required|min:3|max:255',
-            'description' => 'required',
-            'images.*' => 'image|max:1024'
-
-            //'photo' => 'nullable|image|max:1024',
+            'item_id'       => 'required',
+            'item_text'     => 'required',
+            'asset_type_id' => 'required'
         ]);
 
         $this->asset->update([
-            'name' => $this->name,
-            'description' => $this->description,
-            'part' => $this->part,
-            'weight' => $this->weight,
-            'width' => $this->width,
-            'high' => $this->high,
-            'long' => $this->long,
-            'number_parts' => $this->number_parts,
-            'status' => $this->status,
-            'asset_id' => $this->asset_id,
-            'brand_id' => $this->brand_id,
-            'category_id' => $this->category_id
+            'patrimonial_code'  => $this->patrimonial_code_aux,
+            'item_id'           => $this->item_id_aux,
+            'asset_type_id'     => $this->asset_type_id,
+            'state'             => $this->status,
+            'person_edit'       => Auth::user()->person_id
         ]);
 
-         if($this->image){
-            $this->extension_photo = $this->image->extension();
-
-                InvItemFile::update([
-                'name' => $this->image->getClientOriginalName(),
-                'route' => 'asset_images/'.$this->name.'/',
-                'extension' => $this->extension_photo,
-                'asset_id' => $this->asset_save->id
-            ]);
-
-            $this->image->storeAs('asset_images/'.$this->name.'/', $this->asset_save->id.'.'.$this->extension_photo,'public');
-        }
-
-
-        /*
-        if($this->images){
-            foreach ($this->images as $image) {
-            $this->extension_photo = $image->extension();
-            //dd($this->extension_photo);
-                $this->image->storeAs('asset_images/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
-            }
-        }*/
-
-        $this->dispatchBrowserEvent('set-asset-save', ['msg' => 'Datos actualizados correctamente.']);
+        $this->dispatchBrowserEvent('set-asset-save', ['msg' => Lang::get('inventory::labels.msg_update')]);
     }
-
-
 }

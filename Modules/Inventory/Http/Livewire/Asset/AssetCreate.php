@@ -2,44 +2,29 @@
 
 namespace Modules\Inventory\Http\Livewire\Asset;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
-use Modules\Inventory\Entities\InvCategory;
-use Modules\Inventory\Entities\InvBrand;
+use Modules\Inventory\Entities\InvAssetType;
 use Modules\Inventory\Entities\InvAsset;
-use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\DB;
 
 class AssetCreate extends Component
 {
 
     use WithFileUploads;
 
-    public $name;
-    public $description;
-    public $part = false;
-    public $weight;
-    public $width;
-    public $high;
-    public $long;
-    public $number_parts;
-    public $status = true;
-    public $asset_id;
-    public $brand_id;
-    public $category_id;
-    //images
-    public $images = [];
-    public $image;
-    public $extension_photo;
-    //Brand
-    public $brands;
-    //Category
-    public $categories;
-    public $asset_save;
+    public $patrimonial_code;
+    public $item_id;
+    public $item_text;
+    public $asset_type_id;
+    public $state = true;
+
+    public $asset_types = [];
 
     public function mount(){
-        $this->categories = InvCategory::where('status',true)->get();
-        $this->brands = InvBrand::where('status',true)->get();
-
+        $this->asset_types = InvAssetType::where('state',true)->get();
     }
 
     public function render()
@@ -47,76 +32,40 @@ class AssetCreate extends Component
         return view('inventory::livewire.asset.asset-create');
     }
 
-
     public function save(){
-
         $this->validate([
-            'name' => 'required|min:3|max:255',
-            'description' => 'required',
-            'images.*' => 'image|max:1024'
-
-            //'photo' => 'nullable|image|max:1024',
+            'item_id' => 'required',
+            'item_text' => 'required',
+            'asset_type_id' => 'required'
         ]);
 
-        $this->asset_save = InvAsset::create([
-            'name' => $this->name,
-            'description' => $this->description,
-            'part' => $this->part,
-            'weight' => $this->weight,
-            'width' => $this->width,
-            'high' => $this->high,
-            'long' => $this->long,
-            'number_parts' => $this->number_parts,
-            'status' => $this->status,
-            'asset_id' => $this->asset_id,
-            'category_id' => $this->category_id,
-            'brand_id' => $this->brand_id
-        ]);
+        $maxValue = DB::table('inv_assets')->max('patrimonial_code');
 
-         if($this->image){
-            $this->extension_photo = $this->image->extension();
-
-                InvItemFile::create([
-                'name' => $this->image->getClientOriginalName(),
-                'route' => 'asset_images/'.$this->name.'/',
-                'extension' => $this->extension_photo,
-                'asset_id' => $this->asset_save->id
-            ]);
-
-            $this->image->storeAs('asset_images/'.$this->name.'/', $this->asset_save->id.'.'.$this->extension_photo,'public');
+        if($maxValue == null){
+            $correlativo = '000001';
+        }else{
+            $numero = (int) substr($maxValue,4,6);
+            $correlativo = str_pad($numero + 1,  6, "0", STR_PAD_LEFT);
         }
+        $this->patrimonial_code = date('Y').$correlativo;
 
-
-        /*
-        if($this->images){
-            foreach ($this->images as $image) {
-            $this->extension_photo = $image->extension();
-            //dd($this->extension_photo);
-                $this->image->storeAs('asset_images/'.$this->employee_id.'/', $this->employee_id.'.'.$this->extension_photo,'public');
-            }
-        }*/
+        $asset_save = InvAsset::create([
+            'patrimonial_code' => $this->patrimonial_code,
+            'item_id' => $this->item_id,
+            'asset_type_id' => $this->asset_type_id,
+            'state' => $this->state,
+            'person_create'=> Auth::user()->person_id
+        ]);
 
         $this->clearForm();
-        $this->dispatchBrowserEvent('set-asset-save', ['msg' => 'Datos guardados correctamente.']);
+        $this->dispatchBrowserEvent('set-asset-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
     }
-
-
 
     public function clearForm(){
-        $this->name = null;
-        $this->description = null;
-        $this->part = false;
-        $this->weight = null;
-        $this->width = null;
-        $this->high = null;
-        $this->long = null;
-        $this->number_parts = null;
-        $this->status = true;
-        $this->asset_id = null;
-        $this->brand_id = null;
-        $this->category_id = null;
-        $this->image = '';
-
+        $this->item_id = null;
+        $this->item_text = null;
+        $this->asset_type_id = null;
+        $this->patrimonial_code = false;
+        $this->state = true;
     }
-
 }

@@ -1,23 +1,23 @@
 @extends('inventory::layouts.master')
 @section('breadcrumb')
     <x-company-name></x-company-name>
-    <li class="breadcrumb-item">Inventario</li>
-    <li class="breadcrumb-item"><a href="{{ route('inventory_asset') }}">Activos</a></li>
-    <li class="breadcrumb-item active">Nuevo</li>
+    <li class="breadcrumb-item">@lang('inventory::labels.lbl_inventory')</li>
+    <li class="breadcrumb-item"><a href="{{ route('inventory_asset') }}">@lang('inventory::labels.assents')</a></li>
+    <li class="breadcrumb-item active">@lang('inventory::labels.btn_new')</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class="ni ni-social-dropbox"></i>Nuevo <span class='fw-300'>Activo</span> <sup class='badge badge-primary fw-500'>New</sup>
-        
+        <i class="fal fa-boxes"></i> @lang('inventory::labels.btn_new') <span class='fw-300'>@lang('inventory::labels.assent')</span> <sup class='badge badge-primary fw-500'>@lang('inventory::labels.btn_new')</sup>
+
     </h1>
     <div class="subheader-block">
-        Nuevo
+        @lang('inventory::labels.btn_new')
     </div>
 @endsection
 @section('content')
 @livewire('inventory::asset.asset-create')
 @endsection
 @section('script')
-<script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
+    <script src="{{ asset('themes/smart-admin/js/formplugins/autocomplete-bootstrap/bootstrap-autocomplete.min.js') }}" defer></script>
 @endsection

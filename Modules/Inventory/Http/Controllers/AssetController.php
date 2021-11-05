@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Inventory\Entities\InvItem;
 
 class AssetController extends Controller
 {
@@ -36,4 +37,17 @@ class AssetController extends Controller
         return view('inventory::asset.edit')->with('id',$id);
     }
 
+    public function autocomplete(Request $request){
+        $search = $request->input('q');
+        $customers    = InvItem::where('status', true)
+            ->select(
+                'id AS value',
+                'name AS text'
+            )
+            ->where('name','like','%'.$search.'%')
+            ->where('part','=','0')
+            ->where('item_id','=',NULL)
+            ->get();
+        return response()->json($customers, 200);
+    }
 }

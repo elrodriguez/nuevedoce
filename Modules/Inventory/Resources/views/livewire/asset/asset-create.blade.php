@@ -3,128 +3,50 @@
         <div class="card-body">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="name">@lang('inventory::labels.name') <span class="text-danger">*</span> </label>
-                        <input wire:model="name" type="text" class="form-control" id="name" required="">
-                        @error('name')
+                    <div class="col-md-6 mb-3" wire:ignore>
+                        <label class="form-label" for="item_id">@lang('inventory::labels.lbl_item') <span class="text-danger">*</span> </label>
+                        <input wire:model="item_text" id="item_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese el item a buscar y luego seleccione." data-url="{{ route('inventory_asset_search') }}" autocomplete="off" />
+                        <input wire:model="item_id" id="item_id" type="hidden" placeholder="" autocomplete="off" />
+                        @error('item_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label class="form-label" for="category_id">@lang('inventory::labels.category') <span class="text-danger">*</span> </label>
-                        <select wire:model="category_id" id="category_id" class="custom-select" required="">
+                        <label class="form-label" for="asset_type_id">@lang('inventory::labels.lbl_asset_type') <span class="text-danger">*</span> </label>
+                        <select wire:model="asset_type_id" id="asset_type_id" class="custom-select" required="">
                             <option value="">@lang('inventory::labels.lbl_select')</option>
-                            @foreach($categories as $item)
-                                <option value="{{ $item->id }}">{{ $item->description }}</option>
+                            @foreach($asset_types as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                        @error('category_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="brand_id">@lang('inventory::labels.brand') <span class="text-danger">*</span> </label>
-                        <select wire:model="brand_id" id="brand_id" class="custom-select" required="">
-                            <option value="">@lang('inventory::labels.lbl_select')</option>
-                            @foreach($brands as $item)
-                                <option value="{{ $item->id }}">{{ $item->description }}</option>
-                            @endforeach
-                        </select>
-                        @error('brand_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">@lang('inventory::labels.parts') <span class="text-danger">*</span> </label>
-                        <div class="custom-control custom-checkbox">
-                            <input wire:model="part" type="checkbox" class="custom-control-input" id="part" checked="">
-                            <label class="custom-control-label" for="part">Activo</label>
-                        </div>
-                        @error('part')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label" for="description">@lang('inventory::labels.description') <span class="text-danger">*</span> </label>
-                        <input wire:model="description" type="text" class="form-control" id="description" required="">
-                        @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label" for="number_parts">@lang('inventory::labels.number_parts') <span class="text-danger">*</span> </label>
-                        <input wire:model="number_parts" type="number" class="form-control" id="number_parts" required="">
-                        @error('number_parts')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label" for="image">@lang('inventory::labels.lbl_image') <span class="text-danger">*</span> </label>
-                        <div class="custom-file" wire:ignore>
-                            <input wire:model="image" type="file" class="custom-file-input" id="image" >
-                            <label class="custom-file-label" for="customFile">@lang('inventory::labels.lbl_choose_file')</label>
-                        </div>
-                        @error('images')
+                        @error('asset_type_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">@lang('inventory::labels.status') <span class="text-danger">*</span> </label>
-                        <div class="custom-control custom-checkbox">
-                            <input wire:model="status" type="checkbox" class="custom-control-input" id="status" checked="">
-                            <label class="custom-control-label" for="status">Activo</label>
+                        <div class="custom-control custom-checkbox" wire:ignore>
+                            <input wire:model="state" type="checkbox" class="custom-control-input" id="state1" checked="">
+                            <label class="custom-control-label" for="state">@lang('inventory::labels.active')</label>
                         </div>
-                        @error('status')
+                        @error('state')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="weight">@lang('inventory::labels.weight') (KG) <span class="text-danger">*</span> </label>
-                        <input wire:model="weight" type="number" class="form-control" id="weight" required="">
-                        @error('weight')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="width">@lang('inventory::labels.width') (Metros) <span class="text-danger">*</span> </label>
-                        <input wire:model="width" type="number" class="form-control" id="width" required="">
-                        @error('width')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="high">@lang('inventory::labels.high') (Metros)<span class="text-danger">*</span> </label>
-                        <input wire:model="high" type="number" class="form-control" id="high" required="">
-                        @error('high')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="long">@lang('inventory::labels.long') (Metros)<span class="text-danger">*</span> </label>
-                        <input wire:model="long" type="number" class="form-control" id="long" required="">
-                        @error('long')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-               
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('inventory_asset')}}" type="button" class="btn btn-secondary waves-effect waves-themed">Listado</a>
-            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">Guardar</button>
+            <a href="{{ route('inventory_asset')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.lbl_list')</a>
+            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('inventory::labels.btn_save')</button>
         </div>
     </div>
     <script type="text/javascript">
         document.addEventListener('set-asset-save', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",
-                message: "<span><strong>Excelente... </strong>"+event.detail.msg+"</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.success') }}!</span>",
+                message: "<span><strong>{{ __('inventory::labels.excellent') }}... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false
@@ -132,7 +54,13 @@
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
         document.addEventListener('livewire:load', function () {
-            $(":input").inputmask();
+            //Autocomplete
+            $('.basicAutoComplete').autoComplete({
+                autoSelect: true,
+            }).on('autocomplete.select', function (evt, item) {
+                @this.set('item_id',item.value);
+                @this.set('item_text',item.text);
+            });
         });
     </script>
 </div>

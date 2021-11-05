@@ -74,5 +74,7 @@ return [
     'lbl_assigned'      => 'Asignado',
     'lbl_main_item'     => 'Item Principal',
     'lbl_is_a_part'     => '¿Es una parte?',
-    'lbl_yes'           => 'Si'
+    'lbl_yes'           => 'Si',
+    'lbl_patrimonial_code' => 'Código Patrimonial',
+    'lbl_asset_type'    => 'Tipo de Activo'
 ];

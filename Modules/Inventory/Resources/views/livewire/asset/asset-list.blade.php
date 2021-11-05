@@ -39,11 +39,10 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">@lang('inventory::labels.lbl_actions')</th>
+                        <th>@lang('inventory::labels.lbl_patrimonial_code')</th>
                         <th>@lang('inventory::labels.name')</th>
-                        <th>@lang('inventory::labels.category')</th>
-                        <th>@lang('inventory::labels.description')</th>
-                        <th>@lang('inventory::labels.brand')</th>
-                        <th>@lang('inventory::labels.status')</th>
+                        <th>@lang('inventory::labels.lbl_asset_type')</th>
+                        <th class="text-center">@lang('inventory::labels.status')</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -61,16 +60,6 @@
                                         <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
                                     </a>
                                     @endcan
-                                    @can('inventario_activos_item')
-                                    <a href="{{ route('inventory_asset_part',$asset->id) }}" class="dropdown-item">
-                                        <i class="ni ni-layers"></i> @lang('inventory::labels.parts')
-                                    </a>
-                                    @endcan
-                                    @can('inventario_activos_fotos')
-                                    <a href="{{ route('inventory_asset_file',$asset->id) }}" class="dropdown-item">
-                                        <i class="ni ni-picture"></i> @lang('inventory::labels.lbl_images')
-                                    </a>
-                                    @endcan
                                     <div class="dropdown-divider"></div>
                                     @can('inventario_activos_eliminar')
                                     <button onclick="confirmDelete({{ $asset->id }})" type="button" class="dropdown-item text-danger">
@@ -81,12 +70,11 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $asset->name }}</td>
-                        <td class="align-middle">{{ $asset->name_category }}</td>
-                        <td class="align-middle">{{ $asset->description }}</td>
-                        <td class="align-middle">{{ $asset->name_brand }}</td>
-                        <td class="align-middle">
-                            @if($asset->status)
+                        <td class="align-middle">{{ $asset->patrimonial_code }}</td>
+                        <td class="align-middle">{{ $asset->name_item }}</td>
+                        <td class="align-middle">{{ $asset->name_type_asset }}</td>
+                        <td class="align-middle text-center">
+                            @if($asset->state)
                             <span class="badge badge-success">{{ __('inventory::labels.active') }}</span>
                             @else
                             <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>

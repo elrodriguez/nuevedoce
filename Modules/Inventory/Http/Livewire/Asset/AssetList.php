@@ -22,28 +22,23 @@ class AssetList extends Component
     {
         return view('inventory::livewire.asset.asset-list',['assets'=>$this->getAssets()]);
     }
-    public function userSearch()
+    public function assetSearch()
     {
         $this->resetPage();
     }
 
     public function getAssets(){
-        return InvAsset::where('inv_assets.description','like','%'.$this->search.'%')
-            ->join('inv_categories', 'category_id', 'inv_categories.id')
-            ->join('inv_brands', 'brand_id', 'inv_brands.id')
+        return InvAsset::where('inv_assets.patrimonial_code','like','%'.$this->search.'%')
+            ->orWhere('inv_items.name','like','%'.$this->search.'%')
+            ->join('inv_asset_types', 'asset_type_id', 'inv_asset_types.id')
+            ->join('inv_items', 'inv_assets.item_id', 'inv_items.id')
             ->select(
                 'inv_assets.id',
-                'inv_assets.name',
-                'inv_assets.description',
-                'inv_assets.part',
-                'inv_assets.weight',
-                'inv_assets.width',
-                'inv_assets.high',
-                'inv_assets.long',
-                'inv_assets.number_parts',
-                'inv_assets.status',
-                'inv_categories.description AS name_category',
-                'inv_brands.description AS name_brand'
+                'inv_assets.patrimonial_code',
+                'inv_items.name AS name_item',
+                'inv_items.description',
+                'inv_asset_types.name AS name_type_asset',
+                'inv_assets.state'
             )
             ->paginate($this->show);
     }
