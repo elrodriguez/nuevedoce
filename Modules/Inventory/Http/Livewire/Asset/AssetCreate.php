@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Http\Livewire\Asset;
 
+use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
@@ -56,6 +57,14 @@ class AssetCreate extends Component
             'state' => $this->state,
             'person_create'=> Auth::user()->person_id
         ]);
+
+        $activity = new Activity;
+        $activity->modelOn(InvAsset::class, $asset_save->id,'inv_assets');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('inventory_asset_create'));
+        $activity->logType('create');
+        $activity->log('Se creó un nuevo Activo');
+        $activity->save();
 
         $this->clearForm();
         $this->dispatchBrowserEvent('set-asset-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
