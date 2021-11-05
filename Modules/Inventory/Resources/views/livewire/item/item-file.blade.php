@@ -58,7 +58,7 @@
         //Carga de Archivos
         // try {
             var myDropzone = new Dropzone('#file-upload', {
-                paramName: "xyzFileUpload",
+                //paramName: "xyzFileUpload",
                 previewTemplate: $('#preview-template').html(),
                 thumbnailHeight: 120,
                 thumbnailWidth: 120,

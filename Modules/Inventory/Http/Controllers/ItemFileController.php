@@ -42,18 +42,21 @@ class ItemFileController extends Controller
     public function dropZone(Request $request){
         $file = $request->file('file');
         $item_id = $request['item_id'];
-        $archivo = $_FILES['xyzFileUpload'];
+//        $archivo = $_FILES['xyzFileUpload'];
 
-        $archivo_temnombre  = $archivo['tmp_name'];
-        $archivo_nombre     = basename($archivo['name']);
-        $archivo_tamanho    = $archivo['size'];
-        $archivo_tipo       = $archivo['type'];
-        $extension          = explode('.', $archivo_nombre);
-        $extension          = $extension[1];
+//        $archivo_temnombre  = $archivo['tmp_name'];
+//        $archivo_nombre     = basename($archivo['name']);
+//        $archivo_tamanho    = $archivo['size'];
+//        $archivo_tipo       = $archivo['type'];
+//        $extension          = explode('.', $archivo_nombre);
+//        $extension          = $extension[1];
+        $extension          = $file->extension();
         $fileName           = time().'.'.$extension;
         $route_img          = 'item_images/Activo_'.$item_id.'/';
 
-        if(move_uploaded_file($archivo_temnombre, public_path('storage/'.$route_img.$fileName))) {
+//        if(move_uploaded_file($archivo_temnombre, public_path('storage/'.$route_img.$fileName))) {
+        if($fileName != '') {
+            $file->storeAs($route_img, $fileName,'public');
             $item_file = InvItemFile::create([
                 'name' => $fileName,
                 'route' => $route_img.$fileName,
