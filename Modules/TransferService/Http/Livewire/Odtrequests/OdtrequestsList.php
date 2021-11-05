@@ -59,8 +59,11 @@ class OdtrequestsList extends Component
             })
             ->select(
                 'ser_odt_requests.id',
+                'companies.id AS id_company',
                 'companies.full_name AS name_company',
+                'employee.id AS id_employee',
                 'employee.full_name AS name_employee',
+                'customer.id AS id_customer',
                 'customer.full_name AS name_customer',
                 'ser_locals.name AS name_local',
                 'ser_locals.id AS id_local',
@@ -155,9 +158,10 @@ class OdtrequestsList extends Component
             $lat = (double) $local->latitude;
             $lng = (double) $local->longitude;
         }
-        if($type == '5'){
+        if($type == '5' || $type == '3' || $type == '2' || $type == '1'){
             $wholesaler = Person::find($id);
             $label = $wholesaler->full_name;
+            
             $body .= '<dl class="row">
                         <dt class="col-sm-4">'.Lang::get('transferservice::labels.lbl_number').'</dt>
                         <dd class="col-sm-8">'.$wholesaler->number.'</dd>

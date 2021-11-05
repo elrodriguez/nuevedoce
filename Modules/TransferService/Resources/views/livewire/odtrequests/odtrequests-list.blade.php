@@ -28,7 +28,7 @@
                 <input wire:model="date_end" wire:keydown.enter="odtRequestSearch" type="text" class="form-control" id="date_end" onchange="this.dispatchEvent(new InputEvent('input'))" data-inputmask="'mask': '99/99/9999'" class="form-control" im-insert="true" placeholder="Hasta">
                 <input wire:keydown.enter="odtRequestSearch" wire:model.defer="search" type="text" class="form-control" placeholder="{{__('transferservice::labels.lbl_type_here')}} {{__('transferservice::labels.lbl_name')}} {{__('transferservice::labels.lbl_event')}}">
                 <div class="input-group-append">
-                    <button wire:click="customersSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_search')</button>
+                    <button wire:click="odtRequestSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_search')</button>
                     @can('serviciodetraslados_solicitudes_odt_nuevo')
                         <a href="{{ route('service_odt_requests_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_new')</a>
                     @endcan
@@ -66,6 +66,9 @@
                                             <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
                                         </a>
                                     @endcan
+                                    <a href="{{ route('service_odt_requests_edit',$odt_request->id) }}" class="dropdown-item">
+                                        <i class="fal fa-cubes mr-1"></i>@lang('transferservice::buttons.btn_assets')
+                                    </a>
                                     @can('serviciodetraslados_solicitudes_odt_eliminar')
                                         <div class="dropdown-divider"></div>
                                         <button onclick="confirmDelete({{ $odt_request->id }})" type="button" class="dropdown-item text-danger">
@@ -76,9 +79,9 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $odt_request->description }}</td>
-                        <td class="align-middle"><a href="javascript:void(0)" type="button">{{ $odt_request->name_company }}</a></td>
-                        <td class="align-middle"><a href="javascript:void(0)" type="button">{{ $odt_request->name_employee }}</a></td>
-                        <td class="align-middle"><a href="javascript:void(0)" type="button">{{ $odt_request->name_customer }}</a></td>
+                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_company }},1)" href="javascript:void(0)" type="button">{{ $odt_request->name_company }}</a></td>
+                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_employee }},2)" href="javascript:void(0)" type="button">{{ $odt_request->name_employee }}</a></td>
+                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_customer }},3)" href="javascript:void(0)" type="button">{{ $odt_request->name_customer }}</a></td>
                         <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_local }},4)" href="javascript:void(0)" type="button">{{ $odt_request->name_local }}</a></td>
                         <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_wholesaler }},5)" href="javascript:void(0)" type="button">{{ $odt_request->name_wholesaler }}</a></td>
                         <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt_request->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt_request->date_end)->format('d/m/Y') }}</td>
@@ -196,8 +199,9 @@
             $('#modalDetailsBody').html(event.detail.body)
             $('#modalDetails').modal('show');
 
-            initMap(event.detail.lat,event.detail.lng,event.detail.label);
-            
+            if(event.detail.lat){
+                initMap(event.detail.lat,event.detail.lng,event.detail.label);
+            }
         });
 
         function initMap(xlat,xlng,label) {

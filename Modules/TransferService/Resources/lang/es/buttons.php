@@ -12,5 +12,6 @@ return [
     'btn_yes'           => 'Si',
     'btn_not'           => 'No',
     'btn_ok'            => 'Ok',
-    'btn_crew'          => 'Tripulación'
+    'btn_crew'          => 'Tripulación',
+    'btn_assets'        => 'Activos'
 ];

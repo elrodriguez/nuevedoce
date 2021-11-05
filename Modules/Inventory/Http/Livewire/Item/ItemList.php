@@ -32,8 +32,8 @@ class ItemList extends Component
 
     public function getItems(){
         return InvItem::where('inv_items.name','like','%'.$this->search.'%')
-            ->join('inv_categories', 'category_id', 'inv_categories.id')
-            ->join('inv_brands', 'brand_id', 'inv_brands.id')
+            ->leftJoin('inv_categories', 'category_id', 'inv_categories.id')
+            ->leftJoin('inv_brands', 'brand_id', 'inv_brands.id')
             ->select(
                 'inv_items.id',
                 'inv_items.name',
