@@ -39,6 +39,9 @@
             </div>
         </div>
     </div>
+    <div class="card-footer d-flex flex-row align-items-center">
+        <a href="{{ route('inventory_item')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.lbl_list')</a>
+    </div>
 </div>
 <script src="{{ url('themes/smart-admin/js/formplugins/dropzone/dropzone.js') }}"></script>
 <script>
@@ -165,6 +168,7 @@
         // } catch(e) {
         //     alert('Dropzone.js no es compatible con navegadores antiguos!!');
         // }
+        $("#spaItemCreate").html(':: {{ $name_item }}');
     });
 
     document.addEventListener('set-file-delete', event => {

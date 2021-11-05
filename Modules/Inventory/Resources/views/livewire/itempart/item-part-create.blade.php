@@ -111,7 +111,6 @@
     <script type="text/javascript">
         document.addEventListener('set-item-save', event => {
             let id_item_jj = event.detail.id_item_jj;
-            console.log('llego');
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",

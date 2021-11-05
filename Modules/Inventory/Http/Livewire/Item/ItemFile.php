@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Livewire\Item;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
@@ -19,8 +20,14 @@ class ItemFile extends Component
     public $files = [];
     public $files_a;
     public $files_b = array();
+    public $id_item;
+    public $name_item;
 
     public function mount($item_id){
+        $item = InvItem::find($item_id);
+        $this->id_item = $item_id;
+        $this->name_item = $item->name;
+
         $this->item_id = $item_id;
         $this->files = InvItemFile::where('item_id', '=', $item_id)->get();
         $result = array();

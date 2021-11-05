@@ -2,7 +2,7 @@
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('inventory::labels.lbl_inventory')</li>
-    <li class="breadcrumb-item"><a href="{{ route('inventory_asset') }}">@lang('inventory::labels.lbl_items')</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('inventory_item') }}">@lang('inventory::labels.lbl_items')</a></li>
     <li class="breadcrumb-item active">@lang('inventory::labels.btn_new')</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
