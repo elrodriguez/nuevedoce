@@ -43,6 +43,7 @@ class ItemEdit extends Component
     public $item_save;
     public $part_text = '';
     public $part_id = '';
+    public $part_weight;
 
     public $partAsigned_text = 'editando un asignado';
     public $amount_asigned;
@@ -107,6 +108,10 @@ class ItemEdit extends Component
         $activity = new Activity;
         $activity->dataOld(InvItem::find($this->item->id));
 
+        if($this->part){
+            $this->number_parts = 0;
+        }
+
         $this->item->update([
             'name' => $this->name,
             'description' => $this->description,
@@ -115,7 +120,7 @@ class ItemEdit extends Component
             'width' => $this->width,
             'high' => $this->high,
             'long' => $this->long,
-            'number_parts' => $this->number_parts,
+            'number_parts' => ($this->number_parts == null?0:$this->number_parts),
             'status' => $this->status,
             'amount' => ($this->id_item>0?$this->amount_asigned:0),
             #'item_id' => $this->item_id,
@@ -153,26 +158,48 @@ class ItemEdit extends Component
             'part_id' => 'required',
             'amount' => 'required|integer'
         ]);
-        $search_part = InvItem::find($this->part_id);
-        $parte = $search_part->update([
-            'item_id' => $this->item_aa,
-            'amount' => $this->amount,
-            'person_edit' => Auth::user()->person_id
-        ]);
+        if($this->number_parts > count($this->parts_item)) {
+            $search_part = InvItem::find($this->part_id);
+            $parte = $search_part->update([
+                'item_id' => $this->item_aa,
+                'amount' => $this->amount,
+                'person_edit' => Auth::user()->person_id
+            ]);
 
-        $this->parts_item = InvItem::where('item_id', $this->item_aa)->get();
-        $this->parts_item_count = count($this->parts_item);
+            $this->weight = $this->weight+($search_part->weight * $this->amount);
+            //Actualizando Peso Item
+            $search_item_parent =  InvItem::find($this->item_aa);
+            $parent_item = $search_item_parent->update([
+                'weight' => $this->weight,
+                'number_parts' => $this->number_parts,
+                'person_edit' => Auth::user()->person_id
+            ]);
 
-        $this->part_text = '';
-        $this->part_id = '';
-        $this->amount = 1;
+            $this->parts_item = InvItem::where('item_id', $this->item_aa)->get();
+            $this->parts_item_count = count($this->parts_item);
 
-        $this->dispatchBrowserEvent('inv-item-edit', ['msg' => Lang::get('inventory::messages.msg_update'), 'part_count'=> $this->parts_item_count, 'id_item' => $this->id_item]);
+            $this->part_text = '';
+            $this->part_id = '';
+            $this->amount = 1;
+
+            $this->dispatchBrowserEvent('inv-item-edit', ['msg' => Lang::get('inventory::messages.msg_update'), 'part_count' => $this->parts_item_count, 'id_item' => $this->id_item]);
+        }else{
+            $this->dispatchBrowserEvent('set-item-save-not', ['msg' => Lang::get('inventory::labels.msg_0010'), 'part_count' => $this->parts_item_count]);
+        }
     }
 
     public function deletePartItem($id){
         try {
             $delete_aa = InvItem::find($id);
+
+            $this->weight = $this->weight - ($delete_aa->weight * $delete_aa->amount);
+            //Actualizando Peso Item
+            $search_item_parent =  InvItem::find($this->item_aa);
+            $parent_item = $search_item_parent->update([
+                'weight' => $this->weight,
+                'person_edit' => Auth::user()->person_id
+            ]);
+
             $parte = $delete_aa->update([
                 'item_id' => NULL,
                 'amount' => 0,

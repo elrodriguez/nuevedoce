@@ -15,19 +15,27 @@ class ItemPartList extends Component
     public $search;
     public $id_item;
     public $name_item;
+    public $parts_item;
+    public $weight_item;
+    public $count_items;
+    public $search_parent;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public function mount($item_id){
         $item = InvItem::find($item_id);
+        $this->search_parent = $item;
         $this->show = 10;
         $this->id_item = $item_id;
         $this->name_item = $item->name;
+        $this->parts_item = $item->number_parts;
+        $this->weight_item = $item->weight;
     }
 
     public function render()
     {
+        $this->count_items = count($this->getItemParts());
         return view('inventory::livewire.itempart.item-part-list', ['item_parts' => $this->getItemParts(), 'item_name' => $this->name_item]);
     }
 
@@ -70,6 +78,13 @@ class ItemPartList extends Component
         $activity->logType('delete');
         $activity->causedBy(Auth::user());
         $activity->save();
+
+        //Update weight parent
+        $weight_parent = $this->search_parent->weight - ($itemPart->weight * $itemPart->amount);
+        $parent_item = $this->search_parent->update([
+            'weight' => $weight_parent,
+            'person_edit' => Auth::user()->person_id
+        ]);
 
         $itemPart->delete();
 

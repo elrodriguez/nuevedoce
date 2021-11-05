@@ -142,10 +142,11 @@
                     <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-wrench"></i> @lang('inventory::labels.lbl_add_parts'):</h2>
                     <br>
                     <div class="form-row">
-                        <div class="col-md-7 mb-3">
+                        <div class="col-md-7 mb-3" wire:ignore>
                             <label class="form-label" for="part_text">@lang('inventory::labels.lbl_part') <span class="text-danger">*</span> </label>
-                            <input wire:model="part_text" wire:ignore id="part_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese la parte a buscar y luego seleccione." data-url="{{ route('inventory_item_search') }}" autocomplete="off" />
+                            <input wire:model="part_text"  id="part_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese la parte a buscar y luego seleccione." data-url="{{ route('inventory_item_search') }}" autocomplete="off" />
                             <input wire:model="part_id" id="part_id" type="hidden" placeholder="" autocomplete="off" />
+                            <input wire:model="part_weight" id="part_weight" type="hidden" placeholder="" autocomplete="off" />
                             @error('part_text')
                             <div class="invalid-feedback-2">{{ $message }}</div>
                             @enderror
@@ -173,6 +174,7 @@
                                             <th class="text-center">{{ __('labels.actions') }}</th>
                                             <th class="text-center">{{ __('labels.name') }}</th>
                                             <th class="text-center">{{ __('labels.quantity') }}</th>
+                                            <th class="text-center">{{ __('inventory::labels.weight') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,6 +203,7 @@
                                             </td>
                                             <td class="align-middle">{{ $item->name }}</td>
                                             <td class="text-center align-middle">{{ $item->amount }}</td>
+                                            <td class="text-center align-middle">{{ $item['weight'] }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -249,6 +252,24 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
+
+        document.addEventListener('set-item-save-not', event => {
+            let part_count = event.detail.part_count;
+            if(part_count > 0){
+                $('#part').prop('disabled', true);
+            }else{
+                $('#part').prop('disabled', false);
+            }
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.lbl_warning') }}!</span>",
+                message: "<span>"+event.detail.msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        });
 
         document.addEventListener('set-item-part-delete', event => {
             let res = event.detail.res;
@@ -330,6 +351,7 @@
             $('.basicAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
                 @this.set('part_id',item.value);
                 @this.set('part_text',item.text);
+                @this.set('part_weight',item.weight);
             });
 
             $('#part').click(function (){

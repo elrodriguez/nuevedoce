@@ -110,19 +110,25 @@
     </div>
     <script type="text/javascript">
         document.addEventListener('set-item-save', event => {
+            let id_item_jj = event.detail.id_item_jj;
+            console.log('llego');
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",
                 message: "<span><strong>Excelente... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
-                closeButton: false
+                closeButton: false,
+                callback: function () {
+                    let url = "{{ route('inventory_item_part', $id_item) }}";
+                    window.location.href = url;
+                }
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
         document.addEventListener('livewire:load', function () {
             $(":input").inputmask();
-            $("#spaItemName").html(':: {{ $name_item }}');
+            $("#spaItemCreate").html(':: {{ $name_item }}');
         });
     </script>
 </div>

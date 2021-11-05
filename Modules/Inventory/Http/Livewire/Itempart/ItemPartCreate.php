@@ -40,14 +40,20 @@ class ItemPartCreate extends Component
 
     public $id_item;
     public $name_item;
+    public $parts_item;
+    public $weight_item;
+    public $search_parent;
 
     public function mount($item_id){
         $this->categories = InvCategory::where('status',true)->get();
         $this->brands = InvBrand::where('status',true)->get();
 
         $item = InvItem::find($item_id);
+        $this->search_parent = $item;
         $this->id_item = $item_id;
         $this->name_item = $item->name;
+        $this->parts_item = $item->number_parts;
+        $this->weight_item = $item->weight;
     }
 
     public function render()
@@ -60,6 +66,7 @@ class ItemPartCreate extends Component
             'name' => 'required|min:3|max:255',
             'description' => 'required',
             'amount' => 'required|integer',
+            'weight' => 'required|between:0,9999.99',
             'images.*' => 'image|max:1024'
         ]);
 
@@ -80,10 +87,17 @@ class ItemPartCreate extends Component
             'person_create'=> Auth::user()->person_id
         ]);
 
+        //Update weight parent
+        $weight_parent = $this->search_parent->weight + ($this->weight * $this->amount);
+        $parent_item = $this->search_parent->update([
+            'weight' => $weight_parent,
+            'person_edit' => Auth::user()->person_id
+        ]);
+
         $activity = new Activity;
         $activity->modelOn(InvItem::class, $this->item_save->id,'inv_items');
         $activity->causedBy(Auth::user());
-        $activity->routeOn(route('inventory_item_part_create'));
+        $activity->routeOn(route('inventory_item_part_create', $this->id_item));
         $activity->logType('create');
         $activity->log('Se creó una nueva parte de Item');
         $activity->save();
@@ -101,7 +115,7 @@ class ItemPartCreate extends Component
         }
 
         $this->clearForm();
-        $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
+        $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_success'), 'id_item_jj' => $this->id_item ]);
     }
 
 

@@ -122,7 +122,7 @@
         });
         document.addEventListener('livewire:load', function () {
             $(":input").inputmask();
-            $("#spaItemName").html(':: {{ $name_item_parent }}');
+            $("#spaAssetEdit").html(':: {{ $name_item_parent }}');
         });
     </script>
 </div>

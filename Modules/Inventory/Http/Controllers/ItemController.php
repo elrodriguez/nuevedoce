@@ -64,7 +64,8 @@ class ItemController extends Controller
         $customers    = InvItem::where('status', true)
             ->select(
                 'id AS value',
-                'name AS text'
+                'name AS text',
+                'weight'
             )
             ->where('name','like','%'.$search.'%')
             ->where('part','=','1')

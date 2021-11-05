@@ -28,7 +28,9 @@
                 <div class="input-group-append">
                     <button wire:click="itemPartsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
                     @can('inventario_items_parte_nuevo')
+                        @if($parts_item > $count_items)
                         <a href="{{ route('inventory_item_part_create', $id_item) }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('inventory::labels.btn_new')</a>
+                        @endif
                     @endcan
                 </div>
             </div>
@@ -93,7 +95,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
+        <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
             <a href="{{ route('inventory_item')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.lbl_items')</a>
             <div class="ml-auto">{{ $item_parts->links() }}</div>
         </div>
