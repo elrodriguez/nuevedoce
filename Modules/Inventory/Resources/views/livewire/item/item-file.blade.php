@@ -182,6 +182,7 @@
                 className: "modal-alert",
                 closeButton: false
             });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         }else{
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
             let box = bootbox.alert({
@@ -191,7 +192,8 @@
                 className: "modal-alert",
                 closeButton: false
             });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         }
-        box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        
     });
 </script>

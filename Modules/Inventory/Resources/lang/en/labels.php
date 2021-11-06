@@ -76,5 +76,8 @@ return [
     'lbl_is_a_part'     => 'Is a part?',
     'lbl_yes'           => 'Yes',
     'lbl_patrimonial_code' => 'Patrimonial Code',
-    'lbl_asset_type'    => 'Asset Type'
+    'lbl_asset_type'    => 'Asset Type',
+    'lbl_initial_stock' => 'Initial Stock',
+    'lbl_stock'         => 'Stock',
+    'lbl_kardex'         => 'Kardex'
 ];

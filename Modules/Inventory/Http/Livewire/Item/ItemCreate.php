@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Http\Livewire\Item;
 
+use Carbon\Carbon;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -11,6 +12,7 @@ use Modules\Inventory\Entities\InvBrand;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
+use Modules\Inventory\Entities\InvKarkex;
 
 class ItemCreate extends Component
 {
@@ -43,6 +45,9 @@ class ItemCreate extends Component
     public $part_weight;
     public $parts_item_count;
 
+    //kardex
+    public $quantity;
+
     public $parts_item = [];
 
     public function mount(){
@@ -56,9 +61,15 @@ class ItemCreate extends Component
     }
 
     public function save(){
+
         $this->validate([
             'name' => 'required|min:3|max:255',
             'description' => 'required',
+            'quantity' => 'required',
+            'weight' => 'required',
+            'width' => 'required',
+            'high' => 'required',
+            'long' => 'required',
             'images.*' => 'image|max:1024'
         ]);
         if($this->part){
@@ -79,6 +90,14 @@ class ItemCreate extends Component
             'category_id' => $this->category_id,
             'brand_id' => $this->brand_id,
             'person_create'=> Auth::user()->person_id
+        ]);
+
+        InvKarkex::create([
+            'date_of_issue' => Carbon::now()->format('Y-m-d'),
+            'establishment_id' => 1,
+            'item_id' => $this->item_save->id,
+            'quantity' => $this->quantity,
+            'detail' => 'stock inicial'
         ]);
 
         #Save item parts
@@ -204,5 +223,6 @@ class ItemCreate extends Component
         $this->brand_id = null;
         $this->category_id = null;
         $this->image = '';
+        $this->quantity = null;
     }
 }

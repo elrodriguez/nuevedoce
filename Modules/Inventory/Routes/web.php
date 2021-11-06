@@ -45,4 +45,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::get('search', 'AssetController@autocomplete')->name('inventory_asset_search');
     });
 
+    Route::group(['prefix' => 'kardex'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:inventario_kardex'])->get('item_stock', 'KardexController@itemsstock')->name('inventory_kardex_items_stock');
+    });
+
 });

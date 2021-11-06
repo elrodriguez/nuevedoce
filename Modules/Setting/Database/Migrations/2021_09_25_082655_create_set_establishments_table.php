@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateSetEstablishmentsTable extends Migration
 {
@@ -37,6 +38,16 @@ class CreateSetEstablishmentsTable extends Migration
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');
         });
+
+        DB::table('set_establishments')->insert([
+            'address' => 'inicio de registros',
+            'phone' => '12345678',
+            'observation' => 'inicio de registros',
+            'state' => true,
+            'company_id' => 1,
+            'country_id' => 'PE',
+            'email' => 'establecimiento@gmail.com'
+        ]);
     }
 
     /**
