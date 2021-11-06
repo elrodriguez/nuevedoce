@@ -6,6 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvItem;
 use Modules\TransferService\Entities\SerCustomer;
 
 class OdtRequestController extends Controller
@@ -47,6 +49,19 @@ class OdtRequestController extends Controller
                 DB::raw("CONCAT(people.number, ' - ', people.full_name) AS text")
             )
             ->where('people.full_name','like','%'.$search.'%')
+            ->get();
+        return response()->json($customers, 200);
+    }
+
+    public function autocompleteItems(Request $request){
+        $search = $request->input('q');
+        $customers    = InvItem::where('status', true)
+            ->select(
+                'id AS value',
+                'name AS text'
+            )
+            ->where('part','=','0')
+            ->where('inv_items.name','like','%'.$search.'%')
             ->get();
         return response()->json($customers, 200);
     }

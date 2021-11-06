@@ -3,22 +3,26 @@
 namespace Modules\TransferService\Http\Livewire\Odtrequests;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\In;
 use Livewire\Component;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\WithFileUploads;
 use App\Models\Person;
+use Modules\Inventory\Entities\InvItem;
 use Modules\Personal\Entities\PerEmployee;
 use Modules\Setting\Entities\SetCompany;
 use Modules\TransferService\Entities\SerCustomer;
 use Modules\TransferService\Entities\SerLocal;
 use Modules\TransferService\Entities\SerOdtRequest;
+use Modules\TransferService\Entities\SerOdtRequestDetail;
 
 class OdtrequestsEdit extends Component
 {
     use WithFileUploads;
 
+    public $odt_id;
     public $company_id;
     public $supervisor_id;
     public $customer_id;
@@ -31,7 +35,7 @@ class OdtrequestsEdit extends Component
     public $additional_information;
     public $file;
     public $extension = '';
-    public $state = true;
+    public $state = 'P';
 
     public $odtRequest_search;
     public $companies = [];
@@ -43,9 +47,24 @@ class OdtrequestsEdit extends Component
     public $backus_id;
     public $internal_id;
 
+    public $item_text;
+    public $item_id;
+    public $amount = 1;
+    public $items_data = [];
+
     public function mount($id){
+        $this->odt_id = $id;
         $this->locals       = SerLocal::where('state', true)->get();
         $this->wholesalers  = Person::where('identity_document_type_id', '6')->get();
+        $this->items_data  = SerOdtRequestDetail::where('odt_request_id', $id)
+            ->join('inv_items', 'ser_odt_request_details.item_id', 'inv_items.id')
+            ->select(
+                'ser_odt_request_details.id AS id',
+                'ser_odt_request_details.item_id',
+                'ser_odt_request_details.amount AS amount',
+                'inv_items.name AS name'
+            )
+            ->get();
 
         $this->odtRequest_search = SerOdtRequest::find($id);
         $this->company_id = $this->odtRequest_search->company_id;
@@ -173,5 +192,64 @@ class OdtrequestsEdit extends Component
         }
 
         $this->dispatchBrowserEvent('ser-odtrequests-edit', ['msg' => Lang::get('transferservice::messages.msg_update')]);
+    }
+
+    public function saveItem(){
+        $this->validate([
+            'item_text' => 'required|min:3',
+            'item_id'   => 'required',
+            'amount'    => 'required|integer|between:1,9999'
+        ]);
+
+        $data_exist  = SerOdtRequestDetail::where('odt_request_id', $this->odt_id)
+            ->where('item_id', $this->item_id)->get();
+
+        if(count($data_exist) == 0){
+            SerOdtRequestDetail::create([
+                'odt_request_id'    => $this->odt_id,
+                'item_id'           => $this->item_id,
+                'amount'            => $this->amount,
+                'person_create'     => Auth::user()->person_id
+            ]);
+
+            $this->items_data  = SerOdtRequestDetail::where('odt_request_id', $this->odt_id)
+                ->join('inv_items', 'ser_odt_request_details.item_id', 'inv_items.id')
+                ->select(
+                    'ser_odt_request_details.id AS id',
+                    'ser_odt_request_details.item_id AS id',
+                    'ser_odt_request_details.amount AS amount',
+                    'inv_items.name AS name'
+                )
+                ->get();
+
+            $this->item_text = '';
+            $this->item_id = '';
+            $this->amount = 1;
+
+            $this->dispatchBrowserEvent('inv-item-edit', ['msg' => Lang::get('transferservice::messages.msg_0003')]);
+        }else{
+            $this->dispatchBrowserEvent('inv-item-edit-not', ['msg' => Lang::get('transferservice::messages.msg_0004')]);
+        }
+    }
+
+    public function deleteOdtItem($id){
+        try {
+            $delete_aa = SerOdtRequestDetail::find($id);
+            $delete_aa->delete();
+
+            $this->items_data  = SerOdtRequestDetail::where('odt_request_id', $this->odt_id)
+                ->join('inv_items', 'ser_odt_request_details.item_id', 'inv_items.id')
+                ->select(
+                    'ser_odt_request_details.id AS id',
+                    'ser_odt_request_details.item_id AS id',
+                    'ser_odt_request_details.amount AS amount',
+                    'inv_items.name AS name'
+                )
+                ->get();
+            $res = 'success';
+        } catch (\Illuminate\Database\QueryException $e) {
+            $res = 'error';
+        }
+        $this->dispatchBrowserEvent('set-odt-item-delete', ['res' => $res]);
     }
 }

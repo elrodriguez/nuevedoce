@@ -14,6 +14,7 @@ use Modules\TransferService\Entities\SerCustomer;
 use Modules\TransferService\Entities\SerLocal;
 use Modules\TransferService\Entities\SerOdtRequest;
 use Illuminate\Support\Facades\DB;
+use Modules\TransferService\Entities\SerOdtRequestDetail;
 
 class OdtrequestsCreate extends Component
 {
@@ -31,15 +32,21 @@ class OdtrequestsCreate extends Component
     public $additional_information;
     public $file;
     public $extension = '';
-    public $state = true;
+    public $state = 'P';
     public $backus_id;
     public $internal_id;
+
+    public $item_text;
+    public $item_id;
+    public $amount = 1;
 
     public $companies = [];
     public $supervisors = [];
     public $customers = [];
     public $locals = [];
     public $wholesalers = [];
+
+    public $items_data = [];
 
     public function mount(){
         $this->locals       = SerLocal::where('state', true)->get();
@@ -61,7 +68,7 @@ class OdtrequestsCreate extends Component
         $anio = date('Y');
         $code = SerOdtRequest::whereRaw('LEFT(internal_id,4) = ?',[$anio])
             ->max('internal_id');
-        
+
         if($code){
             $this->internal_id = $code + 1;
         }else{
@@ -119,6 +126,20 @@ class OdtrequestsCreate extends Component
             'person_create'             => Auth::user()->person_id
         ]);
 
+        //Save Items:
+        #Save item parts
+        if(count($this->items_data) > 0){
+            foreach ($this->items_data as $row){
+                SerOdtRequestDetail::create([
+                    'odt_request_id'    => $odtRequest->id,
+                    'item_id'           => $row['item_id'],
+                    'amount'            => $row['amount'],
+                    'person_create'     => Auth::user()->person_id
+                ]);
+            }
+        }
+        $this->items_data = [];
+
         if($this->file){
             $resul = $this->file->storeAs('requests_odt_file/'.$odtRequest->id, $odtRequest->id.'.'.$this->extension, 'public');
         }
@@ -131,9 +152,55 @@ class OdtrequestsCreate extends Component
         $activity->log('Se creó una nueva Solicitud ODT');
         $activity->save();
 
-
         $this->dispatchBrowserEvent('ser-odtrequests-save', ['msg' => Lang::get('transferservice::messages.msg_success')]);
         $this->clearForm();
+    }
+
+    public function saveItem(){
+        $this->validate([
+            'item_text' => 'required|min:3',
+            'item_id'   => 'required',
+            'amount'    => 'required|integer|between:1,9999'
+        ]);
+        $existe = false;
+        if (count($this->items_data) > 0) {
+            foreach ($this->items_data as $row) {
+                if ($row['item_id'] == $this->item_id) {
+                    $existe = true;
+                    break;
+                }
+            }
+        }
+        if (!$existe) {
+            $this->items_data[] = array(
+                'item_id'   => $this->item_id,
+                'name'      => $this->item_text,
+                'amount'    => $this->amount
+            );
+        }
+
+        $this->item_text = '';
+        $this->item_id = '';
+        $this->amount = 1;
+
+        if ($existe) {
+            $this->dispatchBrowserEvent('set-item-save-not', ['msg' => Lang::get('transferservice::messages.msg_0004')]);
+        } else {
+            $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('transferservice::messages.msg_0003')]);
+        }
+    }
+
+    public function deleteItem($id){
+        $item_aux = [];
+        if(count($this->items_data) > 0){
+            foreach ($this->items_data as $row) {
+                if ($row['item_id'] != $id) {
+                    $item_aux[] = $row;
+                }
+            }
+        }
+        $this->items_data = $item_aux;
+        $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('transferservice::messages.msg_delete')]);
     }
 
     public function clearForm(){
@@ -149,7 +216,7 @@ class OdtrequestsCreate extends Component
         $this->additional_information  = null;
         $this->file                    = null;
         $this->extension               = '';
-        $this->state                   = true;
+        $this->state                   = 'P';
         $this->backus_id               = null;
     }
 }

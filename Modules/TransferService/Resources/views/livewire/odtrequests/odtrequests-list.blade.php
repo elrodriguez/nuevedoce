@@ -66,9 +66,6 @@
                                             <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
                                         </a>
                                     @endcan
-                                    <a href="{{ route('service_odt_requests_edit',$odt_request->id) }}" class="dropdown-item">
-                                        <i class="fal fa-cubes mr-1"></i>@lang('transferservice::buttons.btn_assets')
-                                    </a>
                                     @can('serviciodetraslados_solicitudes_odt_eliminar')
                                         <div class="dropdown-divider"></div>
                                         <button onclick="confirmDelete({{ $odt_request->id }})" type="button" class="dropdown-item text-danger">
@@ -205,7 +202,7 @@
         });
 
         function initMap(xlat,xlng,label) {
-            
+
             var myLatLng = {lat: xlat, lng: xlng};
 
             map = new google.maps.Map(document.getElementById('map'), {

@@ -97,5 +97,9 @@ return [
     'lbl_attended'      => 'Attended',
     'lbl_rejected'      => 'Rejected',
     'lbl_asset'         => 'Assets',
-    'lbl_programming'   => 'Programming'
+    'lbl_programming'   => 'Programming',
+    'lbl_add_assets'    => 'Add Assets',
+    'lbl_amount'        => 'Amount',
+    'lbl_error'         => 'Error',
+    'lbl_went_wrong'    => 'Went Wrong',
 ];

@@ -96,5 +96,9 @@ return [
     'lbl_attended'      => 'Atendido',
     'lbl_rejected'      => 'Rechazado',
     'lbl_asset'         => 'Activos',
-    'lbl_programming'   => 'Programación'
+    'lbl_programming'   => 'Programación',
+    'lbl_add_assets'    => 'Agregar Activos',
+    'lbl_amount'        => 'Cantidad',
+    'lbl_error'         => 'Error',
+    'lbl_went_wrong'    => 'Salió mal',
 ];

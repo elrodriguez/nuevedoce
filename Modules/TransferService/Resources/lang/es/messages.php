@@ -4,6 +4,8 @@ return [
     'msg_0001'          => '¿Desea eliminar estos datos?',
     'msg_delete_photo'  => '¿Desea eliminar la foto de este empleado?',
     'msg_0002'          => '¡Esta acción no se puede deshacer!',
+    'msg_0003'          => 'Item añadido correctamente',
+    'msg_0004'          => 'El item ya exite en la lista',
     'msg_success'       => 'Datos guardados correctamente.',
     'msg_delete'        => 'Datos eliminados correctamente.',
     'msg_update'        => 'Datos Actualizados correctamente.',
