@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvKarkexesTable extends Migration
+class CreateInvKardexesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInvKarkexesTable extends Migration
      */
     public function up()
     {
-        Schema::create('inv_karkexes', function (Blueprint $table) {
+        Schema::create('inv_kardexes', function (Blueprint $table) {
             $table->id();
             $table->date('date_of_issue');
             $table->unsignedBigInteger('establishment_id')->nullable();
@@ -35,6 +35,6 @@ class CreateInvKarkexesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inv_karkexes');
+        Schema::dropIfExists('inv_kardexes');
     }
 }

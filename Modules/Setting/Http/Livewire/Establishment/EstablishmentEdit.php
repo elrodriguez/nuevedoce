@@ -28,6 +28,7 @@ class EstablishmentEdit extends Component
     public $longitude;
     public $observation;
     public $map;
+    public $name;
 
     public $countries = [];
     public $departments = [];
@@ -52,6 +53,7 @@ class EstablishmentEdit extends Component
         $this->longitude = $this->establishment->longitude;
         $this->observation = $this->establishment->observation;
         $this->map = $this->establishment->map;
+        $this->name = $this->establishment->name;
 
         $this->getProvinves();
         $this->getPDistricts();
@@ -71,6 +73,7 @@ class EstablishmentEdit extends Component
         $activity->dataOld(SetEstablishment::find($this->establishment->id));
 
         $this->establishment->update([
+            'name' => $this->name,
             'address' => $this->address,
             'phone' => $this->phone,
             'observation' => $this->observation,

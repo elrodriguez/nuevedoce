@@ -28,6 +28,7 @@ class EstablishmentCreate extends Component
     public $longitude;
     public $observation;
     public $map;
+    public $name;
 
     public $countries = [];
     public $departments = [];
@@ -53,6 +54,7 @@ class EstablishmentCreate extends Component
         ]);
 
         $establishment = SetEstablishment::create([
+            'name' => $this->name,
             'address' => $this->address,
             'phone' => $this->phone,
             'observation' => $this->observation,
@@ -94,6 +96,7 @@ class EstablishmentCreate extends Component
         $this->longitude = null;
         $this->observation = null;
         $this->map = null;
+        $this->name = null;
     }
 
     public function getProvinves(){

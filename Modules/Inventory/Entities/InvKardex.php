@@ -5,7 +5,7 @@ namespace Modules\Inventory\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class InvKarkex extends Model
+class InvKardex extends Model
 {
     use HasFactory;
 
@@ -21,6 +21,6 @@ class InvKarkex extends Model
     
     protected static function newFactory()
     {
-        return \Modules\Inventory\Database\factories\InvKarkexFactory::new();
+        return \Modules\Inventory\Database\factories\InvKardexFactory::new();
     }
 }

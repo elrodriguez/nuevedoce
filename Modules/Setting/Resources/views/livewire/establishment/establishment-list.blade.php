@@ -37,6 +37,7 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">Acciones</th>
+                        <th>{{ __('labels.name') }}</th>
                         <th>{{ __('setting::labels.address') }}</th>
                         <th>{{ __('setting::labels.telephone') }}</th>
                         <th>Email</th>
@@ -66,6 +67,7 @@
                                 </div>
                             </div>
                         </td>
+                        <td class="align-middle">{{ $establishment->name }}</td>
                         <td class="align-middle">{{ $establishment->address }}</td>
                         <td class="align-middle">{{ $establishment->phone }}</td>
                         <td class="align-middle">{{ $establishment->email }}</td>

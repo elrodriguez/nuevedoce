@@ -119,7 +119,7 @@
             @can('inventario_kardex')
             <li class="{{ $path[0] == 'kardex' && $path[1] == 'asset' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-boxes"></i>
+                    <i class="fal fa-file-chart-line"></i>
                     <span class="nav-link-text" data-i18n="nav.empresa">{{ __('inventory::labels.lbl_kardex') }}</span>
                 </a>
                 <ul>

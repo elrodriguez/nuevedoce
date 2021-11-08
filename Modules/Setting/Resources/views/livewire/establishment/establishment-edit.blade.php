@@ -54,6 +54,13 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
+                        <label class="form-label" for="address">@lang('labels.name') <span class="text-danger">*</span> </label>
+                        <input wire:model="name" type="text" class="form-control" id="name" required="">
+                        @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="address">@lang('setting::labels.address') <span class="text-danger">*</span> </label>
                         <input wire:model="address" type="text" class="form-control" id="address" required="">
                         @error('address')

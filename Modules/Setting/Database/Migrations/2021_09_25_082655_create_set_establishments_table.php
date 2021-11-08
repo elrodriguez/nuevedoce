@@ -16,6 +16,7 @@ class CreateSetEstablishmentsTable extends Migration
     {
         Schema::create('set_establishments', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('address');
             $table->string('phone')->nullable();
             $table->string('observation')->nullable();
@@ -40,6 +41,7 @@ class CreateSetEstablishmentsTable extends Migration
         });
 
         DB::table('set_establishments')->insert([
+            'name' => 'Oficina principal',
             'address' => 'inicio de registros',
             'phone' => '12345678',
             'observation' => 'inicio de registros',
