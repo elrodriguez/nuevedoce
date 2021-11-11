@@ -24,11 +24,11 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="assetSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="@lang('inventory::labels.lbl_type_here')">
+                <input wire:keydown.enter="locationSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
                 <div class="input-group-append">
-                    <button wire:click="assetSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
-                    @can('inventario_activos_nuevo')
-                    <a href="{{ route('inventory_asset_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('inventory::labels.btn_new')</a>
+                    <button wire:click="locationSearch" class="btn btn-default waves-effect waves-themed" type="button">{{ __('labels.search') }}</button>
+                    @can('inventario_ubicaciones_nuevo')
+                    <a href="{{ route('inventory_location_create') }}" class="btn btn-success waves-effect waves-themed" type="button">{{ __('labels.new') }}</a>
                     @endcan
                 </div>
             </div>
@@ -38,16 +38,14 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
-                        <th class="text-center">@lang('inventory::labels.lbl_actions')</th>
-                        <th>@lang('inventory::labels.lbl_location')</th>
-                        <th>@lang('inventory::labels.lbl_patrimonial_code')</th>
-                        <th>@lang('inventory::labels.name')</th>
-                        <th>@lang('inventory::labels.lbl_asset_type')</th>
-                        <th class="text-center">@lang('inventory::labels.status')</th>
+                        <th class="text-center">{{ __('labels.actions') }}</th>
+                        <th>{{ __('labels.establishment') }}</th>
+                        <th>{{ __('labels.description') }}</th>
+                        <th>{{ __('labels.state') }}</th>
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach($assets as $key => $asset)
+                    @foreach($locations as $key => $location)
                     <tr>
                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                         <td class="text-center tdw-50 align-middle">
@@ -56,28 +54,25 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('inventario_activos_editar')
-                                    <a href="{{ route('inventory_asset_edit',$asset->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
+                                    @can('inventario_ubicaciones_editar')
+                                    <a href="{{ route('inventory_location_edit',$location->id) }}" class="dropdown-item">
+                                        <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
                                     </a>
                                     @endcan
                                     <div class="dropdown-divider"></div>
-                                    @can('inventario_activos_eliminar')
-                                    <button onclick="confirmDelete({{ $asset->id }})" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
+                                    @can('inventario_ubicaciones_eliminar')
+                                    <button onclick="confirmDelete({{ $location->id }})" type="button" class="dropdown-item text-danger">
+                                        <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
                                     </button>
                                     @endcan
-
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $asset->location_name }}</td>
-                        <td class="align-middle">{{ $asset->patrimonial_code }}</td>
-                        <td class="align-middle">{{ $asset->name_item }}</td>
-                        <td class="align-middle">{{ $asset->name_type_asset }}</td>
-                        <td class="align-middle text-center">
-                            @if($asset->state)
-                            <span class="badge badge-success">{{ __('inventory::labels.active') }}</span>
+                        <td class="align-middle">{{ $location->establishment_name }}</td>
+                        <td class="align-middle">{{ $location->name }}</td>
+                        <td class="align-middle">
+                            @if($location->state)
+                            <span class="badge badge-warning">{{ __('inventory::labels.active') }}</span>
                             @else
                             <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
                             @endif
@@ -88,27 +83,27 @@
             </table>
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
-            <div class="ml-auto">{{ $assets->links() }}</div>
+            <div class="ml-auto">{{ $locations->links() }}</div>
         </div>
     </div>
     <script type="text/javascript">
         function confirmDelete(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
-                title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('inventory::labels.msg_0001')}}",
-                message: "<span><strong>{{__('inventory::labels.lbl_warning')}}: </strong> {{__('inventory::labels.msg_0002')}}</span>",
+                title: "<i class='fal fa-times-circle text-danger mr-2'></i> ¿Desea eliminar estos datos?",
+                message: "<span><strong>Advertencia: </strong> ¡Esta acción no se puede deshacer!</span>",
                 centerVertical: true,
                 swapButtonOrder: true,
                 buttons:
                 {
                     confirm:
                     {
-                        label: '{{__('inventory::labels.btn_yes')}}',
+                        label: 'Si',
                         className: 'btn-danger shadow-0'
                     },
                     cancel:
                     {
-                        label: '{{__('inventory::labels.btn_not')}}',
+                        label: 'No',
                         className: 'btn-default'
                     }
                 },
@@ -117,21 +112,20 @@
                 callback: function(result)
                 {
                     if(result){
-                        @this.deleteAsset(id)
+                        @this.deleteLocation(id)
                     }
                 }
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
-
-        document.addEventListener('set-asset-delete', event => {
+        document.addEventListener('set-category-delete', event => {
             let res = event.detail.res;
 
             if(res == 'success'){
                 initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
                 let box = bootbox.alert({
-                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.success') }}!</span>",
-                    message: "<span><strong>{{ __('inventory::labels.excellent') }}... </strong>{{ __('inventory::labels.msg_delete') }}</span>",
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{  __('inventory::labels.success') }}!</span>",
+                    message: "<span><strong>{{  __('inventory::labels.excellent') }}... </strong>{{  __('inventory::labels.msg_delete') }}</span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false
@@ -140,8 +134,8 @@
             }else{
                 initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
                 let box = bootbox.alert({
-                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.error') }}!</span>",
-                    message: "<span><strong>{{ __('inventory::labels.went_wrong') }}... </strong>{{ __('inventory::labels.msg_not_peptra') }}</span>",
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{  __('inventory::labels.error') }}!</span>",
+                    message: "<span><strong>{{  __('inventory::labels.went_wrong') }}... </strong>{{  __('inventory::labels.msg_not_peptra') }}</span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false

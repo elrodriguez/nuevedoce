@@ -32,13 +32,15 @@ class AssetList extends Component
             ->orWhere('inv_items.name','like','%'.$this->search.'%')
             ->join('inv_asset_types', 'asset_type_id', 'inv_asset_types.id')
             ->join('inv_items', 'inv_assets.item_id', 'inv_items.id')
+            ->leftJoin('inv_locations', 'inv_assets.location_id', 'inv_locations.id')
             ->select(
                 'inv_assets.id',
                 'inv_assets.patrimonial_code',
                 'inv_items.name AS name_item',
                 'inv_items.description',
                 'inv_asset_types.name AS name_type_asset',
-                'inv_assets.state'
+                'inv_assets.state',
+                'inv_locations.name AS location_name'
             )
             ->paginate($this->show);
     }

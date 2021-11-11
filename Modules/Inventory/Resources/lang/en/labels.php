@@ -80,5 +80,6 @@ return [
     'lbl_initial_stock' => 'Initial Stock',
     'lbl_stock'         => 'Stock',
     'lbl_kardex'        => 'Kardex',
-    'lbl_observations'  => 'Observations'
+    'lbl_observations'  => 'Observations',
+    'lbl_location'      => 'Location'
 ];

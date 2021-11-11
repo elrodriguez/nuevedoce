@@ -11,6 +11,7 @@ use Modules\Inventory\Entities\InvAsset;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
+use Modules\Inventory\Entities\InvLocation;
 
 class AssetEdit extends Component
 {
@@ -24,23 +25,28 @@ class AssetEdit extends Component
     public $asset_type_id;
     public $status;
     public $asset;
+    public $location_id;
+    public $locations;
 
     public $asset_types = [];
 
     public function mount($asset_id){
-        $this->asset_types = InvAssetType::where('state',true)->get();
-        $this->asset = InvAsset::find($asset_id);
-        $this->patrimonial_code = $this->asset->patrimonial_code;
+        $this->asset_types          = InvAssetType::where('state',true)->get();
+        $this->asset                = InvAsset::find($asset_id);
+        $this->patrimonial_code     = $this->asset->patrimonial_code;
         $this->patrimonial_code_aux = $this->asset->patrimonial_code;
-        $this->item_id = $this->asset->item_id;
-        $this->item_id_aux = $this->asset->item_id;
-        $this->asset_type_id = $this->asset->asset_type_id;
-        $this->status = $this->asset->state;
+        $this->item_id              = $this->asset->item_id;
+        $this->item_id_aux          = $this->asset->item_id;
+        $this->asset_type_id        = $this->asset->asset_type_id;
+        $this->status               = $this->asset->state;
+        $this->location_id          = $this->asset->location_id;
 
         $nameItem = InvItem::where('id', $this->asset->item_id)->get();
         foreach ($nameItem as $row){
             $this->item_text = $row->name;
         }
+
+        $this->locations = InvLocation::where('state',true)->get();
     }
 
     public function render()
@@ -64,7 +70,8 @@ class AssetEdit extends Component
             'item_id'           => $this->item_id_aux,
             'asset_type_id'     => $this->asset_type_id,
             'state'             => $this->status,
-            'person_edit'       => Auth::user()->person_id
+            'person_edit'       => Auth::user()->person_id,
+            'location_id'       => $this->location_id
         ]);
 
         $activity->modelOn(InvAsset::class, $this->asset->id,'inv_assets');

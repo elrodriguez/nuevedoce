@@ -21,6 +21,7 @@ class AssetCreate extends Component
     public $item_text;
     public $asset_type_id;
     public $state = true;
+    public $location_id;
 
     public $asset_types = [];
 
@@ -39,7 +40,8 @@ class AssetCreate extends Component
             'item_id' => 'required',
             'item_text' => 'required',
             'asset_type_id' => 'required',
-            'patrimonial_code' => 'required|unique:inv_assets,patrimonial_code'
+            'patrimonial_code' => 'required|unique:inv_assets,patrimonial_code',
+            'location_id' => 'required'
         ]);
 
         // $maxValue = DB::table('inv_assets')->max('patrimonial_code');
@@ -53,11 +55,12 @@ class AssetCreate extends Component
         // $this->patrimonial_code = date('Y').$correlativo;
 
         $asset_save = InvAsset::create([
-            'patrimonial_code' => $this->patrimonial_code,
-            'item_id' => $this->item_id,
-            'asset_type_id' => $this->asset_type_id,
-            'state' => $this->state,
-            'person_create'=> Auth::user()->person_id
+            'patrimonial_code'  => $this->patrimonial_code,
+            'item_id'           => $this->item_id,
+            'asset_type_id'     => $this->asset_type_id,
+            'state'             => $this->state,
+            'person_create'     => Auth::user()->person_id,
+            'location_id'       => $this->location_id
         ]);
 
         $activity = new Activity;
@@ -73,10 +76,11 @@ class AssetCreate extends Component
     }
 
     public function clearForm(){
-        $this->item_id = null;
-        $this->item_text = null;
-        $this->asset_type_id = null;
+        $this->item_id          = null;
+        $this->item_text        = null;
+        $this->asset_type_id    = null;
         $this->patrimonial_code = null;
-        $this->state = true;
+        $this->state            = true;
+        $this->location_id      = null;
     }
 }

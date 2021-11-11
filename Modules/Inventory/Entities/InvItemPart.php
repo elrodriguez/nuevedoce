@@ -14,8 +14,7 @@ class InvItemPart extends Model
         'part_id',
         'state',
         'quantity',
-        'observations',
-        'internal_id'
+        'observations'
     ];
     
     protected static function newFactory()

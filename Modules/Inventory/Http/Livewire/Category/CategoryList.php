@@ -24,7 +24,7 @@ class CategoryList extends Component
         return view('inventory::livewire.category.category-list',['categories'=>$this->getCategories()]);
     }
 
-    public function userSearch()
+    public function categorySearch()
     {
         $this->resetPage();
     }

@@ -49,4 +49,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::middleware(['middleware' => 'role_or_permission:inventario_kardex'])->get('item_stock', 'KardexController@itemsstock')->name('inventory_kardex_items_stock');
     });
 
+    Route::group(['prefix' => 'location'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones'])->get('list', 'LocationController@index')->name('inventory_location');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones_nuevo'])->get('create', 'LocationController@create')->name('inventory_location_create');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones_editar'])->get('edit/{id}', 'LocationController@edit')->name('inventory_location_edit');
+    });
+    
 });

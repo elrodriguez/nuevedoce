@@ -40,8 +40,5 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
-        document.addEventListener('livewire:load', function () {
-            $(":input").inputmask();
-        });
     </script>
 </div>

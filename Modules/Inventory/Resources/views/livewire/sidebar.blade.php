@@ -28,6 +28,28 @@
             </li>
             @endcan
             <li class="nav-title">Navegación</li>
+            @can('inventario_ubicaciones')
+            <li class="{{ $path[0] == 'inventory' && $path[1] == 'location' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="location" data-filter-tags="location">
+                    <i class="fal fa-map-marker"></i>
+                    <span class="nav-link-text" data-i18n="nav.location">{{ __('inventory::labels.lbl_location') }}</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'location' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_location') }}" title="Datos ubicacion" data-filter-tags="Datos ubicacion">
+                            <span class="nav-link-text" data-i18n="nav.datos_ubicacion">Listado Ubicaciones</span>
+                        </a>
+                    </li>
+                    @can('inventario_ubicaciones_nuevo')
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'location' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_location_create') }}" title="Datos ubicacion nuevo" data-filter-tags="Datos ubicacion nuevo">
+                            <span class="nav-link-text" data-i18n="nav.datos_ubicacion_nuevo">Nuevo Ubicación</span>
+                        </a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcan
             @can('inventario_categorias')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">

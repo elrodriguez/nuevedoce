@@ -16,7 +16,8 @@ class InvAsset extends Model
         'asset_type_id',
         'state',
         'person_create',
-        'person_edit'
+        'person_edit',
+        'location_id'
     ];
 
     protected static function newFactory()
