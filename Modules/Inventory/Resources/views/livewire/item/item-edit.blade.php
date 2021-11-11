@@ -72,7 +72,7 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="description">@lang('inventory::labels.description') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="description">@lang('inventory::labels.description')</label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -142,7 +142,7 @@
                     <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-wrench"></i> @lang('inventory::labels.lbl_add_parts'):</h2>
                     <br>
                     <div class="form-row">
-                        <div class="col-md-7 mb-3" wire:ignore>
+                        <div class="col-md-4 mb-3" wire:ignore>
                             <label class="form-label" for="part_text">@lang('inventory::labels.lbl_part') <span class="text-danger">*</span> </label>
                             <input wire:model="part_text"  id="part_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese la parte a buscar y luego seleccione." data-url="{{ route('inventory_item_search') }}" autocomplete="off" />
                             <input wire:model="part_id" id="part_id" type="hidden" placeholder="" autocomplete="off" />
@@ -154,10 +154,17 @@
                             <div class="invalid-feedback-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <label class="form-label" for="amount">@lang('inventory::labels.lbl_amount') <span class="text-danger">*</span> </label>
                             <input wire:model="amount" wire:ignore type="number" class="form-control" id="amount" min="1" required="">
                             @error('amount')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="observations">@lang('inventory::labels.lbl_observations') </label>
+                            <input wire:model="observations" type="text" class="form-control" id="observations">
+                            @error('observations')
                             <div class="invalid-feedback-2">{{ $message }}</div>
                             @enderror
                         </div>
@@ -172,9 +179,9 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">{{ __('labels.actions') }}</th>
-                                            <th class="text-center">{{ __('labels.name') }}</th>
+                                            <th class="">{{ __('labels.name') }}</th>
                                             <th class="text-center">{{ __('labels.quantity') }}</th>
-                                            <th class="text-center">{{ __('inventory::labels.weight') }}</th>
+                                            <th class="text-center">{{ __('inventory::labels.lbl_observations') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -187,7 +194,7 @@
                                                     </button>
                                                     <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
                                                         @can('inventario_items_parte_editar')
-                                                            <a href="{{ route('inventory_item_edit', $item->id) }}" class="dropdown-item">
+                                                            <a href="{{ route('inventory_item_edit', $item->item_id) }}" class="dropdown-item">
                                                                 <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
                                                             </a>
                                                         @endcan
@@ -202,8 +209,8 @@
                                                 </div>
                                             </td>
                                             <td class="align-middle">{{ $item->name }}</td>
-                                            <td class="text-center align-middle">{{ $item->amount }}</td>
-                                            <td class="text-center align-middle">{{ $item['weight'] }}</td>
+                                            <td class="text-right align-middle">{{ $item->quantity }}</td>
+                                            <td class="align-middle">{{ $item->observations }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -246,13 +253,13 @@
                 callback: function(result)
                 {
                     if(result){
-                    @this.deletePartItem(id);
+                        @this.deletePartItem(id);
                     }
                 }
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
-
+        
         document.addEventListener('set-item-save-not', event => {
             let part_count = event.detail.part_count;
             if(part_count > 0){
@@ -270,7 +277,23 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
-
+        document.addEventListener('set-item-add-not', event => {
+            let part_count = event.detail.part_count;
+            if(part_count > 0){
+                $('#part').prop('disabled', true);
+            }else{
+                $('#part').prop('disabled', false);
+            }
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.lbl_warning') }}!</span>",
+                message: "<span>"+event.detail.msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        });
         document.addEventListener('set-item-part-delete', event => {
             let res = event.detail.res;
             let part_count = event.detail.part_count;

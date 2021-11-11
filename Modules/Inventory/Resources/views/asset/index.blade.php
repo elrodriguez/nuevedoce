@@ -7,7 +7,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class="fal fa-boxes"></i></i> @lang('inventory::labels.assents')<sup class='badge badge-primary fw-500'>@lang('inventory::labels.lbl_list')</sup>
+        <i class="fal fa-barcode-alt"></i></i> @lang('inventory::labels.assents')<sup class='badge badge-primary fw-500'>@lang('inventory::labels.lbl_list')</sup>
     </h1>
     <div class="subheader-block">
         @lang('inventory::labels.lbl_list')

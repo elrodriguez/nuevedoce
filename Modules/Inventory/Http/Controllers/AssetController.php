@@ -45,8 +45,8 @@ class AssetController extends Controller
                 'name AS text'
             )
             ->where('name','like','%'.$search.'%')
-            ->where('part','=','0')
-            ->where('item_id','=',NULL)
+            //->where('part','=','0')
+            //->where('item_id','=',NULL)
             ->get();
         return response()->json($customers, 200);
     }

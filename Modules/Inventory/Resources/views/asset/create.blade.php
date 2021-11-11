@@ -8,7 +8,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class="fal fa-boxes"></i> @lang('inventory::labels.btn_new') <span class='fw-300'>@lang('inventory::labels.assent')</span> <sup class='badge badge-primary fw-500'>@lang('inventory::labels.btn_new')</sup>
+        <i class="fal fa-barcode-alt"></i> @lang('inventory::labels.btn_new') <span class='fw-300'>@lang('inventory::labels.assent')</span> <sup class='badge badge-primary fw-500'>@lang('inventory::labels.btn_new')</sup>
 
     </h1>
     <div class="subheader-block">

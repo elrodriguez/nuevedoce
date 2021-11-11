@@ -3,7 +3,14 @@
         <div class="card-body">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row">
-                    <div class="col-md-6 mb-3" wire:ignore>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="patrimonial_code">@lang('inventory::labels.lbl_patrimonial_code') <span class="text-danger">*</span> </label>
+                        <input wire:model="patrimonial_code" id="patrimonial_code" type="text" class="form-control">
+                        @error('patrimonial_code')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3" wire:ignore>
                         <label class="form-label" for="item_id">@lang('inventory::labels.lbl_item') <span class="text-danger">*</span> </label>
                         <input wire:model="item_text" id="item_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese el item a buscar y luego seleccione." data-url="{{ route('inventory_asset_search') }}" autocomplete="off" />
                         <input wire:model="item_id" id="item_id" type="hidden" placeholder="" autocomplete="off" />
@@ -11,7 +18,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="asset_type_id">@lang('inventory::labels.lbl_asset_type') <span class="text-danger">*</span> </label>
                         <select wire:model="asset_type_id" id="asset_type_id" class="custom-select" required="">
                             <option value="">@lang('inventory::labels.lbl_select')</option>

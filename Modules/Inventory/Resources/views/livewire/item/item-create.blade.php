@@ -44,7 +44,7 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="description">@lang('inventory::labels.description') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="description">@lang('inventory::labels.description') </label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
                         <div class="invalid-feedback-2">{{ $message }}</div>
@@ -121,11 +121,11 @@
                     </div>
                 </div>
                 <br>
-                <div id="xyzDivPartesItems" wire:ignore>
+                <div id="xyzDivPartesItems" wire:ignore.self>
                     <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-wrench"></i> @lang('inventory::labels.lbl_add_parts'):</h2>
                     <br>
                     <div class="form-row">
-                        <div class="col-md-7 mb-3" wire:ignore>
+                        <div class="col-md-4 mb-3" wire:ignore>
                             <label class="form-label" for="part_text">@lang('inventory::labels.lbl_part') <span class="text-danger">*</span> </label>
                             <input wire:model="part_text" id="part_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese la parte a buscar y luego seleccione." data-url="{{ route('inventory_item_search') }}" autocomplete="off" />
                             <input wire:model="part_id" id="part_id" type="hidden" placeholder="" autocomplete="off" />
@@ -137,10 +137,17 @@
                             <div class="invalid-feedback-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <label class="form-label" for="amount">@lang('inventory::labels.lbl_amount') <span class="text-danger">*</span> </label>
                             <input wire:model="amount" type="number" class="form-control" id="amount" min="1" required="">
                             @error('amount')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="observations">@lang('inventory::labels.lbl_observations') </label>
+                            <input wire:model="observations" type="text" class="form-control" id="observations">
+                            @error('observations')
                             <div class="invalid-feedback-2">{{ $message }}</div>
                             @enderror
                         </div>
@@ -155,30 +162,22 @@
                                     <thead>
                                     <tr>
                                         <th class="text-center">{{ __('labels.actions') }}</th>
-                                        <th class="text-center">{{ __('labels.name') }}</th>
+                                        <th class="">{{ __('labels.name') }}</th>
                                         <th class="text-center">{{ __('labels.quantity') }}</th>
-                                        <th class="text-center">{{ __('inventory::labels.weight') }}</th>
+                                        <th class="text-center">{{ __('inventory::labels.lbl_observations') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($parts_item as $key => $item)
                                         <tr>
                                             <td class="text-center align-middle">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                        <i class="fal fa-cogs"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                                        <div class="dropdown-divider"></div>
-                                                            <button wire:click="deletePart({{ $item['id'] }})" type="button" class="dropdown-item text-danger">
-                                                                <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
-                                                            </button>
-                                                    </div>
-                                                </div>
+                                                <button wire:click="deletePart({{ $item['id'] }})" type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed">
+                                                    <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
+                                                </button>
                                             </td>
                                             <td class="align-middle">{{ $item['name'] }}</td>
-                                            <td class="text-center align-middle">{{ $item['amount'] }}</td>
-                                            <td class="text-center align-middle">{{ $item['weight'] }}</td>
+                                            <td class="text-right align-middle">{{ $item['amount'] }}</td>
+                                            <td class="align-middle">{{ $item['observations'] }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -216,7 +215,7 @@
             }else{
                 $('#part').prop('disabled', false);
             }
-            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
+            //initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('inventory::labels.success') }}!</span>",
                 message: "<span><strong>{{ __('inventory::labels.excellent') }}... </strong>"+event.detail.msg+"</span>",

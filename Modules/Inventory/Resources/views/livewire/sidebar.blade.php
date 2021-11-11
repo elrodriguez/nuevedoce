@@ -97,8 +97,8 @@
             @can('inventario_activos')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-boxes"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">Activos</span>
+                    <i class="fal fa-barcode-alt"></i>
+                    <span class="nav-link-text" data-i18n="nav.empresa">Activos código</span>
                 </a>
                 <ul>
                     <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' && $path[2] == 'list' ? 'active' : '' }}">

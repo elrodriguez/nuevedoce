@@ -17,7 +17,9 @@ class InventoryDatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call([
-            SeedModulePermissionsTableSeeder::class
+            SeedModulePermissionsTableSeeder::class,
+            SeedInvCategoriesTableSeeder::class,
+            SeedInvBrandsTableSeeder::class 
         ]);
     }
 }

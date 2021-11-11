@@ -16,14 +16,13 @@ class CreateInvItemsTable extends Migration
         Schema::create('inv_items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->boolean('part')->default(false);
             $table->decimal('weight', 10, 2)->nullable();
             $table->decimal('width', 10, 2)->nullable();
             $table->decimal('high', 10, 2)->nullable();
             $table->decimal('long', 10, 2)->nullable();
             $table->integer('number_parts')->nullable();
-            $table->integer('amount')->default(0);
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('item_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
@@ -32,7 +31,6 @@ class CreateInvItemsTable extends Migration
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('item_id')->references('id')->on('inv_items');
             $table->foreign('brand_id')->references('id')->on('inv_brands');
             $table->foreign('category_id')->references('id')->on('inv_categories');
         });

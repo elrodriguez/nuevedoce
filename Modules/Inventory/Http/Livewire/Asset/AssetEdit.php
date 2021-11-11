@@ -52,14 +52,15 @@ class AssetEdit extends Component
         $this->validate([
             'item_id'       => 'required',
             'item_text'     => 'required',
-            'asset_type_id' => 'required'
+            'asset_type_id' => 'required',
+            'patrimonial_code' => 'required|unique:inv_assets,patrimonial_code,'.$this->asset->id
         ]);
 
         $activity = new Activity;
         $activity->dataOld(InvItem::find($this->asset->id));
 
         $this->asset->update([
-            'patrimonial_code'  => $this->patrimonial_code_aux,
+            'patrimonial_code'  => $this->patrimonial_code,
             'item_id'           => $this->item_id_aux,
             'asset_type_id'     => $this->asset_type_id,
             'state'             => $this->status,

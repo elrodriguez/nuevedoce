@@ -12,7 +12,9 @@ use Modules\Inventory\Entities\InvBrand;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
-use Modules\Inventory\Entities\InvKarkex;
+use Modules\Inventory\Entities\InvItemPart;
+use Modules\Inventory\Entities\InvKardex;
+use Illuminate\Support\Str;
 
 class ItemCreate extends Component
 {
@@ -21,14 +23,14 @@ class ItemCreate extends Component
     public $name;
     public $description;
     public $part = false;
-    public $weight;
-    public $width;
-    public $high;
-    public $long;
+    public $weight = 0;
+    public $width = 0;
+    public $high = 0;
+    public $long = 0;
     public $number_parts;
     public $status = true;
     public $item_id;
-    public $brand_id;
+    public $brand_id = 1;
     public $category_id;
     //images
     public $images = [];
@@ -44,6 +46,7 @@ class ItemCreate extends Component
     public $part_id;
     public $part_weight;
     public $parts_item_count;
+    public $observations;
 
     //kardex
     public $quantity;
@@ -64,7 +67,7 @@ class ItemCreate extends Component
 
         $this->validate([
             'name' => 'required|min:3|max:255',
-            'description' => 'required',
+            //'description' => 'required',
             'quantity' => 'required',
             'weight' => 'required',
             'width' => 'required',
@@ -72,6 +75,7 @@ class ItemCreate extends Component
             'long' => 'required',
             'images.*' => 'image|max:1024'
         ]);
+        
         if($this->part){
             $this->number_parts = 0;
         }
@@ -92,7 +96,7 @@ class ItemCreate extends Component
             'person_create'=> Auth::user()->person_id
         ]);
 
-        InvKarkex::create([
+        InvKardex::create([
             'date_of_issue' => Carbon::now()->format('Y-m-d'),
             'establishment_id' => 1,
             'item_id' => $this->item_save->id,
@@ -103,11 +107,12 @@ class ItemCreate extends Component
         #Save item parts
         if(count($this->parts_item) > 0){
             foreach ($this->parts_item as $row){
-                $search_part = InvItem::find($row['id']);
-                $search_part->update([
+                InvItemPart::create([
                     'item_id'       => $this->item_save->id,
-                    'amount'        => $row['amount'],
-                    'person_edit'   => Auth::user()->person_id
+                    'part_id'       => $row['id'],
+                    'state'         => true,
+                    'quantity'      => $row['amount'],
+                    'observations'   => $row['observations']
                 ]);
             }
         }
@@ -140,12 +145,15 @@ class ItemCreate extends Component
     }
 
     public function savePart(){
+
         $this->validate([
             'part_text' => 'required|min:3',
             'part_id' => 'required',
             'amount' => 'required|integer|between:1,9999'
         ]);
+
         if($this->number_parts > count($this->parts_item)) {
+
             if (!$this->part) {
                 $existe = false;
                 if (count($this->parts_item) > 0) {
@@ -157,12 +165,15 @@ class ItemCreate extends Component
                     }
                 }
                 if (!$existe) {
-                    $this->parts_item[] = array(
-                        'id' => $this->part_id,
-                        'amount' => $this->amount,
-                        'weight' => $this->part_weight,
-                        'name' => $this->part_text
+                    $item = array(
+                        'id'            => $this->part_id,
+                        'amount'        => $this->amount,
+                        'observations'  => $this->observations,
+                        'name'          => $this->part_text,
+                        'weight'        => $this->part_weight
                     );
+                    array_push($this->parts_item, $item);
+                    //dd($this->parts_item);
                     $this->weight += $this->part_weight * $this->amount;
                 }
 
@@ -172,6 +183,7 @@ class ItemCreate extends Component
                 $this->part_id = '';
                 $this->part_weight = '';
                 $this->amount = 1;
+                $this->observations = null;
 
                 if ($existe) {
                     $this->dispatchBrowserEvent('set-item-save-not', ['msg' => Lang::get('inventory::labels.msg_0009'), 'part_count' => $this->parts_item_count]);
@@ -213,14 +225,14 @@ class ItemCreate extends Component
         $this->name = null;
         $this->description = null;
         $this->part = false;
-        $this->weight = null;
-        $this->width = null;
-        $this->high = null;
-        $this->long = null;
+        $this->weight = 0;
+        $this->width = 0;
+        $this->high = 0;
+        $this->long = 0;
         $this->number_parts = null;
         $this->status = true;
         $this->item_id = null;
-        $this->brand_id = null;
+        $this->brand_id = 1;
         $this->category_id = null;
         $this->image = '';
         $this->quantity = null;

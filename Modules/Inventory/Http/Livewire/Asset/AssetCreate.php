@@ -34,21 +34,23 @@ class AssetCreate extends Component
     }
 
     public function save(){
+
         $this->validate([
             'item_id' => 'required',
             'item_text' => 'required',
-            'asset_type_id' => 'required'
+            'asset_type_id' => 'required',
+            'patrimonial_code' => 'required|unique:inv_assets,patrimonial_code'
         ]);
 
-        $maxValue = DB::table('inv_assets')->max('patrimonial_code');
+        // $maxValue = DB::table('inv_assets')->max('patrimonial_code');
 
-        if($maxValue == null){
-            $correlativo = '000001';
-        }else{
-            $numero = (int) substr($maxValue,4,6);
-            $correlativo = str_pad($numero + 1,  6, "0", STR_PAD_LEFT);
-        }
-        $this->patrimonial_code = date('Y').$correlativo;
+        // if($maxValue == null){
+        //     $correlativo = '000001';
+        // }else{
+        //     $numero = (int) substr($maxValue,4,6);
+        //     $correlativo = str_pad($numero + 1,  6, "0", STR_PAD_LEFT);
+        // }
+        // $this->patrimonial_code = date('Y').$correlativo;
 
         $asset_save = InvAsset::create([
             'patrimonial_code' => $this->patrimonial_code,
@@ -74,7 +76,7 @@ class AssetCreate extends Component
         $this->item_id = null;
         $this->item_text = null;
         $this->asset_type_id = null;
-        $this->patrimonial_code = false;
+        $this->patrimonial_code = null;
         $this->state = true;
     }
 }

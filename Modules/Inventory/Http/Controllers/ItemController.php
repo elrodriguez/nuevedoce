@@ -69,8 +69,8 @@ class ItemController extends Controller
             )
             ->where('name','like','%'.$search.'%')
             ->where('part','=','1')
-            ->where('item_id','=',NULL)
             ->get();
+            
         return response()->json($customers, 200);
     }
 }
