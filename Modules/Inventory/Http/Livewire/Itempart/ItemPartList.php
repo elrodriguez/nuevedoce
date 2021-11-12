@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Modules\Inventory\Entities\InvAsset;
 use Modules\Inventory\Entities\InvItem;
+use Modules\Inventory\Entities\InvItemPart;
+use Modules\Inventory\Entities\InvItemPartAsset;
 
 class ItemPartList extends Component
 {
@@ -20,17 +23,24 @@ class ItemPartList extends Component
     public $count_items;
     public $search_parent;
 
+    public $modal_title;
+    public $array_codes;
+    public $max_quantity;
+
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public function mount($item_id){
         $item = InvItem::find($item_id);
-        $this->search_parent = $item;
-        $this->show = 10;
-        $this->id_item = $item_id;
-        $this->name_item = $item->name;
-        $this->parts_item = $item->number_parts;
-        $this->weight_item = $item->weight;
+        if($item){
+            $this->search_parent = $item;
+            $this->show = 10;
+            $this->id_item = $item_id;
+            $this->name_item = $item->name;
+            $this->parts_item = $item->number_parts;
+            $this->weight_item = $item->weight;
+        }
+        
     }
 
     public function render()
@@ -40,7 +50,8 @@ class ItemPartList extends Component
     }
 
     public function getItemParts(){
-        return InvItem::where('inv_items.name','like','%'.$this->search.'%')
+        return InvItemPart::join('inv_items','inv_item_parts.part_id','inv_items.id')
+            ->where('inv_items.name','like','%'.$this->search.'%')
             ->leftJoin('inv_categories', 'category_id', 'inv_categories.id')
             ->leftJoin('inv_brands', 'brand_id', 'inv_brands.id')
             ->select(
@@ -54,12 +65,13 @@ class ItemPartList extends Component
                 'inv_items.long',
                 'inv_items.number_parts',
                 'inv_items.status',
-                'inv_items.amount',
-                'inv_items.item_id',
+                'inv_item_parts.id AS item_part_id',
+                'inv_item_parts.quantity',
+                'inv_item_parts.part_id',
                 'inv_categories.description AS name_category',
                 'inv_brands.description AS name_brand'
             )
-            ->where('item_id', '=', $this->id_item)
+            ->where('inv_item_parts.item_id', '=', $this->id_item)
             ->paginate($this->show);
     }
 
@@ -69,9 +81,11 @@ class ItemPartList extends Component
     }
 
     public function deleteItemPart($id){
-        $itemPart = InvItem::find($id);
+        
+        $deletePart = InvItemPart::where('item_id',$this->id_item)->where('part_id',$id)->first();
+        $itemPart   = InvItem::find($id);
 
-        $activity = new activity;
+        $activity   = new activity;
         $activity->log('Se eliminó la parte del item');
         $activity->modelOn(InvItem::class,$id,'inv_item');
         $activity->dataOld($itemPart);
@@ -80,14 +94,77 @@ class ItemPartList extends Component
         $activity->save();
 
         //Update weight parent
-        $weight_parent = $this->search_parent->weight - ($itemPart->weight * $itemPart->amount);
-        $parent_item = $this->search_parent->update([
+        $weight_parent = $this->search_parent->weight - ($itemPart->weight * $deletePart->quantity);
+
+        $this->search_parent->update([
             'weight' => $weight_parent,
             'person_edit' => Auth::user()->person_id
         ]);
 
-        $itemPart->delete();
+        InvItemPart::find($deletePart->id)->delete();
 
         $this->dispatchBrowserEvent('set-item-part-delete', ['msg' => Lang::get('inventory::labels.msg_delete')]);
+    }
+
+    public function openModalCodes($name,$item_id,$quantity,$item_part_id){
+
+        $this->modal_title  = $name;
+        $this->max_quantity = $quantity;
+        $this->item_part_id = $item_part_id;
+
+        $this->getArrayCodes($item_id,$item_part_id);
+        $this->dispatchBrowserEvent('set-item-part-open-model', ['success' => true]);
+    }
+
+    public function saveItemPartAsset($asset_id,$item_id){
+
+        $quantity = InvItemPartAsset::where('item_part_id',$this->item_part_id)
+                    ->where('item_id',$item_id)
+                    ->count('item_id');
+        if($quantity < $this->max_quantity){
+            InvItemPartAsset::create([
+                'item_part_id'  => $this->item_part_id,
+                'item_id'       => $item_id,
+                'asset_id'      => $asset_id
+            ]);
+            $this->getArrayCodes($item_id,$this->item_part_id);
+        }else{
+            $this->dispatchBrowserEvent('set-item-part-asset-save', ['msg' => 'Solo puede Agregar '.$this->max_quantity.' códigos']);
+        }
+    }
+
+    public function getArrayCodes($item_id,$item_part_id){
+
+        $array_codes = InvAsset::select(
+                            'inv_assets.id',
+                            'inv_assets.patrimonial_code',
+                            'inv_assets.item_id',
+                            'inv_assets.state',
+                            'inv_assets.location_id'
+                        )
+                        ->selectSub(function($query) use ($item_part_id,$item_id) {
+                            $query->from('inv_item_part_assets')
+                                ->selectRaw('COUNT(inv_item_part_assets.asset_id)')
+                                ->whereColumn('inv_item_part_assets.asset_id','inv_assets.id')
+                                ->where('inv_item_part_assets.item_part_id',$item_part_id)
+                                ->where('inv_item_part_assets.item_id',$item_id);
+                        }, 'used')
+                        ->where('item_id',$item_id)
+                        ->get();
+
+        if($array_codes){
+            $this->array_codes = $array_codes->toArray();
+        }else{
+            $this->array_codes = [];
+        }
+    }
+
+    public function removeItemPartAsset($asset_id,$item_id){
+        InvItemPartAsset::where('item_part_id',$this->item_part_id)
+            ->where('item_id',$item_id)
+            ->where('asset_id',$asset_id)
+            ->delete();
+            
+        $this->getArrayCodes($item_id,$this->item_part_id);
     }
 }

@@ -97,11 +97,12 @@ class ItemCreate extends Component
         ]);
 
         InvKardex::create([
-            'date_of_issue' => Carbon::now()->format('Y-m-d'),
-            'establishment_id' => 1,
-            'item_id' => $this->item_save->id,
-            'quantity' => $this->quantity,
-            'detail' => 'stock inicial'
+            'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+            'establishment_id'  => 1,
+            'location_id'       => 1,
+            'item_id'           => $this->item_save->id,
+            'quantity'          => $this->quantity,
+            'detail'            => 'stock inicial'
         ]);
 
         #Save item parts

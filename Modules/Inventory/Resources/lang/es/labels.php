@@ -81,5 +81,7 @@ return [
     'lbl_stock'         => 'Stock',
     'lbl_kardex'        => 'Kardex',
     'lbl_observations'  => 'Observaciones',
-    'lbl_location'      => 'Ubicación'
+    'lbl_location'      => 'Ubicación',
+    'lbl_add_codes'     => 'Agregar códigos',
+    'lbl_setting_codes'     => 'Configuración de codigos'
 ];

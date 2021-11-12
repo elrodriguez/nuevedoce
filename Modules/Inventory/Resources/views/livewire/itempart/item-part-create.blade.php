@@ -7,7 +7,7 @@
                         <label class="form-label" for="name">@lang('inventory::labels.name') <span class="text-danger">*</span> </label>
                         <input wire:model="name" type="text" class="form-control" id="name" required="">
                         @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
@@ -19,7 +19,7 @@
                             @endforeach
                         </select>
                         @error('category_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
@@ -31,7 +31,14 @@
                             @endforeach
                         </select>
                         @error('brand_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="brand_id">@lang('inventory::labels.lbl_initial_stock') <span class="text-danger">*</span> </label>
+                        <input wire:model="stock_initial" id="stock_initial" class="form-control" required="">
+                        @error('stock_initial')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -40,14 +47,14 @@
                         <label class="form-label" for="description">@lang('inventory::labels.description') <span class="text-danger">*</span> </label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3" wire:ignore>
                         <label class="form-label" for="amount">@lang('inventory::labels.lbl_amount') <span class="text-danger">*</span> </label>
                         <input wire:model="amount" type="number" class="form-control" id="amount" required="" min="1">
                         @error('amount')
-                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        <div class="invalid-feedback-2-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
@@ -57,7 +64,7 @@
                             <label class="custom-file-label" for="customFile">@lang('inventory::labels.lbl_choose_file')</label>
                         </div>
                         @error('images')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
@@ -67,7 +74,7 @@
                             <label class="custom-control-label" for="status">@lang('inventory::labels.active')</label>
                         </div>
                         @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -76,28 +83,37 @@
                         <label class="form-label" for="weight">@lang('inventory::labels.weight') (@lang('inventory::labels.lbl_kg')) <span class="text-danger">*</span> </label>
                         <input wire:model="weight" type="number" class="form-control" id="weight" required="">
                         @error('weight')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="width">@lang('inventory::labels.width') (@lang('inventory::labels.lbl_meters')) <span class="text-danger">*</span> </label>
                         <input wire:model="width" type="number" class="form-control" id="width" required="">
                         @error('width')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="high">@lang('inventory::labels.high') (@lang('inventory::labels.lbl_meters'))<span class="text-danger">*</span> </label>
                         <input wire:model="high" type="number" class="form-control" id="high" required="">
                         @error('high')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="long">@lang('inventory::labels.long') (@lang('inventory::labels.lbl_meters'))<span class="text-danger">*</span> </label>
                         <input wire:model="long" type="number" class="form-control" id="long" required="">
                         @error('long')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="observations">@lang('inventory::labels.lbl_observations')</label>
+                        <input wire:model="observations" type="text" class="form-control" id="observations" required="">
+                        @error('observations')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

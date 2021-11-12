@@ -66,9 +66,14 @@
                                             <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
                                         </a>
                                     @endcan
+                                    @can('inventario_items_parte_agregar_codigo')
+                                        <button wire:click="openModalCodes('{{ $item_part->name }}',{{ $item_part->part_id }},{{ $item_part->quantity }},{{ $item_part->item_part_id }})" type="button" class="dropdown-item">
+                                            <i class="fal fa-barcode-alt mr-1"></i> @lang('inventory::labels.lbl_setting_codes')
+                                        </button>
+                                    @endcan
                                     <div class="dropdown-divider"></div>
                                     @can('inventario_items_parte_eliminar')
-                                        <button onclick="confirmDelete({{ $item_part->id }})" type="button" class="dropdown-item text-danger">
+                                        <button onclick="confirmDelete({{ $item_part->part_id }})" type="button" class="dropdown-item text-danger">
                                             <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
                                         </button>
                                     @endcan
@@ -78,7 +83,7 @@
                         </td>
                         <td class="align-middle">{{ $item_part->name }}</td>
                         <td class="align-middle">{{ $item_part->description }}</td>
-                        <td class="text-center align-middle">{{ $item_part->amount }}</td>
+                        <td class="text-center align-middle">{{ $item_part->quantity }}</td>
                         <td class="align-middle">{{ $item_part->weight }}</td>
                         <td class="align-middle">{{ $item_part->width }}</td>
                         <td class="align-middle">{{ $item_part->long }}</td>
@@ -98,6 +103,86 @@
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
             <a href="{{ route('inventory_item')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.lbl_items')</a>
             <div class="ml-auto">{{ $item_parts->links() }}</div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" id="modalArrayCodes" tabindex="-1" aria-labelledby="modalArrayCodes" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalArrayCodes"><b>{{ $modal_title }}</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">{{ __('labels.actions') }}</th>
+                                <th>{{ __('labels.code') }}</th>
+                                <th>{{ __('labels.state') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if($array_codes)
+                                @foreach($array_codes as $array_code)
+                                    <tr class="{{ $array_code['used'] > 0 ? 'bg-warning-500' : ''}}">
+                                        <td class="text-center align-middle">
+                                            @if($array_code['used'] > 0)
+                                                <button 
+                                                    wire:click="removeItemPartAsset({{ $array_code['id'] }},{{ $array_code['item_id'] }})"
+                                                    type="button" 
+                                                    class="btn btn-danger btn-sm btn-icon rounded-circle waves-effect waves-themed" 
+                                                    title="Quitar Código"
+                                                >
+                                                    <i class="fal fa-times"></i>
+                                                </button>
+                                            @else
+                                                <button 
+                                                    wire:click="saveItemPartAsset({{ $array_code['id'] }},{{ $array_code['item_id'] }})" 
+                                                    type="button" 
+                                                    class="btn btn-default btn-sm btn-icon rounded-circle waves-effect waves-themed"
+                                                    title="Agregar Código"
+                                                >
+                                                    <i class="fal fa-check"></i>
+                                                </button>
+                                            @endif
+                                        </td>
+                                        <td class="align-middle">{{ $array_code['patrimonial_code'] }}</td>
+                                        <td class="align-middle">
+                                            @if($array_code['state'] == '00')
+                                                <span class="badge badge-warning">Inactivo</span>
+                                            @elseif($array_code['state'] == '01')
+                                                <span class="badge badge-primary">Activo</span>
+                                            @elseif($array_code['state'] == '02')
+                                                <span class="badge badge-info">En reparación</span>
+                                            @elseif($array_code['state'] == '03')
+                                                <span class="badge badge-success">En evento</span>
+                                            @elseif($array_code['state'] == '04')
+                                                <span class="badge badge-danger">Perdido</span>
+                                            @elseif($array_code['state'] == '05')
+                                                <span class="badge badge-dark">De baja</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td class="text-center align-middle" colspan="3">
+                                        <div class="alert alert-danger" role="alert">
+                                            No existen <strong>códigos</strong> registrados.
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -126,7 +211,7 @@
                 callback: function(result)
                 {
                     if(result){
-                    @this.deleteItemPart(id)
+                        @this.deleteItemPart(id)
                     }
                 }
             });
@@ -147,6 +232,22 @@
 
         document.addEventListener('livewire:load', function () {
             $("#spaItemName").html(':: {{ $item_name }}');
+        });
+
+        document.addEventListener('set-item-part-open-model', event => {
+            $('#modalArrayCodes').modal('show');
+        });
+
+        document.addEventListener('set-item-part-asset-save', event => {
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.error') }}!</span>",
+                message: "<span><strong>{{ __('setting::labels.went_wrong') }}... </strong>"+event.detail.msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
     </script>
 </div>

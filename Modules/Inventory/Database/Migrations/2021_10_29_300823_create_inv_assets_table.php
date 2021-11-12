@@ -18,7 +18,7 @@ class CreateInvAssetsTable extends Migration
             $table->string('patrimonial_code');
             $table->unsignedBigInteger('item_id')->nullable();
             $table->unsignedBigInteger('asset_type_id')->nullable();
-            $table->char('state', 2)->default('00');
+            $table->char('state', 2)->default('00')->comment('00=inactivo,01=activo,02=en reparacion,03=en evento,04=perdido,05=de baja');;
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();

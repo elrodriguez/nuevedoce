@@ -13,6 +13,7 @@ use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Modules\Inventory\Entities\InvItemPart;
 
 class ItemPartEdit extends Component
 {
@@ -56,6 +57,7 @@ class ItemPartEdit extends Component
         $this->brands = InvBrand::where('status',true)->get();
 
         $this->item = InvItem::find($item_id);
+       
         $this->name = $this->item->name;
         $this->description = $this->item->description;
         $this->weight = $this->item->weight;
@@ -65,7 +67,7 @@ class ItemPartEdit extends Component
         $this->amount = $this->item->amount;
         $this->status = $this->item->status;
         $this->amount_asigned = $this->item->amount;
-        $this->id_item = $this->item->item_id == null ?0:$this->item->item_id;
+        $this->id_item =$this->item_id_parent == null ? 0 : $this->item_id_parent;
 
         $this->brand_id = $this->item->brand_id;
         $this->category_id = $this->item->category_id;

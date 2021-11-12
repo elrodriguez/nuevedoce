@@ -96,14 +96,14 @@ class ItemEdit extends Component
         if($this->id_item>0){
             $this->validate([
                 'name' => 'required|min:3|max:255',
-                'description' => 'required',
+                //'description' => 'required',
                 'images.*' => 'image|max:1024',
                 'amount_asigned' => 'required|integer'
             ]);
         }else{
             $this->validate([
                 'name' => 'required|min:3|max:255',
-                'description' => 'required',
+                //'description' => 'required',
                 'images.*' => 'image|max:1024'
             ]);
         }
@@ -117,7 +117,7 @@ class ItemEdit extends Component
 
         $this->item->update([
             'name' => $this->name,
-            //'description' => $this->description,
+            'description' => $this->description,
             'part' => $this->part,
             'weight' => $this->weight,
             'width' => $this->width,
@@ -125,8 +125,6 @@ class ItemEdit extends Component
             'long' => $this->long,
             'number_parts' => ($this->number_parts == null?0:$this->number_parts),
             'status' => $this->status,
-            'amount' => ($this->id_item>0?$this->amount_asigned:0),
-            #'item_id' => $this->item_id,
             'brand_id' => $this->brand_id,
             'category_id' => $this->category_id,
             'person_edit'=> Auth::user()->person_id

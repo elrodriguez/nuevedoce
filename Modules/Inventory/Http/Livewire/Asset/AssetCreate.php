@@ -10,7 +10,7 @@ use Modules\Inventory\Entities\InvAssetType;
 use Modules\Inventory\Entities\InvAsset;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-
+use Modules\Inventory\Entities\InvLocation;
 class AssetCreate extends Component
 {
 
@@ -19,14 +19,16 @@ class AssetCreate extends Component
     public $patrimonial_code;
     public $item_id;
     public $item_text;
-    public $asset_type_id;
-    public $state = true;
+    public $asset_type_id = 1;
+    public $state = '01';
     public $location_id;
+    public $locations;
 
     public $asset_types = [];
 
     public function mount(){
         $this->asset_types = InvAssetType::where('state',true)->get();
+        $this->locations = InvLocation::where('state',true)->get();
     }
 
     public function render()
@@ -78,9 +80,9 @@ class AssetCreate extends Component
     public function clearForm(){
         $this->item_id          = null;
         $this->item_text        = null;
-        $this->asset_type_id    = null;
+        $this->asset_type_id    = 1;
         $this->patrimonial_code = null;
-        $this->state            = true;
+        $this->state            = '01';
         $this->location_id      = null;
     }
 }

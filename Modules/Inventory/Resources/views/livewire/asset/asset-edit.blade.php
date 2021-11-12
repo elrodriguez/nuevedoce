@@ -12,14 +12,14 @@
                             @endforeach
                         </select>
                         @error('asset_type_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="patrimonial_code">@lang('inventory::labels.lbl_patrimonial_code') <span class="text-danger">*</span> </label>
                         <input wire:model="patrimonial_code" type="text" class="form-control" id="patrimonial_code" required="">
                         @error('patrimonial_code')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3" wire:ignore>
@@ -27,7 +27,7 @@
                         <input wire:model="item_text" id="item_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese el item a buscar y luego seleccione." data-url="{{ route('inventory_asset_search') }}" autocomplete="off" readonly />
                         <input wire:model="item_id" id="item_id" type="hidden" placeholder="" autocomplete="off" />
                         @error('item_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     
@@ -40,17 +40,21 @@
                             @endforeach
                         </select>
                         @error('asset_type_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">@lang('inventory::labels.status') <span class="text-danger">*</span> </label>
-                        <div class="custom-control custom-checkbox">
-                            <input wire:model="status" type="checkbox" class="custom-control-input" id="status">
-                            <label class="custom-control-label" for="status">@lang('inventory::labels.active')</label>
-                        </div>
+                        <select wire:model="status" class="form-control">
+                            <option value="00">Inactivo</option>
+                            <option value="01">Activo</option>
+                            <option value="02">En reparación</option>
+                            <option value="03">En evento</option>
+                            <option value="04">Perdido</option>
+                            <option value="05">De baja</option>
+                        </select>
                         @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

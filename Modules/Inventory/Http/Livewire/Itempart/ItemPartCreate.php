@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Http\Livewire\Itempart;
 
+use Carbon\Carbon;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -11,6 +12,8 @@ use Modules\Inventory\Entities\InvBrand;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemFile;
 use Livewire\WithFileUploads;
+use Modules\Inventory\Entities\InvItemPart;
+use Modules\Inventory\Entities\InvKardex;
 
 class ItemPartCreate extends Component
 {
@@ -19,11 +22,11 @@ class ItemPartCreate extends Component
     public $name;
     public $description;
     public $part = false;
-    public $weight;
-    public $width;
-    public $amount;
-    public $high;
-    public $long;
+    public $weight = 0;
+    public $width = 0;
+    public $amount = 0;
+    public $high = 0;
+    public $long = 0;
     public $number_parts = 0;
     public $status = true;
     public $brand_id;
@@ -43,6 +46,8 @@ class ItemPartCreate extends Component
     public $parts_item;
     public $weight_item;
     public $search_parent;
+    public $observations;
+    public $stock_initial;
 
     public function mount($item_id){
         $this->categories = InvCategory::where('status',true)->get();
@@ -63,11 +68,12 @@ class ItemPartCreate extends Component
 
     public function save(){
         $this->validate([
-            'name' => 'required|min:3|max:255',
-            'description' => 'required',
-            'amount' => 'required|integer',
-            'weight' => 'required|between:0,9999.99',
-            'images.*' => 'image|max:1024'
+            'name'          => 'required|min:3|max:255',
+            'description'   => 'required',
+            'amount'        => 'required|integer',
+            'weight'        => 'required|between:0,9999.99',
+            'images.*'      => 'image|max:1024',
+            'stock_initial' => 'required'
         ]);
 
         $this->item_save = InvItem::create([
@@ -87,11 +93,28 @@ class ItemPartCreate extends Component
             'person_create'=> Auth::user()->person_id
         ]);
 
+        InvKardex::create([
+            'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+            'establishment_id'  => 1,
+            'location_id'       => 1,
+            'item_id'           => $this->item_save->id,
+            'quantity'          => $this->stock_initial,
+            'detail'            => 'stock inicial'
+        ]);
+
         //Update weight parent
         $weight_parent = $this->search_parent->weight + ($this->weight * $this->amount);
         $parent_item = $this->search_parent->update([
             'weight' => $weight_parent,
             'person_edit' => Auth::user()->person_id
+        ]);
+
+        InvItemPart::create([
+            'item_id'           => $this->id_item,
+            'part_id'           => $this->item_save->id,
+            'state'             => true,
+            'quantity'          => $this->amount,
+            'observations'      => $this->observations
         ]);
 
         $activity = new Activity;
