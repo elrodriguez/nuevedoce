@@ -25,7 +25,7 @@ class CreateSerLoadOrderDetailsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('load_order_id')->references('id')->on('ser_load_orders');
-            $table->foreign('load_order_detail_id')->references('id')->on('ser_odt_request_details');
+            $table->foreign('odt_request_detail_id')->references('id')->on('ser_odt_request_details');
             $table->foreign('odt_request_id')->references('odt_request_id')->on('ser_odt_request_details');
             $table->foreign('item_id')->references('item_id')->on('ser_odt_request_details');
         });
