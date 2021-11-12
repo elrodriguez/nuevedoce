@@ -39,14 +39,11 @@
                 <tr>
                     <th class="text-center">#</th>
                     <th class="text-center">@lang('transferservice::labels.lbl_actions')</th>
-                    <th>@lang('transferservice::labels.lbl_description')</th>
-                    <th>@lang('transferservice::labels.lbl_company')</th>
-                    <th>@lang('transferservice::labels.lbl_supervisor')</th>
-                    <th>@lang('transferservice::labels.lbl_customer')</th>
-                    <th>@lang('transferservice::labels.lbl_local')</th>
-                    <th>@lang('transferservice::labels.lbl_wholesaler')</th>
-                    <th>@lang('transferservice::labels.lbl_event_date')</th>
-                    <th class="text-center">{{ __('setting::labels.state') }}</th>
+                    <th>@lang('transferservice::labels.lbl_code')</th>
+                    <th>@lang('transferservice::labels.lbl_upload_date')</th>
+                    <th>@lang('transferservice::labels.lbl_charging_time')</th>
+                    <th>@lang('transferservice::labels.lbl_vehicle')</th>
+                    <th>@lang('transferservice::labels.lbl_license_plate')</th>
                 </tr>
                 </thead>
                 <tbody class="">
@@ -59,34 +56,34 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('serviciodetraslados_solicitudes_odt_editar')
-                                        <a href="{{ route('service_odt_requests_edit',$loadorder->id) }}" class="dropdown-item">
+                                    @can('serviciodetraslados_orden_carga')
+                                        <a href="{{ route('service_load_order_edit', $loadorder->id) }}" class="dropdown-item">
                                             <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
                                         </a>
                                     @endcan
-                                    @can('serviciodetraslados_solicitudes_odt_eliminar')
+                                        <a href="{{ route('service_load_order_pdf', $loadorder->id) }}" class="dropdown-item text-success">
+                                            <i class="fal print mr-1"></i>@lang('transferservice::buttons.btn_print_oc')
+                                        </a>
+                                    @can('serviciodetraslados_orden_carga_eliminar')
                                         <div class="dropdown-divider"></div>
+                                        @if($loadorder->departure_date == null or $loadorder->departure_date == '')
                                         <button onclick="confirmDelete({{ $loadorder->id }})" type="button" class="dropdown-item text-danger">
                                             <i class="fal fa-trash-alt mr-1"></i>@lang('transferservice::buttons.btn_delete')
                                         </button>
+                                        @else
+                                        <button onclick="confirmNoDelete({{ $loadorder->id }})" type="button" class="dropdown-item text-danger">
+                                            <i class="fal fa-trash-alt mr-1"></i>@lang('transferservice::buttons.btn_delete')
+                                        </button>
+                                        @endif
                                     @endcan
                                 </div>
                             </div>
                         </td>
-                        <td class="align-middle">{{ $loadorder->description }}</td>
-                        <td class="align-middle">{{ $loadorder->name_company }}</td>
-                        <td class="align-middle">{{ $loadorder->name_employee }}</td>
-                        <td class="align-middle">{{ $loadorder->name_customer }}</td>
-                        <td class="align-middle">{{ $loadorder->name_local }}</td>
-                        <td class="align-middle">{{ $loadorder->name_wholesaler }}</td>
-                        <td class="align-middle text-center">{{ date('d-m-Y', strtotime($loadorder->event_date)) }}</td>
-                        <td class="text-center align-middle">
-                            @if($loadorder->state)
-                                <span class="badge badge-success">{{ __('transferservice::labels.lbl_active') }}</span>
-                            @else
-                                <span class="badge badge-danger">{{ __('transferservice::labels.lbl_inactive') }}</span>
-                            @endif
-                        </td>
+                        <td class="align-middle">{{ $loadorder->uuid }}</td>
+                        <td class="align-middle">{{ date('d/m/Y', strtotime($loadorder->upload_date)) }}</td>
+                        <td class="align-middle">{{ $loadorder->charging_time }}</td>
+                        <td class="align-middle">{{ $loadorder->name }}</td>
+                        <td class="align-middle">{{ $loadorder->license_plate }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -97,6 +94,17 @@
         </div>
     </div>
     <script type="text/javascript">
+        function confirmNoDelete(){
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_error')}}!</span>",
+                message: "<span><strong>{{__('transferservice::labels.lbl_warning')}}... </strong>{{__('transferservice::messages.msg_no_delete')}}</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        }
         function confirmDelete(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
@@ -122,14 +130,14 @@
                 callback: function(result)
                 {
                     if(result){
-                        @this.deleteOdtRequest(id);
+                        @this.deleteLoadOrder(id);
                     }
                 }
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
-        document.addEventListener('ser-odtrequests-delete', event => {
+        document.addEventListener('ser-load-order-delete', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_success')}}!</span>",

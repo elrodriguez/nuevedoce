@@ -13,5 +13,7 @@ return [
     'btn_not'           => 'Not',
     'btn_ok'            => 'Ok',
     'btn_crew'          => 'Crew',
-    'btn_assets'        => 'Assets'
+    'btn_assets'        => 'Assets',
+    'btn_add_items_odt' => 'Add Items ODT',
+    'btn_print_oc'      => 'Print OC'
 ];

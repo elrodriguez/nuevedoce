@@ -27,7 +27,7 @@ class CreateSerOdtRequestsTable extends Migration
             $table->string('file')->nullable()->comment('Archivo Ajunto img|pdf');
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
-            $table->char('state',1)->default('P')->comment('P=pendiente,A=atendido,R=rechazado');
+            $table->char('state',1)->default('P')->comment('P=pendiente,O= Orden de Carga, A=atendido,R=rechazado');
             $table->string('backus_id')->nullable()->comment('elcodigo que backus o la empresa solicitante maneja');
             $table->string('internal_id')->nullable()->comment('conformado por el año y un correlativo 2021000001');
             $table->timestamps();

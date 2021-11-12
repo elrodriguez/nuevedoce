@@ -14,14 +14,17 @@ class SerLoadOrder extends Model
         'vehicle_id',
         'charge_maximum',
         'charge_weight',
+        'upload_date',
+        'charging_time',
         'departure_date',
         'departure_time',
         'return_date',
         'return_time',
+        'additional_information',
         'person_create',
         'person_edit'
     ];
-    
+
     protected static function newFactory()
     {
         return \Modules\TransferService\Database\factories\SerLoadOrderFactory::new();

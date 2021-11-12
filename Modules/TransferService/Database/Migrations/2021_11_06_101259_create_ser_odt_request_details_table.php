@@ -18,6 +18,7 @@ class CreateSerOdtRequestDetailsTable extends Migration
             $table->unsignedBigInteger('odt_request_id')->nullable()->comment('Id de la solicitud');
             $table->unsignedBigInteger('item_id')->nullable()->comment('Id del Item');
             $table->integer('amount')->default(0);
+            $table->char('state',1)->default('P')->comment('P=pendiente,O= Orden de Carga, A=atendido,R=rechazado');
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();

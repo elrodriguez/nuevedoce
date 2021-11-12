@@ -15,14 +15,17 @@ class CreateSerLoadOrdersTable extends Migration
     {
         Schema::create('ser_load_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('uuid')->unique();
+            $table->string('uuid', 8)->unique();
             $table->unsignedBigInteger('vehicle_id');
             $table->decimal('charge_maximum',12,2)->default(0);
             $table->decimal('charge_weight',12,2)->default(0);
-            $table->date('departure_date');
-            $table->date('departure_time')->nullable();
-            $table->date('return_date')->nullable();
-            $table->date('return_time')->nullable();
+            $table->date('upload_date')->nullable()->comment('Fecha de carga');
+            $table->time('charging_time')->nullable()->comment('Hora de carga');
+            $table->date('departure_date')->nullable()->comment('Fecha de Salida');
+            $table->time('departure_time')->nullable()->comment('Hora de Salida');
+            $table->date('return_date')->nullable()->comment('Fecha de Retorno');
+            $table->time('return_time')->nullable()->comment('Hora de Retorno');
+            $table->string('additional_information')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();

@@ -1,6 +1,7 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-body p-0">
+            @if($this->departure_date == null or $this->departure_date == '')
             <div class="form-row p-3">
                 <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-paper-plane"></i> @lang('transferservice::labels.lbl_odtlisting_detail'):</h2>
                 <br>
@@ -10,21 +11,21 @@
                     <div class="table-responsive">
                         <table class="table m-0" id="tbl_odtpending">
                             <thead>
-                                <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-center">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input pending_item_odt" id="chkPending" onclick="checkAllMaestro($(this), 'tbl_odtpending', 1); ">
-                                            <label class="custom-control-label" for="chkPending"></label>
-                                        </div>
-                                    </th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_code') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_event') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_customer') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_item') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
-                                </tr>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input pending_item_odt" id="chkPending" onclick="checkAllMaestro($(this), 'tbl_odtpending', 1); ">
+                                        <label class="custom-control-label" for="chkPending"></label>
+                                    </div>
+                                </th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_code') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_event') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_customer') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_item') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
                             @foreach($odt_pending as $key => $odt)
@@ -60,12 +61,20 @@
                     <br>
                 </div>
             </div>
+            @endif
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row p-3">
                     <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-people-carry"></i> @lang('transferservice::labels.lbl_load_order'):</h2>
                     <br>
                 </div>
                 <div class="form-row p-3">
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="uuid">@lang('transferservice::labels.lbl_code') <span class="text-danger">*</span> </label>
+                        <input wire:model.defer="uuid" id="uuid" type="text" class="form-control" readonly />
+                        @error('uuid')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="vehicle_type_id">@lang('transferservice::labels.lbl_vehicle') <span class="text-danger">*</span> </label>
                         <select wire:model="vehicle_id" wire:model.defer wire:change="selWeight" id="vehicle_id" class="custom-select" required="">
@@ -78,10 +87,17 @@
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label" for="vehicle_type_id">@lang('transferservice::labels.lbl_maximum_vehicle_load') <span class="text-danger">*</span> </label>
-                        <input wire:model.defer="vehicle_load" type="text" class="form-control" readonly />
-                        @error('vehicle_load')
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="charge_maximum">@lang('transferservice::labels.lbl_maximum_vehicle_load') <span class="text-danger">*</span> </label>
+                        <input wire:model.defer="charge_maximum" id="charge_maximum" type="text" class="form-control" readonly />
+                        @error('charge_maximum')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="charge_weight">@lang('transferservice::labels.lbl_charge_weight') <span class="text-danger">*</span> </label>
+                        <input wire:model.defer="charge_weight" id="charge_weight" type="text" class="form-control" readonly />
+                        @error('charge_weight')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
@@ -99,8 +115,8 @@
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label" for="count_items">@lang('transferservice::labels.lbl_amount') @lang('transferservice::labels.lbl_item')<span class="text-danger">*</span> </label>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="count_items">@lang('transferservice::labels.lbl_amount') @lang('transferservice::labels.lbl_item') <span class="text-danger">*</span> </label>
                         <input wire:model.defer="count_items" type="text" class="form-control" id="count_items" readonly />
                         @error('count_items')
                         <div class="invalid-feedback-2">{{ $message }}</div>
@@ -119,16 +135,16 @@
                         <div class="table-responsive">
                             <table class="table m-0" id="tbl_addOdtPending">
                                 <thead>
-                                    <tr>
-                                        <th class="text-center">#</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_actions') }}</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_code') }}</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_event') }}</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_customer') }}</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_item') }}</th>
-                                        <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
-                                    </tr>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_actions') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_code') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_event') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_customer') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_item') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($oc_registers as $key => $oc_register)
@@ -141,9 +157,15 @@
                                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                                         <td class="text-center tdw-50 align-middle">
                                             <div class="btn-group">
-                                                <button wire:click="deleteItemODT({{ $oc_register->id }})" type="button" class="dropdown-item text-danger">
+                                                @if($this->departure_date == null or $this->departure_date == '')
+                                                <button onclick="confirmDelete({{ $oc_register->id }})" type="button" class="dropdown-item text-danger">
                                                     <i class="fal fa-trash-alt mr-1"></i>
                                                 </button>
+                                                @else
+                                                <button type="button" class="dropdown-item text-danger">
+                                                    <i class="fal fa-trash-alt mr-1"></i>
+                                                </button>
+                                                @endif
                                             </div>
                                         </td>
                                         <td class="align-middle">{{ $oc_register->internal_id }}</td>
@@ -163,7 +185,9 @@
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
             <a href="{{ route('service_load_order_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('transferservice::buttons.btn_list')</a>
+            @if($this->departure_date == null or $this->departure_date == '')
             <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('transferservice::buttons.btn_save')</button>
+            @endif
         </div>
     </div>
     <script type="text/javascript">
@@ -196,7 +220,7 @@
                 });
                 box.find('.modal-content').css({'background-color': 'rgba(239,56,32,0.5)'});
             }else{
-                @this.saveItemsODT(registros);
+            @this.saveItemsODT(registros);
                 $('.pending_item_odt').prop('checked', false);
             }
         }
@@ -239,6 +263,50 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(8,187,1,0.5)'});
         });
+        //Para Eliminar
+        function confirmDelete(id){
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
+            let box = bootbox.confirm({
+                title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('transferservice::messages.msg_0001')}}",
+                message: "<span><strong>{{__('transferservice::labels.lbl_warning')}}: </strong> {{__('transferservice::messages.msg_0002')}}</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons:
+                    {
+                        confirm:
+                            {
+                                label: '{{ __('transferservice::buttons.btn_yes') }}',
+                                className: 'btn-danger shadow-0'
+                            },
+                        cancel:
+                            {
+                                label: '{{ __('transferservice::buttons.btn_not') }}',
+                                className: 'btn-default'
+                            }
+                    },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function(result) {
+                    if(result){
+                        @this.deleteItemODT(id);
+                    }
+                }
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
+            box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
+        }
+        document.addEventListener('ser-load-order-item-delete', event => {
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_success')}}!</span>",
+                message: "<span><strong>{{__('transferservice::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        });
+        //Fin Eliminar
 
         document.addEventListener('livewire:load', function () {
             $('.pending_item_odt').prop('checked', false);
@@ -248,7 +316,7 @@
 
                 },
                 "oncomplete": function (){
-                    @this.set('charging_time',this.value);
+                @this.set('charging_time',this.value);
                 }
             });
 
@@ -264,7 +332,7 @@
                 language: "es",
                 autoclose: true
             }).on('hide', function(e){
-                @this.set('upload_date',this.value);
+            @this.set('upload_date',this.value);
             });
         });
     </script>

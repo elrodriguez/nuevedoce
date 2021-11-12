@@ -13,5 +13,7 @@ return [
     'btn_not'           => 'No',
     'btn_ok'            => 'Ok',
     'btn_crew'          => 'Tripulación',
-    'btn_assets'        => 'Activos'
+    'btn_assets'        => 'Activos',
+    'btn_add_items_odt' => 'Agregar Items ODT',
+    'btn_print_oc'      => 'Imprimir OC'
 ];

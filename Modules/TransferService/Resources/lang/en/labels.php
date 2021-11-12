@@ -102,4 +102,11 @@ return [
     'lbl_amount'        => 'Amount',
     'lbl_error'         => 'Error',
     'lbl_went_wrong'    => 'Went Wrong',
+    'lbl_odtlisting_detail'    => 'List of ODTs and Pending Detail',
+    'lbl_code'          => 'Code',
+    'lbl_item'          => 'Item',
+    'lbl_upload_date'   => 'Upload Date',
+    'lbl_charging_time' => 'Charging Time',
+    'lbl_attention'     => 'Atención',
+    'lbl_charge_weight' => 'Charge Weight',
 ];
