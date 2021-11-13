@@ -3,17 +3,23 @@
 namespace Modules\Inventory\Http\Livewire\Item;
 
 use Elrod\UserActivity\Activity;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Inventory\Entities\InvItem;
-
+use Modules\Inventory\Imports\ItemsImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Livewire\WithFileUploads;
 class ItemList extends Component
 {
     public $show;
     public $search;
+    public $file;
+    public $loading_import = false;
 
     use WithPagination;
+    use WithFileUploads;
     protected $paginationTheme = 'bootstrap';
 
     public function mount(){
@@ -45,7 +51,6 @@ class ItemList extends Component
                 'inv_items.long',
                 'inv_items.number_parts',
                 'inv_items.status',
-                'inv_items.item_id',
                 'inv_categories.description AS name_category',
                 'inv_brands.description AS name_brand'
             )
@@ -70,5 +75,19 @@ class ItemList extends Component
             $res = 'error';
         }
         $this->dispatchBrowserEvent('set-item-delete', ['res' => $res]);
+    }
+
+    public function import(){
+        try {
+
+            if(Excel::import(new ItemsImport, $this->file)) {
+                $this->loading_import = true;
+            } else {
+                $this->loading_import = false;
+            }
+        } catch (Exception $e) {
+            $this->loading_import = false;
+            dd($e->getMessage());
+        }
     }
 }

@@ -16,7 +16,7 @@ class SeedInvCategoriesTableSeeder extends Seeder
     { 
 
         DB::table('inv_categories')->insert([
-            ['description' => 'Estrados','status' => true],
+            ['description' => 'Estrado','status' => true],
             ['description' => 'Kiosko','status' => true],
             ['description' => 'Kiosko','status' => true],
             ['description' => 'Toldo','status' => true],

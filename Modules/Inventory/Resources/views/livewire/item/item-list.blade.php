@@ -20,13 +20,16 @@
                         </button>
                     @else
                         <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
-                            <i wire:loading.class="spinner-border spinner-border-sm" wire:loading.remove.class="fal fa-search" class="fal fa-search"></i>
+                            <i wire:loading wire:target="itemSearch" wire:loading.class="spinner-border spinner-border-sm" wire:loading.remove.class="fal fa-search" class="fal fa-search"></i>
                         </span>
                     @endif
                 </div>
                 <input wire:keydown.enter="itemSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="@lang('inventory::labels.lbl_type_here')">
                 <div class="input-group-append">
                     <button wire:click="itemSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
+                    @can('inventario_items_importar')
+                        <button onclick="openModalImport()" type="button" class="btn btn-warning waves-effect waves-themed">{{ __('labels.to_import') }}</button>
+                    @endcan
                     @can('inventario_items_nuevo')
                         <a href="{{ route('inventory_item_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('inventory::labels.btn_new')</a>
                     @endcan
@@ -118,6 +121,62 @@
             <div class="ml-auto">{{ $items->links() }}</div>
         </div>
     </div>
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalImportLabel">{{ __('labels.to_import') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-primary alert-dismissible mb-0">
+                        <div class="d-flex flex-start w-100 ">
+                            <div class="mr-2 hidden-md-down">
+                                <span class="icon-stack icon-stack-lg">
+                                    <i class="base base-6 icon-stack-3x opacity-100 color-primary-500"></i>
+                                    <i class="base base-10 icon-stack-2x opacity-100 color-primary-300 fa-flip-vertical"></i>
+                                    <i class="fal fa-info icon-stack-1x opacity-100 color-white"></i>
+                                </span>
+                            </div>
+                            <div class="d-flex flex-fill">
+                                <div class="flex-fill">
+                                    <span class="h5">Cómo funciona</span>
+                                    <br>
+                                    Para importar tiene que tener el <a href="#" target="_blank">formato</a> correcto y deberá ser un archivo excel
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <div class="input-group">
+                            <div class="custom-file" wire:ignore>
+                                <input wire:model.defer="file" type="file" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03">
+                                <label class="custom-file-label" for="inputGroupFile03">Elija el archivo</label>
+                            </div>
+                        </div>
+                    </div>
+                    @if($loading_import)
+                        <div class="alert alert-info mt-3" role="alert">
+                            <strong>{{ __('labels.congratulations') }}</strong> {{ __('labels.file_has_been_uploaded_successfully') }}
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                    <button wire:loading.remove wire:loading.attr="disabled" wire:click="import" type="button" class="btn btn-primary waves-effect waves-themed">
+                        {{ __('labels.save') }}
+                    </button>
+                    <button style="display:none" wire:target="import" wire:loading class="btn btn-primary waves-effect waves-themed" type="button" disabled="">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        {{ __('labels.aca_loading') }}...
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         function confirmDelete(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
@@ -144,7 +203,7 @@
                 callback: function(result)
                 {
                     if(result){
-                    @this.deleteItem(id)
+                        @this.deleteItem(id)
                     }
                 }
             });
@@ -176,5 +235,9 @@
                 box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
             }
         });
+        function openModalImport(){
+            @this.set('loading_import',false);
+            $('#modalImport').modal('show');
+        }
     </script>
 </div>

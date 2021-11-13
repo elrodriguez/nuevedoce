@@ -24,7 +24,6 @@ class CreateInvItemsTable extends Migration
             $table->decimal('long', 10, 2)->nullable();
             $table->integer('number_parts')->nullable();
             $table->boolean('status')->default(true);
-            $table->unsignedBigInteger('item_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();

@@ -18,8 +18,8 @@ class InventoryDatabaseSeeder extends Seeder
 
         $this->call([
             SeedModulePermissionsTableSeeder::class,
-            SeedInvCategoriesTableSeeder::class,
-            SeedInvBrandsTableSeeder::class 
+            //SeedInvCategoriesTableSeeder::class,
+            //SeedInvBrandsTableSeeder::class 
         ]);
     }
 }

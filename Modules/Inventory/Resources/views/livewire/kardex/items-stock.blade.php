@@ -27,7 +27,7 @@
                 <select class="custom-select">
                     <option value="">Seleccionar</option>
                     @foreach($establishments as $establishment)
-                    <option value="{{ $establishment->id }}">{{ $establishment->name }}</option>
+                    <option value="{{ $establishment->id }}">{{ $establishment->description }}</option>
                     @endforeach
                 </select>
                 <input wire:keydown.enter="itemPartsSearch" wire:model.defer="search" type="text" class="form-control" placeholder="@lang('inventory::labels.lbl_type_here')">
