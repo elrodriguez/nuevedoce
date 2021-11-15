@@ -11,7 +11,7 @@
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="description">@lang('transferservice::labels.lbl_code_backus') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="description">@lang('transferservice::labels.lbl_code_document') <span class="text-danger">*</span> </label>
                         <input wire:model="backus_id" type="text" class="form-control" id="backus_id" required="">
                         @error('backus_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>

@@ -1,10 +1,9 @@
 <div>
     <div class="card mb-g rounded-top">
+        <div class="card-header">
+            <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-paper-plane"></i> @lang('transferservice::labels.lbl_odtlisting_detail'):</h2>
+        </div>
         <div class="card-body p-0">
-            <div class="form-row p-3">
-                <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-paper-plane"></i> @lang('transferservice::labels.lbl_odtlisting_detail'):</h2>
-                <br>
-            </div>
             <div class="form-row">
                 <div class="col-md-12 mb-3">
                     <div class="table-responsive">
@@ -60,11 +59,14 @@
                     <br>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="card mb-g rounded-top">
+        <div class="card-header">
+            <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-people-carry"></i> @lang('transferservice::labels.lbl_load_order'):</h2>
+        </div>
+        <div class="card-body p-0">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
-                <div class="form-row p-3">
-                    <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-people-carry"></i> @lang('transferservice::labels.lbl_load_order'):</h2>
-                    <br>
-                </div>
                 <div class="form-row p-3">
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="vehicle_type_id">@lang('transferservice::labels.lbl_vehicle') <span class="text-danger">*</span> </label>

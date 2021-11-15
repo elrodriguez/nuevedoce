@@ -109,4 +109,10 @@ return [
     'lbl_charging_time' => 'Charging Time',
     'lbl_attention'     => 'Atención',
     'lbl_charge_weight' => 'Charge Weight',
+    'lbl_driver'        => 'Driver',
+    'lbl_date'          => 'Date',
+    'lbl_mobile'        => 'Mobile',
+    'lbl_dni'           => 'DNI',
+    'lbl_load_order_detail'=> 'Loading Order Detail',
+    'lbl_code_document' => 'Document code'
 ];

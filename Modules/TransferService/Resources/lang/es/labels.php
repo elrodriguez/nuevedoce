@@ -113,4 +113,6 @@ return [
     'lbl_mobile'        => 'Celular',
     'lbl_dni'           => 'DNI',
     'lbl_load_order_detail'=> 'Detalle de Orden de Carga',
+    'lbl_code_document' => 'Código documento',
+    
 ];

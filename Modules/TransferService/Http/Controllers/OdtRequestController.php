@@ -55,10 +55,10 @@ class OdtRequestController extends Controller
 
     public function autocompleteItems(Request $request){
         $search = $request->input('q');
-        $customers    = InvItem::where('status', true)
+        $customers = InvItem::where('status', true)
             ->select(
                 'id AS value',
-                'name AS text'
+                DB::raw('CONCAT(name," ",description) AS text')
             )
             ->where('part','=','0')
             ->where('inv_items.name','like','%'.$search.'%')

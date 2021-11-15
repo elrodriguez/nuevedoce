@@ -11,6 +11,7 @@ use Modules\Inventory\Entities\InvCategory;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemPart;
 use Modules\Inventory\Entities\InvKardex;
+use Modules\Inventory\Entities\InvModel;
 
 class ItemsImport implements ToModel
 {
@@ -22,6 +23,7 @@ class ItemsImport implements ToModel
             if(strtolower($row[0]) == 'familia' && strtolower($row[1]) == 'subfamilia'){
 
             }else{
+                $model_id           = null;
                 $family_id          = null;
                 $asset_id           = null;
                 $brand_id           = null;
@@ -46,6 +48,8 @@ class ItemsImport implements ToModel
                 
                 $family = InvCategory::where('description','=',$row[0])->first();
 
+                $model  = InvModel::where('description','=',$row[2])->first();
+
                 $asset  = InvItem::where('name','=',$row[1])->where('description','=',$row[2])->first();
 
                 if($family){
@@ -59,6 +63,18 @@ class ItemsImport implements ToModel
 
                     $family_id = $family_new->id;
                 }
+
+                if($model){
+                    $model_id = $model->id;
+                }else{
+                    
+                    $model_new = InvModel::create([
+                        'description'   => ($row[2]?$row[2]:'SIN MODELO')
+                    ]);
+
+                    $model_id = $model_new->id;
+                }
+
                 if($asset){
                     $asset_id = $asset->id;
                     
@@ -75,7 +91,8 @@ class ItemsImport implements ToModel
                         'status'        => true,
                         'brand_id'      => $brand_id,
                         'category_id'   => $family_id,
-                        'person_create' => Auth::user()->person_id
+                        'person_create' => Auth::user()->person_id,
+                        'model_id'      => $model_id
                     ]);
                     
                     InvKardex::create([
@@ -132,7 +149,7 @@ class ItemsImport implements ToModel
                 $exists = InvItemPart::where('item_id',$asset_id)
                             ->where('part_id',$part_id)
                             ->exists();
-                            
+
                 if(!$exists){
                     InvItemPart::create([
                         'item_id'       => $asset_id,
