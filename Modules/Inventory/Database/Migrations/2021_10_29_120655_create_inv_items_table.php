@@ -22,6 +22,8 @@ class CreateInvItemsTable extends Migration
             $table->decimal('width', 10, 2)->nullable();
             $table->decimal('high', 10, 2)->nullable();
             $table->decimal('long', 10, 2)->nullable();
+            $table->decimal('purchase_price', 10, 2)->nullable();
+            $table->decimal('sale_price', 10, 2)->nullable();
             $table->integer('number_parts')->nullable();
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('brand_id')->nullable();

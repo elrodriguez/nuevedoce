@@ -18,6 +18,8 @@ class InvItem extends Model
         'width',
         'high',
         'long',
+        'purchase_price',
+        'sale_price',
         'number_parts',
         'status',
         'brand_id',
