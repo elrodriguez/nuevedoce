@@ -49,9 +49,9 @@ class LoadOrderController extends Controller
             ->join('people', 'ser_customers.person_id', 'people.id')
             ->join('people as wholesales', 'ser_odt_requests.wholesaler_id', 'wholesales.id')
             ->join('inv_items', 'ser_load_order_details.item_id', 'inv_items.id')
-            ->join('ser_vehicle_crewmen', 'ser_vehicle_crewmen.vehicle_id', 'ser_vehicles.id')
-            ->join('per_employees', 'ser_vehicle_crewmen.employee_id', 'per_employees.id')
-            ->join('people as vehicle_crewmen', 'per_employees.person_id', 'vehicle_crewmen.id')
+            ->leftJoin('ser_vehicle_crewmen', 'ser_vehicle_crewmen.vehicle_id', 'ser_vehicles.id')
+            ->leftJoin('per_employees', 'ser_vehicle_crewmen.employee_id', 'per_employees.id')
+            ->leftJoin('people as vehicle_crewmen', 'per_employees.person_id', 'vehicle_crewmen.id')
             ->select(
                 'ser_load_orders.uuid',
                 'ser_load_orders.upload_date',

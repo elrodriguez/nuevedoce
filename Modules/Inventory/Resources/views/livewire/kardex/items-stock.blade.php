@@ -1,7 +1,7 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-header">
-            <div class="input-group input-group-multi-transition">
+            <div class="input-group input-group-multi-transition" wire:ignore>
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-default dropdown-toggle waves-effect waves-themed" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $show }}</button>
                     <div class="dropdown-menu" style="">
@@ -24,54 +24,72 @@
                         </span>
                     @endif
                 </div>
-                <select class="custom-select">
+                <select wire:model.defer="location_id" class="custom-select">
                     <option value="">Seleccionar</option>
                     @foreach($establishments as $establishment)
                     <option value="{{ $establishment->id }}">{{ $establishment->description }}</option>
                     @endforeach
                 </select>
-                <input wire:keydown.enter="itemPartsSearch" wire:model.defer="search" type="text" class="form-control" placeholder="@lang('inventory::labels.lbl_type_here')">
+                <input wire:model.defer="search" type="text" class="form-control autoCompleteItem" data-url="{{ route('inventory_kardex_items_search') }}" autocomplete="off" placeholder="@lang('inventory::labels.lbl_type_here')">
                 <input type="text" class="form-control" id="custom-range" placeholder="Rango de fechas">
                 <div class="input-group-append">
-                    <button wire:click="itemPartsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
+                    <button wire:click="getItems" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
                 </div>
             </div>
         </div>
         <div class="card-body p-0">
             <table class="table m-0">
                 <thead>
-                <tr>
-                    <th class="text-center">#</th>
-                    <th>@lang('inventory::labels.name')</th>
-                    <th>@lang('inventory::labels.description')</th>
-                    <th>@lang('inventory::labels.lbl_amount')</th>
-                    <th>@lang('inventory::labels.weight')</th>
-                    <th>@lang('inventory::labels.width')</th>
-                    <th>@lang('inventory::labels.long')</th>
-                    <th>@lang('inventory::labels.high')</th>
-                    <th>@lang('inventory::labels.status')</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>{{ __('labels.product') }}</th>
+                        <th>{{ __('labels.date') }}</th>
+                        <th>Tipo transacción</th>
+                        <th>{{ __('labels.number') }}</th>
+                        <th class="text-center">{{ __('labels.f_issuance') }}</th>
+                        <th class="text-center">{{ __('labels.entry_kardex') }}</th>
+                        <th class="text-center">{{ __('labels.exit_kardex') }}</th>
+                        <th class="text-center">Saldo</th>
+                    </tr>
                 </thead>
                 <tbody class="">
-                @foreach($items as $key => $item)
+                    @foreach ($items as $key => $item)
                     <tr>
-                        <td class="text-center align-middle">{{ $key + 1 }}</td>
-                        <td class="align-middle">{{ $item->name }}</td>
-                        <td class="align-middle">{{ $item->description }}</td>
-                        <td class="text-center align-middle">{{ $item->amount }}</td>
-                        <td class="align-middle">{{ $item->weight }}</td>
-                        <td class="align-middle">{{ $item->width }}</td>
-                        <td class="align-middle">{{ $item->long }}</td>
-                        <td class="align-middle">{{ $item->high }}</td>
+                        <td class="align-middle">{{ $key+1 }}</td>
+                        <td class="align-middle">{{ $item->name.' '.$item->description }}</td>
+                        <td class="align-middle text-center">{{ $item->created_at }}</td>
                         <td class="align-middle">
-                            @if($item->status)
-                                <span class="badge badge-success">{{ __('inventory::labels.active') }}</span>
+                            @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
+                                @if ($item->quantity>0)
+                                    {{ __('Compra') }}
+                                @else
+                                    {{ __('Anulación Compra') }}
+                                @endif
                             @else
-                                <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
+                                {{ $item->detail }} 
                             @endif
                         </td>
+                        <td class="align-middle">{{ $item->number }}</td>
+                        <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
+                            @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
+                                @if ($item->quantity>0)
+                                    <td class="align-middle text-right">{{ $item->quantity }}</td>
+                                    <td class="align-middle text-right">-</td>
+                                @else
+                                    <td class="align-middle text-right">-</td>
+                                    <td class="align-middle text-right">{{ $item->quantity }}</td>
+                                @endif
+                            @else
+                                <td class="align-middle text-right">{{ $item->quantity }}</td>
+                                <td class="align-middle text-right">-</td>
+                            @endif
+                            @php
+                                $balance = $balance + $item->quantity
+                            @endphp
+                        <td class="align-middle text-right">{{ number_format($balance, 2, '.', '') }}</td>
                     </tr>
-                @endforeach
+    
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -88,8 +106,14 @@
                 },
                 opens: 'left'
             }, function(start, end, label){
-                @this.set('start',start);
-                @this.set('end',end);
+                console.log(end.format('YYYY-MM-DD'))
+                @this.set('start',start.format('YYYY-MM-DD'));
+                @this.set('end',end.format('YYYY-MM-DD'));
+        });
+    });
+    document.addEventListener('livewire:load', function () {
+        $('.autoCompleteItem').autoComplete().on('autocomplete.select', function (evt, item) {
+            @this.set('item_id',item.value);
         });
     });
     </script>
