@@ -25,7 +25,8 @@ class InvItem extends Model
         'brand_id',
         'category_id',
         'person_create',
-        'person_edit'
+        'person_edit',
+        'model_id'
     ];
 
     protected static function newFactory()

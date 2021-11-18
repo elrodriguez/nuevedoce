@@ -42,22 +42,28 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>{{ __('labels.category') }}</th>
+                        <th>{{ __('labels.brand') }}</th>
+                        <th>{{ __('labels.model') }}</th>
                         <th>{{ __('labels.product') }}</th>
                         <th>{{ __('labels.date') }}</th>
-                        <th>Tipo transacción</th>
+                        <th>{{ __('labels.transaction_type') }}</th>
                         <th>{{ __('labels.number') }}</th>
                         <th class="text-center">{{ __('labels.f_issuance') }}</th>
                         <th class="text-center">{{ __('labels.entry_kardex') }}</th>
                         <th class="text-center">{{ __('labels.exit_kardex') }}</th>
-                        <th class="text-center">Saldo</th>
+                        <th class="text-center">{{ __('labels.balance') }}</th>
                     </tr>
                 </thead>
                 <tbody class="">
                     @foreach ($items as $key => $item)
                     <tr>
                         <td class="align-middle">{{ $key+1 }}</td>
+                        <td class="align-middle">{{ $item->category_name }}</td>
+                        <td class="align-middle">{{ $item->brand_name }}</td>
+                        <td class="align-middle">{{ $item->model_name }}</td>
                         <td class="align-middle">{{ $item->name.' '.$item->description }}</td>
-                        <td class="align-middle text-center">{{ $item->created_at }}</td>
+                        <td class="align-middle">{{ $item->date_of_issue }}</td>
                         <td class="align-middle">
                             @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
                                 @if ($item->quantity>0)
@@ -69,7 +75,7 @@
                                 {{ $item->detail }} 
                             @endif
                         </td>
-                        <td class="align-middle">{{ $item->number }}</td>
+                        <td class="align-middle">{{ $item->purchase_number }}</td>
                         <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
                             @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
                                 @if ($item->quantity>0)

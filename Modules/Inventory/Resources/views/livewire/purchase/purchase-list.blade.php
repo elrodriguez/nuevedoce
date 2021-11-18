@@ -39,11 +39,12 @@
                 <tr>
                     <th class="text-center">#</th>
                     <th class="text-center">@lang('inventory::labels.lbl_actions')</th>
-                    <th class="text-center">@lang('inventory::labels.lbl_document_type')</th>
-                    <th class="text-center">@lang('inventory::labels.lbl_serie')</th>
-                    <th class="text-center">@lang('inventory::labels.lbl_number')</th>
+                    <th >@lang('inventory::labels.lbl_document_type')</th>
+                    <th class="text-center">@lang('labels.broadcast_date')</th>
+                    <th >@lang('inventory::labels.lbl_serie')</th>
+                    <th >@lang('inventory::labels.lbl_number')</th>
                     <th class="text-center">@lang('inventory::labels.lbl_total')</th>
-                    <th class="text-center">@lang('inventory::labels.lbl_supplier')</th>
+                    <th >@lang('inventory::labels.lbl_supplier')</th>
                 </tr>
                 </thead>
                 <tbody class="">
@@ -71,9 +72,10 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $purchase->name_document }}</td>
+                        <td class="align-middle text-center">{{ $purchase->date_of_issue }}</td>
                         <td class="align-middle">{{ $purchase->serie }}</td>
                         <td class="align-middle">{{ $purchase->number }}</td>
-                        <td class="align-middle">{{ $purchase->total }}</td>
+                        <td class="align-middle text-right">{{ $purchase->total }}</td>
                         <td class="align-middle">{{ $purchase->name_supplier }}</td>
                     </tr>
                 @endforeach

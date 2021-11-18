@@ -601,5 +601,8 @@ return [
     'message' => 'Mensaje',
     'about' => 'Sobre',
     'license' => 'Licencia',
-    'documentation' => 'Documentación'
+    'documentation' => 'Documentación',
+    'model' => 'Modelo',
+    'transaction_type' => 'Tipo transacción',
+    
 ];

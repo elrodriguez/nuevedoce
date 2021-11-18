@@ -38,7 +38,7 @@ class PurchaseCreate extends Component
     public $store_id;
 
     public function mount(){
-        $this->document_types = DocumentType::where('active',true)
+        $this->document_types = DocumentType::whereIn('id',['01','03','GU75'])
             ->select(
                 'id',
                 'description'
@@ -55,7 +55,7 @@ class PurchaseCreate extends Component
         $this->establishments = SetEstablishment::where('state',true)
             ->select(
                 'id',
-                'observation'
+                'name'
             )
             ->get();
 
@@ -112,7 +112,7 @@ class PurchaseCreate extends Component
                 ]);
 
                 InvKardex::create([
-                    'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+                    'date_of_issue'     => $date_issue,
                     'establishment_id'  => $this->establishment_id,
                     'location_id'       => $this->store_id,
                     'item_id'           => $row['item_id'],
@@ -142,7 +142,7 @@ class PurchaseCreate extends Component
         $this->validate([
             'item_text' => 'required|min:3',
             'item_id' => 'required',
-            'item_amount' => 'required|integer|between:1,99999',
+            'item_amount' => 'required|between:0,99999.99',
             'item_price' => 'required|between:0,99999.99'
         ]);
 

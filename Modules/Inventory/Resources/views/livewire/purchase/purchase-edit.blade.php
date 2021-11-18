@@ -60,7 +60,7 @@
                         <select wire:change="getStores" wire:model="establishment_id" id="establishment_id" class="custom-select" required="">
                             <option value="">@lang('inventory::labels.lbl_select')</option>
                             @foreach($establishments as $item)
-                                <option value="{{ $item->id }}">{{ $item->observation }}</option>
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
                         @error('establishment_id')
@@ -135,19 +135,9 @@
                                     @foreach($items as $key => $item)
                                         <tr>
                                             <td class="text-center align-middle">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                        <i class="fal fa-cogs"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                                        <a wire:click="editItem({{ $item['id'] }})" class="dropdown-item">
-                                                            <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
-                                                        </a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <button onclick="confirmDeleteItem({{ $item['id'] }})" type="button" class="dropdown-item text-danger">
-                                                            <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
-                                                        </button>
-                                                    </div>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button wire:click="editItem({{ $item['id'] }})" type="button" class="btn btn-info waves-effect waves-themed"><i class="fal fa-pencil-alt"></i></button>
+                                                    <button onclick="confirmDeleteItem({{ $item['id'] }})" type="button" class="btn btn-danger waves-effect waves-themed"><i class="fal fa-trash-alt"></i></button>
                                                 </div>
                                             </td>
                                             <td class="align-middle">{{ $item['item_text'] }}</td>

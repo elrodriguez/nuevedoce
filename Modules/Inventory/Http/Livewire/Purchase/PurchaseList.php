@@ -42,10 +42,12 @@ class PurchaseList extends Component
                 'inv_purchases.id',
                 'document_types.description AS name_document',
                 'inv_purchases.serie',
+                'inv_purchases.date_of_issue',
                 'inv_purchases.number',
                 'inv_purchases.total',
                 'people.full_name AS name_supplier'
             )
+            ->orderBy('inv_purchases.date_of_issue','DESC')
             ->paginate($this->show);
     }
 

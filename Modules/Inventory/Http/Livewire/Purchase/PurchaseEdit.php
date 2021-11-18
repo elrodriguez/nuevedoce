@@ -44,7 +44,7 @@ class PurchaseEdit extends Component
 
     public function mount($purchase_id){
         $this->id_purchase = $purchase_id;
-        $this->document_types = DocumentType::where('active',true)
+        $this->document_types = DocumentType::whereIn('id',['01','03','GU75'])
             ->select(
                 'id',
                 'description'
@@ -61,7 +61,7 @@ class PurchaseEdit extends Component
         $this->establishments = SetEstablishment::where('state',true)
             ->select(
                 'id',
-                'observation'
+                'name'
             )
             ->get();
 
@@ -181,8 +181,14 @@ class PurchaseEdit extends Component
                 'person_create' => Auth::user()->person_id
             ]);
 
+            $date_issue = null;
+            if($this->date_of_issue){
+                list($d,$m,$y) = explode('/', $this->date_of_issue);
+                $date_issue = $y.'-'.$m.'-'. $d;
+            }
+
             InvKardex::create([
-                'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+                'date_of_issue'     => $date_issue,
                 'establishment_id'  => $this->establishment_id,
                 'location_id'       => $this->store_id,
                 'item_id'           => $this->item_id,
@@ -209,25 +215,27 @@ class PurchaseEdit extends Component
         $this->validate([
             'item_text'         => 'required|min:3',
             'item_id'           => 'required',
-            'item_amount'       => 'required|integer|between:1,99999',
+            'item_amount'       => 'required|between:0,99999.99',
             'item_price'        => 'required|between:0,99999.99',
             'establishment_id'  => 'required',
             'store_id'          => 'required'
         ]);
 
-        //Actualizar el Kardex en negativo
+        //Creamon un nuevo registro en el Kardex en negativo con la cantidad anterior
         $kardex_search = InvKardex::where('kardexable_id', '=', $this->id_purchase)
+            ->where('kardexable_type', '=', InvPurchase::class)
             ->where('item_id', '=', $this->search_item_edit->item_id)
-            ->get();
-        $amount_i = 0;
-        $id_kardex = 0;
-        foreach ($kardex_search as $row){
-            $id_kardex = $row->id;
-            $amount_i = (double) $row->quantity;
-        }
-        $kardex_search_edit = InvKardex::find($id_kardex);
-        $kardex_search_edit->update([
-            'quantity' => -$amount_i
+            ->first();
+
+        InvKardex::create([
+            'date_of_issue'     => $kardex_search->date_of_issue,
+            'establishment_id'  => $kardex_search->establishment_id,
+            'location_id'       => $kardex_search->location_id,
+            'item_id'           => $kardex_search->item_id,
+            'quantity'          => -(InvPurchaseItem::find($this->search_item_edit->id)->quantity),
+            'kardexable_id'     => $kardex_search->kardexable_id,
+            'kardexable_type'   => $kardex_search->kardexable_type,
+            'detail'            => 'Cantidad Corregida'
         ]);
 
         //Guardar el item editado
@@ -239,15 +247,21 @@ class PurchaseEdit extends Component
             'person_edit'   => Auth::user()->person_id
         ]);
 
+        $date_issue = null;
+        if($this->date_of_issue){
+            list($d,$m,$y) = explode('/', $this->date_of_issue);
+            $date_issue = $y.'-'.$m.'-'. $d;
+        }
+
         InvKardex::create([
-            'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+            'date_of_issue'     => $date_issue,
             'establishment_id'  => $this->establishment_id,
             'location_id'       => $this->store_id,
             'item_id'           => $this->item_id,
             'quantity'          => $this->item_amount,
             'kardexable_id'     => $this->id_purchase,
             'kardexable_type'   => InvPurchase::class,
-            'detail'            => 'Compra'
+            'detail'            => 'Cantidad Corregida'
         ]);
 
         $this->getPurchaseItem();
@@ -286,20 +300,23 @@ class PurchaseEdit extends Component
 
     public function deleteItem($id){
         $item_purchase = InvPurchaseItem::find($id);
-        //Actualiza Kardex
+
         $kardex_search = InvKardex::where('kardexable_id', '=', $this->id_purchase)
+            ->where('kardexable_type', '=', InvPurchase::class)
             ->where('item_id', '=', $item_purchase->item_id)
-            ->get();
-        $amount_i = 0;
-        $id_kardex = 0;
-        foreach ($kardex_search as $row){
-            $id_kardex = $row->id;
-            $amount_i = (double) $row->quantity;
-        }
-        $kardex_search_edit = InvKardex::find($id_kardex);
-        $kardex_search_edit->update([
-            'quantity' => -$amount_i
+            ->first();
+
+        InvKardex::create([
+            'date_of_issue'     => $kardex_search->date_of_issue,
+            'establishment_id'  => $kardex_search->establishment_id,
+            'location_id'       => $kardex_search->location_id,
+            'item_id'           => $kardex_search->item_id,
+            'quantity'          => -($kardex_search->quantity),
+            'kardexable_id'     => $kardex_search->kardexable_id,
+            'kardexable_type'   => $kardex_search->kardexable_type,
+            'detail'            => 'Anulación Compra'
         ]);
+
         $item_purchase->delete();
         $this->getPurchaseItem();
         $this->dispatchBrowserEvent('inv-purchase-edit', ['msg' => Lang::get('inventory::labels.msg_delete')]);

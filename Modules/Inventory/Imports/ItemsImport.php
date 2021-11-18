@@ -31,7 +31,16 @@ class ItemsImport implements ToModel
 
                 if($row[4]){
                     $brand  = InvBrand::where('description','=',$row[4])->first();
-                    $brand_id = $brand->id;
+                    if($brand){
+                        $brand_id = $brand->id;
+                    }else{
+                        $brand = InvBrand::create([
+                            'description'   => $row[4],
+                            'status'        => true
+                        ]);
+                        $brand_id = $brand->id;
+                    }
+
                 }else{
                     $brand  = InvBrand::where('description','=','SIN MARCA')->first();
                     if($brand){
@@ -79,32 +88,34 @@ class ItemsImport implements ToModel
                     $asset_id = $asset->id;
                     
                 }else{
-                    $asset_new = InvItem::create([
-                        'name'          => $row[1],
-                        'description'   => $row[2],
-                        'part'          => false,
-                        'weight'        => 0,
-                        'width'         => 0,
-                        'high'          => 0,
-                        'long'          => 0,
-                        'number_parts'  => 0,
-                        'status'        => true,
-                        'brand_id'      => $brand_id,
-                        'category_id'   => $family_id,
-                        'person_create' => Auth::user()->person_id,
-                        'model_id'      => $model_id
-                    ]);
-                    
-                    InvKardex::create([
-                        'date_of_issue'     => Carbon::now()->format('Y-m-d'),
-                        'establishment_id'  => 1,
-                        'location_id'       => 1,
-                        'item_id'           => $asset_new->id,
-                        'quantity'          => $row_7,
-                        'detail'            => 'stock inicial'
-                    ]);
-
-                    $asset_id = $asset_new->id;
+                    if($row[1]){
+                        $asset_new = InvItem::create([
+                            'name'          => $row[1],
+                            'description'   => $row[2],
+                            'part'          => false,
+                            'weight'        => 0,
+                            'width'         => 0,
+                            'high'          => 0,
+                            'long'          => 0,
+                            'number_parts'  => 0,
+                            'status'        => true,
+                            'brand_id'      => $brand_id,
+                            'category_id'   => $family_id,
+                            'person_create' => Auth::user()->person_id,
+                            'model_id'      => $model_id
+                        ]);
+                        
+                        InvKardex::create([
+                            'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+                            'establishment_id'  => 1,
+                            'location_id'       => 1,
+                            'item_id'           => $asset_new->id,
+                            'quantity'          => $row_7,
+                            'detail'            => 'stock inicial'
+                        ]);
+    
+                        $asset_id = $asset_new->id;
+                    }
                 }
 
                 $part_id = null;
@@ -122,7 +133,7 @@ class ItemsImport implements ToModel
                     $part_new = InvItem::create([
                         'name'          => $row[3],
                         'description'   => null,
-                        'part'          => true,
+                        'part'          => ($asset_id ? true : false),
                         'weight'        => 0,
                         'width'         => 0,
                         'high'          => 0,
@@ -151,15 +162,16 @@ class ItemsImport implements ToModel
                             ->exists();
 
                 if(!$exists){
-                    InvItemPart::create([
-                        'item_id'       => $asset_id,
-                        'part_id'       => $part_id,
-                        'state'         => true,
-                        'quantity'      => $row_5,
-                        'observations'  => $row[6]
-                    ]);
+                    if($asset_id){
+                        InvItemPart::create([
+                            'item_id'       => $asset_id,
+                            'part_id'       => $part_id,
+                            'state'         => true,
+                            'quantity'      => $row_5,
+                            'observations'  => $row[6]
+                        ]);
+                    }
                 }
-               
             }
         }
     }

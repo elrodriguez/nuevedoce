@@ -600,5 +600,7 @@ return [
     'message' => 'Message',
     'about' => 'About',
     'license' => 'License',
-    'documentation' => 'Documentation'
+    'documentation' => 'Documentation',
+    'model' => 'Model',
+    'transaction_type' => 'Transaction type'
 ];

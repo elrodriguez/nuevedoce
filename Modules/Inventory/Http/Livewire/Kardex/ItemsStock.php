@@ -65,7 +65,13 @@ class ItemsStock extends Component
                     $query->on('inv_kardexes.kardexable_id','inv_purchases.id')
                         ->where('inv_kardexes.kardexable_type', InvPurchase::class);
                 })
+                ->leftJoin('inv_categories','inv_items.category_id','inv_categories.id')
+                ->leftJoin('inv_brands','inv_items.brand_id','inv_brands.id')
+                ->leftJoin('inv_models','inv_items.model_id','inv_models.id')
                 ->select(
+                    'inv_categories.description AS category_name',
+                    'inv_brands.description AS brand_name',
+                    'inv_models.description AS model_name',
                     'inv_items.id',
                     'inv_items.name',
                     'inv_items.description',

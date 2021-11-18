@@ -60,7 +60,7 @@
                         <select wire:change="getStores" wire:model="establishment_id" id="establishment_id" class="custom-select" required="">
                             <option value="">@lang('inventory::labels.lbl_select')</option>
                             @foreach($establishments as $item)
-                                <option value="{{ $item->id }}">{{ $item->observation }}</option>
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
                         @error('establishment_id')
