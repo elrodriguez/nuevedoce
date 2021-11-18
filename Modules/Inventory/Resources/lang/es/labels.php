@@ -48,6 +48,7 @@ return [
     'msg_0008'          => 'No se puede añadir una parte a otra parte.',
     'msg_0009'          => 'La Parte a añadir ya exite en la lista.',
     'msg_0010'          => 'El número de partes excede al registro.',
+    'msg_0011'          => 'Para guardar la orden de compra debe añadir por lo menos un item.',
     'lbl_warning'       => 'Advertencia',
     'lbl_actions'       => 'Acciones',
     'lbl_type_here'     => 'Escriba aquí...',

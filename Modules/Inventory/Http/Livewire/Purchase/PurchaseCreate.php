@@ -84,58 +84,62 @@ class PurchaseCreate extends Component
             'store_id' => 'required'
         ]);
 
-        $date_issue = null;
-        if($this->date_of_issue){
-            list($d,$m,$y) = explode('/', $this->date_of_issue);
-            $date_issue = $y.'-'.$m.'-'. $d;
-        }
-
-        $purchase_save = InvPurchase::create([
-            'document_type_id'  => $this->document_type_id,
-            'date_of_issue'     => $date_issue,
-            'serie'             => $this->serie,
-            'number'            => $this->number,
-            'total'             => $this->total,
-            'supplier_id'       => $this->supplier_id,
-            'person_create'     => Auth::user()->person_id
-        ]);
-
-        #Save items
-        if(count($this->items) > 0){
-            foreach ($this->items as $row){
-                InvPurchaseItem::create([
-                    'purchase_id'   => $purchase_save->id,
-                    'item_id'       => $row['item_id'],
-                    'quantity'      => $row['amount'],
-                    'price'         => $row['price'],
-                    'person_create' => Auth::user()->person_id
-                ]);
-
-                InvKardex::create([
-                    'date_of_issue'     => Carbon::now()->format('Y-m-d'),
-                    'establishment_id'  => $this->establishment_id,
-                    'location_id'       => $this->store_id,
-                    'item_id'           => $row['item_id'],
-                    'quantity'          => $row['amount'],
-                    'kardexable_id'     => $purchase_save->id,
-                    'kardexable_type'   => InvPurchase::class,
-                    'detail'            => 'Compra'
-                ]);
+        if (count($this->items) > 0) {
+            $date_issue = null;
+            if ($this->date_of_issue) {
+                list($d, $m, $y) = explode('/', $this->date_of_issue);
+                $date_issue = $y . '-' . $m . '-' . $d;
             }
+
+            $purchase_save = InvPurchase::create([
+                'document_type_id' => $this->document_type_id,
+                'date_of_issue' => $date_issue,
+                'serie' => $this->serie,
+                'number' => $this->number,
+                'total' => $this->total,
+                'supplier_id' => $this->supplier_id,
+                'person_create' => Auth::user()->person_id
+            ]);
+
+            #Save items
+            if (count($this->items) > 0) {
+                foreach ($this->items as $row) {
+                    InvPurchaseItem::create([
+                        'purchase_id' => $purchase_save->id,
+                        'item_id' => $row['item_id'],
+                        'quantity' => $row['amount'],
+                        'price' => $row['price'],
+                        'person_create' => Auth::user()->person_id
+                    ]);
+
+                    InvKardex::create([
+                        'date_of_issue' => Carbon::now()->format('Y-m-d'),
+                        'establishment_id' => $this->establishment_id,
+                        'location_id' => $this->store_id,
+                        'item_id' => $row['item_id'],
+                        'quantity' => $row['amount'],
+                        'kardexable_id' => $purchase_save->id,
+                        'kardexable_type' => InvPurchase::class,
+                        'detail' => 'Compra'
+                    ]);
+                }
+            }
+
+            $this->items = [];
+
+            $activity = new Activity;
+            $activity->modelOn(InvPurchase::class, $purchase_save->id, 'inv_purchases');
+            $activity->causedBy(Auth::user());
+            $activity->routeOn(route('inventory_purchase_create'));
+            $activity->logType('create');
+            $activity->log('Se creó un nueva compra');
+            $activity->save();
+
+            $this->dispatchBrowserEvent('inv-purchase-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
+            $this->clearForm();
+        }else{
+            $this->dispatchBrowserEvent('inv-purchase-save-not', ['msg' => Lang::get('inventory::labels.msg_0011')]);
         }
-
-        $this->items = [];
-
-        $activity = new Activity;
-        $activity->modelOn(InvPurchase::class, $purchase_save->id,'inv_purchases');
-        $activity->causedBy(Auth::user());
-        $activity->routeOn(route('inventory_purchase_create'));
-        $activity->logType('create');
-        $activity->log('Se creó un nueva compra');
-        $activity->save();
-
-        $this->dispatchBrowserEvent('inv-purchase-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
-        $this->clearForm();
     }
 
     public function saveItem(){
