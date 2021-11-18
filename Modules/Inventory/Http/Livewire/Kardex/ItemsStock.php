@@ -21,6 +21,8 @@ class ItemsStock extends Component
     public $establishments;
     public $location_id;
     public $item_id;
+    public $balance = 0;
+    public $restante = 0;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -41,6 +43,7 @@ class ItemsStock extends Component
     public function render()
     {
         $this->getEstablishment();
+        $this->calculateRemaining();
         return view('inventory::livewire.kardex.items-stock',['items'=>$this->getItems()]);
     }
 
@@ -50,12 +53,13 @@ class ItemsStock extends Component
     }
 
     public function getItems(){
+        //dd(InvPurchase::class);
         $start = $this->start;
         $end = $this->end;
         $item_id = $this->item_id;
         $location_id = $this->location_id;
 
-        return InvKardex::query()->join('inv_items','inv_kardexes.item_id','inv_items.id')
+        $items = InvKardex::join('inv_items','inv_kardexes.item_id','inv_items.id')
                 ->leftJoin('inv_purchases', function($query)
                 {
                     $query->on('inv_kardexes.kardexable_id','inv_purchases.id')
@@ -63,19 +67,21 @@ class ItemsStock extends Component
                 })
                 ->select(
                     'inv_items.id',
-                    'inv_items.internal_id',
+                    'inv_items.name',
                     'inv_items.description',
                     'inv_kardexes.detail',
                     'inv_kardexes.date_of_issue',
                     'inv_kardexes.kardexable_type',
                     'inv_kardexes.created_at',
                     'inv_kardexes.quantity',
-                    DB::raw("CONCAT(inv_purchases.series,'-',inv_purchases.number) AS purchase_number")
+                    DB::raw("CONCAT(inv_purchases.serie,'-',inv_purchases.number) AS purchase_number"),
                 )
                 ->where('inv_kardexes.location_id',$location_id)
                 ->where('inv_kardexes.item_id',$item_id)
                 ->whereBetween('inv_kardexes.date_of_issue', [$start, $end])
-                ->paginate(10);
+                ->get();
+                    return $items;
+        //dd($items);
 
     }
 
@@ -84,15 +90,12 @@ class ItemsStock extends Component
         $date_start = $this->start;
         $date_end = $this->end;
         $item_id = $this->item_id;
-        $location_id = $this->establishment_id;
+        $location_id = $this->location_id;
 
         $page = request()->page;
 
-        dd($page);
 
         if($page >= 2) {
-
-            //$warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first();
 
             if($date_start && $date_end) {
                 $records = InvKardex::where([
@@ -135,9 +138,6 @@ class ItemsStock extends Component
                 $data = InvKardex::select('quantity')
                     ->where([['location_id', $location_id],['item_id',$item_id]])
                     ->whereBetween('date_of_issue', [$date_start, $date_end])
-                    // ->when($date_start, function ($query) use ($date_start, $date_end){
-                    //     return $query->whereBetween('date_of_issue', [$date_start, $date_end]);
-                    // })
                     ->limit(($page*$this->visible)-$this->visible)->get();
 
                 for($i=0;$i<=count($data)-1;$i++) {
@@ -160,8 +160,6 @@ class ItemsStock extends Component
         } else {
 
             if($date_start && $date_end) {
-
-                //$warehouse = Warehouse::where('establishment_id', auth()->user()->establishment_id)->first();
 
                 $records = InvKardex::where([
                         ['location_id', $location_id],
