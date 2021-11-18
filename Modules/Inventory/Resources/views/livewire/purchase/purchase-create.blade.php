@@ -121,7 +121,7 @@
                                     <thead>
                                     <tr>
                                         <th class="text-center">{{ __('labels.actions') }}</th>
-                                        <th class="text-center">{{ __('labels.name') }}</th>
+                                        <th>{{ __('labels.name') }}</th>
                                         <th class="text-center">{{ __('labels.quantity') }}</th>
                                         <th class="text-center">{{ __('inventory::labels.lbl_purchase_price') }}</th>
                                     </tr>

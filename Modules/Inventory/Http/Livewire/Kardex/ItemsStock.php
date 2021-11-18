@@ -85,7 +85,8 @@ class ItemsStock extends Component
                 ->where('inv_kardexes.location_id',$location_id)
                 ->where('inv_kardexes.item_id',$item_id)
                 ->whereBetween('inv_kardexes.date_of_issue', [$start, $end])
-                ->get();
+                ->orderBy('inv_kardexes.date_of_issue')
+                ->paginate($this->show);
                     return $items;
         //dd($items);
 
@@ -97,25 +98,31 @@ class ItemsStock extends Component
         $date_end = $this->end;
         $item_id = $this->item_id;
         $location_id = $this->location_id;
+        $this->balance = 0;
+        $this->restante = 0;
 
-        $page = request()->page;
-
+        $page = $this->page;
 
         if($page >= 2) {
 
             if($date_start && $date_end) {
+
                 $records = InvKardex::where([
                     ['location_id', $location_id],
                     ['item_id',$item_id],
                     ['date_of_issue', '<=', $date_start]
-                ])->first();
-
+                ])
+                ->orderBy('date_of_issue')
+                ->first();
+                
                 $ultimate = InvKardex::select(DB::raw('COUNT(*) AS t, MAX(id) AS id'))
                     ->where([
                         ['location_id', $location_id],
                         ['item_id',$item_id],
                         ['date_of_issue', '<=', $date_start]
-                    ])->first();
+                    ])
+                    ->orderBy('date_of_issue')
+                    ->first();
 
                 if (isset($records->date_of_issue) && Carbon::parse($records->date_of_issue)->eq(Carbon::parse($date_start))) {
                     $quantityOld = InvKardex::select(DB::raw('SUM(quantity) AS quantity'))
@@ -123,7 +130,9 @@ class ItemsStock extends Component
                             ['location_id', $location_id],
                             ['item_id',$item_id],
                             ['date_of_issue', '<=', $date_start]
-                        ])->first();
+                        ])
+                        ->orderBy('date_of_issue')
+                        ->first();
                     $quantityOld->quantity = 0;
                 }elseif($ultimate->t == 1) {
                     $quantityOld = InvKardex::select(DB::raw('SUM(quantity) AS quantity'))
@@ -131,20 +140,27 @@ class ItemsStock extends Component
                         ['location_id', $location_id],
                         ['item_id',$item_id],
                         ['date_of_issue', '<=', $date_start]
-                    ])->first();
+                    ])
+                    ->orderBy('date_of_issue')
+                    ->first();
                 } else {
+                    
                     $quantityOld = InvKardex::select(DB::raw('SUM(quantity) AS quantity'))
                         ->where([
                             ['location_id', $location_id],
                             ['item_id',$item_id],
                             ['date_of_issue', '<=', $date_start]
-                        ])->whereNotIn('id', [$ultimate->id])->first();
+                        ])->whereNotIn('id', [$ultimate->id])
+                        ->orderBy('date_of_issue')
+                        ->first();
                 }
-
+                
                 $data = InvKardex::select('quantity')
                     ->where([['location_id', $location_id],['item_id',$item_id]])
                     ->whereBetween('date_of_issue', [$date_start, $date_end])
-                    ->limit(($page*$this->visible)-$this->visible)->get();
+                    ->orderBy('date_of_issue')
+                    ->limit(($page*$this->show)-$this->show)
+                    ->get();
 
                 for($i=0;$i<=count($data)-1;$i++) {
                     $this->restante += $data[$i]->quantity;
@@ -156,7 +172,7 @@ class ItemsStock extends Component
 
             } else {
                 $data = InvKardex::where('location_id', $location_id)->where('item_id',$item_id)
-                    ->limit(($page*$this->visible)-$this->visible)->get();
+                    ->limit(($page*$this->show)-$this->show)->get();
                 for($i=0;$i<=count($data)-1;$i++) {
                     $this->restante+=$data[$i]->quantity;
                 }
@@ -171,14 +187,18 @@ class ItemsStock extends Component
                         ['location_id', $location_id],
                         ['item_id',$item_id],
                         ['date_of_issue', '<=', $date_start]
-                    ])->first();
+                    ])
+                    ->orderBy('date_of_issue')
+                    ->first();
 
                 $ultimate = InvKardex::select(DB::raw('COUNT(*) AS t, MAX(id) AS id'))
                     ->where([
                         ['location_id', $location_id],
                         ['item_id',$item_id],
                         ['date_of_issue', '<=', $date_start]
-                    ])->first();
+                    ])
+                    ->orderBy('date_of_issue')
+                    ->first();
 
                 if (isset($records->date_of_issue) && Carbon::parse($records->date_of_issue)->eq(Carbon::parse($date_start))) {
                     $quantityOld = InvKardex::select(DB::raw('SUM(quantity) AS quantity'))
@@ -186,22 +206,30 @@ class ItemsStock extends Component
                             ['location_id', $location_id],
                             ['item_id',$item_id],
                             ['date_of_issue', '<=', $date_start]
-                        ])->first();
+                        ])
+                        ->orderBy('date_of_issue')
+                        ->first();
+
                     $quantityOld->quantity = 0;
+
                 }elseif($ultimate->t == 1) {
                     $quantityOld = InvKardex::select(DB::raw('SUM(quantity) AS quantity'))
                     ->where([
                         ['location_id', $location_id],
                         ['item_id',$item_id],
                         ['date_of_issue', '<=', $date_start]
-                    ])->first();
+                    ])
+                    ->orderBy('date_of_issue')
+                    ->first();
                 } else {
                     $quantityOld = InvKardex::select(DB::raw('SUM(quantity) AS quantity'))
                         ->where([
                             ['location_id', $location_id],
                             ['item_id',$item_id],
                             ['date_of_issue', '<=', $date_start]
-                        ])->whereNotIn('id', [$ultimate->id])->first();
+                        ])->whereNotIn('id', [$ultimate->id])
+                        ->orderBy('date_of_issue')
+                        ->first();
                 }
                 return $this->balance = $quantityOld->quantity;
             }

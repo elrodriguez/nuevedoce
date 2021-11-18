@@ -1,7 +1,7 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-header">
-            <div class="input-group input-group-multi-transition" wire:ignore>
+            <div class="input-group input-group-multi-transition" wire:ignore.self>
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-default dropdown-toggle waves-effect waves-themed" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $show }}</button>
                     <div class="dropdown-menu" style="">
@@ -63,7 +63,7 @@
                         <td class="align-middle">{{ $item->brand_name }}</td>
                         <td class="align-middle">{{ $item->model_name }}</td>
                         <td class="align-middle">{{ $item->name.' '.$item->description }}</td>
-                        <td class="align-middle">{{ $item->date_of_issue }}</td>
+                        <td class="align-middle">{{ $item->created_at }}</td>
                         <td class="align-middle">
                             @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
                                 @if ($item->quantity>0)
@@ -77,17 +77,17 @@
                         </td>
                         <td class="align-middle">{{ $item->purchase_number }}</td>
                         <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
-                            @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
+                            @if($item->kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
                                 @if ($item->quantity>0)
                                     <td class="align-middle text-right">{{ $item->quantity }}</td>
-                                    <td class="align-middle text-right">-</td>
+                                    <td class="align-middle text-center">-</td>
                                 @else
-                                    <td class="align-middle text-right">-</td>
-                                    <td class="align-middle text-right">{{ $item->quantity }}</td>
+                                    <td class="align-middle text-center">-</td>
+                                    <td class="align-middle text-right text-danger">{{ $item->quantity }}</td>
                                 @endif
                             @else
                                 <td class="align-middle text-right">{{ $item->quantity }}</td>
-                                <td class="align-middle text-right">-</td>
+                                <td class="align-middle text-center">-</td>
                             @endif
                             @php
                                 $balance = $balance + $item->quantity
@@ -100,7 +100,7 @@
             </table>
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
-            {{-- <div class="ml-auto">{{ $items->links() }}</div> --}}
+            <div class="ml-auto">{{ $items->links() }}</div>
         </div>
     </div>
     <script type="text/javascript">
