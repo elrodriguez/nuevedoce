@@ -155,6 +155,28 @@
                 </ul>
             </li>
             @endcan
+            @can('inventario_compras')
+            <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="Compras" data-filter-tags="Compras">
+                    <i class="fal fa-shopping-cart"></i>
+                    <span class="nav-link-text" data-i18n="nav.compras">@lang('inventory::labels.lbl_shopping')</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_purchase') }}" title="Listado de Compras" data-filter-tags="Listado de Compras">
+                            <span class="nav-link-text" data-i18n="nav.listado_compras">@lang('inventory::labels.lbl_list') @lang('inventory::labels.lbl_shopping')</span>
+                        </a>
+                    </li>
+                    @can('inventario_compras_nuevo')
+                        <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('inventory_purchase_create') }}" title="Nueva Compra" data-filter-tags="Nueva Compra">
+                                <span class="nav-link-text" data-i18n="nav.nueva_compra">@lang('inventory::labels.lbl_new') @lang('inventory::labels.lbl_purchase')</span>
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcan
         </ul>
     </nav>
 </div>

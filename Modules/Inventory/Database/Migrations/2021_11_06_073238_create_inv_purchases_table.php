@@ -20,7 +20,10 @@ class CreateInvPurchasesTable extends Migration
             $table->string('serie');
             $table->string('number');
             $table->decimal('total',10,2)->nullable();
+            $table->unsignedBigInteger('person_create')->nullable();
+            $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

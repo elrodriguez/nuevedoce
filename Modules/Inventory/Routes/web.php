@@ -54,5 +54,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones_nuevo'])->get('create', 'LocationController@create')->name('inventory_location_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones_editar'])->get('edit/{id}', 'LocationController@edit')->name('inventory_location_edit');
     });
-    
+
+    Route::group(['prefix' => 'purchase'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:inventario_compras'])->get('list', 'PurchaseController@index')->name('inventory_purchase');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_compras_nuevo'])->get('create', 'PurchaseController@create')->name('inventory_purchase_create');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_compras_editar'])->get('edit/{id}', 'PurchaseController@edit')->name('inventory_purchase_edit');
+        Route::get('search', 'PurchaseController@autocomplete')->name('inventory_purchase_search');
+    });
 });

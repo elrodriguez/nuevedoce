@@ -83,5 +83,16 @@ return [
     'lbl_observations'  => 'Observaciones',
     'lbl_location'      => 'Ubicación',
     'lbl_add_codes'     => 'Agregar códigos',
-    'lbl_setting_codes'     => 'Configuración de codigos'
+    'lbl_setting_codes' => 'Configuración de codigos',
+    'lbl_shopping'      => 'Compras',
+    'lbl_purchase'      => 'Compra',
+    'lbl_serie'         => 'Serie',
+    'lbl_number'        => 'Número',
+    'lbl_document_type' => 'Tipo de Documento',
+    'lbl_date_of_issue' => 'Fecha de Emisión',
+    'lbl_total'         => 'Total',
+    'lbl_purchase_price'=> 'Precio de Compra',
+    'lbl_establishment' => 'Establecimiento',
+    'lbl_store'         => 'Almacén',
+    'lbl_supplier'      => 'Proveedor'
 ];

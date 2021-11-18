@@ -83,5 +83,16 @@ return [
     'lbl_observations'  => 'Observations',
     'lbl_location'      => 'Location',
     'lbl_add_codes'     => 'Add codes',
-    'lbl_setting_codes'     => 'Code configuration'
+    'lbl_setting_codes' => 'Code configuration',
+    'lbl_shopping'      => 'Shopping',
+    'lbl_purchase'      => 'Purchase',
+    'lbl_serie'         => 'Serie',
+    'lbl_number'        => 'Number',
+    'lbl_document_type' => 'Document Type',
+    'lbl_date_of_issue' => 'Date of Issue',
+    'lbl_total'         => 'Total',
+    'lbl_purchase_price'=> 'Purchase Price',
+    'lbl_establishment' => 'Establishment',
+    'lbl_store'         => 'Store',
+    'lbl_supplier'      => 'Supplier'
 ];
