@@ -48,6 +48,7 @@ return [
     'msg_0008'          => 'You cannot add a part to another part.',
     'msg_0009'          => 'The Part to be added already exists in the list.',
     'msg_0010'          => 'The number of parts exceeds the record.',
+    'msg_0011'          => 'To save the purchase order you must add at least one item.',
     'lbl_warning'       => 'Warning',
     'lbl_actions'       => 'Actions',
     'lbl_type_here'     => 'Type Here...',
