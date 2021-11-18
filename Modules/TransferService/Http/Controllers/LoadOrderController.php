@@ -39,7 +39,7 @@ class LoadOrderController extends Controller
         return view('transferservice::loadorder.edit')->with('id', $id);
     }
 
-    public function htmlPdf($id){
+    public function dataPdf($id){
         $data = SerLoadOrderDetail::where('ser_load_order_details.load_order_id', '=', $id)
             ->join('ser_load_orders', 'ser_load_order_details.load_order_id', 'ser_load_orders.id')
             ->join('ser_vehicles', 'vehicle_id', 'ser_vehicles.id')
@@ -69,12 +69,14 @@ class LoadOrderController extends Controller
                 'wholesales.full_name AS name_wholesale',
                 'wholesales.telephone AS cel_wholesale',
                 'ser_load_order_details.amount',
-                'inv_items.name'
+                'inv_items.name',
+                'ser_odt_requests.internal_id'
             )
             ->get();
+        return $data;
+    }
 
-        $head_report = $data[0];
-
+    public function htmlPdf($head_report, $htmlDetail){
         $html = '
         <table align="center" width="100%">
             <thead>
@@ -155,21 +157,21 @@ class LoadOrderController extends Controller
                     <th style="font-weight: bold; text-align: center; width: 80px;">'.Lang::get('transferservice::labels.lbl_amount').'</th>
                 </tr>
             </thead>
-            <tbody>';
-        $a = 1;
-        foreach ($data as $key=>$row){
-            $html.='
-            <tr>
-                <td style="text-align: center; width: 80px;">'.$a.'</td>
-                <td style="width: 380px;">'.$row->name.'</td>
-                <td style="text-align: center; width: 80px;">'.$row->amount.'</td>
-            </tr>
-            ';
-            $a++;
-        }
-            $html.='
+            <tbody>
+            '.$htmlDetail.'
             </tbody>
         </table>
+        ';
+        return $html;
+    }
+
+    public function htmlDetailPdf($a, $row){
+        $html ='
+        <tr>
+            <td style="text-align: center; width: 80px;">'.$a.'</td>
+            <td style="width: 380px;">'.$row->name.'</td>
+            <td style="text-align: center; width: 80px;">'.$row->amount.'</td>
+        </tr>
         ';
         return $html;
     }
@@ -181,16 +183,48 @@ class LoadOrderController extends Controller
         PDF::SetMargins(7, 18, 7);
         // set default header data
         PDF::SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 006', PDF_HEADER_STRING);
+        PDF::setFooterData(array(0,64,0), array(0,64,128));
 
         // set header and footer fonts
         PDF::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         PDF::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        PDF::SetFooterMargin(10);// Intervalo inferior del pie de página
+
         PDF::SetFontSubsetting(false);
         PDF::SetFontSize('10px');
+        PDF::SetAutoPageBreak(true, 25);
+
         PDF::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        PDF::AddPage('P', 'A4');
-        PDF::writeHTML($this->htmlPdf($id), true, false, true, false, '');
-        PDF::lastPage();
+        $data = $this->dataPdf($id);
+        $head_report = array();
+        PDF::AddPage();
+        $aux_odt = '';
+        $bp = false;
+        $detail_html = '';
+        $a = 1;
+        foreach ($data as $row){
+            if($aux_odt != $row['internal_id']){
+                if($bp){
+                    PDF::writeHTML($this->htmlPdf($head_report, $detail_html), true, false, true, false, '');
+                    PDF::Cell(0, 10, 'Página '.PDF::getAliasNumPage().'/'.PDF::getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                    PDF::AddPage();
+                }
+                $head_report = $row;
+                $detail_html = '';
+                $bp = true;
+                $a = 1;
+            }
+            $detail_html .= $this->htmlDetailPdf($a, $row);
+            $a++;
+            $array_aux_detail[] = $row;
+            $aux_odt = $row['internal_id'];
+        }
+        PDF::writeHTML($this->htmlPdf($head_report, $detail_html), true, false, true, false, '');
+        // Page number
+        //PDF::endPage();
+        PDF::Cell(0, 10, 'Página '.PDF::getAliasNumPage().'/'.PDF::getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
         PDF::Output('my_loar_order.pdf', 'D');
         exit;
     }
