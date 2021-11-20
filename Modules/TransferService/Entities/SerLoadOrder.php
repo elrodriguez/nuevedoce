@@ -20,6 +20,7 @@ class SerLoadOrder extends Model
         'departure_time',
         'return_date',
         'return_time',
+        'state',
         'additional_information',
         'person_create',
         'person_edit'

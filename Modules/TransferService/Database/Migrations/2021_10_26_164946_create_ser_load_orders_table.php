@@ -26,6 +26,7 @@ class CreateSerLoadOrdersTable extends Migration
             $table->date('return_date')->nullable()->comment('Fecha de Retorno');
             $table->time('return_time')->nullable()->comment('Hora de Retorno');
             $table->string('additional_information')->nullable();
+            $table->string('state', 1)->default('P')->comment('P= Pendiente Carga, E = En servicio, A=Retornado, B Pendiente retorno');
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();

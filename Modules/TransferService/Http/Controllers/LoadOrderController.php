@@ -228,4 +228,9 @@ class LoadOrderController extends Controller
         PDF::Output('my_loar_order.pdf', 'D');
         exit;
     }
+
+    public function exit()
+    {
+        return view('transferservice::loadorder.exit');
+    }
 }

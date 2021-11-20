@@ -114,5 +114,11 @@ return [
     'lbl_mobile'        => 'Mobile',
     'lbl_dni'           => 'DNI',
     'lbl_load_order_detail'=> 'Loading Order Detail',
-    'lbl_code_document' => 'Document code'
+    'lbl_code_document' => 'Document code',
+    'lbl_exit'          => 'Exit',
+    'lbl_accept_exit'   => 'Accept Exit',
+    'lbl_slope_load'    => 'Slope Load',
+    'lbl_in_service'    => 'In Service',
+    'lbl_returned'      => 'Returned',
+    'lbl_pending_return'=> 'Pending Return'
 ];

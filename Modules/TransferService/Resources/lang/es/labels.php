@@ -114,5 +114,10 @@ return [
     'lbl_dni'           => 'DNI',
     'lbl_load_order_detail'=> 'Detalle de Orden de Carga',
     'lbl_code_document' => 'Código documento',
-    
+    'lbl_exit'          => 'Salida',
+    'lbl_accept_exit'   => 'Aceptar Salida',
+    'lbl_slope_load'    => 'Pendiente Carga',
+    'lbl_in_service'    => 'En Servicio',
+    'lbl_returned'      => 'Retornado',
+    'lbl_pending_return'=> 'Pendiente Retorno'
 ];
