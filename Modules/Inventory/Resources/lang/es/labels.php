@@ -95,5 +95,8 @@ return [
     'lbl_purchase_price'=> 'Precio de Compra',
     'lbl_establishment' => 'Establecimiento',
     'lbl_store'         => 'Almacén',
-    'lbl_supplier'      => 'Proveedor'
+    'lbl_supplier'      => 'Proveedor',
+    'lbl_assets_with_code' => 'Activos con Código',
+    'lbl_accessory'     => 'Accesorio',
+    'lbl_asset'         => 'Activo',
 ];

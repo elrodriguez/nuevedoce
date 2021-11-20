@@ -138,23 +138,7 @@
                 </ul>
             </li>
             @endcan
-            @can('inventario_kardex')
-            <li class="{{ $path[0] == 'kardex' && $path[1] == 'asset' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-file-chart-line"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">{{ __('inventory::labels.lbl_kardex') }}</span>
-                </a>
-                <ul>
-                    @can('inventario_kardex_items_stock')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'kardex' && $path[2] == 'item_stock' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_kardex_items_stock') }}" title="Stock por Item" data-filter-tags="Stock por Item">
-                            <span class="nav-link-text" data-i18n="nav.stock_por_item">Stock por Item</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
-            @endcan
+            
             @can('inventario_compras')
             <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Compras" data-filter-tags="Compras">
@@ -173,6 +157,31 @@
                                 <span class="nav-link-text" data-i18n="nav.nueva_compra">@lang('inventory::labels.lbl_new') @lang('inventory::labels.lbl_purchase')</span>
                             </a>
                         </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcan
+
+            @can('inventario_kardex')
+            <li class="{{ $path[0] == 'kardex' && $path[1] == 'asset' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                    <i class="fal fa-file-chart-line"></i>
+                    <span class="nav-link-text" data-i18n="nav.empresa">{{ __('inventory::labels.lbl_kardex') }}</span>
+                </a>
+                <ul>
+                    @can('inventario_kardex_items_stock')
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'kardex' && $path[2] == 'item_stock' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_kardex_items_stock') }}" title="Stock por Item" data-filter-tags="Stock por Item">
+                            <span class="nav-link-text" data-i18n="nav.stock_por_item">Stock por Item</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('inventario_kardex_active_codes')
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'kardex' && $path[2] == 'active_codes' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_kardex_active_codes') }}" title="{{ __('inventory::labels.lbl_assets_with_code') }}" data-filter-tags="{{ __('inventory::labels.lbl_assets_with_code') }}">
+                            <span class="nav-link-text" data-i18n="nav.activos_con_codigos">{{ __('inventory::labels.lbl_assets_with_code') }}</span>
+                        </a>
+                    </li>
                     @endcan
                 </ul>
             </li>

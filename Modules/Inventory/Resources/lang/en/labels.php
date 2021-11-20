@@ -95,5 +95,8 @@ return [
     'lbl_purchase_price'=> 'Purchase Price',
     'lbl_establishment' => 'Establishment',
     'lbl_store'         => 'Store',
-    'lbl_supplier'      => 'Supplier'
+    'lbl_supplier'      => 'Supplier',
+    'lbl_assets_with_code' => 'Assets with code',
+    'lbl_accessory'     => 'Accessory',
+    'lbl_asset'         => 'Asset',
 ];

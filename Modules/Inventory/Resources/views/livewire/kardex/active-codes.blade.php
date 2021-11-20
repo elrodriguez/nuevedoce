@@ -24,14 +24,19 @@
                         </span>
                     @endif
                 </div>
-                <select wire:model.defer="location_id" class="custom-select">
+                <select wire:model.defer="family_id" class="custom-select">
                     <option value="">Seleccionar</option>
-                    @foreach($establishments as $establishment)
-                    <option value="{{ $establishment->id }}">{{ $establishment->description }}</option>
+                    @foreach($families as $family)
+                    <option value="{{ $family->id }}">{{ $family->description }}</option>
+                    @endforeach
+                </select>
+                <select wire:model.defer="brand_id" class="custom-select">
+                    <option value="">Seleccionar</option>
+                    @foreach($brands as $brand)
+                    <option value="{{ $brand->id }}">{{ $brand->description }}</option>
                     @endforeach
                 </select>
                 <input wire:model.defer="search" type="text" class="form-control autoCompleteItem" data-url="{{ route('inventory_kardex_items_search') }}" autocomplete="off" placeholder="@lang('inventory::labels.lbl_type_here')">
-                <input type="text" class="form-control" id="custom-range" placeholder="Rango de fechas">
                 <div class="input-group-append">
                     <button wire:click="getItems" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
                 </div>
@@ -45,14 +50,11 @@
                         <th>{{ __('labels.category') }}</th>
                         <th>{{ __('labels.brand') }}</th>
                         <th>{{ __('labels.model') }}</th>
-                        <th>{{ __('labels.product') }}</th>
-                        <th>{{ __('labels.date') }}</th>
-                        <th>{{ __('labels.transaction_type') }}</th>
-                        <th>{{ __('labels.number') }}</th>
-                        <th class="text-center">{{ __('labels.f_issuance') }}</th>
-                        <th class="text-center">{{ __('labels.entry_kardex') }}</th>
-                        <th class="text-center">{{ __('labels.exit_kardex') }}</th>
-                        <th class="text-center">{{ __('labels.balance') }}</th>
+                        <th>{{ __('inventory::labels.lbl_accessory') }}</th>
+                        <th>{{ __('labels.description') }}</th>
+                        <th>{{ __('labels.code') }}</th>
+                        <th>{{ __('inventory::labels.lbl_location') }}</th>
+                        <th class="text-center">{{ __('labels.state') }}</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -62,37 +64,11 @@
                         <td class="align-middle">{{ $item->category_name }}</td>
                         <td class="align-middle">{{ $item->brand_name }}</td>
                         <td class="align-middle">{{ $item->model_name }}</td>
-                        <td class="align-middle">{{ $item->name.' '.$item->description }}</td>
-                        <td class="align-middle">{{ $item->created_at }}</td>
-                        <td class="align-middle">
-                            @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
-                                @if ($item->quantity>0)
-                                    {{ __('Compra') }}
-                                @else
-                                    {{ __('Anulación Compra') }}
-                                @endif
-                            @else
-                                {{ $item->detail }} 
-                            @endif
-                        </td>
-                        <td class="align-middle">{{ $item->purchase_number }}</td>
-                        <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
-                            @if($item->kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
-                                @if ($item->quantity>0)
-                                    <td class="align-middle text-right">{{ $item->quantity }}</td>
-                                    <td class="align-middle text-center">-</td>
-                                @else
-                                    <td class="align-middle text-center">-</td>
-                                    <td class="align-middle text-right text-danger">{{ $item->quantity }}</td>
-                                @endif
-                            @else
-                                <td class="align-middle text-right">{{ $item->quantity }}</td>
-                                <td class="align-middle text-center">-</td>
-                            @endif
-                            @php
-                                $balance = $balance + $item->quantity
-                            @endphp
-                        <td class="align-middle text-right">{{ number_format($balance, 2, '.', '') }}</td>
+                        <td class="align-middle">{{ $item->part_name }}</td>
+                        <td class="align-middle">{{ $item->part_description }}</td>
+                        <td class="align-middle">{{ $item->patrimonial_code }}</td>
+                        <td class="align-middle">{{ $item->location_name }}</td>
+                        <td class="align-middle">{{ $item->state }}</td>
                     </tr>
     
                     @endforeach
@@ -104,21 +80,10 @@
         </div>
     </div>
     <script type="text/javascript">
-    document.addEventListener('livewire:load', function () {
-        $('#custom-range').daterangepicker({
-                locale:
-                    {
-                        format: 'DD/MM/YYYY'
-                },
-                opens: 'left'
-            }, function(start, end, label){
-                console.log(end.format('YYYY-MM-DD'))
-                @this.set('start',start.format('YYYY-MM-DD'));
-                @this.set('end',end.format('YYYY-MM-DD'));
+        document.addEventListener('livewire:load', function () {
+            $('.autoCompleteItem').autoComplete().on('autocomplete.select', function (evt, item) {
+                @this.set('item_id',item.value);
+            });
         });
-        $('.autoCompleteItem').autoComplete().on('autocomplete.select', function (evt, item) {
-            @this.set('item_id',item.value);
-        });
-    });
     </script>
 </div>

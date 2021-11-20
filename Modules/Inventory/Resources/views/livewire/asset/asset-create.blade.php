@@ -12,14 +12,14 @@
                             @endforeach
                         </select>
                         @error('asset_type_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="patrimonial_code">@lang('inventory::labels.lbl_patrimonial_code') <span class="text-danger">*</span> </label>
                         <input wire:model="patrimonial_code" id="patrimonial_code" type="text" class="form-control">
                         @error('patrimonial_code')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3" wire:ignore>
@@ -27,7 +27,7 @@
                         <input wire:model="item_text" id="item_text" required="" class="form-control basicAutoComplete" type="text" placeholder="Ingrese el item a buscar y luego seleccione." data-url="{{ route('inventory_asset_search') }}" autocomplete="off" />
                         <input wire:model="item_id" id="item_id" type="hidden" placeholder="" autocomplete="off" />
                         @error('item_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     
@@ -54,7 +54,7 @@
                             <option value="05">De baja</option>
                         </select>
                         @error('state')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

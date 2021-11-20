@@ -44,10 +44,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_editar'])->get('edit/{id}', 'AssetController@edit')->name('inventory_asset_edit');
         Route::get('search', 'AssetController@autocomplete')->name('inventory_asset_search');
     });
-
+    
     Route::group(['prefix' => 'kardex'], function() {
-        Route::middleware(['middleware' => 'role_or_permission:inventario_kardex'])->get('item_stock', 'KardexController@itemsstock')->name('inventory_kardex_items_stock');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_kardex_items_stock'])->get('item_stock', 'KardexController@itemsstock')->name('inventory_kardex_items_stock');
         Route::get('search_item', 'KardexController@autocompleteItems')->name('inventory_kardex_items_search');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_kardex_active_codes'])->get('active_codes', 'KardexController@activecodes')->name('inventory_kardex_active_codes');
     });
 
     Route::group(['prefix' => 'location'], function() {

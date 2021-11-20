@@ -28,4 +28,7 @@ class KardexController extends Controller
         return response()->json($customers, 200);
     }
 
+    public function activecodes(){
+        return view('inventory::kardex.activecodes');
+    }
 }
