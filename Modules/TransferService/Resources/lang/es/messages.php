@@ -8,6 +8,7 @@ return [
     'msg_0004'          => 'El item ya exite en la lista',
     'msg_0005'          => 'Seleccione los items de la ODT que desea añadir.',
     'msg_0006'          => 'Los Item de la ODT se añadieron correctamente a la Orden de Carga.',
+    'msg_0007'          => '¿Desea aprobar la salida?',
     'msg_success'       => 'Datos guardados correctamente.',
     'msg_delete'        => 'Datos eliminados correctamente.',
     'msg_update'        => 'Datos Actualizados correctamente.',

@@ -8,6 +8,7 @@ return [
     'msg_0004'          => 'The item already exists in the list',
     'msg_0005'          => 'Select the ODT items you want to add.',
     'msg_0006'          => 'The ODT Items were successfully added to the Cargo Order.',
+    'msg_0007'          => 'Do you want to approve the exit?',
     'msg_success'       => 'Data saved correctly.',
     'msg_delete'        => 'Data removed successfully.',
     'msg_update'        => 'Data updated correctly.',

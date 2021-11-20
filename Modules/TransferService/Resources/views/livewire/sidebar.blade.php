@@ -145,6 +145,13 @@
                                 </a>
                             </li>
                         @endcan
+                        @can('serviciodetraslados_orden_carga_salida')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'load_order' && $path[2] == 'exit' ? 'active' : '' }}">
+                                <a href="{{ route('service_load_order_exit') }}" title="Salida orden carga" data-filter-tags="Salida orden carga">
+                                    <span class="nav-link-text" data-i18n="nav.salida_orden_carga">{{ __('transferservice::labels.lbl_exit') }} </span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan
