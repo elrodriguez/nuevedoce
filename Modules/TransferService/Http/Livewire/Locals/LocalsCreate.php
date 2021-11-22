@@ -33,8 +33,8 @@ class LocalsCreate extends Component
             'name' => $this->name,
             'address' => $this->address,
             'reference' => $this->reference,
-            'longitude' => $this->longitude,
-            'latitude' => $this->latitude,
+            //'longitude' => $this->longitude,
+            //'latitude' => $this->latitude,
             'state' => $this->state,
             'person_create' =>  Auth::user()->person_id
         ]);

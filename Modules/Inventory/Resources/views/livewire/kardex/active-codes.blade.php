@@ -36,7 +36,7 @@
                     <option value="{{ $brand->id }}">{{ $brand->description }}</option>
                     @endforeach
                 </select>
-                <input wire:model.defer="search" type="text" class="form-control autoCompleteItem" data-url="{{ route('inventory_kardex_items_search') }}" autocomplete="off" placeholder="@lang('inventory::labels.lbl_type_here')">
+                <input wire:model.defer="search" type="text" class="form-control"  placeholder="@lang('inventory::labels.lbl_type_here')">
                 <div class="input-group-append">
                     <button wire:click="getItems" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
                 </div>
@@ -49,7 +49,7 @@
                         <th>#</th>
                         <th>{{ __('labels.category') }}</th>
                         <th>{{ __('labels.brand') }}</th>
-                        <th>{{ __('labels.model') }}</th>
+                        {{-- <th>{{ __('labels.model') }}</th> --}}
                         <th>{{ __('inventory::labels.lbl_accessory') }}</th>
                         <th>{{ __('labels.description') }}</th>
                         <th>{{ __('labels.code') }}</th>
@@ -58,20 +58,29 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach ($items as $key => $item)
-                    <tr>
-                        <td class="align-middle">{{ $key+1 }}</td>
-                        <td class="align-middle">{{ $item->category_name }}</td>
-                        <td class="align-middle">{{ $item->brand_name }}</td>
-                        <td class="align-middle">{{ $item->model_name }}</td>
-                        <td class="align-middle">{{ $item->part_name }}</td>
-                        <td class="align-middle">{{ $item->part_description }}</td>
-                        <td class="align-middle">{{ $item->patrimonial_code }}</td>
-                        <td class="align-middle">{{ $item->location_name }}</td>
-                        <td class="align-middle">{{ $item->state }}</td>
-                    </tr>
-    
-                    @endforeach
+                    @if(count($items)>0)
+                        @foreach ($items as $key => $item)
+                            <tr>
+                                <td class="align-middle">{{ $key+1 }}</td>
+                                <td class="align-middle">{{ $item->category_name }}</td>
+                                <td class="align-middle">{{ $item->brand_name }}</td>
+                                {{-- <td class="align-middle">{{ $item->model_name }}</td> --}}
+                                <td class="align-middle">{{ $item->part_name }}</td>
+                                <td class="align-middle">{{ $item->part_description }}</td>
+                                <td class="align-middle">{{ $item->patrimonial_code }}</td>
+                                <td class="align-middle">{{ $item->location_name }}</td>
+                                <td class="align-middle">{{ $item->state }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="8" class="text-center">
+                                <div class="alert alert-warning mb-0" role="alert">
+                                    {{ __('labels.no_data_available_in_the_table') }}
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -79,11 +88,4 @@
             <div class="ml-auto">{{ $items->links() }}</div>
         </div>
     </div>
-    <script type="text/javascript">
-        document.addEventListener('livewire:load', function () {
-            $('.autoCompleteItem').autoComplete().on('autocomplete.select', function (evt, item) {
-                @this.set('item_id',item.value);
-            });
-        });
-    </script>
 </div>

@@ -70,8 +70,8 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $local->name }}</td>
-                        <td class="align-middle text-center">{{ $local->address }}</td>
-                        <td class="align-middle text-center">{{ $local->reference }}</td>
+                        <td class="align-middle">{{ $local->address }}</td>
+                        <td class="align-middle">{{ $local->reference }}</td>
                         <td class="text-center align-middle">
                             @if($local->state)
                                 <span class="badge badge-success">{{ __('transferservice::labels.lbl_active') }}</span>

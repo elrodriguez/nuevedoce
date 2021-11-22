@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Modules\Inventory\Entities\InvItemPart;
 use Modules\Inventory\Entities\InvKardex;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
@@ -38,16 +39,19 @@ class LoadorderExit extends Component
             $date =  $ys.'-'.$ms.'-'.$ds;
         }
 
-        if($this->search || $this->license_plate || $this->date_upload) {
-            $data = SerLoadOrder::where('ser_load_orders.uuid', '=', $this->search )
-                ->join('ser_vehicles', 'vehicle_id', 'ser_vehicles.id')
+        $license_plate  = $this->license_plate;
+        $search    = $this->search;
+
+
+            $data = SerLoadOrder::join('ser_vehicles', 'vehicle_id', 'ser_vehicles.id')
                 ->join('ser_vehicle_types', 'vehicle_type_id', 'ser_vehicle_types.id')
-                ->orWhere('ser_vehicles.license_plate', '=', $this->license_plate)
-                ->when($date, function ($query) use ($date) {
-                    return $query->where([
-                        ['ser_load_orders.upload_date', '=', $date]
-                    ]);
+                ->when($search, function ($query) use ($search) {
+                    return $query->where('ser_load_orders.uuid', '=', $search);
                 })
+                ->when($license_plate, function ($query) use ($license_plate) {
+                    return $query->where('ser_vehicles.license_plate', '=', $license_plate);
+                })
+                ->where('ser_load_orders.upload_date', '=', $date)
                 ->select(
                     'ser_vehicles.license_plate',
                     'ser_vehicle_types.name',
@@ -65,40 +69,15 @@ class LoadorderExit extends Component
                 )
                 ->orderBy('ser_load_orders.upload_date', 'DESC')
                 ->paginate($this->show);
-        }else{
-            $data = SerLoadOrder::where('ser_load_orders.uuid', 'like', '%' . $this->search . '%')
-                ->join('ser_vehicles', 'vehicle_id', 'ser_vehicles.id')
-                ->join('ser_vehicle_types', 'vehicle_type_id', 'ser_vehicle_types.id')
-                ->where('ser_vehicles.license_plate', '=', $this->license_plate)
-                ->when($date, function ($query) use ($date) {
-                    return $query->where([
-                        ['ser_load_orders.upload_date', '=', $date]
-                    ]);
-                })
-                ->select(
-                    'ser_vehicles.license_plate',
-                    'ser_vehicle_types.name',
-                    'ser_load_orders.id',
-                    'ser_load_orders.charge_maximum',
-                    'ser_load_orders.charge_weight',
-                    'ser_load_orders.upload_date',
-                    'ser_load_orders.charging_time',
-                    'ser_load_orders.departure_date',
-                    'ser_load_orders.departure_time',
-                    'ser_load_orders.return_date',
-                    'ser_load_orders.return_time',
-                    'ser_load_orders.uuid',
-                    'ser_load_orders.state'
-                )
-                ->orderBy('ser_load_orders.upload_date', 'DESC')
-                ->paginate($this->show);
-        }
+        
         return $data;
     }
 
     public function acceptExit($id){
         $loar_order_search = SerLoadOrder::find($id);
         $load_order_detail = SerLoadOrderDetail::where('load_order_id', '=', $id)->get();
+        $date_of_issue = Carbon::now()->format('Y-m-d');
+
         $aux_odt = '';
         foreach ($load_order_detail as $row){
             if($aux_odt != $row->odt_request_id){
@@ -108,8 +87,9 @@ class LoadorderExit extends Component
                     'person_edit'   => Auth::user()->person_id
                 ]);
             }
+
             InvKardex::create([
-                'date_of_issue'     => Carbon::now()->format('Y-m-d'),
+                'date_of_issue'     => $date_of_issue,
                 'establishment_id'  => 1,
                 'location_id'       => 1,
                 'item_id'           => $row->item_id,
@@ -118,6 +98,23 @@ class LoadorderExit extends Component
                 'kardexable_type'   => SerLoadOrder::class,
                 'detail'            => 'Salida para servicios terceros'
             ]);
+
+            $parts = InvItemPart::where('item_id', $row->item_id)->get();
+
+            if($parts){
+                foreach($parts as $part){
+                    InvKardex::create([
+                        'date_of_issue'     => $date_of_issue,
+                        'establishment_id'  => 1,
+                        'location_id'       => 1,
+                        'item_id'           => $row->item_id,
+                        'quantity'          => -($part->quantity),
+                        'kardexable_id'     => $id,
+                        'kardexable_type'   => SerLoadOrder::class,
+                        'detail'            => 'Salida para servicios terceros'
+                    ]);
+                }
+            }
 
             $aux_odt = $row->odt_request_id;
         }

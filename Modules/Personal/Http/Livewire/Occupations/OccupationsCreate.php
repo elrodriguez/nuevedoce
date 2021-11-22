@@ -22,7 +22,7 @@ class OccupationsCreate extends Component
     public function save(){
         $this->validate([
             'name' => 'required|max:255',
-            'description' => 'required|max:255'
+            //'description' => 'required|max:255'
         ]);
 
         $occupation = PerOccupation::create([

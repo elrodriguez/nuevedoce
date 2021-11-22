@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::middleware(['middleware' => 'role_or_permission:inventario_items_parte_nuevo'])->get('part_create/{item_id}', 'ItemPartController@create')->name('inventory_item_part_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_items_parte_editar'])->get('part_edit/{id}', 'ItemPartController@edit')->name('inventory_item_part_edit');
         Route::get('search', 'ItemController@autocomplete')->name('inventory_item_search');
+        Route::get('download_example', 'ItemController@getDownload')->name('inventory_item_download_example');
     });
 
     Route::group(['prefix' => 'asset'], function() {

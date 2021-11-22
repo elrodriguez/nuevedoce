@@ -16,7 +16,7 @@ class CreatePerOccupationsTable extends Migration
         Schema::create('per_occupations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->boolean('state')->default(true);

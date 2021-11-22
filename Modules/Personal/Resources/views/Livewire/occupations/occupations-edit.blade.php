@@ -7,14 +7,14 @@
                         <label class="form-label" for="address">@lang('personal::labels.lbl_name') <span class="text-danger">*</span> </label>
                         <input wire:model="name" type="text" class="form-control" id="name" required="">
                         @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="phone">@lang('personal::labels.lbl_description') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="phone">@lang('personal::labels.lbl_description') </label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
@@ -24,7 +24,7 @@
                             <label class="custom-control-label" for="state">@lang('personal::labels.lbl_active')</label>
                         </div>
                         @error('state')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

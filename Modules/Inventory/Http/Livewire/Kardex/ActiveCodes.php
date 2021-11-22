@@ -49,6 +49,9 @@ class ActiveCodes extends Component
                         'inv_locations.name AS location_name',
                         'inv_assets.state'
                     )
+                    ->where('inv_categories.id',$this->family_id)
+                    ->where('inv_brands.id',$this->brand_id)
+                    ->where('parts.name','like','%'.$this->search.'%')
                     ->orderBY('inv_categories.description')
                     ->orderBY('parts.name')
                     ->paginate($this->show);

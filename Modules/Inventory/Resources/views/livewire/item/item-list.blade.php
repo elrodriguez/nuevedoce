@@ -145,7 +145,7 @@
                                 <div class="flex-fill">
                                     <span class="h5">Cómo funciona</span>
                                     <br>
-                                    Para importar tiene que tener el <a href="#" target="_blank">formato</a> correcto y deberá ser un archivo excel
+                                    Para importar tiene que tener el <a href="{{ route('inventory_item_download_example') }}">formato</a> correcto y deberá ser un archivo excel
                                 </div>
                             </div>
                         </div>

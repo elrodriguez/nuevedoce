@@ -44,20 +44,12 @@ class ItemController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function getDownload()
     {
-        //
+        $file= public_path(). "/storage/items.xlsx";
+        return response()->download($file, 'items.xlsx');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     public function autocomplete(Request $request){
         $search = $request->input('q');

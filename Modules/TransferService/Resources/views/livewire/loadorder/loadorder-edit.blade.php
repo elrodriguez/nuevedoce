@@ -19,10 +19,10 @@
                                     </div>
                                 </th>
                                 <th class="text-center">{{ __('transferservice::labels.lbl_code') }}</th>
-                                <th class="text-center">{{ __('transferservice::labels.lbl_event') }}</th>
-                                <th class="text-center">{{ __('transferservice::labels.lbl_customer') }}</th>
+                                <th class="">{{ __('transferservice::labels.lbl_event') }}</th>
+                                <th class="">{{ __('transferservice::labels.lbl_customer') }}</th>
                                 <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
-                                <th class="text-center">{{ __('transferservice::labels.lbl_item') }}</th>
+                                <th class="">{{ __('transferservice::labels.lbl_item') }}</th>
                                 <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
                             </tr>
                             </thead>
@@ -46,9 +46,9 @@
                                     <td class="align-middle">{{ $odt->internal_id }}</td>
                                     <td class="align-middle">{{ $odt->name_evento }}</td>
                                     <td class="align-middle">{{ $odt->name_customer }}</td>
-                                    <td class="align-middle">{{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }}</td>
+                                    <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }}</td>
                                     <td class="align-middle">{{ $odt->name_item }}</td>
-                                    <td class="align-middle text-center">{{ $odt->amount }}</td>
+                                    <td class="align-middle text-right">{{ $odt->amount }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -93,21 +93,21 @@
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="charge_maximum">@lang('transferservice::labels.lbl_maximum_vehicle_load') <span class="text-danger">*</span> </label>
                         <input wire:model.defer="charge_maximum" id="charge_maximum" type="text" class="form-control" readonly />
                         @error('charge_maximum')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="charge_weight">@lang('transferservice::labels.lbl_charge_weight') <span class="text-danger">*</span> </label>
                         <input wire:model.defer="charge_weight" id="charge_weight" type="text" class="form-control" readonly />
                         @error('charge_weight')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="upload_date">@lang('transferservice::labels.lbl_upload_date') <span class="text-danger">*</span> </label>
                         <input wire:model="upload_date" type="text" class="form-control" id="upload_date" required="" />
                         @error('upload_date')
@@ -128,7 +128,7 @@
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label" for="additional_information">@lang('transferservice::labels.lbl_additional_information') </label>
                         <textarea wire:model.defer="additional_information" class="form-control" id="additional_information"></textarea>
                         @error('additional_information')
@@ -145,10 +145,10 @@
                                     <th class="text-center">#</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_actions') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_code') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_event') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_customer') }}</th>
+                                    <th class="">{{ __('transferservice::labels.lbl_event') }}</th>
+                                    <th class="">{{ __('transferservice::labels.lbl_customer') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
-                                    <th class="text-center">{{ __('transferservice::labels.lbl_item') }}</th>
+                                    <th class="">{{ __('transferservice::labels.lbl_item') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
                                 </tr>
                                 </thead>
@@ -177,9 +177,9 @@
                                         <td class="align-middle">{{ $oc_register->internal_id }}</td>
                                         <td class="align-middle">{{ $oc_register->name_evento }}</td>
                                         <td class="align-middle">{{ $oc_register->name_customer }}</td>
-                                        <td class="align-middle">{{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }}</td>
+                                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }}</td>
                                         <td class="align-middle">{{ $oc_register->name_item }}</td>
-                                        <td class="align-middle text-center">{{ $oc_register->amount }}</td>
+                                        <td class="align-middle text-right">{{ $oc_register->amount }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

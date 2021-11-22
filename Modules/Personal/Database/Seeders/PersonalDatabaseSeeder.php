@@ -18,6 +18,7 @@ class PersonalDatabaseSeeder extends Seeder
 
         $this->call([
             SeedModulePermissionsTableSeeder::class,
+            SeedOcupationsTableSeeder::class,
         ]);
     }
 }

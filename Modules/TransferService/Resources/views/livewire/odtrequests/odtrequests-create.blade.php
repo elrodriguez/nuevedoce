@@ -156,7 +156,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">{{ __('labels.actions') }}</th>
-                                            <th class="text-center">{{ __('labels.name') }}</th>
+                                            <th>{{ __('labels.name') }}</th>
                                             <th class="text-center">@lang('inventory::labels.lbl_amount')</th>
                                         </tr>
                                     </thead>

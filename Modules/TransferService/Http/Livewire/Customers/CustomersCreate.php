@@ -115,11 +115,11 @@ class CustomersCreate extends Component
                 'number' => 'required|numeric|unique:people,number',
                 'last_name_father' => 'required|min:3|max:255',
                 'last_name_mother' => 'required|min:3|max:255',
-                'address' => 'required|min:3|max:255',
-                'email' => 'required|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
+                //'address' => 'required|min:3|max:255',
+                'email' => 'nullable|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
                 //'telephone' => 'required|min:3|max:255',
                 'sex' => 'required',
-                'birth_date' => 'required',
+                //'birth_date' => 'required',
                 'photo' => 'nullable|image|max:1024'
             ]);
         }else{

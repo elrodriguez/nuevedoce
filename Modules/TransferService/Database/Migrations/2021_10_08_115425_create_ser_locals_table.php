@@ -18,8 +18,8 @@ class CreateSerLocalsTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('reference');
-            $table->string('longitude');
-            $table->string('latitude');
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->boolean('state')->default(true);

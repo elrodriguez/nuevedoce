@@ -76,8 +76,8 @@ class CompaniesCreate extends Component
             'district_id' => 'required',
             'identity_document_type_id' => 'required',
             'number' => 'required|numeric|unique:people,number',
-            'address' => 'required|min:3|max:255',
-            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
+            //'address' => 'required|min:3|max:255',
+            'email' => 'nullable|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
             //'telephone' => 'required|min:3|max:255',
             //'sex' => 'required',
             'type_person_id' => 'required'
