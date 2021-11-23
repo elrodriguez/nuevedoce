@@ -152,6 +152,13 @@
                                 </a>
                             </li>
                         @endcan
+                        @can('serviciodetraslados_orden_carga_retorno')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'load_order' && $path[2] == 'return' ? 'active' : '' }}">
+                                <a href="{{ route('service_load_order_return') }}" title="Retorno orden carga" data-filter-tags="Retorno orden carga">
+                                    <span class="nav-link-text" data-i18n="nav.retorno_orden_carga">{{ __('transferservice::labels.lbl_return') }} </span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan

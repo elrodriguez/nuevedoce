@@ -233,4 +233,9 @@ class LoadOrderController extends Controller
     {
         return view('transferservice::loadorder.exit');
     }
+
+    public function return()
+    {
+        return view('transferservice::loadorder.return');
+    }
 }

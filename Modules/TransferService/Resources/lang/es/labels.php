@@ -120,5 +120,6 @@ return [
     'lbl_in_service'    => 'En Servicio',
     'lbl_returned'      => 'Retornado',
     'lbl_pending_return'=> 'Pendiente Retorno',
-    'lbl_accessories'   => 'Accesorios'
+    'lbl_accessories'   => 'Accesorios',
+    'lbl_return'        => 'Retorno'
 ];
