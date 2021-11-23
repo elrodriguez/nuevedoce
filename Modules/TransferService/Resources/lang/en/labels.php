@@ -120,5 +120,6 @@ return [
     'lbl_slope_load'    => 'Slope Load',
     'lbl_in_service'    => 'In Service',
     'lbl_returned'      => 'Returned',
-    'lbl_pending_return'=> 'Pending Return'
+    'lbl_pending_return'=> 'Pending Return',
+    'lbl_accessories'   => 'Accessories'
 ];

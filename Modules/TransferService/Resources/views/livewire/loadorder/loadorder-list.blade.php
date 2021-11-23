@@ -44,6 +44,7 @@
                     <th>@lang('transferservice::labels.lbl_charging_time')</th>
                     <th>@lang('transferservice::labels.lbl_vehicle')</th>
                     <th>@lang('transferservice::labels.lbl_license_plate')</th>
+                    <th>@lang('labels.state')</th>
                 </tr>
                 </thead>
                 <tbody class="">
@@ -61,9 +62,12 @@
                                             <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
                                         </a>
                                     @endcan
-                                        <a href="{{ route('service_load_order_pdf', $loadorder->id) }}" class="dropdown-item text-success">
-                                            <i class="fal print mr-1"></i>@lang('transferservice::buttons.btn_print_oc')
-                                        </a>
+                                    <a wire:click="getLoadOrderDetails({{ $loadorder->id }})" href="javascript:void(0)" class="dropdown-item text-info">
+                                        <i class="fal fa-list-ol mr-1"></i>@lang('labels.see_details')
+                                    </a>
+                                    <a href="{{ route('service_load_order_pdf', $loadorder->id) }}" class="dropdown-item text-success">
+                                        <i class="fal fa-print mr-1"></i>@lang('transferservice::buttons.btn_print_oc')
+                                    </a>
                                     @can('serviciodetraslados_orden_carga_eliminar')
                                         <div class="dropdown-divider"></div>
                                         @if($loadorder->departure_date == null or $loadorder->departure_date == '')
@@ -84,6 +88,17 @@
                         <td class="align-middle">{{ $loadorder->charging_time }}</td>
                         <td class="align-middle">{{ $loadorder->name }}</td>
                         <td class="align-middle">{{ $loadorder->license_plate }}</td>
+                        <td class="align-middle">
+                            @if($loadorder->state == 'P')
+                                <span class="badge badge-secondary">{{ __('transferservice::labels.lbl_slope_load') }}</span>
+                            @elseif($loadorder->state == 'E')
+                                <span class="badge badge-success">{{ __('transferservice::labels.lbl_in_service') }}</span>
+                            @elseif($loadorder->state == 'A')
+                                <span class="badge badge-primary">{{ __('transferservice::labels.lbl_returned') }}</span>
+                            @elseif($loadorder->state == 'B')
+                                <span class="badge badge-info">{{ __('transferservice::labels.lbl_pending_return') }}</span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -91,6 +106,48 @@
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $loadorders->links() }}</div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalLoadOrderDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{ __('labels.details') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{{ __('labels.category') }}</th>
+                            <th scope="col">{{ __('labels.subcategory') }}</th>
+                            <th scope="col">{{ __('labels.description') }}</th>
+                            <th scope="col">{{ __('transferservice::labels.lbl_accessories') }}</th>
+                            <th scope="col">{{ __('labels.quantity') }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($loadorderdetails as $key => $loadorderdetail)
+                            <tr>
+                                <th scope="row">{{ $key + 1 }}</th>
+                                <td>{{ $loadorderdetail->category_name }}</td>
+                                <td>{{ $loadorderdetail->asset_name }}</td>
+                                <td>{{ $loadorderdetail->asset_description }}</td>
+                                <td>{{ $loadorderdetail->part_name }}</td>
+                                <td>{{ $loadorderdetail->quantity }}</td>
+                            </tr>
+                          @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -147,6 +204,9 @@
                 closeButton: false
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        });
+        document.addEventListener('ser-load-order-details', event => {
+            $('#modalLoadOrderDetails').modal('show');
         });
     </script>
 </div>

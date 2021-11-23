@@ -7,6 +7,7 @@ use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Lang;
+use Modules\Inventory\Entities\InvItemPart;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
 use Modules\TransferService\Entities\SerOdtRequest;
@@ -16,7 +17,8 @@ class LoadorderList extends Component
 {
     public $show;
     public $search;
-
+    public $loadorderdetails = [];
+    
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
@@ -45,7 +47,8 @@ class LoadorderList extends Component
                 'ser_load_orders.departure_time',
                 'ser_load_orders.return_date',
                 'ser_load_orders.return_time',
-                'ser_load_orders.uuid'
+                'ser_load_orders.uuid',
+                'ser_load_orders.state'
             )
             ->paginate($this->show);
     }
@@ -86,5 +89,26 @@ class LoadorderList extends Component
 
 
         $this->dispatchBrowserEvent('ser-load-order-delete', ['msg' => Lang::get('transferservice::messages.msg_delete')]);
+    }
+
+    public function getLoadOrderDetails($id){
+        $this->loadorderdetails = [];
+
+        $this->loadorderdetails = InvItemPart::join('inv_items AS part','inv_item_parts.part_id','part.id')
+                                    ->join('inv_items AS asset','inv_item_parts.item_id','asset.id')
+                                    ->join('inv_categories','asset.category_id','inv_categories.id')
+                                    ->join('ser_load_order_details','asset.id','ser_load_order_details.item_id')
+                                    ->select(
+                                        'inv_categories.description AS category_name',
+                                        'asset.name AS asset_name',
+                                        'asset.description AS asset_description',
+                                        'part.name AS part_name',
+                                        'inv_item_parts.quantity'
+                                    )
+                                    ->where('ser_load_order_details.load_order_id',$id)
+                                    ->get();
+        
+        $this->dispatchBrowserEvent('ser-load-order-details', ['success' => true]);
+
     }
 }

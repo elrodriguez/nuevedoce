@@ -119,5 +119,6 @@ return [
     'lbl_slope_load'    => 'Pendiente Carga',
     'lbl_in_service'    => 'En Servicio',
     'lbl_returned'      => 'Retornado',
-    'lbl_pending_return'=> 'Pendiente Retorno'
+    'lbl_pending_return'=> 'Pendiente Retorno',
+    'lbl_accessories'   => 'Accesorios'
 ];
