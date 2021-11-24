@@ -3,5 +3,6 @@
     "Setting": true,
     "Personal": true,
     "Inventory": true,
-    "TransferService": true
+    "TransferService": true,
+    "Lend": true
 }

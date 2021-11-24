@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'navigation' => 'Navegación',
     'thnum' => 'Num.',
     'companies' => 'Empresas',
     'company' => 'Empresa',
@@ -380,6 +381,7 @@ return [
     'upload_image_file' => 'Subir archivo de imagen',
     'analytics' => 'Análisis',
     'dashboard_from' => 'Panel',
+    'dashBoard' => 'DashBoard',
     'analytics_dashboard' => 'Panel de Análisis',
     'expenses' => 'Gastos',
     'my_profits' => 'Mis Beneficios',

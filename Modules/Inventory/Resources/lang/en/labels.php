@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'module_name'       => 'Inventory',
     'lbl_inventory'     => 'Inventory',
     'lbl_list'          => 'List',
     'lbl_unit_measure'  => 'Unit of Measure',

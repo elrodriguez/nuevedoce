@@ -1,7 +1,7 @@
-@extends('inventory::layouts.master')
+@extends('lend::layouts.master')
 @section('breadcrumb')
     <x-company-name></x-company-name>
-    <li class="breadcrumb-item">{{ __('inventory::labels.module_name') }}</li>
+    <li class="breadcrumb-item">{{ __('lend::labels.module_name') }}</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
