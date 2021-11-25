@@ -100,4 +100,7 @@ return [
     'lbl_assets_with_code' => 'Activos con Código',
     'lbl_accessory'     => 'Accesorio',
     'lbl_asset'         => 'Activo',
+    'lbl_location_store'=> 'localizaciones (Almacenes)',
+    'lbl_assets_with_code' => 'Activos con código',
+    'lbl_documents_purchases'=> 'documentos (Compras)'
 ];

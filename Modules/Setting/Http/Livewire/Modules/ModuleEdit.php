@@ -49,7 +49,7 @@ class ModuleEdit extends Component
 
         $activity->modelOn(SetModule::class,$this->module->id,'set_modules');
         $activity->causedBy(Auth::user());
-        $activity->routeOn(route('setting_modules_edit',$this->establishment->id));
+        $activity->routeOn(route('setting_modules_edit',$this->module->id));
         $activity->logType('edit');
         $activity->dataUpdated($this->module);
         $activity->log('se actualizo datos del modulo');

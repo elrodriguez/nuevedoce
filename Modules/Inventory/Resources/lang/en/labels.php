@@ -100,4 +100,7 @@ return [
     'lbl_assets_with_code' => 'Assets with code',
     'lbl_accessory'     => 'Accessory',
     'lbl_asset'         => 'Asset',
+    'lbl_location_store'=> 'locations (Warehouses)',
+    'lbl_assets_with_code' => 'Assets with code',
+    'lbl_documents_purchases'=> 'documentos (Compras)'
 ];
