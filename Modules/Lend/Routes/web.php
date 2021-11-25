@@ -15,6 +15,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('lend')->group(function(
     Route::get('dashboard', 'LendController@index')->name('lend_dashboard');
 
     Route::group(['prefix' => 'interest'], function() {
-        Route::middleware(['middleware' => 'role_or_permission:prestamos_intereses'])->get('list', 'InterestsController@index')->name('lend_interests_list');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_intereses'])->get('list', 'InterestsController@index')->name('lend_interest_list');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_intereses_nuevo'])->get('create', 'InterestsController@create')->name('lend_interest_create');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_intereses_editar'])->get('edit/{id}', 'InterestsController@edit')->name('lend_interest_edit');
     });
 });

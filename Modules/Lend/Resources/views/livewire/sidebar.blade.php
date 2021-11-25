@@ -42,22 +42,28 @@
             </li>
             @endcan
             <li class="nav-title">@lang('labels.navigation')</li>
-            @can('personal_tipo_empleados')
+            @can('prestamos_intereses')
             <li class="{{ $path[0] == 'lend' && $path[1] == 'interest' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="Tipo de Empleado" data-filter-tags="Tipo de Empleado">
+                <a href="javascript:void(0);" title="Intereses" data-filter-tags="Intereses">
                     <i class="fal fa-humidity"></i>
-                    <span class="nav-link-text" data-i18n="nav.tipo_empleado">@lang('lend::labels.lbl_interest')</span>
+                    <span class="nav-link-text" data-i18n="nav.interes">@lang('lend::labels.lbl_interest')</span>
                 </a>
                 <ul>
                     <li class="{{ $path[0] == 'lend' && $path[1] == 'interest' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('lend_interests_list') }}" title="Interéses" data-filter-tags="Interéses">
-                            <span class="nav-link-text" data-i18n="nav.datos_intereses">@lang('labels.list')</span>
+                        <a href="{{ route('lend_interest_list') }}" title="Lista Interéses" data-filter-tags="Lista Interéses">
+                            <span class="nav-link-text" data-i18n="nav.lista_intereses">@lang('labels.list')</span>
                         </a>
                     </li>
+                    @can('prestamos_intereses_nuevo')
+                    <li class="{{ $path[0] == 'lend' && $path[1] == 'interest' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('lend_interest_create') }}" title="Nuevo Interés" data-filter-tags="Nuevo Interés">
+                            <span class="nav-link-text" data-i18n="nav.nuevo_interes">@lang('lend::labels.lbl_new')</span>
+                        </a>
+                    </li>
+                    @endcan
                 </ul>
             </li>
             @endcan
-
         </ul>
     </nav>
 </div>
