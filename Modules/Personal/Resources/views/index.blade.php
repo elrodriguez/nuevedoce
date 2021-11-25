@@ -1,7 +1,7 @@
 @extends('personal::layouts.master')
 @section('breadcrumb')
     <x-company-name></x-company-name>
-    <li class="breadcrumb-item">Personal</li>
+    <li class="breadcrumb-item">{{ __('personal::labels.module_name') }}</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
@@ -12,4 +12,14 @@
     <div class="subheader-block">
         Dashboard
     </div>
+@endsection
+@section('content')
+<div class="row">
+    <div class="col-sm-6 col-xl-3">
+        @livewire('personal::companies.companies-quantity')
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        @livewire('personal::employees.employees-quantity')
+    </div>
+</div>
 @endsection

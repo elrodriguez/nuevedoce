@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'module_name'       => 'Personal',
     'lbl_name'          => 'Name',
     'lbl_names'         => 'Names',
     'lbl_description'   => 'Description',
