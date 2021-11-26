@@ -25,5 +25,8 @@ return  [
     'lbl_went_wrong'    => 'Salió mal',
     'lbl_attention'     => 'Atención',
     'lbl_value'         => 'Valor',
-    'lbl_payment_method'=> 'Forma de Pago'
+    'lbl_payment_method'=> 'Forma de Pago',
+    'lbl_quotas'        => 'Cuotas',
+    'lbl_quota'         => 'Cuota',
+    'lbl_amount'        => 'Cantidad'
 ];

@@ -25,5 +25,8 @@ return  [
     'lbl_went_wrong'    => 'Went Wrong',
     'lbl_attention'     => 'Attention',
     'lbl_value'         => 'Value',
-    'lbl_payment_method'=> 'Payment Method'
+    'lbl_payment_method'=> 'Payment Method',
+    'lbl_quotas'        => 'Quotas',
+    'lbl_quota'         => 'Quota',
+    'lbl_amount'        => 'Amount'
 ];

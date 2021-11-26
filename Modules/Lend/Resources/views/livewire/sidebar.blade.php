@@ -86,6 +86,28 @@
                     </ul>
                 </li>
             @endcan
+            @can('prestamos_cuotas')
+                <li class="{{ $path[0] == 'lend' && $path[1] == 'quota' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Número de Cuotas" data-filter-tags="Número de Cuotas">
+                        <i class="fal fa-list-ol"></i>
+                        <span class="nav-link-text" data-i18n="nav.numero_cuotas">@lang('lend::labels.lbl_quotas')</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'lend' && $path[1] == 'quota' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('lend_quota_index') }}" title="Lista de Cuotas" data-filter-tags="Lista de Cuotas">
+                                <span class="nav-link-text" data-i18n="nav.lista_formas_pago">@lang('labels.list')</span>
+                            </a>
+                        </li>
+                        @can('prestamos_cuotas_nuevo')
+                            <li class="{{ $path[0] == 'lend' && $path[1] == 'quota' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('lend_quota_create') }}" title="Nuevo Numero de Cuotas" data-filter-tags="Nuevo Numero de Cuotas">
+                                    <span class="nav-link-text" data-i18n="nav.nueva_cuota">@lang('lend::labels.lbl_new')</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>
