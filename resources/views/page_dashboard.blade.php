@@ -1,14 +1,12 @@
 <x-app-layout>
     <x-slot name="sidebar">
     </x-slot>  
-    <x-slot name="breadcrumb">
+    @section("breadcrumb")
         <x-company-name></x-company-name>
-        <li class="breadcrumb-item">Category</li>
-        <li class="breadcrumb-item">Sub-category</li>
-        <li class="breadcrumb-item active">Page Title</li>
+        <li class="breadcrumb-item active">Dashboard</li>
         <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
-    </x-slot>
-    <x-slot name="subheader">
+    @endsection
+    @section("subheader")
         <h1 class="subheader-title">
             <i class='subheader-icon fal fa-globe'></i>Modulos <span class='fw-300'>Del Sistema</span> <sup class='badge badge-primary fw-500'>New</sup>
             <small>Disponibles para el usuario</small>
@@ -16,6 +14,8 @@
         <div class="subheader-block">
             Modulos
         </div>
-    </x-slot>
-    @livewire('dashboard')
+    @endsection
+    @section('content')
+        @livewire('dashboard')
+    @endsection
 </x-app-layout>

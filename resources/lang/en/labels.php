@@ -604,5 +604,8 @@ return [
     'license' => 'License',
     'documentation' => 'Documentation',
     'model' => 'Model',
-    'transaction_type' => 'Transaction type'
+    'transaction_type' => 'Transaction type',
+    'user_data' => 'User Data',
+    'lcorrect' => 'Corregir',
+    'username_password_incorrect' => 'The username or password is incorrect'
 ];

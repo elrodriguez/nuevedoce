@@ -20,7 +20,7 @@ class SeedModulePermissionsTableSeeder extends Seeder
     {
         $module = SetModule::create([
             'uuid' => Str::uuid(),
-            'logo' => 'fal fa-badge-dollar',
+            'logo' => 'fal fa-hands-usd',
             'label' => 'Prestamos',
             'destination_route' => 'lend_dashboard',
             'status' => true

@@ -47,8 +47,8 @@
         document.addEventListener('login-error', function () {
             initApp.playSound('themes/smart-admin/media/sound', 'voice_on')
             bootbox.alert({
-                title: "<i class='fal fa-check-circle text-success mr-2'></i> <span class='text-success fw-500'>Success!</span>",
-                message: "<span><strong>Great...</strong> all is complete</span>",
+                title: "<i class='fal fa-times text-success mr-2'></i> <span class='text-success fw-500'>{{ __('labels.error') }}</span>",
+                message: "<span><strong>{{ __('labels.lcorrect') }}...</strong> {{ __('labels.username_password_incorrect') }}</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false

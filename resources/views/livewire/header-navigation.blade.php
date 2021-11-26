@@ -65,7 +65,10 @@
                     </div>
                 </div>
                 <div class="dropdown-divider m-0"></div>
-                <a href="#" class="dropdown-item" data-action="app-reset">
+                <a data-toggle="modal" data-target="#modalProfile" href="javascript:void(0)" class="dropdown-item">
+                    <span>{{ __('labels.user_data') }}</span>
+                </a>
+                {{--<a href="#" class="dropdown-item" data-action="app-reset">
                     <span data-i18n="drpdwn.reset_layout">Reset Layout</span>
                 </a>
                 <a href="#" class="dropdown-item" data-toggle="modal" data-target=".js-modal-settings">
@@ -79,8 +82,8 @@
                 <a href="#" class="dropdown-item" data-action="app-print">
                     <span data-i18n="drpdwn.print">Print</span>
                     <i class="float-right text-muted fw-n">Ctrl + P</i>
-                </a>
-                <div class="dropdown-multilevel dropdown-multilevel-left">
+                </a> --}}
+                {{-- <div class="dropdown-multilevel dropdown-multilevel-left">
                     <div class="dropdown-item">
                         Language
                     </div>
@@ -92,7 +95,7 @@
                         <a href="#?lang=jp" class="dropdown-item" data-action="lang" data-lang="jp">日本語</a>
                         <a href="#?lang=ch" class="dropdown-item" data-action="lang" data-lang="ch">中文</a>
                     </div>
-                </div>
+                </div> --}}
                 <div class="dropdown-divider m-0"></div>
                 <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display:none">@csrf</form>
                 <a class="dropdown-item fw-500 pt-3 pb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

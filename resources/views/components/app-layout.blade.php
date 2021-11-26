@@ -23,39 +23,12 @@
         <link rel="mask-icon" href="{{ url('themes/smart-admin/img/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
         <!-- You can add your own stylesheet here to override any styles that comes before it -->
 		<link rel="stylesheet" media="screen, print" href="{{ url('themes/smart-admin/css/your_styles.css') }}">
+        @yield('styles')
     </head>
-    <!-- BEGIN Body -->
-    <!-- Possible Classes
-
-		* 'header-function-fixed'         - header is in a fixed at all times
-		* 'nav-function-fixed'            - left panel is fixed
-		* 'nav-function-minify'			  - skew nav to maximize space
-		* 'nav-function-hidden'           - roll mouse on edge to reveal
-		* 'nav-function-top'              - relocate left pane to top
-		* 'mod-main-boxed'                - encapsulates to a container
-		* 'nav-mobile-push'               - content pushed on menu reveal
-		* 'nav-mobile-no-overlay'         - removes mesh on menu reveal
-		* 'nav-mobile-slide-out'          - content overlaps menu
-		* 'mod-bigger-font'               - content fonts are bigger for readability
-		* 'mod-high-contrast'             - 4.5:1 text contrast ratio
-		* 'mod-color-blind'               - color vision deficiency
-		* 'mod-pace-custom'               - preloader will be inside content
-		* 'mod-clean-page-bg'             - adds more whitespace
-		* 'mod-hide-nav-icons'            - invisible navigation icons
-		* 'mod-disable-animation'         - disables css based animations
-		* 'mod-hide-info-card'            - hides info card from left panel
-		* 'mod-lean-subheader'            - distinguished page header
-		* 'mod-nav-link'                  - clear breakdown of nav links
-
-		>>> more settings are described inside documentation page >>>
-	-->
     <body class="mod-bg-1 ">
-        <!-- DOC: script to save and load page settings -->
+     
         <script>
-            /**
-             *	This script should be placed right after the body tag for fast execution 
-             *	Note: the script is written in pure javascript and does not depend on thirdparty library
-             **/
+
             'use strict';
 
             var classHolder = document.getElementsByTagName("BODY")[0],
@@ -119,7 +92,10 @@
         <div class="page-wrapper">
             <div class="page-inner">
                 <!-- BEGIN Left Aside -->
-                @livewire('sidebar')
+                @section('sidebar')
+                    @livewire('sidebar')
+                @show
+               
                 <!-- END Left Aside -->
                 <div class="page-content-wrapper">
                     <!-- BEGIN Page Header -->
@@ -129,12 +105,12 @@
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
                     <main id="js-page-content" role="main" class="page-content">
                         <ol class="breadcrumb page-breadcrumb">
-                            {{ $breadcrumb }}
+                            @yield('breadcrumb')
                         </ol>
                         <div class="subheader">
-                            {{ $subheader }}
+                            @yield('subheader')
                         </div>
-                        {{ $slot }}
+                        @yield('content')
                     </main>
                     <!-- this overlay is activated only when mobile menu is triggered -->
                     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
@@ -213,11 +189,14 @@
                 </div>
             </div>
         </div>
+        @livewire('modal-profile')
         <!-- END Page Wrapper -->
         <!-- BEGIN Quick Menu -->
         <x-theme-setting></x-theme-setting>
         <script src="{{ url('themes/smart-admin/js/vendors.bundle.js') }}"></script>
         <script src="{{ url('themes/smart-admin/js/app.bundle.js') }}"></script>
+        @yield('script')
         <!--This page contains the basic JS and CSS files to get started on your project. If you need aditional addon's or plugins please see scripts located at the bottom of each page in order to find out which JS/CSS files to add.-->
+        @livewireScripts
     </body>
 </html>
