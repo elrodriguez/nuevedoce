@@ -27,6 +27,7 @@
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
+                </div>
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
