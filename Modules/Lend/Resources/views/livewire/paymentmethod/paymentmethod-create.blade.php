@@ -11,13 +11,6 @@
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="value">@lang('lend::labels.lbl_value') <span class="text-danger">*</span> </label>
-                        <input wire:model="value" type="text" class="form-control" id="value" required="">
-                        @error('value')
-                        <div class="invalid-feedback-2">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 mb-3">
                         <label class="form-label">@lang('lend::labels.lbl_state') <span class="text-danger">*</span> </label>
                         <div class="custom-control custom-checkbox">
                             <input wire:model="state" type="checkbox" class="custom-control-input" id="state" checked="">
@@ -31,12 +24,12 @@
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('lend_interest_list')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('lend::labels.lbl_list')</a>
+            <a href="{{ route('lend_paymentmethod_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('lend::labels.lbl_list')</a>
             <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('lend::buttons.btn_save')</button>
         </div>
     </div>
     <script type="text/javascript">
-        document.addEventListener('len-interest-save', event => {
+        document.addEventListener('len-payment-method-save', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('lend::labels.lbl_success')}}!</span>",
