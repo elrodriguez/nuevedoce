@@ -64,6 +64,28 @@
                 </ul>
             </li>
             @endcan
+            @can('prestamos_forma_pago')
+                <li class="{{ $path[0] == 'lend' && $path[1] == 'paymentmethod' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Formas de Pago" data-filter-tags="Formas de Pago">
+                        <i class="fal fa-funnel-dollar"></i>
+                        <span class="nav-link-text" data-i18n="nav.formas_pago">@lang('lend::labels.lbl_payment_method')</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'lend' && $path[1] == 'paymentmethod' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('lend_paymentmethod_index') }}" title="Lista Formas de Pago" data-filter-tags="Lista Formas de Pago">
+                                <span class="nav-link-text" data-i18n="nav.lista_formas_pago">@lang('labels.list')</span>
+                            </a>
+                        </li>
+                        @can('prestamos_forma_pago_nuevo')
+                            <li class="{{ $path[0] == 'lend' && $path[1] == 'paymentmethod' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('lend_paymentmethod_create') }}" title="Nueva Forma de Pago" data-filter-tags="Nueva Forma de Pago">
+                                    <span class="nav-link-text" data-i18n="nav.nueva_forma_pago">@lang('lend::labels.lbl_new')</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>
