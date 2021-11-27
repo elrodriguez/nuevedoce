@@ -26,7 +26,7 @@ class QuotaEdit extends Component
 
     public function save(){
         $this->validate([
-            'amount'   => 'required|numeric'
+            'amount'   => 'required|numeric|unique:len_quotas,amount,'.$this->quota->id
         ]);
 
         $activity = new Activity;

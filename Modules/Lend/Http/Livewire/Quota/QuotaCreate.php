@@ -19,7 +19,7 @@ class QuotaCreate extends Component
 
     public function save(){
         $this->validate([
-            'amount'   => 'required|numeric'
+            'amount'   => 'required|numeric|unique:len_quotas,amount'
         ]);
 
         $quota = LenQuota::create([

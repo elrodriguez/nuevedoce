@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use Illuminate\Support\Facades\DB;
 class CreateLenPaymentMethodsTable extends Migration
 {
     /**
@@ -22,6 +22,12 @@ class CreateLenPaymentMethodsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::table('len_payment_methods')->insert([
+            ['description' => 'Meses'],
+            ['description' => 'Semanas'],
+            ['description' => 'Días']
+        ]);
     }
 
     /**

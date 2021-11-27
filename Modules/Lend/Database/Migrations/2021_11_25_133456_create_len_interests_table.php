@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateLenInterestsTable extends Migration
 {
@@ -23,6 +24,13 @@ class CreateLenInterestsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::table('len_interests')->insert([
+            ['description' => '20%','value' => '0.20'],
+            ['description' => '18%','value' => '0.18'],
+            ['description' => '15%','value' => '0.15'],
+            ['description' => '10%','value' => '0.10']
+        ]);
     }
 
     /**

@@ -108,6 +108,28 @@
                     </ul>
                 </li>
             @endcan
+            @can('prestamos_contrato')
+                <li class="{{ $path[0] == 'lend' && $path[1] == 'contract' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Contratos" data-filter-tags="Contratos">
+                        <i class="fal fa-money-check-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.contratos">@lang('lend::labels.lbl_contract')</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'lend' && $path[1] == 'contract' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('lend_contract_index') }}" title="Lista de Contratos" data-filter-tags="Lista de Contratos">
+                                <span class="nav-link-text" data-i18n="nav.lista_contratos">@lang('labels.list')</span>
+                            </a>
+                        </li>
+                        @can('prestamos_contrato_nuevo')
+                            <li class="{{ $path[0] == 'lend' && $path[1] == 'contract' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('lend_contract_create') }}" title="Nuevo Contrato" data-filter-tags="Nuevo Contrato">
+                                    <span class="nav-link-text" data-i18n="nav.nueva_contrato">@lang('lend::labels.lbl_new')</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>

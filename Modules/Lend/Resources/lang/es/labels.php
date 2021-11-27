@@ -28,5 +28,15 @@ return  [
     'lbl_payment_method'=> 'Forma de Pago',
     'lbl_quotas'        => 'Cuotas',
     'lbl_quota'         => 'Cuota',
-    'lbl_amount'        => 'Cantidad'
+    'lbl_amount'        => 'Cantidad',
+    'lbl_contract'      => 'Contrato',
+    'lbl_referred'      => 'Referido',
+    'lbl_penalty_applies' => 'Aplica penalidad A/C',
+    'lbl_penalty_amount_day' => 'Monto de penalidad por día',
+    'lbl_principal_amount' => 'Monto capital',
+    'lbl_interest_amount'   => 'Monto interés',
+    'lbl_total_amount'  => 'Monto total',
+    'lbl_con_active' => 'Activo',
+    'lbl_con_finished'   => 'Terminado',
+    'lbl_con_stop_paying'  => 'Dejó de pagar'
 ];

@@ -31,4 +31,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('lend')->group(function(
         Route::middleware(['middleware' => 'role_or_permission:prestamos_cuotas_nuevo'])->get('create', 'QuotaController@create')->name('lend_quota_create');
         Route::middleware(['middleware' => 'role_or_permission:prestamos_cuotas_editar'])->get('edit/{id}', 'QuotaController@edit')->name('lend_quota_edit');
     });
+
+    Route::group(['prefix' => 'contract'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato'])->get('list', 'ContractController@index')->name('lend_contract_index');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato_nuevo'])->get('create', 'ContractController@create')->name('lend_contract_create');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato_editar'])->get('edit/{id}', 'ContractController@edit')->name('lend_contract_edit');
+    });
 });
