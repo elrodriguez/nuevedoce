@@ -16,10 +16,10 @@
 @section('content')
 <div class="row">
     <div class="col-sm-6 col-xl-3">
-        @livewire('personal::companies.companies-quantity')
+        {{-- @livewire('personal::companies.companies-quantity') --}}
     </div>
     <div class="col-sm-6 col-xl-3">
-        @livewire('personal::employees.employees-quantity')
+        {{-- @livewire('personal::employees.employees-quantity') --}}
     </div>
 </div>
 @endsection
