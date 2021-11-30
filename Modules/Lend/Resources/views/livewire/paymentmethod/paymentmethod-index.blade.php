@@ -28,7 +28,7 @@
                 <div class="input-group-append">
                     <button wire:click="paymentMethodsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('lend::buttons.btn_search')</button>
                     @can('prestamos_forma_pago_nuevo')
-                        <a href="{{ route('lend_paymentmethod_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('lend::buttons.btn_new')</a>
+{{--                        <a href="{{ route('lend_paymentmethod_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('lend::buttons.btn_new')</a>--}}
                     @endcan
                 </div>
             </div>
@@ -52,19 +52,19 @@
                                 <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     <i class="fal fa-cogs"></i>
                                 </button>
-                                <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('prestamos_forma_pago_editar')
-                                        <a href="{{ route('lend_paymentmethod_edit', $payment_method->id) }}" class="dropdown-item">
-                                            <i class="fal fa-pencil-alt mr-1"></i>@lang('lend::buttons.btn_edit')
-                                        </a>
-                                    @endcan
-                                    @can('prestamos_forma_pago_eliminar')
-                                        <div class="dropdown-divider"></div>
-                                        <button onclick="confirmDelete({{ $payment_method->id }})" type="button" class="dropdown-item text-danger">
-                                            <i class="fal fa-trash-alt mr-1"></i>@lang('lend::buttons.btn_delete')
-                                        </button>
-                                    @endcan
-                                </div>
+{{--                                <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">--}}
+{{--                                    @can('prestamos_forma_pago_editar')--}}
+{{--                                        <a href="{{ route('lend_paymentmethod_edit', $payment_method->id) }}" class="dropdown-item">--}}
+{{--                                            <i class="fal fa-pencil-alt mr-1"></i>@lang('lend::buttons.btn_edit')--}}
+{{--                                        </a>--}}
+{{--                                    @endcan--}}
+{{--                                    @can('prestamos_forma_pago_eliminar')--}}
+{{--                                        <div class="dropdown-divider"></div>--}}
+{{--                                        <button onclick="confirmDelete({{ $payment_method->id }})" type="button" class="dropdown-item text-danger">--}}
+{{--                                            <i class="fal fa-trash-alt mr-1"></i>@lang('lend::buttons.btn_delete')--}}
+{{--                                        </button>--}}
+{{--                                    @endcan--}}
+{{--                                </div>--}}
                             </div>
                         </td>
                         <td class="align-middle">{{ $payment_method->description }}</td>

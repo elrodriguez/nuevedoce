@@ -28,7 +28,7 @@ class CreateLenContractsTable extends Migration
             $table->decimal('amount_interest',10,2);
             $table->decimal('amount_total',10,2);
             $table->text('additional_information')->nullable();
-            $table->char('state',1)->default(true)->comment('A=Activo,T=Terminado,D=Dejo de pagar');
+            $table->char('state','A')->default(true)->comment('A=Activo,T=Terminado,D=Dejo de pagar');
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();
