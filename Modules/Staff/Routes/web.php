@@ -1,7 +1,7 @@
 <?php
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('staff')->group(function() {
-    Route::get('dashboard', 'staffController@index')->name('staff_dashboard');
+    Route::get('dashboard', 'StaffController@index')->name('staff_dashboard');
 
     Route::group(['prefix' => 'employees_type'], function() {
         Route::middleware(['middleware' => 'role_or_permission:staff_tipo_empleados'])->get('list', 'EmployeeTypeController@index')->name('staff_employee-type_index');
