@@ -2,9 +2,11 @@
 
 namespace Modules\Lend\Http\Controllers;
 
+use App\Models\Person;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ContractController extends Controller
 {
@@ -53,7 +55,7 @@ class ContractController extends Controller
      */
     public function edit($id)
     {
-        return view('lend::contract.edit');
+        return view('lend::contract.edit')->with('id', $id);
     }
 
     /**
@@ -75,5 +77,17 @@ class ContractController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function autocomplete(Request $request){
+        $search = $request->input('q');
+        $customers    = Person::where('identity_document_type_id', '<>', '0')
+            ->select(
+                'people.id AS value',
+                DB::raw("CONCAT(people.number, ' - ', people.full_name) AS text")
+            )
+            ->where('people.full_name','like','%'.$search.'%')
+            ->get();
+        return response()->json($customers, 200);
     }
 }

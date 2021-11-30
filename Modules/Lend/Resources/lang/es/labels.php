@@ -32,11 +32,20 @@ return  [
     'lbl_contract'      => 'Contrato',
     'lbl_referred'      => 'Referido',
     'lbl_penalty_applies' => 'Aplica penalidad A/C',
+    'lbl_penalty'       => 'Aplica Mora',
     'lbl_penalty_amount_day' => 'Monto de penalidad por día',
     'lbl_principal_amount' => 'Monto capital',
     'lbl_interest_amount'   => 'Monto interés',
     'lbl_total_amount'  => 'Monto total',
     'lbl_con_active' => 'Activo',
     'lbl_con_finished'   => 'Terminado',
-    'lbl_con_stop_paying'  => 'Dejó de pagar'
+    'lbl_con_stop_paying'  => 'Dejó de pagar',
+    'lbl_customer'      => 'Cliente',
+    'lbl_additional_information'      => 'Información Adicional',
+    'lbl_payment_schedule'=> 'Cronograma de Pagos',
+    'lbl_date_to_pay'   => 'Fecha a Pagar',
+    'lbl_amount_to_pay' => 'Importe a Pagar',
+    'lbl_pending'       => 'Pendiente',
+    'lbl_paid'          => 'Pagado',
+    'lbl_defeated'      => 'Vencido'
 ];

@@ -8,11 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\WithPagination;
 use Modules\Lend\Entities\LenContract;
+use Modules\Lend\Entities\LenPaymentSchedule;
+use Modules\TransferService\Entities\SerLoadOrderDetail;
+use Modules\TransferService\Entities\SerOdtRequest;
+use Modules\TransferService\Entities\SerOdtRequestDetail;
 
 class ContractList extends Component
 {
     public $show;
     public $search;
+    public $detail_lists = [];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -60,19 +65,30 @@ class ContractList extends Component
         $this->resetPage();
     }
 
-    // public function deleteInterest($id){
-    //     $interest = LenInterest::find($id);
+     public function deleteContract($id){
+         $contract = LenContract::find($id);
 
-    //     $activity = new activity;
-    //     $activity->log('Se eliminó el interés');
-    //     $activity->modelOn(LenInterest::class, $id,'len_interests');
-    //     $activity->dataOld($interest);
-    //     $activity->logType('delete');
-    //     $activity->causedBy(Auth::user());
-    //     $activity->save();
+         //Eliminado el detalle:
+         $detail = LenPaymentSchedule::where('contract_id', '=', $id)->get();
+         foreach ($detail as $key=>$row){
+             $detail_sr = LenPaymentSchedule::find($row->id)->delete();
+         }
+         $activity = new activity;
+         $activity->log('Se eliminó el contrato de prestamo');
+         $activity->modelOn(LenContract::class, $id,'len_contracts');
+         $activity->dataOld($contract);
+         $activity->logType('delete');
+         $activity->causedBy(Auth::user());
+         $activity->save();
 
-    //     $interest->delete();
+         $contract->delete();
 
-    //     $this->dispatchBrowserEvent('len-interest-delete', ['msg' => Lang::get('lend::messages.msg_delete')]);
-    // }
+         $this->dispatchBrowserEvent('len-contract-delete', ['msg' => Lang::get('lend::messages.msg_delete')]);
+     }
+
+    public function openModalDetails($id){
+        $this->detail_lists = LenPaymentSchedule::where('contract_id', '=', $id)->get();
+        $label = Lang::get('lend::labels.lbl_payment_schedule');
+        $this->dispatchBrowserEvent('len-contract-details', ['label' => $label]);
+    }
 }

@@ -77,11 +77,11 @@
                             </a>
                         </li>
                         @can('prestamos_forma_pago_nuevo')
-                            <li class="{{ $path[0] == 'lend' && $path[1] == 'paymentmethod' && $path[2] == 'create' ? 'active' : '' }}">
-                                <a href="{{ route('lend_paymentmethod_create') }}" title="Nueva Forma de Pago" data-filter-tags="Nueva Forma de Pago">
-                                    <span class="nav-link-text" data-i18n="nav.nueva_forma_pago">@lang('lend::labels.lbl_new')</span>
-                                </a>
-                            </li>
+{{--                            <li class="{{ $path[0] == 'lend' && $path[1] == 'paymentmethod' && $path[2] == 'create' ? 'active' : '' }}">--}}
+{{--                                <a href="{{ route('lend_paymentmethod_create') }}" title="Nueva Forma de Pago" data-filter-tags="Nueva Forma de Pago">--}}
+{{--                                    <span class="nav-link-text" data-i18n="nav.nueva_forma_pago">@lang('lend::labels.lbl_new')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                         @endcan
                     </ul>
                 </li>

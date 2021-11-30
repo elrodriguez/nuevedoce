@@ -32,11 +32,20 @@ return  [
     'lbl_contract'      => 'Contract',
     'lbl_referred'      => 'Referred',
     'lbl_penalty_applies' => 'A/C penalty applies',
+    'lbl_penalty'       => 'Aplica Mora',
     'lbl_penalty_amount_day' => 'Penalty amount per day',
     'lbl_principal_amount' => 'Principal amount',
     'lbl_interest_amount'   => 'Interest amount',
     'lbl_total_amount'  => 'Total amount',
     'lbl_con_active' => 'Active',
     'lbl_con_finished'   => 'Finished',
-    'lbl_con_stop_paying'  => 'Stop paying'
+    'lbl_con_stop_paying'  => 'Stop paying',
+    'lbl_customer'      => 'Customer',
+    'lbl_additional_information'      => 'Additional Information',
+    'lbl_payment_schedule' => 'Payment Schedule',
+    'lbl_date_to_pay'   => 'Date to Pay',
+    'lbl_amount_to_pay' => 'Amount to Pay',
+    'lbl_pending'       => 'Pending',
+    'lbl_paid'          => 'Paid',
+    'lbl_defeated'      => 'Defeated'
 ];
