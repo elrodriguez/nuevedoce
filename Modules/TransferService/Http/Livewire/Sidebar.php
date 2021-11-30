@@ -10,7 +10,7 @@ class Sidebar extends Component
     public $company;
 
     public function mount(){
-        $this->company = SetCompany::first();
+        $this->company = SetCompany::where('main',true)->first();
     }
     
     public function render()
