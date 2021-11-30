@@ -223,8 +223,8 @@
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('staff_employees_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('personal::labels.lbl_list')</a>
-            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('personal::labels.btn_save')</button>
+            <a href="{{ route('staff_employees_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('staff::labels.lbl_list')</a>
+            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('staff::labels.btn_save')</button>
         </div>
     </div>
     <script type="text/javascript">

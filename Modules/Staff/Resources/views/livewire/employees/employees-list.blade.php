@@ -24,7 +24,7 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="employeesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('personal::labels.lbl_type_here')}}">
+                <input wire:keydown.enter="employeesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('staff::labels.lbl_type_here')}}">
                 <div class="input-group-append">
                     <button wire:click="employeesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
                     @can('personal_empleados_nuevo')
@@ -80,9 +80,9 @@
                         <td class="align-middle">{{ $employee->name_company }}</td>
                         <td class="text-center align-middle">
                             @if($employee->state)
-                                <span class="badge badge-success">{{ __('personal::labels.lbl_active') }}</span>
+                                <span class="badge badge-success">{{ __('staff::labels.lbl_active') }}</span>
                             @else
-                                <span class="badge badge-danger">{{ __('personal::labels.lbl_inactive') }}</span>
+                                <span class="badge badge-danger">{{ __('staff::labels.lbl_inactive') }}</span>
                             @endif
                         </td>
                     </tr>

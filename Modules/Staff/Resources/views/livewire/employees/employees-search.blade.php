@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="form-row needs-validation input-group {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="input-group bg-white shadow-inset-2">
-                    <input wire:keydown.enter="searchPerson" wire:model="number_search" maxlength="11" type="text" class="form-control border-left-1 bg-transparent pl-1" id="number_search" required="" placeholder="{{__('personal::labels.lbl_enter_identity_document_number')}}">
+                    <input wire:keydown.enter="searchPerson" wire:model="number_search" maxlength="11" type="text" class="form-control border-left-1 bg-transparent pl-1" id="number_search" required="" placeholder="{{__('staff::labels.lbl_enter_identity_document_number')}}">
                     @error('number_search')
                     <div class="invalid-feedback-2">{{ $message }}</div>
                     @enderror
@@ -19,7 +19,7 @@
         document.addEventListener('per-employees-search_a', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('personal::labels.lbl_success')}}!</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('staff::labels.lbl_success')}}!</span>",
                 message: "<span>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 swapButtonOrder: true,

@@ -24,11 +24,11 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="companiesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('personal::labels.lbl_type_here')}}">
+                <input wire:keydown.enter="companiesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('staff::labels.lbl_type_here')}}">
                 <div class="input-group-append">
-                    <button wire:click="companiesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
+                    <button wire:click="companiesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('staff::labels.btn_search')</button>
                     @can('personal_empleados_nuevo')
-                        <a href="{{ route('staff_companies_search') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('personal::labels.btn_new')</a>
+                        <a href="{{ route('staff_companies_search') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('staff::labels.btn_new')</a>
                     @endcan
                 </div>
             </div>
@@ -38,13 +38,13 @@
                 <thead>
                 <tr>
                     <th class="text-center">#</th>
-                    <th class="text-center">@lang('personal::labels.lbl_actions')</th>
-                    <th>@lang('personal::labels.lbl_name')</th>
-                    <th>@lang('personal::labels.lbl_identity_document_type')</th>
-                    <th>@lang('personal::labels.lbl_number')</th>
-                    <th>@lang('personal::labels.lbl_telephone')</th>
-                    <th>@lang('personal::labels.lbl_email')</th>
-                    <th>@lang('personal::labels.lbl_type_person')</th>
+                    <th class="text-center">@lang('staff::labels.lbl_actions')</th>
+                    <th>@lang('staff::labels.lbl_name')</th>
+                    <th>@lang('staff::labels.lbl_identity_document_type')</th>
+                    <th>@lang('staff::labels.lbl_number')</th>
+                    <th>@lang('staff::labels.lbl_telephone')</th>
+                    <th>@lang('staff::labels.lbl_email')</th>
+                    <th>@lang('staff::labels.lbl_type_person')</th>
                 </tr>
                 </thead>
                 <tbody class="">

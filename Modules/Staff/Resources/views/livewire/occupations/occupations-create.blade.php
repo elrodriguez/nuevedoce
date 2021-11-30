@@ -38,8 +38,8 @@
         document.addEventListener('per-occupations-save', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('personal::labels.lbl_success')}}!</span>",
-                message: "<span><strong>{{__('personal::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('staff::labels.lbl_success')}}!</span>",
+                message: "<span><strong>{{__('staff::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false

@@ -24,7 +24,7 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="occupationsSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('personal::labels.lbl_type_here')}}">
+                <input wire:keydown.enter="occupationsSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('staff::labels.lbl_type_here')}}">
                 <div class="input-group-append">
                     <button wire:click="occupationsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
                     @can('personal_ocupaciones_nuevo')
@@ -72,9 +72,9 @@
                         <td class="align-middle">{{ $occupation->description }}</td>
                         <td class="text-center align-middle">
                             @if($occupation->state)
-                                <span class="badge badge-success">{{ __('personal::labels.lbl_active') }}</span>
+                                <span class="badge badge-success">{{ __('staff::labels.lbl_active') }}</span>
                             @else
-                                <span class="badge badge-danger">{{ __('personal::labels.lbl_inactive') }}</span>
+                                <span class="badge badge-danger">{{ __('staff::labels.lbl_inactive') }}</span>
                             @endif
                         </td>
                     </tr>
@@ -90,20 +90,20 @@
         function confirmDelete(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
-                title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('personal::labels.msg_0001')}}",
-                message: "<span><strong>{{__('personal::labels.lbl_warning')}}: </strong> {{__('personal::labels.msg_0002')}}</span>",
+                title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('staff::labels.msg_0001')}}",
+                message: "<span><strong>{{__('staff::labels.lbl_warning')}}: </strong> {{__('staff::labels.msg_0002')}}</span>",
                 centerVertical: true,
                 swapButtonOrder: true,
                 buttons:
                     {
                         confirm:
                             {
-                                label: '{{__('personal::labels.btn_yes')}}',
+                                label: '{{__('staff::labels.btn_yes')}}',
                                 className: 'btn-danger shadow-0'
                             },
                         cancel:
                             {
-                                label: '{{__('personal::labels.btn_not')}}',
+                                label: '{{__('staff::labels.btn_not')}}',
                                 className: 'btn-default'
                             }
                     },
@@ -122,8 +122,8 @@
         document.addEventListener('per-occupations-delete', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('personal::labels.lbl_success')}}!</span>",
-                message: "<span><strong>{{__('personal::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('staff::labels.lbl_success')}}!</span>",
+                message: "<span><strong>{{__('staff::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false
