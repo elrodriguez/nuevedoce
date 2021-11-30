@@ -4,24 +4,24 @@
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="address">@lang('personal::labels.lbl_name') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="address">@lang('staff::labels.lbl_name') <span class="text-danger">*</span> </label>
                         <input wire:model="name" type="text" class="form-control" id="name" required="">
                         @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="phone">@lang('personal::labels.lbl_description') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="phone">@lang('staff::labels.lbl_description') <span class="text-danger">*</span> </label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">@lang('personal::labels.lbl_state') <span class="text-danger">*</span> </label>
+                        <label class="form-label">@lang('staff::labels.lbl_state') <span class="text-danger">*</span> </label>
                         <div class="custom-control custom-checkbox">
                             <input wire:model="state" type="checkbox" class="custom-control-input" id="state" checked="">
-                            <label class="custom-control-label" for="state">@lang('personal::labels.lbl_active')</label>
+                            <label class="custom-control-label" for="state">@lang('staff::labels.lbl_active')</label>
                         </div>
                         @error('state')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -30,8 +30,8 @@
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('staff_employee-type_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('personal::labels.lbl_list')</a>
-            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('personal::labels.btn_save')</button>
+            <a href="{{ route('staff_employee-type_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('staff::labels.lbl_list')</a>
+            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('staff::labels.btn_save')</button>
         </div>
     </div>
     <script type="text/javascript">

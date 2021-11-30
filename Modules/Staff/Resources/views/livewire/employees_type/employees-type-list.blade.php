@@ -26,9 +26,9 @@
                 </div>
                 <input wire:keydown.enter="activitiesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('staff::labels.lbl_type_here')}}">
                 <div class="input-group-append">
-                    <button wire:click="activitiesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('personal::labels.btn_search')</button>
+                    <button wire:click="activitiesSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('staff::labels.btn_search')</button>
                     @can('personal_tipo_empleados_nuevo')
-                    <a href="{{ route('staff_employee-type_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('personal::labels.btn_new')</a>
+                    <a href="{{ route('staff_employee-type_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('staff::labels.btn_new')</a>
                     @endcan
                 </div>
             </div>
@@ -38,9 +38,9 @@
                 <thead>
                 <tr>
                     <th class="text-center">#</th>
-                    <th class="text-center">@lang('personal::labels.lbl_actions')</th>
-                    <th>@lang('personal::labels.lbl_name')</th>
-                    <th>@lang('personal::labels.lbl_description')</th>
+                    <th class="text-center">@lang('staff::labels.lbl_actions')</th>
+                    <th>@lang('staff::labels.lbl_name')</th>
+                    <th>@lang('staff::labels.lbl_description')</th>
                     <th class="text-center">{{ __('setting::labels.state') }}</th>
                 </tr>
                 </thead>
@@ -56,13 +56,13 @@
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
                                     @can('personal_tipo_empleados_editar')
                                     <a href="{{ route('staff_employee-type_edit',$employeesType->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i>@lang('personal::labels.btn_edit')
+                                        <i class="fal fa-pencil-alt mr-1"></i>@lang('staff::labels.btn_edit')
                                     </a>
                                     @endcan
                                     @can('personal_tipo_empleados_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $employeesType->id }})" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i>@lang('personal::labels.btn_delete')
+                                        <i class="fal fa-trash-alt mr-1"></i>@lang('staff::labels.btn_delete')
                                     </button>
                                     @endcan
                                 </div>

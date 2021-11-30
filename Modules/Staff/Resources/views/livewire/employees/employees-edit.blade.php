@@ -115,7 +115,7 @@
                         <div class="frame-wrap">
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="man" name="sex" wire:model="sex" value="H">
-                                <label class="custom-control-label" for="man">@lang('personal::labels.lbl_man')</label>
+                                <label class="custom-control-label" for="man">@lang('staff::labels.lbl_man')</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="woman" name="sex" wire:model="sex" value="M" >
@@ -215,7 +215,7 @@
                             <input wire:model="cv" type="file" class="custom-file-input" id="cv">
                             <label class="custom-file-label" for="customFile">@lang('staff::labels.lbl_choose_file')</label>
                             @if($cv_view)
-                                <a href="{{ $cv_view }}" alt="{{ $names }}" target="_blank" class="btn btn-success waves-effect waves-themed" width="150px"><span class="fal fa-download mr-1"></span> @lang('personal::labels.lbl_cv') {{ $names }}</a>
+                                <a href="{{ $cv_view }}" alt="{{ $names }}" target="_blank" class="btn btn-success waves-effect waves-themed" width="150px"><span class="fal fa-download mr-1"></span> @lang('staff::labels.lbl_cv') {{ $names }}</a>
                             @endif
                         </div>
                         @error('cv')
@@ -226,8 +226,8 @@
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('staff_employees_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('personal::labels.lbl_list')</a>
-            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('personal::labels.btn_update')</button>
+            <a href="{{ route('staff_employees_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('staff::labels.lbl_list')</a>
+            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('staff::labels.btn_update')</button>
         </div>
     </div>
     <script type="text/javascript">

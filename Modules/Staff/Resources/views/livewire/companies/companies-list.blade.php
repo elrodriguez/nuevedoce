@@ -59,13 +59,13 @@
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
                                     @can('personal_empresas_editar')
                                         <a href="{{ route('staff_companies_edit',$company->id) }}" class="dropdown-item">
-                                            <i class="fal fa-pencil-alt mr-1"></i>@lang('personal::labels.btn_edit')
+                                            <i class="fal fa-pencil-alt mr-1"></i>@lang('staff::labels.btn_edit')
                                         </a>
                                     @endcan
                                     @can('personal_empresas_eliminar')
                                         <div class="dropdown-divider"></div>
                                         <button onclick="confirmDelete({{ $company->id }})" type="button" class="dropdown-item text-danger">
-                                            <i class="fal fa-trash-alt mr-1"></i>@lang('personal::labels.btn_delete')
+                                            <i class="fal fa-trash-alt mr-1"></i>@lang('staff::labels.btn_delete')
                                         </button>
                                     @endcan
                                 </div>

@@ -8,7 +8,7 @@
                     <div class="invalid-feedback-2">{{ $message }}</div>
                     @enderror
                     <div class="input-group-append">
-                        <button wire:click="searchPerson" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('personal::labels.btn_search')</button>
+                        <button wire:click="searchPerson" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('staff::labels.btn_search')</button>
                     </div>
                 </div>
             </div>
