@@ -34,30 +34,30 @@
         </div>
         <ul id="js-nav-menu" class="nav-menu">
             @can('personal_dashboard')
-            <li class="{{ $path[0] == 'personal' && $path[1] == 'dashboard' ? 'active' : '' }}">
-                <a href="{{ route('personal_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
+            <li class="{{ $path[0] == 'staff' && $path[1] == 'dashboard' ? 'active' : '' }}">
+                <a href="{{ route('staff_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
                     <i class="fal fa-tachometer-alt-fast"></i>
-                    <span class="nav-link-text" data-i18n="nav.blankpage">@lang('personal::labels.lbl_dashBoard')</span>
+                    <span class="nav-link-text" data-i18n="nav.blankpage">@lang('staff::labels.lbl_dashBoard')</span>
                 </a>
             </li>
             @endcan
-            <li class="nav-title">@lang('personal::labels.lbl_navigation')</li>
+            <li class="nav-title">@lang('staff::labels.lbl_navigation')</li>
             @can('personal_tipo_empleados')
-            <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' ? 'active open' : '' }}">
+            <li class="{{ $path[0] == 'staff' && $path[1] == 'employees_type' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Tipo de Empleado" data-filter-tags="Tipo de Empleado">
                     <i class="fal fa-people-arrows"></i>
-                    <span class="nav-link-text" data-i18n="nav.tipo_empleado">@lang('personal::labels.lbl_employee_type')</span>
+                    <span class="nav-link-text" data-i18n="nav.tipo_empleado">@lang('staff::labels.lbl_employee_type')</span>
                 </a>
                 <ul>
-                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
-                        <a href="{{ route('personal_employee-type_index') }}" title="Listar Tipo de Empleado" data-filter-tags="Listar Tipo de Empleado">
-                            <span class="nav-link-text" data-i18n="nav.datos_listar_tipo_empleado">@lang('personal::labels.lbl_to_list')</span>
+                    <li class="{{ $path[0] == 'staff' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
+                        <a href="{{ route('staff_employee-type_index') }}" title="Listar Tipo de Empleado" data-filter-tags="Listar Tipo de Empleado">
+                            <span class="nav-link-text" data-i18n="nav.datos_listar_tipo_empleado">@lang('staff::labels.lbl_to_list')</span>
                         </a>
                     </li>
                     @can('personal_tipo_empleados_nuevo')
-                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
-                        <a href="{{ route('personal_employee-type_create') }}" title="Nuevo Tipo de Empleado" data-filter-tags="Nuevo Tipo de Empleado">
-                            <span class="nav-link-text" data-i18n="nav.nuevo_tipo_empleado">@lang('personal::labels.lbl_new')</span>
+                    <li class="{{ $path[0] == 'staff' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
+                        <a href="{{ route('staff_employee-type_create') }}" title="Nuevo Tipo de Empleado" data-filter-tags="Nuevo Tipo de Empleado">
+                            <span class="nav-link-text" data-i18n="nav.nuevo_tipo_empleado">@lang('staff::labels.lbl_new')</span>
                         </a>
                     </li>
                     @endcan
@@ -65,21 +65,21 @@
             </li>
             @endcan
             @can('personal_ocupaciones')
-            <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' ? 'active open' : '' }}">
+            <li class="{{ $path[0] == 'staff' && $path[1] == 'occupations' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="ocupaciones" data-filter-tags="ocupaciones">
                     <i class="fal fa-person-dolly"></i>
-                    <span class="nav-link-text" data-i18n="nav.ocupaciones">@lang('personal::labels.lbl_occupations')</span>
+                    <span class="nav-link-text" data-i18n="nav.ocupaciones">@lang('staff::labels.lbl_occupations')</span>
                 </a>
                 <ul>
-                    <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('personal_occupation_index') }}" title="Listado" data-filter-tags="Listado">
-                            <span class="nav-link-text" data-i18n="nav.listado">@lang('personal::labels.lbl_to_list')</span>
+                    <li class="{{ $path[0] == 'staff' && $path[1] == 'occupations' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('staff_occupation_index') }}" title="Listado" data-filter-tags="Listado">
+                            <span class="nav-link-text" data-i18n="nav.listado">@lang('staff::labels.lbl_to_list')</span>
                         </a>
                     </li>
                     @can('personal_ocupaciones_nuevo')
-                    <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('personal_occupation_create') }}" title="Nueva Ocupación" data-filter-tags="Nueva Ocupación">
-                            <span class="nav-link-text" data-i18n="nav.nueva_ocupacion">@lang('personal::labels.lbl_new')</span>
+                    <li class="{{ $path[0] == 'staff' && $path[1] == 'occupations' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('staff_occupation_create') }}" title="Nueva Ocupación" data-filter-tags="Nueva Ocupación">
+                            <span class="nav-link-text" data-i18n="nav.nueva_ocupacion">@lang('staff::labels.lbl_new')</span>
                         </a>
                     </li>
                     @endcan
@@ -87,21 +87,21 @@
             </li>
             @endcan
             @can('personal_empleados')
-            <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' ? 'active open' : '' }}">
+            <li class="{{ $path[0] == 'staff' && $path[1] == 'employees' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Empleados" data-filter-tags="Empleados">
                     <i class="fal fa-users"></i>
-                    <span class="nav-link-text" data-i18n="nav.empleados">@lang('personal::labels.lbl_employees')</span>
+                    <span class="nav-link-text" data-i18n="nav.empleados">@lang('staff::labels.lbl_employees')</span>
                 </a>
                 <ul>
-                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('personal_employees_index') }}" title="Listado de Empleados" data-filter-tags="Listado de Empleados">
-                            <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('personal::labels.lbl_to_list')</span>
+                    <li class="{{ $path[0] == 'staff' && $path[1] == 'employees' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('staff_employees_index') }}" title="Listado de Empleados" data-filter-tags="Listado de Empleados">
+                            <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('staff::labels.lbl_to_list')</span>
                         </a>
                     </li>
                     @can('personal_empleados_nuevo')
-                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('personal_employees_search') }}" title="Nuevo Empleado" data-filter-tags="Nuevo Empleado">
-                            <span class="nav-link-text" data-i18n="nav.nuevo_empleado">@lang('personal::labels.lbl_new')</span>
+                    <li class="{{ $path[0] == 'staff' && $path[1] == 'employees' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('staff_employees_search') }}" title="Nuevo Empleado" data-filter-tags="Nuevo Empleado">
+                            <span class="nav-link-text" data-i18n="nav.nuevo_empleado">@lang('staff::labels.lbl_new')</span>
                         </a>
                     </li>
                     @endcan
@@ -109,21 +109,21 @@
             </li>
             @endcan
             @can('personal_empresas')
-                <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' ? 'active open' : '' }}">
+                <li class="{{ $path[0] == 'staff' && $path[1] == 'companies' ? 'active open' : '' }}">
                     <a href="javascript:void(0);" title="Empresas" data-filter-tags="Empresas">
                         <i class="fal fa-landmark"></i>
-                        <span class="nav-link-text" data-i18n="nav.empresas">@lang('personal::labels.lbl_companies')</span>
+                        <span class="nav-link-text" data-i18n="nav.empresas">@lang('staff::labels.lbl_companies')</span>
                     </a>
                     <ul>
-                        <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' && $path[2] == 'list' ? 'active' : '' }}">
-                            <a href="{{ route('personal_companies_index') }}" title="Listado de Empresas" data-filter-tags="Listado de Empresas">
-                                <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('personal::labels.lbl_to_list')</span>
+                        <li class="{{ $path[0] == 'staff' && $path[1] == 'companies' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('staff_companies_index') }}" title="Listado de Empresas" data-filter-tags="Listado de Empresas">
+                                <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('staff::labels.lbl_to_list')</span>
                             </a>
                         </li>
                         @can('personal_empresas_nuevo')
-                            <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' && $path[2] == 'create' ? 'active' : '' }}">
-                                <a href="{{ route('personal_companies_search') }}" title="Nueva Empresa" data-filter-tags="Nueva Empresa">
-                                    <span class="nav-link-text" data-i18n="nav.nueva_empresa">@lang('personal::labels.lbl_new')</span>
+                            <li class="{{ $path[0] == 'staff' && $path[1] == 'companies' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('staff_companies_search') }}" title="Nueva Empresa" data-filter-tags="Nueva Empresa">
+                                    <span class="nav-link-text" data-i18n="nav.nueva_empresa">@lang('staff::labels.lbl_new')</span>
                                 </a>
                             </li>
                         @endcan

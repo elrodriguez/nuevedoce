@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Modules\Setting\Database\Seeders\SettingDatabaseSeeder;
 use Modules\Inventory\Database\Seeders\InventoryDatabaseSeeder;
-use Modules\Personal\Database\Seeders\PersonalDatabaseSeeder;
+use Modules\Staff\Database\Seeders\StaffDatabaseSeeder;
 use Modules\TransferService\Database\Seeders\TransferServiceDatabaseSeeder;
 use Modules\Lend\Database\Seeders\LendDatabaseSeeder;
 
@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             SettingDatabaseSeeder::class,
             InventoryDatabaseSeeder::class,
-            PersonalDatabaseSeeder::class,
             TransferServiceDatabaseSeeder::class,
             LendDatabaseSeeder::class,
+            StaffDatabaseSeeder::class
         ]);
     }
 }

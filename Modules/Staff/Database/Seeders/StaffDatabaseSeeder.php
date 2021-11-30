@@ -16,6 +16,9 @@ class StaffDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call([
+            SeedModulePermissionsTableSeeder::class,
+            SeedOcupationsTableSeeder::class,
+        ]);
     }
 }

@@ -1,7 +1,6 @@
 {
     "System": true,
     "Setting": true,
-    "Personal": true,
     "Inventory": true,
     "TransferService": true,
     "Lend": true,

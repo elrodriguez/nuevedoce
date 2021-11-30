@@ -16,7 +16,6 @@ class CreateSerOdtRequestsTable extends Migration
         Schema::create('ser_odt_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id')->nullable()->comment('Empresa id');
-            $table->unsignedBigInteger('supervisor_id')->nullable()->comment('Supervisor id');
             $table->unsignedBigInteger('customer_id')->nullable()->comment('Cliente id');
             $table->unsignedBigInteger('local_id')->nullable()->comment('Local id');
             $table->unsignedBigInteger('wholesaler_id')->nullable()->comment('Mayorista id');
@@ -33,7 +32,6 @@ class CreateSerOdtRequestsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('people');
-            $table->foreign('supervisor_id')->references('id')->on('per_employees');
             $table->foreign('customer_id')->references('id')->on('ser_customers');
             $table->foreign('local_id')->references('id')->on('ser_locals');
             $table->foreign('wholesaler_id')->references('id')->on('people');
