@@ -17,174 +17,118 @@
                 </a>
             </div>
         </div>
-        <x-info-card-user></x-info-card-user>
+        <div class="info-card">
+            <img src="{{ url('themes/smart-admin/img/demo/avatars/avatar-admin.png') }}" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
+            <div class="info-card-text">
+                <a href="#" class="d-flex align-items-center text-white">
+                    <span class="text-truncate text-truncate-sm d-inline-block">
+                        {{ auth()->user()->name }}
+                    </span>
+                </a>
+                <span class="d-inline-block text-truncate text-truncate-sm">{{ auth()->user()->email }}</span>
+            </div>
+            <img src="{{ url('themes/smart-admin/img/card-backgrounds/cover-2-lg.png') }}" class="cover" alt="cover">
+            <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
+                <i class="fal fa-angle-down"></i>
+            </a>
+        </div>
         <ul id="js-nav-menu" class="nav-menu">
-            @can('inventario_dashboard')
-            <li class="{{ $path[0] == 'inventory' && $path[1] == 'dashboard' ? 'active' : '' }}">
-                <a href="{{ route('inventory_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
+            @can('personal_dashboard')
+            <li class="{{ $path[0] == 'personal' && $path[1] == 'dashboard' ? 'active' : '' }}">
+                <a href="{{ route('personal_dashboard') }}" title="Blank Project" data-filter-tags="blank page">
                     <i class="fal fa-tachometer-alt-fast"></i>
-                    <span class="nav-link-text" data-i18n="nav.blankpage">DashBoard</span>
+                    <span class="nav-link-text" data-i18n="nav.blankpage">@lang('personal::labels.lbl_dashBoard')</span>
                 </a>
             </li>
             @endcan
-            <li class="nav-title">Navegación</li>
-            @can('inventario_ubicaciones')
-            <li class="{{ $path[0] == 'inventory' && $path[1] == 'location' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="location" data-filter-tags="location">
-                    <i class="fal fa-map-marker"></i>
-                    <span class="nav-link-text" data-i18n="nav.location">{{ __('inventory::labels.lbl_location') }}</span>
+            <li class="nav-title">@lang('personal::labels.lbl_navigation')</li>
+            @can('personal_tipo_empleados')
+            <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="Tipo de Empleado" data-filter-tags="Tipo de Empleado">
+                    <i class="fal fa-people-arrows"></i>
+                    <span class="nav-link-text" data-i18n="nav.tipo_empleado">@lang('personal::labels.lbl_employee_type')</span>
                 </a>
                 <ul>
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'location' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_location') }}" title="Datos ubicacion" data-filter-tags="Datos ubicacion">
-                            <span class="nav-link-text" data-i18n="nav.datos_ubicacion">Listado Ubicaciones</span>
+                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
+                        <a href="{{ route('personal_employee-type_index') }}" title="Listar Tipo de Empleado" data-filter-tags="Listar Tipo de Empleado">
+                            <span class="nav-link-text" data-i18n="nav.datos_listar_tipo_empleado">@lang('personal::labels.lbl_to_list')</span>
                         </a>
                     </li>
-                    @can('inventario_ubicaciones_nuevo')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'location' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_location_create') }}" title="Datos ubicacion nuevo" data-filter-tags="Datos ubicacion nuevo">
-                            <span class="nav-link-text" data-i18n="nav.datos_ubicacion_nuevo">Nuevo Ubicación</span>
+                    @can('personal_tipo_empleados_nuevo')
+                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees_type' && $path[2] == 'data' ? 'active' : '' }}">
+                        <a href="{{ route('personal_employee-type_create') }}" title="Nuevo Tipo de Empleado" data-filter-tags="Nuevo Tipo de Empleado">
+                            <span class="nav-link-text" data-i18n="nav.nuevo_tipo_empleado">@lang('personal::labels.lbl_new')</span>
                         </a>
                     </li>
                     @endcan
                 </ul>
             </li>
             @endcan
-            @can('inventario_categorias')
-            <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="ni ni-book-open"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">Categoria</span>
+            @can('personal_ocupaciones')
+            <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="ocupaciones" data-filter-tags="ocupaciones">
+                    <i class="fal fa-person-dolly"></i>
+                    <span class="nav-link-text" data-i18n="nav.ocupaciones">@lang('personal::labels.lbl_occupations')</span>
                 </a>
                 <ul>
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_category') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Categoria</span>
+                    <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('personal_occupation_index') }}" title="Listado" data-filter-tags="Listado">
+                            <span class="nav-link-text" data-i18n="nav.listado">@lang('personal::labels.lbl_to_list')</span>
                         </a>
                     </li>
-                    @can('inventario_categorias_nuevo')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'category' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_category_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Categoria</span>
+                    @can('personal_ocupaciones_nuevo')
+                    <li class="{{ $path[0] == 'personal' && $path[1] == 'occupations' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('personal_occupation_create') }}" title="Nueva Ocupación" data-filter-tags="Nueva Ocupación">
+                            <span class="nav-link-text" data-i18n="nav.nueva_ocupacion">@lang('personal::labels.lbl_new')</span>
                         </a>
                     </li>
                     @endcan
                 </ul>
             </li>
             @endcan
-            @can('inventario_marcas')
-            <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="ni ni-tag"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">Marca</span>
+            @can('personal_empleados')
+            <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="Empleados" data-filter-tags="Empleados">
+                    <i class="fal fa-users"></i>
+                    <span class="nav-link-text" data-i18n="nav.empleados">@lang('personal::labels.lbl_employees')</span>
                 </a>
                 <ul>
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_brand') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Marca</span>
+                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' && $path[2] == 'list' ? 'active' : '' }}">
+                        <a href="{{ route('personal_employees_index') }}" title="Listado de Empleados" data-filter-tags="Listado de Empleados">
+                            <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('personal::labels.lbl_to_list')</span>
                         </a>
                     </li>
-                    @can('inventario_marcas_nuevo')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'brand' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_brand_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Marca</span>
+                    @can('personal_empleados_nuevo')
+                    <li class="{{ $path[0] == 'personal' && $path[1] == 'employees' && $path[2] == 'create' ? 'active' : '' }}">
+                        <a href="{{ route('personal_employees_search') }}" title="Nuevo Empleado" data-filter-tags="Nuevo Empleado">
+                            <span class="nav-link-text" data-i18n="nav.nuevo_empleado">@lang('personal::labels.lbl_new')</span>
                         </a>
                     </li>
                     @endcan
                 </ul>
             </li>
             @endcan
-            @can('inventario_items')
-                <li class="{{ $path[0] == 'inventory' && $path[1] == 'item' ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" title="Items" data-filter-tags="Items">
-                        <i class="ni ni-social-dropbox"></i>
-                        <span class="nav-link-text" data-i18n="nav.items">@lang('inventory::labels.lbl_items')</span>
+            @can('personal_empresas')
+                <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Empresas" data-filter-tags="Empresas">
+                        <i class="fal fa-landmark"></i>
+                        <span class="nav-link-text" data-i18n="nav.empresas">@lang('personal::labels.lbl_companies')</span>
                     </a>
                     <ul>
-                        <li class="{{ $path[0] == 'inventory' && $path[1] == 'item' && $path[2] == 'list' ? 'active' : '' }}">
-                            <a href="{{ route('inventory_item') }}" title="Listado de Items" data-filter-tags="Listado de Items">
-                                <span class="nav-link-text" data-i18n="nav.listado_items">@lang('inventory::labels.lbl_list') @lang('inventory::labels.lbl_items')</span>
+                        <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('personal_companies_index') }}" title="Listado de Empresas" data-filter-tags="Listado de Empresas">
+                                <span class="nav-link-text" data-i18n="nav.listado_de_empleados">@lang('personal::labels.lbl_to_list')</span>
                             </a>
                         </li>
-                        @can('inventario_items_nuevo')
-                            <li class="{{ $path[0] == 'inventory' && $path[1] == 'item' && $path[2] == 'create' ? 'active' : '' }}">
-                                <a href="{{ route('inventory_item_create') }}" title="Nuevo Item" data-filter-tags="Nuevo Item">
-                                    <span class="nav-link-text" data-i18n="nav.item_nuevo">@lang('inventory::labels.btn_new') @lang('inventory::labels.lbl_item')</span>
+                        @can('personal_empresas_nuevo')
+                            <li class="{{ $path[0] == 'personal' && $path[1] == 'companies' && $path[2] == 'create' ? 'active' : '' }}">
+                                <a href="{{ route('personal_companies_search') }}" title="Nueva Empresa" data-filter-tags="Nueva Empresa">
+                                    <span class="nav-link-text" data-i18n="nav.nueva_empresa">@lang('personal::labels.lbl_new')</span>
                                 </a>
                             </li>
                         @endcan
                     </ul>
                 </li>
-            @endcan
-            @can('inventario_activos')
-            <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-barcode-alt"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">Activos código</span>
-                </a>
-                <ul>
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_asset') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Listado Activos</span>
-                        </a>
-                    </li>
-                    @can('inventario_marcas_nuevo')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'asset' && $path[2] == 'create' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_asset_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
-                            <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo Activo</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
-            @endcan
-            
-            @can('inventario_compras')
-            <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="Compras" data-filter-tags="Compras">
-                    <i class="fal fa-shopping-cart"></i>
-                    <span class="nav-link-text" data-i18n="nav.compras">@lang('inventory::labels.lbl_shopping')</span>
-                </a>
-                <ul>
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' && $path[2] == 'list' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_purchase') }}" title="Listado de Compras" data-filter-tags="Listado de Compras">
-                            <span class="nav-link-text" data-i18n="nav.listado_compras">@lang('inventory::labels.lbl_list') @lang('inventory::labels.lbl_shopping')</span>
-                        </a>
-                    </li>
-                    @can('inventario_compras_nuevo')
-                        <li class="{{ $path[0] == 'inventory' && $path[1] == 'purchase' && $path[2] == 'create' ? 'active' : '' }}">
-                            <a href="{{ route('inventory_purchase_create') }}" title="Nueva Compra" data-filter-tags="Nueva Compra">
-                                <span class="nav-link-text" data-i18n="nav.nueva_compra">@lang('inventory::labels.lbl_new') @lang('inventory::labels.lbl_purchase')</span>
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-            @endcan
-
-            @can('inventario_kardex')
-            <li class="{{ $path[0] == 'kardex' && $path[1] == 'asset' ? 'active open' : '' }}">
-                <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
-                    <i class="fal fa-file-chart-line"></i>
-                    <span class="nav-link-text" data-i18n="nav.empresa">{{ __('inventory::labels.lbl_kardex') }}</span>
-                </a>
-                <ul>
-                    @can('inventario_kardex_items_stock')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'kardex' && $path[2] == 'item_stock' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_kardex_items_stock') }}" title="Stock por Item" data-filter-tags="Stock por Item">
-                            <span class="nav-link-text" data-i18n="nav.stock_por_item">Stock por Item</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('inventario_kardex_active_codes')
-                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'kardex' && $path[2] == 'active_codes' ? 'active' : '' }}">
-                        <a href="{{ route('inventory_kardex_active_codes') }}" title="{{ __('inventory::labels.lbl_assets_with_code') }}" data-filter-tags="{{ __('inventory::labels.lbl_assets_with_code') }}">
-                            <span class="nav-link-text" data-i18n="nav.activos_con_codigos">{{ __('inventory::labels.lbl_assets_with_code') }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
             @endcan
         </ul>
     </nav>
