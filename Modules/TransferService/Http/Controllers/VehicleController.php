@@ -5,7 +5,7 @@ namespace Modules\TransferService\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Personal\Entities\PerEmployee;
+use Modules\Staff\Entities\StaEmployee;
 
 class VehicleController extends Controller
 {
@@ -59,7 +59,7 @@ class VehicleController extends Controller
 
     public function searchEmployee(Request $request){
         $search = $request->input('q');
-        $employees = PerEmployee::join('people','person_id','people.id')
+        $employees = StaEmployee::join('people','person_id','people.id')
             ->select('sta_employees.id AS value')
             ->selectRaw('CONCAT(people.number," - ",people.full_name) AS text')
             ->where('people.full_name','like','%'.$search.'%')
