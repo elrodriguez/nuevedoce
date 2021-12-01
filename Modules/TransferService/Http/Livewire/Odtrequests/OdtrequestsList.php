@@ -44,8 +44,8 @@ class OdtrequestsList extends Component
         }
         
         return SerOdtRequest::join('people AS companies', 'ser_odt_requests.company_id', 'companies.id')
-            ->join('per_employees', 'ser_odt_requests.supervisor_id', 'per_employees.id')
-            ->join('people AS employee', 'per_employees.person_id', 'employee.id')
+            ->join('sta_employees', 'ser_odt_requests.supervisor_id', 'sta_employees.id')
+            ->join('people AS employee', 'sta_employees.person_id', 'employee.id')
             ->join('ser_customers', 'ser_odt_requests.customer_id', 'ser_customers.id')
             ->join('people AS customer', 'ser_customers.person_id', 'customer.id')
             ->join('ser_locals', 'ser_odt_requests.local_id', 'ser_locals.id')

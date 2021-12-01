@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Livewire\WithFileUploads;
 use App\Models\Person;
-use Modules\Personal\Entities\PerEmployee;
+use Modules\Staff\Entities\StaEmployee;
 use Modules\Setting\Entities\SetCompany;
 use Modules\TransferService\Entities\SerCustomer;
 use Modules\TransferService\Entities\SerLocal;
@@ -60,9 +60,9 @@ class OdtrequestsCreate extends Component
             ->select('id', 'full_name AS name', 'number')
             ->get();
 
-        $this->supervisors  = PerEmployee::where('state', true)
+        $this->supervisors  = StaEmployee::where('state', true)
             ->join('people', 'person_id', 'people.id')
-            ->select('per_employees.id', 'people.full_name')
+            ->select('sta_employees.id', 'people.full_name')
             ->get();
 
         $anio = date('Y');

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Lang;
 use Livewire\WithFileUploads;
 use App\Models\Person;
 use Modules\Inventory\Entities\InvItem;
-use Modules\Personal\Entities\PerEmployee;
+use Modules\Staff\Entities\StaEmployee;
 use Modules\Setting\Entities\SetCompany;
 use Modules\TransferService\Entities\SerCustomer;
 use Modules\TransferService\Entities\SerLocal;
@@ -118,7 +118,7 @@ class OdtrequestsEdit extends Component
 
         $this->supervisors  = PerEmployee::where('state', true)
             ->join('people', 'person_id', 'people.id')
-            ->select('per_employees.id', 'people.full_name')
+            ->select('sta_employees.id', 'people.full_name')
             ->get();
 
         return view('transferservice::livewire.odtrequests.odtrequests-edit');
