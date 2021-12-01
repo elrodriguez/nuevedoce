@@ -60,7 +60,7 @@ class VehicleController extends Controller
     public function searchEmployee(Request $request){
         $search = $request->input('q');
         $employees = PerEmployee::join('people','person_id','people.id')
-            ->select('per_employees.id AS value')
+            ->select('sta_employees.id AS value')
             ->selectRaw('CONCAT(people.number," - ",people.full_name) AS text')
             ->where('people.full_name','like','%'.$search.'%')
             ->get();
