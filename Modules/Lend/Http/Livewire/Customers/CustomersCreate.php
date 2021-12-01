@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TransferService\Http\Livewire\Customers;
+namespace Modules\Lend\Http\Livewire\Customers;
 
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +12,6 @@ use App\Models\District;
 use App\Models\IdentityDocumentType;
 use App\Models\Person;
 use App\Models\Province;
-use Modules\Personal\Entities\PerEmployee;
-use Modules\Personal\Entities\PerEmployeeType;
-use Modules\Personal\Entities\PerOccupation;
 use Livewire\WithFileUploads;
 use App\Models\Customer;
 
@@ -100,7 +97,7 @@ class CustomersCreate extends Component
 
     public function render()
     {
-        return view('transferservice::livewire.customers.customers-create');
+        return view('lend::livewire.customers.customers-create');
     }
 
     public function save(){
@@ -233,7 +230,7 @@ class CustomersCreate extends Component
             $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');
         }
 
-        $this->dispatchBrowserEvent('ser-customers-type-save', ['msg' => Lang::get('transferservice::messages.msg_success')]);
+        $this->dispatchBrowserEvent('ser-customers-type-save', ['msg' => Lang::get('lend::messages.msg_success')]);
         $this->clearForm();
     }
 

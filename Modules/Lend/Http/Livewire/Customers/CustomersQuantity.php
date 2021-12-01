@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TransferService\Http\Livewire\Customers;
+namespace Modules\Lend\Http\Livewire\Customers;
 
 use Livewire\Component;
 use App\Models\Customer;
@@ -15,6 +15,6 @@ class CustomersQuantity extends Component
 
     public function render()
     {
-        return view('transferservice::livewire.customers.customers-quantity');
+        return view('lend::livewire.customers.customers-quantity');
     }
 }

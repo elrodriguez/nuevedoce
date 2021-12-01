@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Inventory\Entities\InvAsset;
 use Modules\Inventory\Entities\InvItem;
-use Modules\TransferService\Entities\SerCustomer;
+use App\Models\Customer;
 
 class OdtRequestController extends Controller
 {
@@ -42,10 +42,10 @@ class OdtRequestController extends Controller
 
     public function autocomplete(Request $request){
         $search = $request->input('q');
-        $customers    = SerCustomer::where('state', true)
+        $customers    = Customer::where('state', true)
             ->join('people', 'person_id', 'people.id')
             ->select(
-                'ser_customers.id AS value',
+                'customers.id AS value',
                 DB::raw("CONCAT(people.number, ' - ', people.full_name) AS text")
             )
             ->where('people.full_name','like','%'.$search.'%')

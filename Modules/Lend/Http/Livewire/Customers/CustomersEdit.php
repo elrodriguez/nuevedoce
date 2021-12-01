@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TransferService\Http\Livewire\Customers;
+namespace Modules\Lend\Http\Livewire\Customers;
 
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
@@ -101,7 +101,7 @@ class CustomersEdit extends Component
 
     public function render()
     {
-        return view('transferservice::livewire.customers.customers-edit');
+        return view('lend::livewire.customers.customers-edit');
     }
 
     public function save(){
@@ -175,7 +175,7 @@ class CustomersEdit extends Component
             $this->photo->storeAs('customers_photo/'.$this->customer_id.'/', $this->customer_id.'.'.$this->extension_photo,'public');
         }
 
-        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('transferservice::messages.msg_update')]);
+        $this->dispatchBrowserEvent('ser-customers-type-edit', ['msg' => Lang::get('lend::messages.msg_update')]);
     }
 
     public function getProvinves(){

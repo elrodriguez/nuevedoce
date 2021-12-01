@@ -10,7 +10,7 @@ use Livewire\WithFileUploads;
 use App\Models\Person;
 use Modules\Staff\Entities\StaEmployee;
 use Modules\Setting\Entities\SetCompany;
-use Modules\TransferService\Entities\SerCustomer;
+use App\Models\Customer;
 use Modules\TransferService\Entities\SerLocal;
 use Modules\TransferService\Entities\SerOdtRequest;
 use Illuminate\Support\Facades\DB;

@@ -13,7 +13,7 @@ class CreateSerCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('ser_customers', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('person_id')->nullable(); //Persona
             $table->boolean('direct')->default(false);
@@ -34,6 +34,6 @@ class CreateSerCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ser_customers');
+        Schema::dropIfExists('customers');
     }
 }

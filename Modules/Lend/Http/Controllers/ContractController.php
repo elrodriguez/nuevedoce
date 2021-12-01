@@ -81,7 +81,7 @@ class ContractController extends Controller
 
     public function autocomplete(Request $request){
         $search = $request->input('q');
-        $customers    = Person::where('identity_document_type_id', '<>', '0')
+        $customers    = Person::join('customers', 'customers.person_id', 'people.id')
             ->select(
                 'people.id AS value',
                 DB::raw("CONCAT(people.number, ' - ', people.full_name) AS text")

@@ -13,7 +13,7 @@ use App\Models\Person;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Staff\Entities\StaEmployee;
 use Modules\Setting\Entities\SetCompany;
-use Modules\TransferService\Entities\SerCustomer;
+use App\Models\Customer;
 use Modules\TransferService\Entities\SerLocal;
 use Modules\TransferService\Entities\SerOdtRequest;
 use Modules\TransferService\Entities\SerOdtRequestDetail;
@@ -70,10 +70,10 @@ class OdtrequestsEdit extends Component
         $this->company_id = $this->odtRequest_search->company_id;
         $this->supervisor_id = $this->odtRequest_search->supervisor_id;
         $this->customer_id = $this->odtRequest_search->customer_id;
-        $customer_search    = SerCustomer::where('state', true)
+        $customer_search    = Customer::where('state', true)
             ->join('people', 'person_id', 'people.id')
             ->select(
-                'ser_customers.id AS value',
+                'customers.id AS value',
                 DB::raw("CONCAT(people.number, ' - ', people.full_name) AS full_name")
             )
             ->find($this->customer_id);

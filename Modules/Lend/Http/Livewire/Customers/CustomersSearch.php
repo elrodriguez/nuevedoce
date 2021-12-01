@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TransferService\Http\Livewire\Customers;
+namespace Modules\Lend\Http\Livewire\Customers;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Lang;
@@ -21,7 +21,7 @@ class CustomersSearch extends Component
 
     public function render()
     {
-        return view('transferservice::livewire.customers.customers-search');
+        return view('lend::livewire.customers.customers-search');
     }
 
     public function searchPerson(){
@@ -47,11 +47,11 @@ class CustomersSearch extends Component
             }
         }
         if($encuentra == ''){
-            $this->dispatchBrowserEvent('ser-customers-search_a', ['msg' => Lang::get('transferservice::messages.msg_search_not'), 'numberPerson' => $this->number_search]);
+            $this->dispatchBrowserEvent('ser-customers-search_a', ['msg' => Lang::get('lend::messages.msg_search_not'), 'numberPerson' => $this->number_search]);
         }elseif($encuentra != '' && $encuentra_e == ''){
-            $this->dispatchBrowserEvent('ser-customers-search_b', ['msg' => Lang::get('transferservice::messages.msg_search_ok_a'), 'personId' => $this->person_id]);
+            $this->dispatchBrowserEvent('ser-customers-search_b', ['msg' => Lang::get('lend::messages.msg_search_ok_a'), 'personId' => $this->person_id]);
         }else{
-            $this->dispatchBrowserEvent('ser-customers-search_c', ['msg' => Lang::get('transferservice::messages.msg_search_ok_b'), 'customerId' => $this->customer_id]);
+            $this->dispatchBrowserEvent('ser-customers-search_c', ['msg' => Lang::get('lend::messages.msg_search_ok_b'), 'customerId' => $this->customer_id]);
         }
     }
 }
