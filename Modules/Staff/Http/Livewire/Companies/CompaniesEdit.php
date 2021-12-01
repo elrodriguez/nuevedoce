@@ -131,7 +131,7 @@ class CompaniesEdit extends Component
         $activity->log('Se actualizo datos de la Empresa');
         $activity->save();
 
-        $this->dispatchBrowserEvent('per-companies-type-edit', ['msg' => Lang::get('Staff::labels.msg_update')]);
+        $this->dispatchBrowserEvent('per-companies-type-edit', ['msg' => Lang::get('staff::labels.msg_update')]);
     }
 
     public function getProvinves(){

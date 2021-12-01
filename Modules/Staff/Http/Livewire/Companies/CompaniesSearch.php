@@ -26,9 +26,9 @@ class CompaniesSearch extends Component
             $encuentra = $personSearch->id;
         }
         if($encuentra == ''){
-            $this->dispatchBrowserEvent('per-companies-search_a', ['msg' => Lang::get('Staff::labels.msg_search_company_not'), 'numberPerson' => $this->number_search]);
+            $this->dispatchBrowserEvent('per-companies-search_a', ['msg' => Lang::get('staff::labels.msg_search_company_not'), 'numberPerson' => $this->number_search]);
         }else{
-            $this->dispatchBrowserEvent('per-companies-search_b', ['msg' => Lang::get('Staff::labels.msg_search_company_ok'), 'personId' => $encuentra]);
+            $this->dispatchBrowserEvent('per-companies-search_b', ['msg' => Lang::get('staff::labels.msg_search_company_ok'), 'personId' => $encuentra]);
         }
     }
 }

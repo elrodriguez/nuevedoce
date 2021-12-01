@@ -20,14 +20,14 @@ class VehiclesCrew extends Component
 
     public function render()
     {
-        $this->crew = SerVehicleCrewman::join('per_employees','employee_id','per_employees.id')
+        $this->crew = SerVehicleCrewman::join('sta_employees','employee_id','sta_employees.id')
             ->join('people','person_id','people.id')
-            ->join('per_occupations','occupation_id','per_occupations.id')
+            ->join('sta_occupations','occupation_id','sta_occupations.id')
             ->select(
                 'ser_vehicle_crewmen.id',
                 'people.number',
                 'people.full_name',
-                'per_occupations.name AS ocupation',
+                'sta_occupations.name AS ocupation',
                 'ser_vehicle_crewmen.description'
             )
             ->where('vehicle_id',$this->vehicle_id)

@@ -63,6 +63,6 @@ class CompaniesList extends Component
 
         $people->delete();
 
-        $this->dispatchBrowserEvent('per-companies-delete', ['msg' => Lang::get('Staff::labels.msg_delete')]);
+        $this->dispatchBrowserEvent('per-companies-delete', ['msg' => Lang::get('staff::labels.msg_delete')]);
     }
 }
