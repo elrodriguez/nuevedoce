@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('lend')->group(function(
         Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato_nuevo'])->get('create', 'ContractController@create')->name('lend_contract_create');
         Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato_editar'])->get('edit/{id}', 'ContractController@edit')->name('lend_contract_edit');
         Route::get('search', 'ContractController@autocomplete')->name('lend_contract_search');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato_imprimir'])->get('print/{id}', 'ContractController@print')->name('lend_contract_print');
     });
 
     Route::group(['prefix' => 'customers'], function() {

@@ -50,7 +50,9 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'prestamos_contrato_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'prestamos_contrato_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'prestamos_contrato_eliminar','guard_name' => 'sanctum']));
-
+        array_push($permissions,Permission::create(['name' => 'prestamos_contrato_estado_cuotas','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'prestamos_contrato_imprimir','guard_name' => 'sanctum']));
+        
         $role = Role::find(1);
 
         foreach($permissions as $permission){

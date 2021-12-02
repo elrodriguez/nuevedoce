@@ -91,4 +91,12 @@ class ContractList extends Component
         $label = Lang::get('lend::labels.lbl_payment_schedule');
         $this->dispatchBrowserEvent('len-contract-details', ['label' => $label]);
     }
+
+    public function statusChange($id,$st){
+        $payment_schedule = LenPaymentSchedule::find($id);
+        $payment_schedule->update([
+            'state' => $st
+        ]);
+        $this->detail_lists = LenPaymentSchedule::where('contract_id', '=', $payment_schedule->contract_id)->get();
+    }
 }

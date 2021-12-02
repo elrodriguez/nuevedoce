@@ -20,7 +20,7 @@
                         </button>
                     @else
                         <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
-                            <i wire:loading.class="spinner-border spinner-border-sm" wire:loading.remove.class="fal fa-search" class="fal fa-search"></i>
+                            <i wire:target="contractsSearch" wire:loading.class="spinner-border spinner-border-sm" wire:loading.remove.class="fal fa-search" class="fal fa-search"></i>
                         </span>
                     @endif
                 </div>
@@ -70,6 +70,11 @@
                                                 @can('prestamos_contrato_editar')
                                                     <a href="{{ route('lend_contract_edit', $contract->id) }}" class="dropdown-item">
                                                         <i class="fal fa-pencil-alt mr-1"></i>@lang('lend::buttons.btn_edit')
+                                                    </a>
+                                                @endcan
+                                                @can('prestamos_contrato_imprimir')
+                                                    <a href="javascript:printContract('{{ route('lend_contract_print', $contract->id) }}')" type="button" class="dropdown-item text-info">
+                                                        <i class="fal fa-print mr-1"></i>@lang('labels.to_print')
                                                     </a>
                                                 @endcan
                                                 @can('prestamos_contrato_eliminar')
@@ -129,8 +134,8 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="modalDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div wire:ignore.self class="modal fade" id="modalDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalDetailsLabel">{{__('lend::labels.lbl_payment_schedule')}}</h5>
@@ -143,6 +148,9 @@
                         <thead>
                         <tr>
                             <th class="text-center">#</th>
+                            @can('prestamos_contrato_pagar_cuota')
+                            <th class="text-center">{{ __('labels.actions') }}</th>
+                            @endcan
                             <th class="text-center">@lang('lend::labels.lbl_date_to_pay')</th>
                             <th class="text-center">@lang('lend::labels.lbl_principal_amount')</th>
                             <th class="text-center">@lang('lend::labels.lbl_interest_amount')</th>
@@ -151,24 +159,37 @@
                         </tr>
                         </thead>
                         <tbody class="">
-                        @foreach($detail_lists as $key => $detail_list)
-                            <tr>
-                                <td class="text-center align-middle">{{ $key + 1 }}</td>
-                                <td class="text-center align-middle">{{ \Carbon\Carbon::parse($detail_list->date_to_pay)->format('d/m/Y') }}</td>
-                                <td class="text-right align-middle">{{ $detail_list->capital }}</td>
-                                <td class="text-right align-middle">{{ $detail_list->interest }}</td>
-                                <td class="text-right align-middle">{{ $detail_list->amount_to_pay }}</td>
-                                <td class="text-center align-middle">
-                                    @if($detail_list->state == 'P')
-                                        <span class="badge badge-primary">{{ __('lend::labels.lbl_pending') }}</span>
-                                    @elseif($detail_list->state  == 'A')
-                                        <span class="badge badge-success">{{ __('lend::labels.lbl_paid') }}</span>
-                                    @elseif($detail_list->state  == 'V')
-                                        <span class="badge badge-danger">{{ __('lend::labels.lbl_defeated') }}</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
+                            @php
+                                $current_date = \Carbon\Carbon::now();
+                            @endphp
+                            @foreach($detail_lists as $key => $detail_list)
+                                <tr>
+                                    <td class="text-center align-middle">{{ $key + 1 }}</td>
+                                    @can('prestamos_contrato_estado_cuotas')
+                                    <td class="text-center align-middle">
+                                        <div class="btn-group btn-group-sm">
+                                            <button wire:click="statusChange({{ $detail_list->id }},'A')" title="Pagado" type="button" class="btn btn-primary waves-effect waves-themed"><i class="fal fa-check"></i></button>
+                                            <button wire:click="statusChange({{ $detail_list->id }},'P')" title="No pago" type="button" class="btn btn-danger waves-effect waves-themed"><i class="fal fa-times"></i></button>
+                                        </div>
+                                    </td>
+                                    @endcan
+                                    <td class="text-center align-middle">{{ \Carbon\Carbon::parse($detail_list->date_to_pay)->format('d/m/Y') }}</td>
+                                    <td class="text-right align-middle">{{ $detail_list->capital }}</td>
+                                    <td class="text-right align-middle">{{ $detail_list->interest }}</td>
+                                    <td class="text-right align-middle">{{ $detail_list->amount_to_pay }}</td>
+                                    <td class="text-center align-middle">
+                                        @if($detail_list->state == 'P')
+                                            @if($current_date->gt($detail_list->date_to_pay))
+                                                <span class="badge badge-danger">{{ __('lend::labels.lbl_defeated') }}</span>
+                                            @else
+                                                <span class="badge badge-primary">{{ __('lend::labels.lbl_pending') }}</span>
+                                            @endif
+                                        @elseif($detail_list->state  == 'A')
+                                            <span class="badge badge-success">{{ __('lend::labels.lbl_paid') }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -226,5 +247,10 @@
             $('#modalDetailsLabel').html(event.detail.label);
             $('#modalDetails').modal('show');
         });
+
+        function printContract(url){
+            window.open(url, '_blank');
+        }
+
     </script>
 </div>
