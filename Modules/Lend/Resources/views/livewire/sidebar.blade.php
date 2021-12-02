@@ -28,6 +28,30 @@
             </li>
             @endcan
             <li class="nav-title">@lang('labels.navigation')</li>
+            @can('prestamos_clientes')
+                <li class="{{ $path[0] == 'lend' && $path[1] == 'customers' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Clientes" data-filter-tags="Clientes">
+                        <i class="fal fa-users-class"></i>
+                        <span class="nav-link-text" data-i18n="nav.clientes">{{ __('lend::labels.lbl_customers') }}</span>
+                    </a>
+                    <ul>
+                        @can('prestamos_clientes')
+                        <li class="{{ $path[0] == 'lend' && $path[1] == 'customers' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('lend_customers_index') }}" title="Listar Clientes" data-filter-tags="Listar Clientes">
+                                <span class="nav-link-text" data-i18n="nav.listar_cliente">{{ __('lend::labels.lbl_to_list') }} {{ __('lend::labels.lbl_customer') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('prestamos_clientes_nuevo')
+                        <li class="{{ $path[0] == 'lend' && $path[1] == 'customers' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('lend_customers_create', '') }}" title="Nuevo Cliente" data-filter-tags="Nuevo Cliente">
+                                <span class="nav-link-text" data-i18n="nav.nuevo_cliente">{{ __('lend::labels.lbl_new') }} {{ __('lend::labels.lbl_customer') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
             @can('prestamos_intereses')
             <li class="{{ $path[0] == 'lend' && $path[1] == 'interest' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Intereses" data-filter-tags="Intereses">

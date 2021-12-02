@@ -32,7 +32,7 @@ class CreateSerOdtRequestsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('people');
-            $table->foreign('customer_id')->references('id')->on('ser_customers');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('local_id')->references('id')->on('ser_locals');
             $table->foreign('wholesaler_id')->references('id')->on('people');
         });

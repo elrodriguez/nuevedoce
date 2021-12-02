@@ -47,8 +47,8 @@ class LoadorderCreate extends Component
     public function getItemsODT(){
         $this->odt_pending = SerOdtRequestDetail::where('ser_odt_request_details.state', 'P')
             ->join('ser_odt_requests','odt_request_id','ser_odt_requests.id')
-            ->join('ser_customers','ser_odt_requests.customer_id','ser_customers.id')
-            ->join('people','ser_customers.person_id','people.id')
+            ->join('customers','ser_odt_requests.customer_id','customers.id')
+            ->join('people','customers.person_id','people.id')
             ->join('inv_items','ser_odt_request_details.item_id','inv_items.id')
             ->select(
                 'ser_odt_request_details.id AS id',
@@ -69,8 +69,8 @@ class LoadorderCreate extends Component
     public function getItemsODTAdd(){
         $this->oc_registers = SerOdtRequestDetail::where('ser_odt_request_details.state', 'P')
             ->join('ser_odt_requests','odt_request_id','ser_odt_requests.id')
-            ->join('ser_customers','ser_odt_requests.customer_id','ser_customers.id')
-            ->join('people','ser_customers.person_id','people.id')
+            ->join('customers','ser_odt_requests.customer_id','customers.id')
+            ->join('people','customers.person_id','people.id')
             ->join('inv_items','ser_odt_request_details.item_id','inv_items.id')
             ->select(
                 'ser_odt_request_details.id AS id',

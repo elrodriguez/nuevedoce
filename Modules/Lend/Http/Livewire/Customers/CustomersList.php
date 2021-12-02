@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TransferService\Http\Livewire\Customers;
+namespace Modules\Lend\Http\Livewire\Customers;
 
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +24,7 @@ class CustomersList extends Component
 
     public function render()
     {
-        return view('transferservice::livewire.customers.customers-list', ['customers' => $this->getCustomers()]);
+        return view('lend::livewire.customers.customers-list', ['customers' => $this->getCustomers()]);
     }
 
     public function getCustomers(){
@@ -91,6 +91,6 @@ class CustomersList extends Component
         //Eliminar archivos y direcctorio
         $this->deleteDirectory('storage/customers_photo/'.$id);
 
-        $this->dispatchBrowserEvent('ser-customers-delete', ['msg' => Lang::get('transferservice::messages.msg_delete')]);
+        $this->dispatchBrowserEvent('ser-customers-delete', ['msg' => Lang::get('lend::messages.msg_delete')]);
     }
 }

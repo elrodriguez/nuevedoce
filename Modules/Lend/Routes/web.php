@@ -38,4 +38,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('lend')->group(function(
         Route::middleware(['middleware' => 'role_or_permission:prestamos_contrato_editar'])->get('edit/{id}', 'ContractController@edit')->name('lend_contract_edit');
         Route::get('search', 'ContractController@autocomplete')->name('lend_contract_search');
     });
+
+    Route::group(['prefix' => 'customers'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_clientes'])->get('list', 'CustomerController@index')->name('lend_customers_index');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_clientes_nuevo'])->get('create/{id}', 'CustomerController@create')->name('lend_customers_create');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_clientes_editar'])->get('edit/{id}', 'CustomerController@edit')->name('lend_customers_edit');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_clientes_buscar'])->get('search', 'CustomerController@search')->name('lend_customers_search');
+    });
 });
