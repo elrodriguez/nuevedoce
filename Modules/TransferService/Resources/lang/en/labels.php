@@ -122,5 +122,6 @@ return [
     'lbl_returned'      => 'Returned',
     'lbl_pending_return'=> 'Pending Return',
     'lbl_accessories'   => 'Accessories',
-    'lbl_return'        => 'Return'
+    'lbl_return'        => 'Return',
+    'lbl_print_map'     => 'Print Map'
 ];

@@ -61,6 +61,9 @@
                                         <a onclick="confirmExit('{{$item->id}}')" class="dropdown-item">
                                             <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
                                         </a>
+                                        <a class="dropdown-item" wire:click="openModalDetails({{ $item->id }})" href="javascript:void(0)" type="button">
+                                            <i class="fal fa-map-marked-alt"></i> @lang('transferservice::labels.lbl_print_map')
+                                        </a>
                                         @else
                                             <button class="dropdown-item" disabled>
                                                 <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
@@ -93,6 +96,26 @@
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $load_orders->links() }}</div>
+        </div>
+    </div>
+    <!-- Modal Mapa -->
+    <div class="modal fade" id="modalDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetailsLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalDetailsBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success map-print">Imprimir</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -157,5 +180,76 @@
                 @this.set('date_upload',this.value);
             });
         });
+
+        //
+        document.addEventListener('ser-load-exit-details', event => {
+            let data_m = event.detail.data;
+
+            $('#modalDetailsLabel').html(event.detail.label)
+            $('#modalDetailsBody').html(event.detail.body)
+            $('#modalDetails').modal('show');
+
+            if(event.detail.lat){
+                initMap(event.detail.lat, event.detail.lng, event.detail.label, data_m);
+            }
+            //function
+            function printAnyMaps() {
+                const $body = $('body');
+                const $mapContainer = $('#map');
+                const $mapContainerParent = $mapContainer.parent();
+                const $printContainer = $('<div style="position:relative;">');
+
+                $printContainer
+                    .height($mapContainer.height())
+                    .append($mapContainer)
+                    .prependTo($body);
+
+                const $content = $body
+                    .children()
+                    .not($printContainer)
+                    .not('script')
+                    .detach();
+
+                /**
+                 * Needed for those who use Bootstrap 3.x, because some of
+                 * its `@media print` styles ain't play nicely when printing.
+                 */
+                const $patchedStyle = $('<style media="print">')
+                    .text(`
+                          img { max-width: none !important; }
+                          a[href]:after { content: ""; }
+                        `)
+                    .appendTo('head');
+
+                window.print();
+
+                $body.prepend($content);
+                $mapContainerParent.prepend($mapContainer);
+
+                $printContainer.remove();
+                $patchedStyle.remove();
+            }
+
+            $('.map-print').unbind().click(function (){
+                printAnyMaps();
+            });
+        });
+        function initMap(xlat,xlng,label, data_m) {
+            var myLatLng = {lat: xlat, lng: xlng};
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: myLatLng,
+                scrollwheel: false,
+                zoom: 8,
+            });
+
+            data_m.forEach(function(row, index) {
+                var marker = new google.maps.Marker({
+                    position: {lat:row.lat, lng:row.lon},
+                    map: map,
+                    title: row.title
+                });
+            });
+
+        }
     </script>
 </div>

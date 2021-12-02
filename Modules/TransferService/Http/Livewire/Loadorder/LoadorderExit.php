@@ -69,7 +69,7 @@ class LoadorderExit extends Component
                 )
                 ->orderBy('ser_load_orders.upload_date', 'DESC')
                 ->paginate($this->show);
-        
+
         return $data;
     }
 
@@ -135,5 +135,65 @@ class LoadorderExit extends Component
         $this->search = null;
         $this->date_upload = null;
         $this->license_plate = null;
+    }
+
+    public function openModalDetails($id){
+        $body = '';
+        $orderDetail = SerLoadOrderDetail::where('load_order_id', '=', $id)
+            ->join('ser_odt_requests', 'odt_request_id', 'ser_odt_requests.id')
+            ->join('ser_locals', 'ser_odt_requests.local_id', 'ser_locals.id')
+            ->select(
+                'ser_odt_requests.local_id',
+                'ser_locals.name',
+                'ser_locals.address',
+                'ser_locals.reference',
+                'ser_locals.longitude',
+                'ser_locals.latitude'
+            )
+            ->get();
+        $array_aux = array();
+        $local_aux = '';
+        foreach ($orderDetail as $row){
+            if($local_aux != $row->local_id){
+                array_push($array_aux, $row);
+            }
+            $local_aux = $row->local_id;
+        }
+
+        $cantidad   = count($array_aux);
+        $label      = '';
+        $address    = '';
+        $reference  = '';
+        $lat        = '';
+        $lng        = '';
+        $array_data = array();
+        $a = 0;
+        foreach ($array_aux as $row){
+            if($a == 0){
+                $label = $row->name;
+                $address = $row->address;
+                $reference = $row->reference;
+            }else{
+                $label = $label.', '.$row->name;
+                $address = $address.', '.$row->address;
+                $reference = $reference.', '.$row->reference;
+            }
+            $lat = (double) $row->latitude;
+            $lng = (double) $row->longitude;
+            array_push($array_data, array('title'=>$row->name, 'lat'=>(double) $row->latitude, 'lon'=>(double) $row->longitude));
+            $a++;
+        }
+        $body .= '
+        <dl class="row">
+            <dt class="col-sm-2">'.Lang::get('labels.address').'</dt>
+            <dd class="col-sm-10">'.$address.'</dd>
+            <dt class="col-sm-2">'.Lang::get('transferservice::labels.lbl_reference').'</dt>
+            <dd class="col-sm-10">'.$reference.'</dd>
+        </dl>
+        <div>
+            <div id="map" style="height: 300px;" wire:ignore></div>
+        </div>';
+
+        $this->dispatchBrowserEvent('ser-load-exit-details', ['body' => $body,'label' => $label,'lat' => $lat,'lng' => $lng, 'data'=>$array_data]);
     }
 }
