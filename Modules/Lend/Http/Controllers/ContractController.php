@@ -60,8 +60,7 @@ class ContractController extends Controller
             )
             ->where('len_contracts.id',$id)
             ->first();
-            
-            $moneda = 'soles';
+
             $formatter = new NumeroALetras();
             $capital_words = $formatter->toMoney($contract->amount_capital, 2, 'SOLES', 'CENTIMOS');
             $total_words = $formatter->toMoney($contract->amount_total, 2, 'SOLES', 'CENTIMOS');

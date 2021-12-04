@@ -72,6 +72,9 @@
                                                         <i class="fal fa-pencil-alt mr-1"></i>@lang('lend::buttons.btn_edit')
                                                     </a>
                                                 @endcan
+                                                <a wire:click="openModalDetails({{ $contract->id }})" href="javascript:void(0)')" type="button" class="dropdown-item text-info">
+                                                    <i class="fal fa-table mr-1"></i>{{__('lend::labels.lbl_payment_schedule')}}
+                                                </a>
                                                 @can('prestamos_contrato_imprimir')
                                                     <a href="javascript:printContract('{{ route('lend_contract_print', $contract->id) }}')" type="button" class="dropdown-item text-info">
                                                         <i class="fal fa-print mr-1"></i>@lang('labels.to_print')
@@ -86,7 +89,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="align-middle"><a wire:click="openModalDetails({{ $contract->id }})" href="javascript:void(0)" type="button">{{ $contract->customer_number.' '.$contract->customer_name }}</a></td>
+                                    <td class="align-middle">{{ $contract->customer_number.' '.$contract->customer_name }}</td>
                                     <td class="align-middle">{{ $contract->referred_name.' '.$contract->referred_number }}</td>
                                     <td class="align-middle">{{ $contract->interest_description }}</td>
                                     <td class="align-middle">{{ $contract->payment_method_description }}</td>

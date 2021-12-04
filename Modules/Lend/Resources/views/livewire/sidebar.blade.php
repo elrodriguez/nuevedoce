@@ -44,7 +44,7 @@
                         @endcan
                         @can('prestamos_clientes_nuevo')
                         <li class="{{ $path[0] == 'lend' && $path[1] == 'customers' && $path[2] == 'create' ? 'active' : '' }}">
-                            <a href="{{ route('lend_customers_create', '') }}" title="Nuevo Cliente" data-filter-tags="Nuevo Cliente">
+                            <a href="{{ route('lend_customers_search') }}" title="Nuevo Cliente" data-filter-tags="Nuevo Cliente">
                                 <span class="nav-link-text" data-i18n="nav.nuevo_cliente">{{ __('lend::labels.lbl_new') }} {{ __('lend::labels.lbl_customer') }}</span>
                             </a>
                         </li>

@@ -27,7 +27,7 @@
                 <input wire:keydown.enter="customersSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('lend::labels.lbl_type_here')}}">
                 <div class="input-group-append">
                     <button wire:click="customersSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('lend::buttons.btn_search')</button>
-                    @can('serviciodetraslados_clientes_nuevo')
+                    @can('prestamos_clientes_nuevo')
                         <a href="{{ route('lend_customers_search') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('lend::buttons.btn_new')</a>
                     @endcan
                 </div>
