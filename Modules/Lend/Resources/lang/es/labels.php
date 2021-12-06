@@ -78,4 +78,7 @@ return  [
     'lbl_yes'           => 'Si',
     'lbl_not'           => 'No',
     'lbl_customer'      => 'Cliente',
+    'lbl_filter_payments_the_day' => 'Filtrar cobros del día',
+    'lbl_pay_fee'       => 'Pagar cuota',
+    'lbl_charges'       => 'Cobrar'
 ];
