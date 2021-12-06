@@ -49,7 +49,7 @@ class LoadorderEdit extends Component
         $this->charge_maximum = $this->loadOrder_search->charge_maximum;
         $this->charge_weight = $this->loadOrder_search->charge_weight;
         $this->upload_date = date('d/m/Y', strtotime($this->loadOrder_search->upload_date));
-        $this->charging_time = $this->loadOrder_search->charging_time;
+        $this->charging_time = substr($this->loadOrder_search->charging_time, 0, 5);
         $this->departure_date = $this->loadOrder_search->departure_date;
         $this->departure_time = $this->loadOrder_search->departure_time;
         $this->return_date = $this->loadOrder_search->return_date;
@@ -74,16 +74,18 @@ class LoadorderEdit extends Component
             ->join('customers','ser_odt_requests.customer_id','customers.id')
             ->join('people','customers.person_id','people.id')
             ->join('inv_items','ser_odt_request_details.item_id','inv_items.id')
-            ->select(
-                'ser_odt_request_details.id AS id',
-                'ser_odt_requests.internal_id',
-                'ser_odt_requests.description AS name_evento',
-                'people.full_name AS name_customer',
-                'ser_odt_requests.date_start',
-                'ser_odt_requests.date_end',
-                'inv_items.name AS name_item',
-                'ser_odt_request_details.amount'
-            )
+            ->select(DB::raw("
+                ser_odt_request_details.id AS id,
+                ser_odt_requests.internal_id,
+                ser_odt_requests.description AS name_evento,
+                people.full_name AS name_customer,
+                ser_odt_requests.date_start,
+                ser_odt_requests.date_end,
+                inv_items.name AS name_item,
+                ser_odt_request_details.amount,
+                (ser_odt_request_details.amount - ser_odt_request_details.quantity_served) AS amount_pending,
+                ser_odt_request_details.quantity_served
+            "))
             ->orderBy('ser_odt_requests.internal_id', 'asc')
             ->orderBy('ser_odt_request_details.id', 'asc')
             ->get();
@@ -142,23 +144,82 @@ class LoadorderEdit extends Component
 
     public function saveItemsODT($register){
         //Save Datail
-        $this->getItemsODTNewAdd($register);
+        $params = explode('|', $register);
+        $list_add = "";
+        $a_s = 0;
+        $array_save_add = array();
+        foreach ($params as $row){
+            $detail_add_row = explode('#', $row);
+            if($a_s == 0){
+                $list_add = $detail_add_row[0];
+            }else{
+                $list_add = $list_add.'|'.$detail_add_row[0];
+            }
+            array_push($array_save_add, array('id'=>$detail_add_row[0], 'amount_total'=>$detail_add_row[1], 'amount_add'=>$detail_add_row[2]));
+            $a_s++;
+        }
+        $this->getItemsODTNewAdd($list_add);
         $sum_weight = 0;
         foreach ($this->oc_registers_new as $key => $odt){
-            $save_detail_oc = SerLoadOrderDetail::create([
-                'load_order_id'         => $this->loadOrder_id,
-                'odt_request_detail_id' => $odt->id,
-                'odt_request_id'        => $odt->odt_request_id,
-                'item_id'               => $odt->item_id,
-                'amount'                => $odt->amount,
-                'person_create'         => Auth::user()->person_id
-            ]);
-            //Actualizando el estado en ODT detalle
-            $odt_detail_u = SerOdtRequestDetail::find($odt->id);
-            $odt_detail_u->update([
-                'state'         => 'O',
-                'person_edit'   => Auth::user()->person_id
-            ]);
+            $id = array_search($odt->id, array_column($array_save_add, 'id'));
+            $amount_select = $array_save_add[$id]['amount_add'];
+
+            //Buscando si el registro ya exite para modificarlo o para nuevo
+            $data_exist_detail = SerLoadOrderDetail::where('load_order_id', '=', $this->loadOrder_search->id)
+                ->where('odt_request_detail_id', '=', $odt->id)
+                ->where('odt_request_id', '=', $odt->odt_request_id)
+                ->get();
+
+            if(count($data_exist_detail) > 0){ #Update
+                foreach ($data_exist_detail as $fila){
+                    $item_edit_search = SerLoadOrderDetail::find($fila->id);
+                }
+
+                $item_edit_search->update([
+                    'amount'                => ($item_edit_search->amount + $amount_select),
+                    'person_edit'           => Auth::user()->person_id
+                ]);
+
+                //Actualizando el estado en ODT detalle
+                $odt_detail_u = SerOdtRequestDetail::find($odt->id);
+                if($odt_detail_u->amount == ($odt_detail_u->quantity_served + $amount_select)){
+                    $odt_detail_u->update([
+                        'state'             => 'O',
+                        'quantity_served'   => ($odt_detail_u->quantity_served + $amount_select),
+                        'person_edit'       => Auth::user()->person_id
+                    ]);
+                }else{
+                    $odt_detail_u->update([
+                        'quantity_served'   => ($odt_detail_u->quantity_served + $amount_select),
+                        'person_edit'       => Auth::user()->person_id
+                    ]);
+                }
+            }else{ #New Insert
+                $save_detail_oc = SerLoadOrderDetail::create([
+                    'load_order_id'         => $this->loadOrder_id,
+                    'odt_request_detail_id' => $odt->id,
+                    'odt_request_id'        => $odt->odt_request_id,
+                    'item_id'               => $odt->item_id,
+                    'amount'                => $amount_select,
+                    'person_create'         => Auth::user()->person_id
+                ]);
+
+                //Actualizando el estado en ODT detalle
+                $odt_detail_u = SerOdtRequestDetail::find($odt->id);
+                if($odt_detail_u->amount == ($odt_detail_u->quantity_served + $amount_select)){
+                    $odt_detail_u->update([
+                        'state'             => 'O',
+                        'quantity_served'   => ($odt_detail_u->quantity_served + $amount_select),
+                        'person_edit'       => Auth::user()->person_id
+                    ]);
+                }else{
+                    $odt_detail_u->update([
+                        'quantity_served'   => ($odt_detail_u->quantity_served + $amount_select),
+                        'person_edit'       => Auth::user()->person_id
+                    ]);
+                }
+            }
+
             //Consultando si ODT Detalle hay Pendiente si no para cambiar estado del padre (ODT)
             $cantidad_odt_p = SerOdtRequestDetail::where('odt_request_id','=', $odt->odt_request_id)
                 ->where('state', '=', 'P')
@@ -170,7 +231,7 @@ class LoadorderEdit extends Component
                     'person_edit'   => Auth::user()->person_id
                 ]);
             }
-            $sum_weight += $odt->amount * $odt->weight;
+            $sum_weight += $amount_select * $odt->weight;
         }
         $this->getItemsODT();
         $this->getItemsODTAdd();
@@ -202,18 +263,20 @@ class LoadorderEdit extends Component
                 'ser_odt_requests.date_end',
                 'inv_items.name AS name_item',
                 'ser_odt_request_details.amount',
+                'ser_odt_request_details.quantity_served',
                 'inv_items.weight'
             )
             ->get();
         $sum_weight = 0;
         foreach ($dataDelete_odt as $row){
-            $sum_weight = $row->amount * $row->weight;
+            $sum_weight = $row->quantity_served * $row->weight;
         }
 
         $odt_detail_u = SerOdtRequestDetail::find($id_odt_detail);
         $odt_detail_u->update([
-            'state' => 'P',
-            'person_edit'   => Auth::user()->person_id
+            'state'             => 'P',
+            'quantity_served'   => 0,
+            'person_edit'       => Auth::user()->person_id
         ]);
 
         $odt_head_u = SerOdtRequest::find($item_load_delete->odt_request_id);
@@ -243,41 +306,31 @@ class LoadorderEdit extends Component
             'count_items'   => 'required|integer|between:1,99999'
         ]);
 
-        $maxValue = DB::table('ser_load_orders')->max('uuid');
-
-        if($maxValue == null){
-            $correlativo = '0001';
-        }else{
-            $numero = (int) substr($maxValue,4,4);
-            $correlativo = str_pad($numero + 1,  4, "0", STR_PAD_LEFT);
-        }
-        $this->uuid = date('Y').$correlativo;
-
         $date_upload = null;
         if($this->upload_date){
             list($d,$m,$y) = explode('/', $this->upload_date);
             $date_upload = $y.'-'.$m.'-'. $d;
         }
 
-        $save_oc = SerLoadOrder::create([
+        $this->loadOrder_search->update([
             'uuid'                      => $this->uuid,
             'vehicle_id'                => $this->vehicle_id,
-            'charge_maximum'            => $this->vehicle_load,
+            'charge_maximum'            => $this->charge_maximum,
             'charge_weight'             => $this->charge_weight,
             'upload_date'               => $date_upload,
             'charging_time'             => $this->charging_time,
-            'departure_date'            => date('Y-m-d'),
-            'departure_time'            => date('H:i:s'),
+//            'departure_date'            => date('Y-m-d'),
+//            'departure_time'            => date('H:i:s'),
             'additional_information'    => $this->additional_information,
             'person_create'             => Auth::user()->person_id
         ]);
 
         $activity = new Activity;
-        $activity->modelOn(SerLoadOrder::class, $save_oc->id,'ser_load_orders');
+        $activity->modelOn(SerLoadOrder::class, $this->loadOrder_search->id,'ser_load_orders');
         $activity->causedBy(Auth::user());
-        $activity->routeOn(route('service_load_order_create'));
-        $activity->logType('create');
-        $activity->log('Se creó una nueva Orden de Carga');
+        $activity->routeOn(route('service_load_order_edit', $this->loadOrder_search->id));
+        $activity->logType('update');
+        $activity->log('Se modificó la Orden de Carga');
         $activity->save();
 
         $this->dispatchBrowserEvent('ser-load-order-save', ['msg' => Lang::get('transferservice::messages.msg_success')]);

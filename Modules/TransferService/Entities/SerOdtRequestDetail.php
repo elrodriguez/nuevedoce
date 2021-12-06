@@ -14,6 +14,7 @@ class SerOdtRequestDetail extends Model
         'odt_request_id',
         'item_id',
         'amount',
+        'quantity_served',
         'state',
         'person_create',
         'person_edit'

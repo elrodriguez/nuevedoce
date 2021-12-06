@@ -23,6 +23,9 @@
                                 <th class="">{{ __('transferservice::labels.lbl_customer') }}</th>
                                 <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
                                 <th class="">{{ __('transferservice::labels.lbl_item') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_requested_amount') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_quantity_served') }}</th>
+                                <th class="text-center">{{ __('transferservice::labels.lbl_pending_quantity') }}</th>
                                 <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
                             </tr>
                             </thead>
@@ -48,7 +51,10 @@
                                     <td class="align-middle">{{ $odt->name_customer }}</td>
                                     <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }}</td>
                                     <td class="align-middle">{{ $odt->name_item }}</td>
-                                    <td class="align-middle text-right">{{ $odt->amount }}</td>
+                                    <td class="align-middle text-center">{{ $odt['amount'] }}</td>
+                                    <td class="align-middle text-center">{{ $odt['quantity_served'] }}</td>
+                                    <td class="align-middle text-center">{{ $odt['amount_pending'] }}</td>
+                                    <td class="align-middle text-center"><input name="quantity[]" class="col-6" type="number" min="1" max="{{ $odt['amount_pending'] }}" id="quantity{{$key}}" style="height: 30px;" value="{{ $odt['amount_pending'] }}"></td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -69,10 +75,6 @@
         </div>
         <div class="card-body p-0">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
-                <div class="form-row p-3">
-                    <h2 class="fw-700 m-0"><i class="subheader-icon fal fa-people-carry"></i> @lang('transferservice::labels.lbl_load_order'):</h2>
-                    <br>
-                </div>
                 <div class="form-row p-3">
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="uuid">@lang('transferservice::labels.lbl_code') <span class="text-danger">*</span> </label>
@@ -179,7 +181,7 @@
                                         <td class="align-middle">{{ $oc_register->name_customer }}</td>
                                         <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }}</td>
                                         <td class="align-middle">{{ $oc_register->name_item }}</td>
-                                        <td class="align-middle text-right">{{ $oc_register->amount }}</td>
+                                        <td class="align-middle text-center">{{ $oc_register->amount }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -200,33 +202,40 @@
         function saveItemsODT(){
             let cantidad = 0;
             let registros = "";
+            let errors = 0;
             $("#tbl_odtpending > tbody > tr").each(function(i, e) {
                 let elemento = $(e);
                 let celdasTD = elemento.children("td").eq(1).find("input").eq(0);
+                let celdasCant = elemento.children("td").eq(10).find("input").eq(0);
+                let cantidad_aux = parseInt(celdasTD.attr('data-amount'));
+                celdasCant.css({'color':'', 'border-color':''});
                 if (celdasTD.is(":checked")) {
-                    if(cantidad == 0){
-                        //registros = celdasTD.val()+'*'+celdasTD.attr('data-amount');
-                        registros = celdasTD.val();
+                    if(parseInt(celdasCant.val()) <= cantidad_aux && parseInt(celdasCant.val()) > 0) {
+                        if (cantidad == 0) {
+                            registros = celdasTD.val()+'#'+cantidad_aux+'#'+parseInt(celdasCant.val());
+                        } else {
+                            registros = registros + '|' + celdasTD.val() +'#'+cantidad_aux+ '#'+parseInt(celdasCant.val());
+                        }
+                        cantidad++;
                     }else{
-                        //registros = registros+'|'+celdasTD.val()+'*'+celdasTD.attr('data-amount');
-                        registros = registros+'|'+celdasTD.val();
+                        celdasCant.css({'color':'#cd0e0e', 'border-color':'#cd0e0e'});
+                        errors++;
                     }
-                    cantidad++;
-
                 }
             })
-            if(cantidad == 0){
+            if(cantidad == 0 || errors > 0){
+                let message_error = errors >0?'{{__('transferservice::messages.msg_0009')}}':'{{__('transferservice::messages.msg_0005')}}';
                 initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
                 let box = bootbox.alert({
                     title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_attention')}}!</span>",
-                    message: "<span><strong>{{__('transferservice::messages.msg_0005')}}... </strong></span>",
+                    message: "<span><strong>"+message_error+"... </strong></span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false
                 });
                 box.find('.modal-content').css({'background-color': 'rgba(239,56,32,0.5)'});
             }else{
-            @this.saveItemsODT(registros);
+                @this.saveItemsODT(registros);
                 $('.pending_item_odt').prop('checked', false);
             }
         }

@@ -18,7 +18,7 @@ class LoadorderList extends Component
     public $show;
     public $search;
     public $loadorderdetails = [];
-    
+
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
@@ -63,12 +63,15 @@ class LoadorderList extends Component
         //Consultando los items para Cambiar su estado y eliminar
         $loadOrderDetail = SerLoadOrderDetail::where('load_order_id', '=', $id)->get();
         foreach ($loadOrderDetail as $key=>$row){
-            $detail_sr = SerLoadOrderDetail::find($row->id)->delete();
+            $detail_sr = SerLoadOrderDetail::find($row->id);
             $detail_srodt = SerOdtRequestDetail::find($row->odt_request_detail_id);
             $detail_srodt->update([
-                'state'         => 'P',
-                'person_edit'   => Auth::user()->person_id
+                'state'             => 'P',
+                'quantity_served'   => ($detail_srodt->quantity_served - $detail_sr->amount),
+                'person_edit'       => Auth::user()->person_id
             ]);
+
+            $detail_sr->delete();
 
             $odt_sr = SerOdtRequest::find($row->odt_request_id);
             $odt_sr->update([
@@ -107,7 +110,7 @@ class LoadorderList extends Component
                                     )
                                     ->where('ser_load_order_details.load_order_id',$id)
                                     ->get();
-        
+
         $this->dispatchBrowserEvent('ser-load-order-details', ['success' => true]);
 
     }

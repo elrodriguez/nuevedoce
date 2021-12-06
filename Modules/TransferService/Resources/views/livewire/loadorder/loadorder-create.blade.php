@@ -22,14 +22,17 @@
                                     <th class="">{{ __('transferservice::labels.lbl_customer') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
                                     <th class="">{{ __('transferservice::labels.lbl_item') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_requested_amount') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_quantity_served') }}</th>
+                                    <th class="text-center">{{ __('transferservice::labels.lbl_pending_quantity') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                             @foreach($odt_pending as $key => $odt)
-                                @if($odt_number_aux != $odt->internal_id)
+                                @if($odt_number_aux != $odt['internal_id'])
                                     <tr style="font-weight: bold;">
-                                        <td colspan="8">{{$odt_number_aux = $odt->internal_id }}: {{ $odt->name_evento }} ( {{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }} )</td>
+                                        <td colspan="11">{{$odt_number_aux = $odt['internal_id'] }}: {{ $odt['name_evento'] }} ( {{ \Carbon\Carbon::parse($odt['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt['date_end'])->format('d/m/Y') }} )</td>
                                     </tr>
                                 @endif
                                 <tr>
@@ -37,17 +40,20 @@
                                     <td class="text-center tdw-50 align-middle">
                                         <div class="btn-group">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input pending_item_odt" value="{{$odt->id}}" data-amount="{{$odt->amount}}" id="chkPending{{$key}}">
+                                                <input type="checkbox" class="custom-control-input pending_item_odt" value="{{$odt['id']}}" data-amount="{{$odt['amount_pending']}}" id="chkPending{{$key}}">
                                                 <label class="custom-control-label" for="chkPending{{$key}}"></label>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="align-middle">{{ $odt->internal_id }}</td>
-                                    <td class="align-middle">{{ $odt->name_evento }}</td>
-                                    <td class="align-middle">{{ $odt->name_customer }}</td>
-                                    <td class="align-middle">{{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }}</td>
-                                    <td class="align-middle">{{ $odt->name_item }}</td>
-                                    <td class="align-middle text-right">{{ $odt->amount }}</td>
+                                    <td class="align-middle">{{ $odt['internal_id'] }}</td>
+                                    <td class="align-middle">{{ $odt['name_evento'] }}</td>
+                                    <td class="align-middle">{{ $odt['name_customer'] }}</td>
+                                    <td class="align-middle">{{ \Carbon\Carbon::parse($odt['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt['date_end'])->format('d/m/Y') }}</td>
+                                    <td class="align-middle">{{ $odt['name_item'] }}</td>
+                                    <td class="align-middle text-center">{{ $odt['amount'] }}</td>
+                                    <td class="align-middle text-center">{{ $odt['quantity_served'] }}</td>
+                                    <td class="align-middle text-center">{{ $odt['amount_pending'] }}</td>
+                                    <td class="align-middle text-center"><input name="quantity[]" class="col-6" type="number" min="1" max="{{ $odt['amount_pending'] }}" id="quantity{{$key}}" style="height: 30px;" value="{{ $odt['amount_pending'] }}"></td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -81,8 +87,8 @@
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="vehicle_type_id">@lang('transferservice::labels.lbl_maximum_vehicle_load') <span class="text-danger">*</span> </label>
-                        <input wire:model.defer="vehicle_load" type="text" class="form-control" readonly />
+                        <label class="form-label" for="vehicle_load">@lang('transferservice::labels.lbl_maximum_vehicle_load') <span class="text-danger">*</span> </label>
+                        <input wire:model.defer="vehicle_load" name="vehicle_load" id="vehicle_load" type="text" class="form-control" readonly />
                         @error('vehicle_load')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
@@ -105,6 +111,13 @@
                         <label class="form-label" for="count_items">@lang('transferservice::labels.lbl_amount') @lang('transferservice::labels.lbl_item')<span class="text-danger">*</span> </label>
                         <input wire:model.defer="count_items" type="text" class="form-control" id="count_items" readonly />
                         @error('count_items')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="charge_weight">@lang('transferservice::labels.lbl_total_weight_added') @lang('transferservice::labels.lbl_item')<span class="text-danger">*</span> </label>
+                        <input wire:model.defer="charge_weight" type="text" class="form-control" id="charge_weight" readonly />
+                        @error('charge_weight')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
@@ -134,26 +147,26 @@
                                 </thead>
                                 <tbody>
                                 @foreach($oc_registers as $key => $oc_register)
-                                    @if($odt_add_aux != $oc_register->internal_id)
+                                    @if($odt_add_aux != $oc_register['internal_id'])
                                         <tr style="font-weight: bold;">
-                                            <td colspan="8">{{$odt_add_aux = $oc_register->internal_id }}: {{ $oc_register->name_evento }} ( {{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }} )</td>
+                                            <td colspan="8">{{$odt_add_aux = $oc_register['internal_id'] }}: {{ $oc_register['name_evento'] }} ( {{ \Carbon\Carbon::parse($oc_register['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register['date_end'])->format('d/m/Y') }} )</td>
                                         </tr>
                                     @endif
                                     <tr>
                                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                                         <td class="text-center tdw-50 align-middle">
                                             <div class="btn-group">
-                                                <button wire:click="deleteItemODT({{ $oc_register->id }})" type="button" class="dropdown-item text-danger">
+                                                <button wire:click="deleteItemODT({{ $oc_register['id'] }})" type="button" class="dropdown-item text-danger">
                                                     <i class="fal fa-trash-alt mr-1"></i>
                                                 </button>
                                             </div>
                                         </td>
-                                        <td class="align-middle">{{ $oc_register->internal_id }}</td>
-                                        <td class="align-middle">{{ $oc_register->name_evento }}</td>
-                                        <td class="align-middle">{{ $oc_register->name_customer }}</td>
-                                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }}</td>
-                                        <td class="align-middle">{{ $oc_register->name_item }}</td>
-                                        <td class="align-middle text-right">{{ $oc_register->amount }}</td>
+                                        <td class="align-middle">{{ $oc_register['internal_id'] }}</td>
+                                        <td class="align-middle">{{ $oc_register['name_evento'] }}</td>
+                                        <td class="align-middle">{{ $oc_register['name_customer'] }}</td>
+                                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register['date_end'])->format('d/m/Y') }}</td>
+                                        <td class="align-middle">{{ $oc_register['name_item'] }}</td>
+                                        <td class="align-middle text-center">{{ $oc_register['amount_select'] }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -172,31 +185,38 @@
         function saveItemsODT(){
             let cantidad = 0;
             let registros = "";
+            let errors = 0;
             $("#tbl_odtpending > tbody > tr").each(function(i, e) {
                 let elemento = $(e);
                 let celdasTD = elemento.children("td").eq(1).find("input").eq(0);
+                let celdasCant = elemento.children("td").eq(10).find("input").eq(0);
+                let cantidad_aux = parseInt(celdasTD.attr('data-amount'));
+                celdasCant.css({'color':'', 'border-color':''});
                 if (celdasTD.is(":checked")) {
-                    if(cantidad == 0){
-                        //registros = celdasTD.val()+'*'+celdasTD.attr('data-amount');
-                        registros = celdasTD.val();
+                    if(parseInt(celdasCant.val()) <= cantidad_aux && parseInt(celdasCant.val()) > 0) {
+                        if (cantidad == 0) {
+                            registros = celdasTD.val()+'#'+cantidad_aux+'#'+parseInt(celdasCant.val());
+                        } else {
+                            registros = registros + '|' + celdasTD.val() +'#'+cantidad_aux+ '#'+parseInt(celdasCant.val());
+                        }
+                        cantidad++;
                     }else{
-                        //registros = registros+'|'+celdasTD.val()+'*'+celdasTD.attr('data-amount');
-                        registros = registros+'|'+celdasTD.val();
+                        celdasCant.css({'color':'#cd0e0e', 'border-color':'#cd0e0e'});
+                        errors++;
                     }
-                    cantidad++;
-
                 }
-            })
-            if(cantidad == 0){
+            });
+            if(cantidad == 0 || errors > 0){
+                let message_error = errors >0?'{{__('transferservice::messages.msg_0009')}}':'{{__('transferservice::messages.msg_0005')}}';
                 initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
                 let box = bootbox.alert({
                     title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_attention')}}!</span>",
-                    message: "<span><strong>{{__('transferservice::messages.msg_0005')}}... </strong></span>",
+                    message: "<span><strong>"+message_error+"... </strong></span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false
                 });
-                box.find('.modal-content').css({'background-color': 'rgba(239,56,32,0.5)'});
+                box.find('.modal-content').css({'background-color': 'rgba(243,52,26,0.78)'});
             }else{
                 @this.saveItemsODT(registros);
                 $('.pending_item_odt').prop('checked', false);
@@ -240,6 +260,46 @@
                 closeButton: false
             });
             box.find('.modal-content').css({'background-color': 'rgba(8,187,1,0.5)'});
+        });
+
+        document.addEventListener('ser-load-order-weight', event => {
+            let w_v_t = parseFloat(event.detail.vehicle_w);
+            let w_s_t = parseFloat($('#charge_weight').val());
+            if(isNaN(w_s_t)){
+                w_s_t = 0;
+            }
+
+            if(w_s_t > w_v_t) {
+                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+                let box = bootbox.alert({
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_warning')}}!</span>",
+                    message: "<span><strong>{{ __('transferservice::messages.msg_0010')}}... </strong></span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({'background-color': 'rgba(28,85,236,0.5)'});
+            }
+        });
+
+        document.addEventListener('ser-load-order-select-weight', event => {
+            let w_s_t = parseFloat(event.detail.select_w);
+            let w_v_t = parseFloat($('#vehicle_load').val());
+            if(isNaN(w_v_t)){
+                w_v_t = 0;
+            }
+
+            if(w_s_t > w_v_t && w_v_t > 0) {
+                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+                let box = bootbox.alert({
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_warning')}}!</span>",
+                    message: "<span><strong>{{ __('transferservice::messages.msg_0011')}}... </strong></span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({'background-color': 'rgba(28,85,236,0.5)'});
+            }
         });
 
         document.addEventListener('livewire:load', function () {

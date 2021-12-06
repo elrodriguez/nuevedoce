@@ -122,5 +122,9 @@ return [
     'lbl_pending_return'=> 'Pendiente Retorno',
     'lbl_accessories'   => 'Accesorios',
     'lbl_return'        => 'Retorno',
-    'lbl_print_map'     => 'Imprimir Mapa'
+    'lbl_print_map'     => 'Imprimir Mapa',
+    'lbl_quantity_served'=> 'Cantidad Atendida',
+    'lbl_requested_amount'=> 'Cantidad Solicitada',
+    'lbl_pending_quantity'=> 'Cantidad Pendiente',
+    'lbl_total_weight_added'=> 'Peso Total Agregado'
 ];
