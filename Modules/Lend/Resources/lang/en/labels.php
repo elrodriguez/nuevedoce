@@ -79,4 +79,7 @@ return  [
     'lbl_yes'           => 'Yes',
     'lbl_not'           => 'Not',
     'lbl_customer'      => 'Customer',
+    'lbl_filter_payments_the_day' => 'Filter payments of the day',
+    'lbl_pay_fee'       => 'Pay fee',
+    'lbl_charges'       => 'Charges'
 ];

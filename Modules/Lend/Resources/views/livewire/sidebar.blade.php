@@ -44,7 +44,7 @@
                         @endcan
                         @can('prestamos_clientes_nuevo')
                         <li class="{{ $path[0] == 'lend' && $path[1] == 'customers' && $path[2] == 'create' ? 'active' : '' }}">
-                            <a href="{{ route('lend_customers_create', '') }}" title="Nuevo Cliente" data-filter-tags="Nuevo Cliente">
+                            <a href="{{ route('lend_customers_search') }}" title="Nuevo Cliente" data-filter-tags="Nuevo Cliente">
                                 <span class="nav-link-text" data-i18n="nav.nuevo_cliente">{{ __('lend::labels.lbl_new') }} {{ __('lend::labels.lbl_customer') }}</span>
                             </a>
                         </li>
@@ -55,7 +55,7 @@
             @can('prestamos_intereses')
             <li class="{{ $path[0] == 'lend' && $path[1] == 'interest' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="Intereses" data-filter-tags="Intereses">
-                    <i class="fal fa-humidity"></i>
+                    <i class="fal fa-percent"></i>
                     <span class="nav-link-text" data-i18n="nav.interes">@lang('lend::labels.lbl_interest')</span>
                 </a>
                 <ul>
@@ -77,7 +77,7 @@
             @can('prestamos_forma_pago')
                 <li class="{{ $path[0] == 'lend' && $path[1] == 'paymentmethod' ? 'active open' : '' }}">
                     <a href="javascript:void(0);" title="Formas de Pago" data-filter-tags="Formas de Pago">
-                        <i class="fal fa-funnel-dollar"></i>
+                        <i class="fal fa-list-alt"></i>
                         <span class="nav-link-text" data-i18n="nav.formas_pago">@lang('lend::labels.lbl_payment_method')</span>
                     </a>
                     <ul>
@@ -121,7 +121,7 @@
             @can('prestamos_contrato')
                 <li class="{{ $path[0] == 'lend' && $path[1] == 'contract' ? 'active open' : '' }}">
                     <a href="javascript:void(0);" title="Contratos" data-filter-tags="Contratos">
-                        <i class="fal fa-money-check-alt"></i>
+                        <i class="fal fa-file-invoice-dollar"></i>
                         <span class="nav-link-text" data-i18n="nav.contratos">@lang('lend::labels.lbl_contract')</span>
                     </a>
                     <ul>
@@ -134,6 +134,28 @@
                             <li class="{{ $path[0] == 'lend' && $path[1] == 'contract' && $path[2] == 'create' ? 'active' : '' }}">
                                 <a href="{{ route('lend_contract_create') }}" title="Nuevo Contrato" data-filter-tags="Nuevo Contrato">
                                     <span class="nav-link-text" data-i18n="nav.nueva_contrato">@lang('lend::labels.lbl_new')</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('prestamos_cobros')
+                <li class="{{ $path[0] == 'lend' && $path[1] == 'charges' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Cobros" data-filter-tags="Cobros">
+                        <i class="fal fa-cash-register"></i>
+                        <span class="nav-link-text" data-i18n="nav.cobros">@lang('lend::labels.lbl_charges')</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'lend' && $path[1] == 'charges' && $path[2] == 'on_day' ? 'active' : '' }}">
+                            <a href="{{ route('lend_charges_on_day') }}" title="buscar pagos del dia" data-filter-tags="Lista de Contratos">
+                                <span class="nav-link-text" data-i18n="nav.buscar_pagos_del_dia">@lang('lend::labels.lbl_filter_payments_the_day')</span>
+                            </a>
+                        </li>
+                        @can('prestamos_cobros_pagar')
+                            <li class="{{ $path[0] == 'lend' && $path[1] == 'charges' && $path[2] == 'pay' ? 'active' : '' }}">
+                                <a href="{{ route('lend_charges_pay') }}" title="Pagar Cuota" data-filter-tags="Pagar Cuota">
+                                    <span class="nav-link-text" data-i18n="nav.pagar_cuota">@lang('lend::labels.lbl_pay_fee')</span>
                                 </a>
                             </li>
                         @endcan

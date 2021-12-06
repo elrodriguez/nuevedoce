@@ -172,7 +172,7 @@
                         @enderror
                     </div>
                 </div>
-                <h4 class="panel-hdr">
+                <h4 class="panel-hdr" style="display:none">
                     <i class="fal fa-user-cog"></i> @lang('lend::labels.lbl_data_customer')
                 </h4>
                 <div class="form-row" style="display:none">

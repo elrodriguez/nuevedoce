@@ -46,4 +46,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('lend')->group(function(
         Route::middleware(['middleware' => 'role_or_permission:prestamos_clientes_editar'])->get('edit/{id}', 'CustomerController@edit')->name('lend_customers_edit');
         Route::middleware(['middleware' => 'role_or_permission:prestamos_clientes_buscar'])->get('search', 'CustomerController@search')->name('lend_customers_search');
     });
+
+    Route::group(['prefix' => 'charges'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_cobros'])->get('on_day', 'ChargesController@filter')->name('lend_charges_on_day');
+        Route::middleware(['middleware' => 'role_or_permission:prestamos_cobros_pagar'])->get('pay', 'ChargesController@pay')->name('lend_charges_pay');
+    });
 });
