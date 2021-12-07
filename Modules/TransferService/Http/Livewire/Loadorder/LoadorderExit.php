@@ -4,6 +4,7 @@ namespace Modules\TransferService\Http\Livewire\Loadorder;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,6 +13,7 @@ use Modules\Inventory\Entities\InvKardex;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
 use Modules\TransferService\Entities\SerOdtRequest;
+use Modules\TransferService\Entities\SerVehicle;
 
 class LoadorderExit extends Component
 {
@@ -42,34 +44,37 @@ class LoadorderExit extends Component
         $license_plate  = $this->license_plate;
         $search    = $this->search;
 
-
-            $data = SerLoadOrder::join('ser_vehicles', 'vehicle_id', 'ser_vehicles.id')
-                ->join('ser_vehicle_types', 'vehicle_type_id', 'ser_vehicle_types.id')
-                ->when($search, function ($query) use ($search) {
-                    return $query->where('ser_load_orders.uuid', '=', $search);
-                })
-                ->when($license_plate, function ($query) use ($license_plate) {
-                    return $query->where('ser_vehicles.license_plate', '=', $license_plate);
-                })
-                ->where('ser_load_orders.upload_date', '=', $date)
-                ->select(
-                    'ser_vehicles.license_plate',
-                    'ser_vehicle_types.name',
-                    'ser_load_orders.id',
-                    'ser_load_orders.charge_maximum',
-                    'ser_load_orders.charge_weight',
-                    'ser_load_orders.upload_date',
-                    'ser_load_orders.charging_time',
-                    'ser_load_orders.departure_date',
-                    'ser_load_orders.departure_time',
-                    'ser_load_orders.return_date',
-                    'ser_load_orders.return_time',
-                    'ser_load_orders.uuid',
-                    'ser_load_orders.state'
-                )
-                ->orderBy('ser_load_orders.upload_date', 'DESC')
-                ->paginate($this->show);
-
+        $data = SerLoadOrder::join('ser_vehicles', 'vehicle_id', 'ser_vehicles.id')
+            ->join('ser_vehicle_types', 'vehicle_type_id', 'ser_vehicle_types.id')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('ser_load_orders.uuid', '=', $search);
+            })
+            ->when($license_plate, function ($query) use ($license_plate) {
+                return $query->where('ser_vehicles.license_plate', '=', $license_plate);
+            })
+            ->leftjoin('ser_vehicle_crewmen', 'ser_vehicles.id', 'ser_vehicle_crewmen.vehicle_id')
+            ->leftjoin('sta_employees', 'ser_vehicle_crewmen.employee_id', 'sta_employees.id')
+            ->leftjoin('people', 'sta_employees.person_id', 'people.id')
+            ->where('ser_load_orders.upload_date', '=', $date)
+            ->select(DB::raw("
+               ser_vehicles.license_plate,
+               ser_vehicle_types.name,
+               ser_load_orders.id,
+               ser_load_orders.charge_maximum,
+               ser_load_orders.charge_weight,
+               ser_load_orders.upload_date,
+               ser_load_orders.charging_time,
+               ser_load_orders.departure_date,
+               ser_load_orders.departure_time,
+               ser_load_orders.return_date,
+               ser_load_orders.return_time,
+               ser_load_orders.uuid,
+               ser_load_orders.state,
+               ser_vehicles.id AS vehicle_id,
+               IF(LENGTH(people.telephone) = 9, people.telephone, '') AS telephone
+            "))
+            ->orderBy('ser_load_orders.upload_date', 'DESC')
+            ->paginate($this->show);
         return $data;
     }
 
@@ -137,7 +142,7 @@ class LoadorderExit extends Component
         $this->license_plate = null;
     }
 
-    public function openModalDetails($id){
+    public function openModalDetails($id, $telephone){
         $body = '';
         $orderDetail = SerLoadOrderDetail::where('load_order_id', '=', $id)
             ->join('ser_odt_requests', 'odt_request_id', 'ser_odt_requests.id')
@@ -168,15 +173,18 @@ class LoadorderExit extends Component
         $lng        = '';
         $array_data = array();
         $a = 0;
+        $route_map_w = '';
         foreach ($array_aux as $row){
             if($a == 0){
                 $label = $row->name;
                 $address = $row->address;
                 $reference = $row->reference;
+                $route_map_w = 'https://maps.google.com/?q='.$row->latitude.','.$row->longitude;
             }else{
                 $label = $label.', '.$row->name;
                 $address = $address.', '.$row->address;
                 $reference = $reference.', '.$row->reference;
+                $route_map_w = $route_map_w.' https://maps.google.com/?q='.$row->latitude.','.$row->longitude;
             }
             $lat = (double) $row->latitude;
             $lng = (double) $row->longitude;
@@ -194,6 +202,11 @@ class LoadorderExit extends Component
             <div id="map" style="height: 300px;" wire:ignore></div>
         </div>';
 
-        $this->dispatchBrowserEvent('ser-load-exit-details', ['body' => $body,'label' => $label,'lat' => $lat,'lng' => $lng, 'data'=>$array_data]);
+        $map_whatsapp = '';
+        if($telephone != ''){
+            $map_whatsapp = 'https://wa.me/51'.$telephone.'/?text=Ruta '.$route_map_w;
+        }
+
+        $this->dispatchBrowserEvent('ser-load-exit-details', ['body' => $body,'label' => $label,'lat' => $lat,'lng' => $lng, 'data'=>$array_data, 'whatsapp'=>$map_whatsapp]);
     }
 }

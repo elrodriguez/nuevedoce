@@ -124,8 +124,10 @@ return [
     'lbl_accessories'   => 'Accessories',
     'lbl_return'        => 'Return',
     'lbl_print_map'     => 'Print Map',
+    'lbl_print'         => 'Print',
     'lbl_quantity_served'=> 'Quantity Served',
     'lbl_requested_amount'=> 'Requested Amount',
     'lbl_pending_quantity'=> 'Pending Quantity',
-    'lbl_total_weight_added'=> 'Total Weight Added'
+    'lbl_total_weight_added'=> 'Total Weight Added',
+    'lbl_share_to_whatsApp'=> 'Share To WhatsApp'
 ];

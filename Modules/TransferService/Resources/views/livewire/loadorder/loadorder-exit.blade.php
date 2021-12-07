@@ -61,7 +61,7 @@
                                         <a onclick="confirmExit('{{$item->id}}')" class="dropdown-item">
                                             <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
                                         </a>
-                                        <a class="dropdown-item" wire:click="openModalDetails({{ $item->id }})" href="javascript:void(0)" type="button">
+                                        <a class="dropdown-item" wire:click="openModalDetails({{ $item->id }}, {{ $item->telephone }})" href="javascript:void(0)" type="button">
                                             <i class="fal fa-map-marked-alt"></i> @lang('transferservice::labels.lbl_print_map')
                                         </a>
                                         @else
@@ -112,7 +112,10 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success map-print">Imprimir</button>
+                    <a id="btnWhatsapp" class="dropdown-item" href="" target="_blank" style="display: none;">
+                        <i class="fal fa-comment-lines"></i> {{__('transferservice::labels.lbl_share_to_whatsApp')}}
+                    </a>
+                    <button type="button" class="btn btn-success map-print">{{__('transferservice::labels.lbl_print')}}</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
                 </div>
             </div>
@@ -183,6 +186,14 @@
 
         //
         document.addEventListener('ser-load-exit-details', event => {
+            let map_whatsapp = event.detail.whatsapp;
+            //btnWhatsapp
+            if(map_whatsapp != ''){
+                $('#btnWhatsapp').css('display', 'block');
+                $('#btnWhatsapp').attr('href', map_whatsapp);
+            }else{
+                $('#btnWhatsapp').css('href', '');
+            }
             let data_m = event.detail.data;
 
             $('#modalDetailsLabel').html(event.detail.label)
