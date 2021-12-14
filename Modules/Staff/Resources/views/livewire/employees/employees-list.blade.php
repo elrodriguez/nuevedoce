@@ -81,7 +81,7 @@
                             @if($employee->name_company)
                                 {{ $employee->name_company }}
                             @else
-                                {{ SetCompany::where('main',true)->first()->name }}
+                                {{ $company_name }}
                             @endif
                         </td>
                         <td class="text-center align-middle">

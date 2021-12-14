@@ -9,17 +9,20 @@ use Livewire\WithPagination;
 use Modules\Staff\Entities\StaEmployee;
 use App\Models\Person;
 use Illuminate\Support\Facades\Lang;
+use Modules\Setting\Entities\SetCompany;
 
 class EmployeesList extends Component
 {
     public $show;
     public $search;
+    public $company_name;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public function mount(){
         $this->show = 10;
+        $this->company_name = SetCompany::where('main',true)->first()->name;
     }
 
     public function render()
