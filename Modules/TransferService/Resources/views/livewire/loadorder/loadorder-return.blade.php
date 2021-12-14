@@ -56,6 +56,9 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                    <a wire:click="getLoadOrderDetails({{ $item->id }})" href="javascript:void(0)" class="dropdown-item text-info">
+                                        <i class="fal fa-list-ol mr-1"></i>@lang('labels.see_details')
+                                    </a>
                                     @can('serviciodetraslados_orden_carga_aceptar_salida')
                                         @if($item->state == 'E')
                                             <a onclick="confirmReturn('{{$item->id}}')" class="dropdown-item">
