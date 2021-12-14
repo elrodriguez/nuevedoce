@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Lang;
+use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
 use PDF;
 
@@ -177,6 +178,7 @@ class LoadOrderController extends Controller
     }
 
     public function print($id){
+        $internal_id = SerLoadOrder::find($id)->uuid;
         PDF::SetAuthor('System');
         PDF::SetTitle('Orden de Carga');
         PDF::SetSubject('Reporte Orden de Carga');
@@ -225,7 +227,7 @@ class LoadOrderController extends Controller
         //PDF::endPage();
         PDF::Cell(0, 10, 'Página '.PDF::getAliasNumPage().'/'.PDF::getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
-        PDF::Output('my_loar_order.pdf', 'D');
+        PDF::Output($internal_id.'.pdf', 'D');
         exit;
     }
 
