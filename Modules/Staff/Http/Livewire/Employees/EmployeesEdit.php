@@ -16,6 +16,7 @@ use Modules\Staff\Entities\StaEmployee;
 use Modules\Staff\Entities\StaEmployeeType;
 use Modules\Staff\Entities\StaOccupation;
 use Livewire\WithFileUploads;
+use Modules\Setting\Entities\SetCompany;
 
 class EmployeesEdit extends Component
 {
@@ -193,7 +194,7 @@ class EmployeesEdit extends Component
 
         //Validando si empleado es Interno no vaya con empresa
         if($this->employee_type_id == '1'){
-            $this->company_id = null;
+            $this->company_id = SetCompany::where('main',true)->first()->id;
         }
 
         if($this->photo){
