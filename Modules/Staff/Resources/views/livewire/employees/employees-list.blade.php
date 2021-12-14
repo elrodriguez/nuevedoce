@@ -77,7 +77,13 @@
                         <td class="align-middle">{{ date('d-m-Y', strtotime($employee->admission_date)) }}</td>
                         <td class="align-middle">{{ $employee->name_employee_type }}</td>
                         <td class="align-middle">{{ $employee->name_occupation }}</td>
-                        <td class="align-middle">{{ $employee->name_company }}</td>
+                        <td class="align-middle">
+                            @if($employee->name_company)
+                                {{ $employee->name_company }}
+                            @else
+                                {{ SetCompany::where('main',true)->first()->name }}
+                            @endif
+                        </td>
                         <td class="text-center align-middle">
                             @if($employee->state)
                                 <span class="badge badge-success">{{ __('staff::labels.lbl_active') }}</span>
