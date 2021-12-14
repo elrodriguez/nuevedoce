@@ -53,7 +53,7 @@
                                     <td class="align-middle text-center">{{ $odt['amount'] }}</td>
                                     <td class="align-middle text-center">{{ $odt['quantity_served'] }}</td>
                                     <td class="align-middle text-center">{{ $odt['amount_pending'] }}</td>
-                                    <td class="align-middle text-center"><input name="quantity[]" class="col-6" type="number" min="1" max="{{ $odt['amount_pending'] }}" id="quantity{{$key}}" style="height: 30px;" value="{{ $odt['amount_pending'] }}"></td>
+                                    <td class="align-middle text-center" width="100px"><input name="quantity[]" class="col-6" type="number" min="1" max="{{ $odt['amount_pending'] }}" id="quantity{{$key}}" style="height: 30px;" value="{{ $odt['amount_pending'] }}"></td>
                                 </tr>
                             @endforeach
                             </tbody>
