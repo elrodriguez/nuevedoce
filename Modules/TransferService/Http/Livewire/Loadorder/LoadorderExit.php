@@ -21,6 +21,7 @@ class LoadorderExit extends Component
     public $search;
     public $date_upload;
     public $license_plate;
+    public $loadorderdetails;
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
