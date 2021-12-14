@@ -18,6 +18,7 @@ class LoadorderReturn extends Component
     public $search;
     public $date_upload;
     public $license_plate;
+    public $loadorderdetails = [];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -125,5 +126,26 @@ class LoadorderReturn extends Component
         $this->search = null;
         $this->date_upload = null;
         $this->license_plate = null;
+    }
+
+    public function getLoadOrderDetails($id){
+        $this->loadorderdetails = [];
+
+        $this->loadorderdetails = InvItemPart::join('inv_items AS part','inv_item_parts.part_id','part.id')
+                                    ->join('inv_items AS asset','inv_item_parts.item_id','asset.id')
+                                    ->join('inv_categories','asset.category_id','inv_categories.id')
+                                    ->join('ser_load_order_details','asset.id','ser_load_order_details.item_id')
+                                    ->select(
+                                        'inv_categories.description AS category_name',
+                                        'asset.name AS asset_name',
+                                        'asset.description AS asset_description',
+                                        'part.name AS part_name',
+                                        'inv_item_parts.quantity'
+                                    )
+                                    ->where('ser_load_order_details.load_order_id',$id)
+                                    ->get();
+
+        $this->dispatchBrowserEvent('ser-load-order-details', ['success' => true]);
+
     }
 }
