@@ -97,6 +97,6 @@ class EmployeesList extends Component
         //Eliminar archivos y direcctorio
         $this->deleteDirectory('storage/employees_photo/'.$id);
 
-        $this->dispatchBrowserEvent('per-employees-delete', ['msg' => Lang::get('Staff::labels.msg_delete')]);
+        $this->dispatchBrowserEvent('per-employees-delete', ['msg' => Lang::get('staff::labels.msg_delete')]);
     }
 }

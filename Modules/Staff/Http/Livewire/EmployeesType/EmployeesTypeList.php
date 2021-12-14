@@ -48,6 +48,6 @@ class EmployeesTypeList extends Component
 
         $employee_type->delete();
 
-        $this->dispatchBrowserEvent('per-employees-type-delete', ['msg' => Lang::get('Staff::labels.msg_delete')]);
+        $this->dispatchBrowserEvent('per-employees-type-delete', ['msg' => Lang::get('staff::labels.msg_delete')]);
     }
 }
