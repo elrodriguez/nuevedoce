@@ -13,6 +13,8 @@ return [
     'msg_0009'          => 'Ingrese una cantidad mayor a cero y menor e igual a la cantidad solicitada.',
     'msg_0010'          => 'El peso total de carga del vehículo seleccionado es menor al peso total añadido',
     'msg_0011'          => 'El peso total añadido supera al peso del vehículo',
+    'msg_0012'          => 'El vehículo seleccionado para la orden de carga no tiene tripulación o el conductor no tiene un número de celular registrado y el local no esta registrado sus coordenadas',
+    'msg_0013'          => 'El local seleccionado en la ODT no tiene registrado sus coordenadas.',
     'msg_success'       => 'Datos guardados correctamente.',
     'msg_delete'        => 'Datos eliminados correctamente.',
     'msg_update'        => 'Datos Actualizados correctamente.',

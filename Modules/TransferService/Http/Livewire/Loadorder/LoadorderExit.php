@@ -207,6 +207,6 @@ class LoadorderExit extends Component
             $map_whatsapp = 'https://wa.me/51'.$telephone.'/?text=Ruta '.$route_map_w;
         }
 
-        $this->dispatchBrowserEvent('ser-load-exit-details', ['body' => $body,'label' => $label,'lat' => $lat,'lng' => $lng, 'data'=>$array_data, 'whatsapp'=>$map_whatsapp]);
+        $this->dispatchBrowserEvent('ser-load-exit-details', ['body' => $body,'label' => $label,'lat' => $lat,'lng' => $lng, 'data'=>$array_data, 'whatsapp'=>$map_whatsapp, 'telephone'=>(string)$telephone]);
     }
 }

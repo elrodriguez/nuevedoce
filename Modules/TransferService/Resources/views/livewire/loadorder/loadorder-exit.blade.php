@@ -61,7 +61,7 @@
                                         <a onclick="confirmExit('{{$item->id}}')" class="dropdown-item">
                                             <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
                                         </a>
-                                        <a class="dropdown-item" wire:click="openModalDetails({{ $item->id }}, {{ $item->telephone }})" href="javascript:void(0)" type="button">
+                                        <a class="dropdown-item" wire:click="openModalDetails({{ $item->id }}, '{{ $item->telephone }}')" href="javascript:void(0)" type="button">
                                             <i class="fal fa-map-marked-alt"></i> @lang('transferservice::labels.lbl_print_map')
                                         </a>
                                         @else
@@ -187,6 +187,34 @@
         //
         document.addEventListener('ser-load-exit-details', event => {
             let map_whatsapp = event.detail.whatsapp;
+            console.log(event.detail.lat);
+            console.log(event.detail.lng);
+            console.log(event.detail.telephone);
+            if(event.detail.telephone === "" && event.detail.lat == 0){
+                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+                let box = bootbox.alert({
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_warning')}}!</span>",
+                    message: "<span><strong>{{__('transferservice::messages.msg_0012')}}... </strong></span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+                return false;
+            }
+
+            if(event.detail.lat == 0 ){
+                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+                let box = bootbox.alert({
+                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_warning')}}!</span>",
+                    message: "<span><strong>{{__('transferservice::messages.msg_0013')}}... </strong></span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+                return false;
+            }
             //btnWhatsapp
             if(map_whatsapp != ''){
                 $('#btnWhatsapp').css('display', 'block');

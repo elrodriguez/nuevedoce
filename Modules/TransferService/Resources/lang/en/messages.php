@@ -13,6 +13,8 @@ return [
     'msg_0009'          => 'Enter an amount greater than zero and less than and equal to the requested amount.',
     'msg_0010'          => 'The total loaded weight of the selected vehicle is less than the total added weight',
     'msg_0011'          => 'Total added weight exceeds vehicle weight',
+    'msg_0012'          => 'The vehicle selected for the loading order does not have a crew or the driver does not have a registered cell phone number and the location does not have its coordinates registered',
+    'msg_0013'          => 'The location selected in the ODT does not have its coordinates registered.',
     'msg_success'       => 'Data saved correctly.',
     'msg_delete'        => 'Data removed successfully.',
     'msg_update'        => 'Data updated correctly.',
