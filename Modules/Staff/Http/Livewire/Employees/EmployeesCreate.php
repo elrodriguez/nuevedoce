@@ -281,7 +281,7 @@ class EmployeesCreate extends Component
         $activity->log('Se creó un nuevo empleado');
         $activity->save();
 
-        $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('Staff::labels.msg_success')]);
+        $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('staff::labels.msg_success')]);
         $this->clearForm();
     }
 

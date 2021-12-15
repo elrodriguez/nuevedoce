@@ -41,7 +41,7 @@ class EmployeesTypeCreate extends Component
         $activity->save();
 
         $this->clearForm();
-        $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('Staff::labels.msg_success')]);
+        $this->dispatchBrowserEvent('per-employees-type-save', ['msg' => Lang::get('staff::labels.msg_success')]);
     }
 
     public function  clearForm(){

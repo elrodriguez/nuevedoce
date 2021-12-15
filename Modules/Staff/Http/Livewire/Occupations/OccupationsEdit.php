@@ -51,6 +51,6 @@ class OccupationsEdit extends Component
         $activity->log('Se actualizo datos de la ocupación');
         $activity->save();
 
-        $this->dispatchBrowserEvent('per-occupations-update', ['msg' => Lang::get('Staff::labels.msg_update')]);
+        $this->dispatchBrowserEvent('per-occupations-update', ['msg' => Lang::get('staff::labels.msg_update')]);
     }
 }

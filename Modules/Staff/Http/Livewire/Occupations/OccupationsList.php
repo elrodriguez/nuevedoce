@@ -48,6 +48,6 @@ class OccupationsList extends Component
 
         $occupation->delete();
 
-        $this->dispatchBrowserEvent('per-occupations-delete', ['msg' => Lang::get('Staff::labels.msg_delete')]);
+        $this->dispatchBrowserEvent('per-occupations-delete', ['msg' => Lang::get('staff::labels.msg_delete')]);
     }
 }

@@ -41,7 +41,7 @@ class OccupationsCreate extends Component
         $activity->save();
 
         $this->clearForm();
-        $this->dispatchBrowserEvent('per-occupations-save', ['msg' => Lang::get('Staff::labels.msg_success')]);
+        $this->dispatchBrowserEvent('per-occupations-save', ['msg' => Lang::get('staff::labels.msg_success')]);
     }
 
     public function  clearForm(){

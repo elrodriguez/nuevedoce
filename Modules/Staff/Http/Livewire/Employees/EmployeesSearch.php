@@ -97,11 +97,11 @@ class EmployeesSearch extends Component
             }
         }
         if($encuentra == ''){
-            $this->dispatchBrowserEvent('per-employees-search_a', ['msg' => Lang::get('Staff::labels.msg_search_not'), 'numberPerson' => $this->number_search]);
+            $this->dispatchBrowserEvent('per-employees-search_a', ['msg' => Lang::get('staff::labels.msg_search_not'), 'numberPerson' => $this->number_search]);
         }elseif($encuentra != '' && $encuentra_e == ''){
-            $this->dispatchBrowserEvent('per-employees-search_b', ['msg' => Lang::get('Staff::labels.msg_search_ok_a'), 'personId' => $this->person_id]);
+            $this->dispatchBrowserEvent('per-employees-search_b', ['msg' => Lang::get('staff::labels.msg_search_ok_a'), 'personId' => $this->person_id]);
         }else{
-            $this->dispatchBrowserEvent('per-employees-search_c', ['msg' => Lang::get('Staff::labels.msg_search_ok_b'), 'employeeId' => $this->employee_id]);
+            $this->dispatchBrowserEvent('per-employees-search_c', ['msg' => Lang::get('staff::labels.msg_search_ok_b'), 'employeeId' => $this->employee_id]);
         }
     }
 

@@ -56,6 +56,9 @@
                                     <i class="fal fa-cogs"></i>
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                    <a wire:click="getLoadOrderDetails({{ $item->id }})" href="javascript:void(0)" class="dropdown-item text-info">
+                                        <i class="fal fa-list-ol mr-1"></i>@lang('labels.see_details')
+                                    </a>
                                     @can('serviciodetraslados_orden_carga_aceptar_salida')
                                         @if($item->state == 'E')
                                             <a onclick="confirmReturn('{{$item->id}}')" class="dropdown-item">
@@ -93,6 +96,48 @@
         </div>
         <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $load_orders->links() }}</div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalLoadOrderDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{ __('labels.details') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{{ __('labels.category') }}</th>
+                            <th scope="col">{{ __('labels.subcategory') }}</th>
+                            <th scope="col">{{ __('labels.description') }}</th>
+                            <th scope="col">{{ __('transferservice::labels.lbl_accessories') }}</th>
+                            <th scope="col">{{ __('labels.quantity') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($loadorderdetails as $key => $loadorderdetail)
+                            <tr>
+                                <th scope="row">{{ $key + 1 }}</th>
+                                <td>{{ $loadorderdetail->category_name }}</td>
+                                <td>{{ $loadorderdetail->asset_name }}</td>
+                                <td>{{ $loadorderdetail->asset_description }}</td>
+                                <td>{{ $loadorderdetail->part_name }}</td>
+                                <td>{{ $loadorderdetail->quantity }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -156,6 +201,10 @@
             }).on('hide', function(e){
                 @this.set('date_upload',this.value);
             });
+        });
+
+        document.addEventListener('ser-load-order-details', event => {
+            $('#modalLoadOrderDetails').modal('show');
         });
     </script>
 </div>

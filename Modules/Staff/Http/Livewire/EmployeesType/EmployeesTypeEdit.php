@@ -52,6 +52,6 @@ class EmployeesTypeEdit extends Component
         $activity->log('Se actualizo datos del tipo de empleado');
         $activity->save();
 
-        $this->dispatchBrowserEvent('per-employees-type-update', ['msg' => Lang::get('Staff::labels.msg_update')]);
+        $this->dispatchBrowserEvent('per-employees-type-update', ['msg' => Lang::get('staff::labels.msg_update')]);
     }
 }
