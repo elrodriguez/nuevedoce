@@ -59,6 +59,18 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="unit_measure_id">@lang('inventory::labels.lbl_unit_measure') <span class="text-danger">*</span></label>
+                        <select wire:model="unit_measure_id" id="unit_measure_id" class="custom-select" required="">
+                            <option value="">@lang('inventory::labels.lbl_select')</option>
+                            @foreach($unit_measures as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('unit_measure_id')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="col-md-3 mb-3" wire:ignore>
                         <label class="form-label">@lang('inventory::labels.lbl_is_a_part') <span class="text-danger">*</span> </label>
                         <div class="custom-control custom-checkbox">
@@ -259,7 +271,7 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
-        
+
         document.addEventListener('set-item-save-not', event => {
             let part_count = event.detail.part_count;
             if(part_count > 0){

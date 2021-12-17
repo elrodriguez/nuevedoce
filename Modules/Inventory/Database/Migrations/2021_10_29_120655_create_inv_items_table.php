@@ -28,12 +28,14 @@ class CreateInvItemsTable extends Migration
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('unit_measure_id')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('brand_id')->references('id')->on('inv_brands');
             $table->foreign('category_id')->references('id')->on('inv_categories');
+            $table->foreign('unit_measure_id')->references('id')->on('inv_unit_measures');
         });
     }
 

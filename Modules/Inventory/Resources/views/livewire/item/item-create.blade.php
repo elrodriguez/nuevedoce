@@ -35,6 +35,18 @@
                         @enderror
                     </div>
                     <div class="col-md-3 mb-3">
+                        <label class="form-label" for="unit_measure_id">@lang('inventory::labels.lbl_unit_measure') <span class="text-danger">*</span></label>
+                        <select wire:model="unit_measure_id" id="unit_measure_id" class="custom-select" required="">
+                            <option value="">@lang('inventory::labels.lbl_select')</option>
+                            @foreach($unit_measures as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('unit_measure_id')
+                        <div class="invalid-feedback-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-3 mb-3">
                         <label class="form-label">@lang('inventory::labels.lbl_initial_stock') <span class="text-danger">*</span> </label>
                         <input wire:model.defer="quantity" type="text" class="form-control" required>
                         @error('quantity')
@@ -186,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">

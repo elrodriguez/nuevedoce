@@ -40,6 +40,7 @@ class ItemList extends Component
         return InvItem::where('inv_items.name','like','%'.$this->search.'%')
             ->leftJoin('inv_categories', 'category_id', 'inv_categories.id')
             ->leftJoin('inv_brands', 'brand_id', 'inv_brands.id')
+            ->leftJoin('inv_unit_measures', 'unit_measure_id', 'inv_unit_measures.id')
             ->select(
                 'inv_items.id',
                 'inv_items.name',
@@ -52,7 +53,9 @@ class ItemList extends Component
                 'inv_items.number_parts',
                 'inv_items.status',
                 'inv_categories.description AS name_category',
-                'inv_brands.description AS name_brand'
+                'inv_brands.description AS name_brand',
+                'inv_unit_measures.name AS unit_measure',
+                'inv_unit_measures.abbreviation AS unit_measure_abr'
             )
             ->paginate($this->show);
     }

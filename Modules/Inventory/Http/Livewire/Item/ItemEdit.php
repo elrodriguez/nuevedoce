@@ -14,6 +14,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Modules\Inventory\Entities\InvItemPart;
+use Modules\Inventory\Entities\InvUnitMeasure;
 
 class ItemEdit extends Component
 {
@@ -33,12 +34,14 @@ class ItemEdit extends Component
     public $id_item = 0; //For Parts
     public $brand_id;
     public $category_id;
+    public $unit_measure_id;
     //images
     public $images = [];
     public $image;
     public $extension_photo;
     //Brand
     public $brands;
+    public $unit_measures = [];
     //Category
     public $categories;
     public $item_save;
@@ -59,6 +62,7 @@ class ItemEdit extends Component
     public function mount($item_id){
         $this->categories = InvCategory::where('status',true)->get();
         $this->brands = InvBrand::where('status',true)->get();
+        $this->unit_measures = InvUnitMeasure::where('state',true)->get();
 
         $this->item = InvItem::find($item_id);
         $this->name = $this->item->name;
@@ -72,13 +76,14 @@ class ItemEdit extends Component
         $this->status = $this->item->status;
         $this->amount_asigned = $this->item->amount;
         $this->id_item = $this->item->item_id == null ? 0 : $this->item->item_id;
-        
+
         $this->brand_id = $this->item->brand_id;
         $this->category_id = $this->item->category_id;
+        $this->unit_measure_id = $this->item->unit_measure_id;
 
         $this->item_aa = $item_id;
-        
-        
+
+
 
         if($this->id_item > 0) {
             $item_parent = InvItem::find($this->id_item);
@@ -96,6 +101,7 @@ class ItemEdit extends Component
         if($this->id_item>0){
             $this->validate([
                 'name' => 'required|min:3|max:255',
+                'unit_measure_id' => 'required',
                 //'description' => 'required',
                 'images.*' => 'image|max:1024',
                 'amount_asigned' => 'required|integer'
@@ -103,6 +109,7 @@ class ItemEdit extends Component
         }else{
             $this->validate([
                 'name' => 'required|min:3|max:255',
+                'unit_measure_id' => 'required',
                 //'description' => 'required',
                 'images.*' => 'image|max:1024'
             ]);
@@ -127,6 +134,7 @@ class ItemEdit extends Component
             'status' => $this->status,
             'brand_id' => $this->brand_id,
             'category_id' => $this->category_id,
+            'unit_measure_id' => $this->unit_measure_id,
             'person_edit'=> Auth::user()->person_id
         ]);
 
@@ -160,7 +168,7 @@ class ItemEdit extends Component
             'part_id' => 'required',
             'amount' => 'required|integer'
         ]);
-        
+
         if($this->number_parts > count($this->parts_item)) {
             $search_part = InvItem::find($this->part_id);
 
@@ -178,16 +186,16 @@ class ItemEdit extends Component
                 $this->weight = $this->weight+($search_part->weight * $this->amount);
                 //Actualizando Peso Item
                 $search_item_parent =  InvItem::find($this->item_aa);
-    
+
                 $parent_item = $search_item_parent->update([
                     'weight' => $this->weight,
                     'number_parts' => $this->number_parts,
                     'person_edit' => Auth::user()->person_id
                 ]);
-    
+
                 $this->parts_item = InvItem::where('item_id', $this->item_aa)->get();
                 $this->parts_item_count = count($this->parts_item);
-    
+
                 $this->part_text = '';
                 $this->part_id = '';
                 $this->amount = 1;
@@ -196,7 +204,7 @@ class ItemEdit extends Component
             }else{
                 $this->dispatchBrowserEvent('set-item-add-not', ['msg' => Lang::get('inventory::labels.msg_0009'), 'part_count' => $this->parts_item_count]);
             }
-          
+
         }else{
             $this->dispatchBrowserEvent('set-item-save-not', ['msg' => Lang::get('inventory::labels.msg_0010'), 'part_count' => $this->parts_item_count]);
         }

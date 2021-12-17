@@ -15,6 +15,7 @@ use Livewire\WithFileUploads;
 use Modules\Inventory\Entities\InvItemPart;
 use Modules\Inventory\Entities\InvKardex;
 use Illuminate\Support\Str;
+use Modules\Inventory\Entities\InvUnitMeasure;
 
 class ItemCreate extends Component
 {
@@ -32,6 +33,7 @@ class ItemCreate extends Component
     public $item_id;
     public $brand_id = 1;
     public $category_id;
+    public $unit_measure_id;
     //images
     public $images = [];
     public $image;
@@ -40,6 +42,7 @@ class ItemCreate extends Component
     public $brands;
     //Category
     public $categories;
+    public $unit_measures = [];
     public $item_save;
     public $part_text;
     public $amount = 1;
@@ -56,6 +59,7 @@ class ItemCreate extends Component
     public function mount(){
         $this->categories = InvCategory::where('status',true)->get();
         $this->brands = InvBrand::where('status',true)->get();
+        $this->unit_measures = InvUnitMeasure::where('state',true)->get();
     }
 
     public function render()
@@ -73,9 +77,10 @@ class ItemCreate extends Component
             'width' => 'required',
             'high' => 'required',
             'long' => 'required',
+            'unit_measure_id' => 'required',
             'images.*' => 'image|max:1024'
         ]);
-        
+
         if($this->part){
             $this->number_parts = 0;
         }
@@ -92,6 +97,7 @@ class ItemCreate extends Component
             'status' => $this->status,
             'item_id' => $this->item_id,
             'category_id' => $this->category_id,
+            'unit_measure_id' => $this->unit_measure_id,
             'brand_id' => $this->brand_id,
             'person_create'=> Auth::user()->person_id
         ]);

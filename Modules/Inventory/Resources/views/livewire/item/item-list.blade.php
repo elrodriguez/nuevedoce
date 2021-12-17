@@ -48,6 +48,7 @@
                     <th>@lang('inventory::labels.brand')</th>
                     <th class="text-center">@lang('inventory::labels.lbl_part')</th>
                     <th class="text-center">@lang('inventory::labels.lbl_assigned')</th>
+                    <th class="">@lang('inventory::labels.lbl_unit_measure')</th>
                     <th class="text-center">@lang('inventory::labels.status')</th>
                 </tr>
                 </thead>
@@ -105,6 +106,7 @@
                                 <span class="badge badge-danger">{{ __('inventory::labels.btn_not') }}</span>
                             @endif
                         </td>
+                        <td class="align-middle">{{ $item->unit_measure }}</td>
                         <td class="text-center align-middle">
                             @if($item->status)
                                 <span class="badge badge-success">{{ __('inventory::labels.active') }}</span>

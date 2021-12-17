@@ -24,6 +24,7 @@ class InvItem extends Model
         'status',
         'brand_id',
         'category_id',
+        'unit_measure_id',
         'person_create',
         'person_edit',
         'model_id'
