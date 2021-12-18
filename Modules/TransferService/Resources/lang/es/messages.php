@@ -15,6 +15,8 @@ return [
     'msg_0011'          => 'El peso total añadido supera al peso del vehículo',
     'msg_0012'          => 'El vehículo seleccionado para la orden de carga no tiene tripulación o el conductor no tiene un número de celular registrado y el local no esta registrado sus coordenadas',
     'msg_0013'          => 'El local seleccionado en la ODT no tiene registrado sus coordenadas.',
+    'msg_0014'          => 'Aún no esta definido la fecha de envío o falta seleccionar el vehiculo para la guía de retorno.',
+    'msg_0015'          => 'La guía de salida ya fue creada.',
     'msg_success'       => 'Datos guardados correctamente.',
     'msg_delete'        => 'Datos eliminados correctamente.',
     'msg_update'        => 'Datos Actualizados correctamente.',

@@ -51,5 +51,6 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga'])->get('print/{id}', 'LoadOrderController@print')->name('service_load_order_pdf');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_salida'])->get('exit', 'LoadOrderController@exit')->name('service_load_order_exit');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_retorno'])->get('return', 'LoadOrderController@return')->name('service_load_order_return');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_guias'])->get('guide/{id}', 'LoadOrderController@guide')->name('service_load_order_guide');
     });
 });

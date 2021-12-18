@@ -240,4 +240,9 @@ class LoadOrderController extends Controller
     {
         return view('transferservice::loadorder.return');
     }
+
+    public function guide($id)
+    {
+        return view('transferservice::loadorder.guides')->with('id', $id);
+    }
 }

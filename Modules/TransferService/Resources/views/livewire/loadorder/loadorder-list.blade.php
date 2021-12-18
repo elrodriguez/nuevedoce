@@ -68,6 +68,11 @@
                                     <a href="{{ route('service_load_order_pdf', $loadorder->id) }}" class="dropdown-item text-success">
                                         <i class="fal fa-print mr-1"></i>@lang('transferservice::buttons.btn_print_oc')
                                     </a>
+                                    @can('serviciodetraslados_orden_carga_guias')
+                                    <a href="{{ route('service_load_order_guide', $loadorder->id) }}" class="dropdown-item text-warning">
+                                        <i class="fal fa-clone mr-1"></i>@lang('transferservice::labels.lbl_generate_guides')
+                                    </a>
+                                    @endcan
                                     @can('serviciodetraslados_orden_carga_eliminar')
                                         <div class="dropdown-divider"></div>
                                         @if($loadorder->departure_date == null or $loadorder->departure_date == '')
