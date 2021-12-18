@@ -150,5 +150,6 @@ return [
     'lbl_transport'         => 'Transport',
     'lbl_qty'               => 'Qty',
     'lbl_Unidad'            => 'Unit',
-    'lbl_kilograms'         => 'K.G.'
+    'lbl_kilograms'         => 'K.G.',
+    'lbl_print_guide'       => 'Print Guide'
 ];

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Lang;
+use Modules\TransferService\Entities\SerGuide;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
 use PDF;
@@ -244,5 +245,42 @@ class LoadOrderController extends Controller
     public function guide($id)
     {
         return view('transferservice::loadorder.guides')->with('id', $id);
+    }
+
+    public function printGuides($id){
+        $data_exist = SerGuide::where('loadorder_id','=', $id)
+            //->where('guide_type', '=', 'S')
+            ->get();
+
+        PDF::SetAuthor('System');
+        PDF::SetTitle('Guias');
+        PDF::SetSubject('Guia Remision');
+        PDF::SetMargins(7, 18, 7);
+        // set default header data
+        PDF::SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 006', PDF_HEADER_STRING);
+        PDF::setFooterData(array(0,64,0), array(0,64,128));
+
+        // set header and footer fonts
+        PDF::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        PDF::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        PDF::SetFooterMargin(10);// Intervalo inferior del pie de página
+
+        PDF::SetFontSubsetting(false);
+        PDF::SetFontSize('10px');
+        PDF::SetAutoPageBreak(true, 25);
+
+        PDF::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        PDF::AddPage();
+        foreach ($data_exist as $row){
+            $html = view('transferservice::loadorder.guideprint')->with('id', $row->id)->render();
+            PDF::writeHTML($html, true, false, true, false, '');
+            PDF::AddPage();
+        }
+        PDF::writeHTML($html, true, false, true, false, '');
+        //PDF::Cell(0, 10, 'Página '.PDF::getAliasNumPage().'/'.PDF::getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+        PDF::Output('guides.pdf', 'D');
+        exit;
     }
 }

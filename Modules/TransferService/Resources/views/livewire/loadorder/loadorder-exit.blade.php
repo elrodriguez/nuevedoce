@@ -73,6 +73,11 @@
                                             </button>
                                         @endif
                                     @endcan
+                                    @can('serviciodetraslados_orden_carga_guias')
+                                        <a href="{{ route('service_load_order_print_guide', $item->id) }}" class="dropdown-item text-success">
+                                            <i class="fal fa-print mr-1"></i>@lang('transferservice::labels.lbl_print_guide')
+                                        </a>
+                                    @endcan
                                 </div>
                             </div>
                         </td>
