@@ -36,6 +36,7 @@ class LoadorderGuides extends Component
     public $cell_phone_bussines; //Email
 
     //Data Serie numero:
+    public $id_serie_search;
     public $ruc_company;
     public $name_document;
     public $serie;
@@ -205,8 +206,10 @@ class LoadorderGuides extends Component
 
     public function getSerie() {
         $this->search_serie = SerSerie::where('document_type_id', '=', $this->idDocumentGuide)
+            ->where('ser_series.state', '=', true)
             ->join('document_types', 'document_type_id', 'document_types.id')
             ->select(
+                'ser_series.id',
                 'ser_series.serie AS serie',
                 'ser_series.year AS year',
                 'ser_series.current_number AS current_number',
@@ -216,6 +219,7 @@ class LoadorderGuides extends Component
             )
             ->get();
         foreach ($this->search_serie as $item) {
+            $this->id_serie_search = $item->id;
             $this->serie = $item->serie;
             $this->year = $item->year;
             $this->number = (int) $item->current_number + 1;
@@ -383,6 +387,13 @@ class LoadorderGuides extends Component
                         'person_create' => Auth::user()->person_id
                     ]);
                 }
+
+                //Save number serie:
+                $serie_edit = SerSerie::find($this->id_serie_search);
+                $serie_edit->update([
+                    'current_number'        => (int) $this->number_return_format,
+                    'person_edit'           => Auth::user()->person_id
+                ]);
                 //end guides
                 $message = Lang::get('transferservice::messages.msg_success');
             }else{
