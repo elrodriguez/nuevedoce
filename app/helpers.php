@@ -39,3 +39,16 @@ function nameMonth(){
     $months = array (1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre');
     return $months[(int)$m];
 }
+
+function getEnumValues($table,$field)
+{
+    $type = \Illuminate\Support\Facades\DB::select( \Illuminate\Support\Facades\DB::raw("SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'") )[0]->Type;
+    preg_match('/^enum\((.*)\)$/', $type, $matches);
+    $enum = array();
+    foreach( explode(',', $matches[1]) as $value )
+    {
+        $v = trim( $value, "'" );
+        $enum = \Illuminate\Support\Arr::add($enum, $v, $v);
+    }
+    return $enum;
+}

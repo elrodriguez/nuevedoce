@@ -150,5 +150,7 @@ return [
     'lbl_qty'               => 'Cant.',
     'lbl_unit'              => 'Unidad',
     'lbl_kilograms'         => 'K.G.',
-    'lbl_print_guide'       => 'Imprimir Guías'
+    'lbl_print_guide'       => 'Imprimir Guías',
+    'lbl_occurrence_note'   => 'Nota de Ocurrencias',
+    'lbl_it_is_necessary_to_mark_the_missing_items' => 'Es necesario marcar los items faltantes'
 ];

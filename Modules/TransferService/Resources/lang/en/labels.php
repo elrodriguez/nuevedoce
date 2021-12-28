@@ -151,5 +151,7 @@ return [
     'lbl_qty'               => 'Qty',
     'lbl_Unidad'            => 'Unit',
     'lbl_kilograms'         => 'K.G.',
-    'lbl_print_guide'       => 'Print Guide'
+    'lbl_print_guide'       => 'Print Guide',
+    'lbl_occurrence_note'   => 'Occurrence note',
+    'lbl_it_is_necessary_to_mark_the_missing_items' => 'It is necessary to mark the missing items'
 ];

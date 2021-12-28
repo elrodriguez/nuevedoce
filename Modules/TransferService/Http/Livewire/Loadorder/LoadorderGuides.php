@@ -159,6 +159,7 @@ class LoadorderGuides extends Component
                 ->get();
 
             $this->date_of_issue_d = date('d-m-Y');
+
             foreach ($this->search_order as $row) {
                 $this->type_of_transport = 'Privado';
                 $this->license_plate = $row->license_plate;
@@ -177,7 +178,7 @@ class LoadorderGuides extends Component
                 $this->document_carrier_r = $row->document_carrier;
                 break;
             }
-
+            //dd($this->shipping_date_f);
             $this->getLoadOrderDetails();
             #dd($this->loadorderdetails);
             $this->number_of_packages = count($this->loadorderdetails);

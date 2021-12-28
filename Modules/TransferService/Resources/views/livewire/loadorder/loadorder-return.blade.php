@@ -62,13 +62,18 @@
                                     @can('serviciodetraslados_orden_carga_aceptar_salida')
                                         @if($item->state == 'E')
                                             <a onclick="confirmReturn('{{$item->id}}')" class="dropdown-item">
-                                                <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_return')
+                                                <i class="fal fa-house-return mr-1"></i>@lang('transferservice::labels.lbl_return')
                                             </a>
                                         @else
                                             <button class="dropdown-item" disabled>
-                                                <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_return')
+                                                <i class="fal fa-house-return mr-1"></i>@lang('transferservice::labels.lbl_return')
                                             </button>
                                         @endif
+                                    @endcan
+                                    @can('serviciodetraslados_nota_ocurrencias')
+                                        <a href="{{ route('service_load_order_ocurrencenote', $item->id) }}" class="dropdown-item text-blank">
+                                            <i class="fal fa-file-exclamation mr-1"></i>@lang('transferservice::labels.lbl_occurrence_note')
+                                        </a>
                                     @endcan
                                 </div>
                             </div>

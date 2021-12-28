@@ -36,16 +36,16 @@
         <div class="card-body p-0">
             <table class="table m-0">
                 <thead>
-                <tr>
-                    <th class="text-center">#</th>
-                    <th class="text-center">@lang('transferservice::labels.lbl_actions')</th>
-                    <th>@lang('transferservice::labels.lbl_code')</th>
-                    <th>@lang('transferservice::labels.lbl_upload_date')</th>
-                    <th>@lang('transferservice::labels.lbl_charging_time')</th>
-                    <th>@lang('transferservice::labels.lbl_vehicle')</th>
-                    <th>@lang('transferservice::labels.lbl_license_plate')</th>
-                    <th>@lang('labels.state')</th>
-                </tr>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">@lang('transferservice::labels.lbl_actions')</th>
+                        <th>@lang('transferservice::labels.lbl_code')</th>
+                        <th>@lang('transferservice::labels.lbl_upload_date')</th>
+                        <th>@lang('transferservice::labels.lbl_charging_time')</th>
+                        <th>@lang('transferservice::labels.lbl_vehicle')</th>
+                        <th>@lang('transferservice::labels.lbl_license_plate')</th>
+                        <th>@lang('labels.state')</th>
+                    </tr>
                 </thead>
                 <tbody class="">
                 @foreach($loadorders as $key => $loadorder)
@@ -76,7 +76,11 @@
                                         <i class="fal fa-print mr-1"></i>@lang('transferservice::labels.lbl_print_guide')
                                     </a>
                                     @endcan
-                                    {{-- de prueba --}}
+                                    @can('serviciodetraslados_nota_ocurrencias')
+                                    <a href="{{ route('service_load_order_ocurrencenote', $loadorder->id) }}" class="dropdown-item text-blank">
+                                        <i class="fal fa-file-exclamation mr-1"></i>@lang('transferservice::labels.lbl_occurrence_note')
+                                    </a>
+                                    @endcan
                                     @can('serviciodetraslados_orden_carga_eliminar')
                                         <div class="dropdown-divider"></div>
                                         @if($loadorder->departure_date == null or $loadorder->departure_date == '')

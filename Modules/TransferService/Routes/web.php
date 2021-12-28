@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::get('search', 'OdtRequestController@autocomplete')->name('service_odt_requests_search');
         Route::get('search_item', 'OdtRequestController@autocompleteItems')->name('service_odt_items_search');
     });
-
+    
     Route::group(['prefix' => 'load_order'], function() {
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga'])->get('list', 'LoadOrderController@index')->name('service_load_order_index');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_nuevo'])->get('create', 'LoadOrderController@create')->name('service_load_order_create');
@@ -52,6 +52,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_salida'])->get('exit', 'LoadOrderController@exit')->name('service_load_order_exit');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_retorno'])->get('return', 'LoadOrderController@return')->name('service_load_order_return');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_guias'])->get('guide/{id}', 'LoadOrderController@guide')->name('service_load_order_guide');
-        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_guias'])->get('printGuides/{id}', 'LoadOrderController@printGuides')->name('service_load_order_print_guide');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_orden_carga_guias'])->get('printguides/{id}', 'LoadOrderController@printGuides')->name('service_load_order_print_guide');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_nota_ocurrencias'])->get('ocurrencenote/{id}', 'LoadOrderController@ocurrenceNote')->name('service_load_order_ocurrencenote');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_nota_ocurrencias_nuevo'])->get('ocurrencenote/create/{id}', 'LoadOrderController@ocurrenceNoteCreate')->name('service_load_order_ocurrencenote_create');
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_nota_ocurrencias_editar'])->get('ocurrencenote/edit/{id}/{code}', 'LoadOrderController@ocurrenceNoteEdit')->name('service_load_order_ocurrencenote_edit');
     });
 });

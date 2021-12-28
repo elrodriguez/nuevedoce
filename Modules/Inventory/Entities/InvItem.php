@@ -27,7 +27,8 @@ class InvItem extends Model
         'unit_measure_id',
         'person_create',
         'person_edit',
-        'model_id'
+        'model_id',
+        'unit_measure_id'
     ];
 
     protected static function newFactory()

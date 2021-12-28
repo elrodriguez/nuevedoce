@@ -283,4 +283,14 @@ class LoadOrderController extends Controller
         PDF::Output('guides.pdf', 'D');
         exit;
     }
+
+    public function ocurrenceNote($id){
+        return view('transferservice::loadorder.occurrencenote')->with('id', $id);
+    }
+    public function ocurrenceNoteCreate($id){
+        return view('transferservice::loadorder.occurrencenote_create')->with('id', $id);
+    }
+    public function ocurrenceNoteEdit($id,$code){
+        return view('transferservice::loadorder.occurrencenote_edit')->with('id', $id)->with('code', $code);
+    }
 }

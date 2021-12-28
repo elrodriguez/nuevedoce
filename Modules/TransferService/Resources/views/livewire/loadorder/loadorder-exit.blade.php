@@ -62,14 +62,14 @@
                                     @can('serviciodetraslados_orden_carga_aceptar_salida')
                                         @if($item->state == 'P')
                                         <a onclick="confirmExit('{{$item->id}}')" class="dropdown-item">
-                                            <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
+                                            <i class="fal fa-house-leav mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
                                         </a>
                                         <a class="dropdown-item" wire:click="openModalDetails({{ $item->id }}, '{{ $item->telephone }}')" href="javascript:void(0)" type="button">
                                             <i class="fal fa-map-marked-alt"></i> @lang('transferservice::labels.lbl_print_map')
                                         </a>
                                         @else
                                             <button class="dropdown-item" disabled>
-                                                <i class="fal fa-check mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
+                                                <i class="fal fa-house-leav mr-1"></i>@lang('transferservice::labels.lbl_accept_exit')
                                             </button>
                                         @endif
                                     @endcan

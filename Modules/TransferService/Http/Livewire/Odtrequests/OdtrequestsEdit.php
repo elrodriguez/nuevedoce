@@ -116,7 +116,7 @@ class OdtrequestsEdit extends Component
             ->select('id', 'full_name AS name', 'number')
             ->get();
 
-        $this->supervisors  = PerEmployee::where('state', true)
+        $this->supervisors  = StaEmployee::where('state', true)
             ->join('people', 'person_id', 'people.id')
             ->select('sta_employees.id', 'people.full_name')
             ->get();

@@ -102,7 +102,8 @@ class ItemsImport implements ToModel
                             'brand_id'      => $brand_id,
                             'category_id'   => $family_id,
                             'person_create' => Auth::user()->person_id,
-                            'model_id'      => $model_id
+                            'model_id'      => $model_id,
+                            'unit_measure_id' => 1
                         ]);
                         
                         InvKardex::create([
@@ -142,7 +143,8 @@ class ItemsImport implements ToModel
                         'status'        => true,
                         'brand_id'      => $brand_id,
                         'category_id'   => $family_id,
-                        'person_create' => Auth::user()->person_id
+                        'person_create' => Auth::user()->person_id,
+                        'unit_measure_id' => 1
                     ]);
 
                     InvKardex::create([
