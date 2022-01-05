@@ -156,9 +156,10 @@
                                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                                         <td class="text-center tdw-50 align-middle">
                                             <div class="btn-group">
-                                                <button wire:click="deleteItemODT({{ $oc_register['id'] }})" type="button" class="dropdown-item text-danger">
-                                                    <i class="fal fa-trash-alt mr-1"></i>
-                                                </button>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button wire:click="showDetailsItems({{ $oc_register['item_id'] }},'{{ $oc_register['name_item'] }}')" type="button" class="btn btn-light waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="Ver Partes"><i class="fal fa-ballot-check"></i></button>
+                                                    <button wire:click="deleteItemODT({{ $oc_register['id'] }})" type="button" class="btn btn-light waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="align-middle">{{ $oc_register['internal_id'] }}</td>
@@ -179,6 +180,62 @@
         <div class="card-footer d-flex flex-row align-items-center">
             <a href="{{ route('service_load_order_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('transferservice::buttons.btn_list')</a>
             <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('transferservice::buttons.btn_save')</button>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" id="modalPartsDetails" tabindex="-1" aria-labelledby="modalPartsDetailsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPartsDetailsLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if(count($items_loadorder) > 0)
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">{{ __('labels.name') }}</th>
+                                    <th scope="col">{{ __('labels.description') }}</th>
+                                    <th scope="col">{{ __('labels.code') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($items_loadorder as $key => $item_loadorder)
+                                    <tr>
+                                        <td class="align-middle">{{ $key + 1 }}</td>
+                                        <td class="align-middle">{{ $item_loadorder['name'] }}</td>
+                                        <td class="align-middle">{{ $item_loadorder['description'] }}</td>
+                                        <td class="align-middle">
+                                            @if(count($item_loadorder['assets']) > 0)
+                                                <div wire:ignore>
+                                                    <select onchange="selectCodes({{ $key }})" id="selectm{{ $key }}" class="select-codes-items" multiple="multiple">
+                                                        <option value="">{{ __('labels.to_select') }}</option>
+                                                        @foreach($item_loadorder['assets'] as $asset)
+                                                            <option value="{{ $asset['id'] }}">{{ $asset['patrimonial_code'] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="alert alert-primary text-center" role="alert">
+                            No tiene partes
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                    <button wire:click="addAssetCodes" type="button" class="btn btn-primary">{{ __('labels.done_text') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -300,6 +357,7 @@
                 });
                 box.find('.modal-content').css({'background-color': 'rgba(28,85,236,0.5)'});
             }
+            $('.btntooltip').tooltip();
         });
 
         document.addEventListener('livewire:load', function () {
@@ -328,6 +386,22 @@
             }).on('hide', function(e){
                 @this.set('upload_date',this.value);
             });
+        });
+        document.addEventListener('ser-load-order-open-modal-details', event => {
+            $('#modalPartsDetailsLabel').html(event.detail.itemname);
+            $('.select-codes-items').select2({ 
+                dropdownParent: $("#modalPartsDetails") 
+            });
+            $('#modalPartsDetails').modal('show');
+        });
+
+        function selectCodes(index){
+            const selected = document.querySelectorAll('#selectm'+index+' option:checked');
+            const values = Array.from(selected).map(el => el.value);
+            @this.set(`items_loadorder.${index}.codes`,values);
+        }
+        document.addEventListener('ser-load-order-hide-modal-details', event => {
+            $('#modalPartsDetails').modal('hide');
         });
     </script>
 </div>

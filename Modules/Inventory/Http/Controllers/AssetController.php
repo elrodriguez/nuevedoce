@@ -50,4 +50,8 @@ class AssetController extends Controller
             ->get();
         return response()->json($customers, 200);
     }
+
+    public function parts($id){
+        return view('inventory::asset.parts')->with('id',$id);
+    }
 }

@@ -27,11 +27,6 @@
                 <input wire:keydown.enter="itemPartsSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="@lang('inventory::labels.lbl_type_here')">
                 <div class="input-group-append">
                     <button wire:click="itemPartsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('inventory::labels.btn_search')</button>
-                    @can('inventario_items_parte_nuevo')
-                        @if($parts_item > $count_items)
-                        <a href="{{ route('inventory_item_part_create', $id_item) }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('inventory::labels.btn_new')</a>
-                        @endif
-                    @endcan
                 </div>
             </div>
         </div>
@@ -56,26 +51,11 @@
                     <tr>
                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                         <td class="text-center tdw-50 align-middle">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i class="fal fa-cogs"></i>
+                            @can('inventario_items_parte_agregar_codigo')
+                                <button wire:click="openModalCodes('{{ $item_part->name }}',{{ $item_part->part_id }},{{ $item_part->quantity }},{{ $item_part->item_part_id }},{{ $item_part->asset_id }})" type="button" class="btn btn-default btn-icon rounded-circle waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="@lang('inventory::labels.lbl_setting_codes')">
+                                    <i class="fal fa-barcode-alt"></i>
                                 </button>
-                                <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('inventario_items_parte_editar')
-                                        <a href="{{ route('inventory_item_part_edit', ($item_part->id.'_'.$id_item)) }}" class="dropdown-item">
-                                            <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
-                                        </a>
-                                    @endcan
-
-                                    <div class="dropdown-divider"></div>
-                                    @can('inventario_items_parte_eliminar')
-                                        <button onclick="confirmDelete({{ $item_part->part_id }})" type="button" class="dropdown-item text-danger">
-                                            <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
-                                        </button>
-                                    @endcan
-
-                                </div>
-                            </div>
+                            @endcan
                         </td>
                         <td class="align-middle">{{ $item_part->name }}</td>
                         <td class="align-middle">{{ $item_part->description }}</td>
@@ -96,8 +76,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
-            <a href="{{ route('inventory_item')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.lbl_items')</a>
+        <div class="card-footer pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
+            <a href="{{ route('inventory_asset')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.assents')</a>
             <div class="ml-auto">{{ $item_parts->links() }}</div>
         </div>
     </div>
@@ -228,6 +208,7 @@
 
         document.addEventListener('livewire:load', function () {
             $("#spaItemName").html(':: {{ $item_name }}');
+            $('.btntooltip').tooltip();
         });
 
         document.addEventListener('set-item-part-open-model', event => {

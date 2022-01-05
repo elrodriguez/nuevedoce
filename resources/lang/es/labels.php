@@ -608,5 +608,6 @@ return [
     'transaction_type' => 'Tipo transacción',
     'user_data' => 'Datos de Usuario',
     'lcorrect' => 'Corregir',
-    'username_password_incorrect' => 'El nombre de usuario o contraseña es incorrecto'
+    'username_password_incorrect' => 'El nombre de usuario o contraseña es incorrecto',
+    'done_text' => 'Hecho'
 ];

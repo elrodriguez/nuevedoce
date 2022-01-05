@@ -7,6 +7,9 @@ use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvItem;
+use Modules\Inventory\Entities\InvItemPart;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
 use Modules\TransferService\Entities\SerOdtRequest;
@@ -31,6 +34,8 @@ class LoadorderCreate extends Component
     public $items_selected_add = '';
     public $items_add_save = [];
     public $count_items = 0;
+    public $items_loadorder = [];
+    public $asset_codes = [];
 
     public function mount(){
         $this->vehicles = SerVehicle::where('state',true)->get();
@@ -364,5 +369,38 @@ class LoadorderCreate extends Component
         $this->items_add_save = [];
         $this->getItemsODT();
         $this->getItemsODTAdd();
+    }
+
+    public function showDetailsItems($id,$name){
+        $this->items_loadorder = [];
+        $items_loadorder = InvItemPart::join('inv_items','inv_item_parts.part_id','inv_items.id')
+                    ->select(
+                        'inv_items.id',
+                        'inv_items.name',
+                        'inv_items.description',
+                        'inv_item_parts.item_id'
+                    )
+                    ->where('inv_item_parts.item_id',$id)
+                    ->get();
+        
+        if($items_loadorder){
+            foreach($items_loadorder as $key => $item_loadorder){
+                $codes = InvAsset::where('item_id',$item_loadorder->id)->select('id','patrimonial_code','state')->get();
+                $this->items_loadorder[$key] = [
+                    'id'                => $item_loadorder->id,
+                    'name'              => $item_loadorder->name,
+                    'description'       => $item_loadorder->description,
+                    'codes'             => [],
+                    'assets'            => $codes ? $codes->toArray() : []
+                ];
+            }
+        }
+
+        $this->dispatchBrowserEvent('ser-load-order-open-modal-details', ['itemname' => $name]);
+    }
+
+    public function addAssetCodes(){
+        array_push($this->asset_codes,$this->items_loadorder);
+        $this->dispatchBrowserEvent('ser-load-order-hide-modal-details', ['success' => true]);
     }
 }

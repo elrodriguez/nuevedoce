@@ -607,5 +607,6 @@ return [
     'transaction_type' => 'Transaction type',
     'user_data' => 'User Data',
     'lcorrect' => 'Corregir',
-    'username_password_incorrect' => 'The username or password is incorrect'
+    'username_password_incorrect' => 'The username or password is incorrect',
+    'done_text' => 'Done'
 ];

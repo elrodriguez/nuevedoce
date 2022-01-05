@@ -61,6 +61,13 @@
                                         <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
                                     </a>
                                     @endcan
+                                    @can('inventario_items_parte')
+                                        @if(!$asset->part)
+                                        <a href="{{ route('inventory_asset_part',$asset->item_id) }}" class="dropdown-item">
+                                            <i class="ni ni-layers"></i> @lang('inventory::labels.parts')
+                                        </a>
+                                        @endif
+                                    @endcan
                                     <div class="dropdown-divider"></div>
                                     @can('inventario_activos_eliminar')
                                     <button onclick="confirmDelete({{ $asset->id }})" type="button" class="dropdown-item text-danger">
@@ -87,7 +94,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
+        <div class="card-footer pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $assets->links() }}</div>
         </div>
     </div>
