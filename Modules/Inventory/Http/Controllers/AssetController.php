@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Modules\Inventory\Entities\InvItem;
 
 class AssetController extends Controller
@@ -42,7 +43,7 @@ class AssetController extends Controller
         $customers    = InvItem::where('status', true)
             ->select(
                 'id AS value',
-                'name AS text'
+                DB::raw('CONCAT(name," ",IFNULL(description,"")) AS text')
             )
             ->where('name','like','%'.$search.'%')
             //->where('part','=','0')
@@ -51,7 +52,9 @@ class AssetController extends Controller
         return response()->json($customers, 200);
     }
 
-    public function parts($id){
-        return view('inventory::asset.parts')->with('id',$id);
+    public function parts($item_id,$asset_id){
+        return view('inventory::asset.parts')
+                    ->with('item_id',$item_id)
+                    ->with('asset_id',$asset_id);
     }
 }

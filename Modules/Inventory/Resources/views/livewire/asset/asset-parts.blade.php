@@ -52,7 +52,7 @@
                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                         <td class="text-center tdw-50 align-middle">
                             @can('inventario_items_parte_agregar_codigo')
-                                <button wire:click="openModalCodes('{{ $item_part->name }}',{{ $item_part->part_id }},{{ $item_part->quantity }},{{ $item_part->item_part_id }},{{ $item_part->asset_id }})" type="button" class="btn btn-default btn-icon rounded-circle waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="@lang('inventory::labels.lbl_setting_codes')">
+                                <button wire:click="openModalCodes('{{ $item_part->name }}',{{ $item_part->part_id }},{{ $item_part->quantity }},{{ $item_part->item_part_id }})" type="button" class="btn btn-default btn-icon rounded-circle waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="@lang('inventory::labels.lbl_setting_codes')">
                                     <i class="fal fa-barcode-alt"></i>
                                 </button>
                             @endcan
@@ -103,26 +103,30 @@
                         <tbody>
                             @if($array_codes)
                                 @foreach($array_codes as $array_code)
-                                    <tr class="{{ $array_code['used'] > 0 ? 'bg-warning-500' : ''}}">
+                                    <tr class="{{ $array_code['used'] > 0 || $array_code['exists'] > 0 ? 'bg-warning-500' : ''}}">
                                         <td class="text-center align-middle">
-                                            @if($array_code['used'] > 0)
-                                                <button 
-                                                    wire:click="removeItemPartAsset({{ $array_code['id'] }},{{ $array_code['item_id'] }})"
-                                                    type="button" 
-                                                    class="btn btn-danger btn-sm btn-icon rounded-circle waves-effect waves-themed" 
-                                                    title="Quitar Código"
-                                                >
-                                                    <i class="fal fa-times"></i>
-                                                </button>
+                                            @if($array_code['exists'] == 0)
+                                                @if($array_code['used'] > 0)
+                                                    <button 
+                                                        wire:click="removeItemPartAsset({{ $array_code['id'] }},{{ $array_code['item_id'] }})"
+                                                        type="button" 
+                                                        class="btn btn-danger btn-sm btn-icon rounded-circle waves-effect waves-themed" 
+                                                        title="Quitar Código"
+                                                    >
+                                                        <i class="fal fa-times"></i>
+                                                    </button>
+                                                @else
+                                                    <button 
+                                                        wire:click="saveItemPartAsset({{ $array_code['id'] }},{{ $array_code['item_id'] }})" 
+                                                        type="button" 
+                                                        class="btn btn-default btn-sm btn-icon rounded-circle waves-effect waves-themed"
+                                                        title="Agregar Código"
+                                                    >
+                                                        <i class="fal fa-check"></i>
+                                                    </button>
+                                                @endif
                                             @else
-                                                <button 
-                                                    wire:click="saveItemPartAsset({{ $array_code['id'] }},{{ $array_code['item_id'] }})" 
-                                                    type="button" 
-                                                    class="btn btn-default btn-sm btn-icon rounded-circle waves-effect waves-themed"
-                                                    title="Agregar Código"
-                                                >
-                                                    <i class="fal fa-check"></i>
-                                                </button>
+                                                <i class="fal fa-lock-alt"></i> 
                                             @endif
                                         </td>
                                         <td class="align-middle">{{ $array_code['patrimonial_code'] }}</td>

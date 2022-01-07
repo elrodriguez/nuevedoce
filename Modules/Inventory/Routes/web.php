@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_nuevo'])->get('create', 'AssetController@create')->name('inventory_asset_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_editar'])->get('edit/{id}', 'AssetController@edit')->name('inventory_asset_edit');
         Route::get('search', 'AssetController@autocomplete')->name('inventory_asset_search');
-        Route::middleware(['middleware' => 'role_or_permission:inventario_items_parte'])->get('part_list/{item_id}', 'AssetController@parts')->name('inventory_asset_part');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_items_parte'])->get('part_list/{item_id}/{asset_id}', 'AssetController@parts')->name('inventory_asset_part');
     });
     
     Route::group(['prefix' => 'kardex'], function() {

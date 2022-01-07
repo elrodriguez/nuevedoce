@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvAssetParts;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvItemPart;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
+use Modules\TransferService\Entities\SerLoadOrderDetailAsset;
 use Modules\TransferService\Entities\SerOdtRequest;
 use Modules\TransferService\Entities\SerOdtRequestDetail;
 use Modules\TransferService\Entities\SerVehicle;
@@ -36,9 +38,12 @@ class LoadorderCreate extends Component
     public $count_items = 0;
     public $items_loadorder = [];
     public $asset_codes = [];
+    public $asset_items = [];
 
     public function mount(){
         $this->vehicles = SerVehicle::where('state',true)->get();
+        $this->getItemsODT();
+        $this->getItemsODTAdd();
     }
 
     public function calcAmountAdd($id){
@@ -54,8 +59,7 @@ class LoadorderCreate extends Component
     }
 
     public function render(){
-        $this->getItemsODT();
-        $this->getItemsODTAdd();
+        
         return view('transferservice::livewire.loadorder.loadorder-create');
     }
 
@@ -77,7 +81,7 @@ class LoadorderCreate extends Component
                 people.full_name AS name_customer,
                 ser_odt_requests.date_start,
                 ser_odt_requests.date_end,
-                inv_items.name AS name_item,
+                CONCAT(inv_items.name,' ',inv_items.description) AS name_item,
                 ser_odt_request_details.amount,
                 (ser_odt_request_details.amount - ser_odt_request_details.quantity_served) AS amount_pending,
                 ser_odt_request_details.quantity_served
@@ -104,6 +108,7 @@ class LoadorderCreate extends Component
     }
 
     public function getItemsODTAdd(){
+
         $ocd_register_detail = SerOdtRequestDetail::where('ser_odt_request_details.state', 'P')
             ->join('ser_odt_requests','odt_request_id','ser_odt_requests.id')
             ->join('customers','ser_odt_requests.customer_id','customers.id')
@@ -118,7 +123,7 @@ class LoadorderCreate extends Component
                 'people.full_name AS name_customer',
                 'ser_odt_requests.date_start',
                 'ser_odt_requests.date_end',
-                'inv_items.name AS name_item',
+                DB::raw('CONCAT(inv_items.name," ",inv_items.description) AS name_item'),
                 'ser_odt_request_details.amount',
                 'ser_odt_request_details.quantity_served',
                 'inv_items.weight'
@@ -127,25 +132,32 @@ class LoadorderCreate extends Component
             ->orderBy('ser_odt_requests.internal_id', 'asc')
             ->orderBy('ser_odt_request_details.id', 'asc')
             ->get();
+
         $detail_odt = [];
-        foreach ($ocd_register_detail as $key=>$row){
-            //dd($row);
+
+        foreach ($ocd_register_detail as $key => $row){
+            $assets = InvAsset::where('item_id',$row->item_id)->select('id','patrimonial_code')->get();
             $detail_a['id'] = $row->id;
-            $detail_a['odt_request_id'] = $row->odt_request_id;
-            $detail_a['item_id'] = $row->item_id;
-            $detail_a['internal_id'] = $row->internal_id;
-            $detail_a['name_evento'] = $row->name_evento;
-            $detail_a['name_customer'] = $row->name_customer;
-            $detail_a['date_start'] = $row->date_start;
-            $detail_a['date_end'] = $row->date_end;
-            $detail_a['name_item'] = $row->name_item;
-            $detail_a['amount'] = $row->amount;
-            $detail_a['quantity_served'] = $row->quantity_served;
-            $detail_a['amount_select'] = $this->calcAmountAdd($row->id);
-            $detail_a['weight'] = $row->weight;
+            $detail_a['odt_request_id']     = $row->odt_request_id;
+            $detail_a['item_id']            = $row->item_id;
+            $detail_a['internal_id']        = $row->internal_id;
+            $detail_a['name_evento']        = $row->name_evento;
+            $detail_a['name_customer']      = $row->name_customer;
+            $detail_a['date_start']         = $row->date_start;
+            $detail_a['date_end']           = $row->date_end;
+            $detail_a['name_item']          = $row->name_item;
+            $detail_a['amount']             = $row->amount;
+            $detail_a['quantity_served']    = $row->quantity_served;
+            $detail_a['amount_select']      = $this->calcAmountAdd($row->id);
+            $detail_a['weight']             = $row->weight;
+            $detail_a['assets']             = $assets ? $assets->toArray() : [];
+            $detail_a['codes']              = [];
             $detail_odt[] = $detail_a;
         }
+
         $this->oc_registers = $detail_odt;
+        
+        $this->dispatchBrowserEvent('ser-load-order-select-assets', ['success' => true]);
     }
 
     public function saveItemsODT($register){
@@ -171,10 +183,12 @@ class LoadorderCreate extends Component
                 }
             }
         }
-        //dd($array_aux);
+
         $this->items_add_save = $array_aux;
+
         $a = 0;
         $b = 0;
+
         foreach ($this->items_add_save as $item){
             if($item['validate_item'] == 1){
                 if($a == 0){
@@ -191,7 +205,7 @@ class LoadorderCreate extends Component
             }
             $b++;
         }
-        //dd($this->items_selected_add);
+
         $this->getItemsODT();
         $this->getItemsODTAdd();
         $this->count_items = count($this->items_add_save);
@@ -264,6 +278,7 @@ class LoadorderCreate extends Component
     }
 
     public function save(){
+
         $this->validate([
             'vehicle_id'    => 'required',
             'upload_date'   => 'required',
@@ -301,9 +316,13 @@ class LoadorderCreate extends Component
         ]);
 
         //Save Datail
+
+        //dd($this->oc_registers);
+
         foreach ($this->oc_registers as $key => $odt){
             $id = array_search($odt['id'], array_column($this->items_add_save, 'id'));
             $amount_select = $this->items_add_save[$id]['amount_select'];
+
             $save_detail_oc = SerLoadOrderDetail::create([
                 'load_order_id'         => $save_oc->id,
                 'odt_request_detail_id' => $odt['id'],
@@ -312,6 +331,16 @@ class LoadorderCreate extends Component
                 'amount'                => $amount_select,
                 'person_create'         => Auth::user()->person_id
             ]);
+
+            ///se guardan los activos con codigos para los items de las oc
+            foreach($odt['codes'] as $codes){
+                SerLoadOrderDetailAsset::create([
+                    'item_id'       => $odt['item_id'],
+                    'asset_id'      => $codes,
+                    'load_order_id' => $save_oc->id
+                ]);
+            }
+
             //Actualizando el estado en ODT detalle
             $odt_detail_u = SerOdtRequestDetail::find($odt['id']);
 
@@ -371,27 +400,43 @@ class LoadorderCreate extends Component
         $this->getItemsODTAdd();
     }
 
-    public function showDetailsItems($id,$name){
+    public function showDetailsItems($id,$name,$index){
         $this->items_loadorder = [];
+
+        $codes = $this->oc_registers[$index]['codes'];
+        
         $items_loadorder = InvItemPart::join('inv_items','inv_item_parts.part_id','inv_items.id')
+                    ->join('inv_assets', function ($query) use ($codes) {
+                        $query->on('inv_item_parts.item_id','inv_assets.item_id')
+                                ->whereIn('inv_assets.id',$codes);
+                    })
                     ->select(
+                        'inv_assets.id AS asset_id',
+                        'inv_assets.patrimonial_code AS asset_code',
                         'inv_items.id',
                         'inv_items.name',
                         'inv_items.description',
                         'inv_item_parts.item_id'
                     )
                     ->where('inv_item_parts.item_id',$id)
+                    ->orderBy('inv_assets.id')
                     ->get();
         
         if($items_loadorder){
             foreach($items_loadorder as $key => $item_loadorder){
-                $codes = InvAsset::where('item_id',$item_loadorder->id)->select('id','patrimonial_code','state')->get();
+                $assets = InvAssetParts::join('inv_assets','asset_part_id','inv_assets.id')
+                                        ->where('inv_asset_parts.asset_id',$item_loadorder->asset_id)
+                                        ->where('inv_assets.item_id',$item_loadorder->id)
+                                        ->select('id','inv_assets.patrimonial_code')
+                                        ->get();
+
                 $this->items_loadorder[$key] = [
+                    'asset_id'          => $item_loadorder->asset_id,
+                    'asset_code'        => $item_loadorder->asset_code,
                     'id'                => $item_loadorder->id,
                     'name'              => $item_loadorder->name,
                     'description'       => $item_loadorder->description,
-                    'codes'             => [],
-                    'assets'            => $codes ? $codes->toArray() : []
+                    'assets'            => $assets ? $assets->toArray() : []
                 ];
             }
         }
@@ -399,8 +444,4 @@ class LoadorderCreate extends Component
         $this->dispatchBrowserEvent('ser-load-order-open-modal-details', ['itemname' => $name]);
     }
 
-    public function addAssetCodes(){
-        array_push($this->asset_codes,$this->items_loadorder);
-        $this->dispatchBrowserEvent('ser-load-order-hide-modal-details', ['success' => true]);
-    }
 }

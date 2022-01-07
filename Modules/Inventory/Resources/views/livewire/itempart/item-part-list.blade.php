@@ -96,7 +96,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
+        <div class="card-footer  pb-0 d-flex flex-row align-items-center" style="margin-bottom: 20px;">
             <a href="{{ route('inventory_item')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('inventory::labels.lbl_items')</a>
             <div class="ml-auto">{{ $item_parts->links() }}</div>
         </div>

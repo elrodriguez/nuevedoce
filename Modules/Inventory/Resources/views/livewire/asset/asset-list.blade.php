@@ -63,7 +63,7 @@
                                     @endcan
                                     @can('inventario_items_parte')
                                         @if(!$asset->part)
-                                        <a href="{{ route('inventory_asset_part',$asset->item_id) }}" class="dropdown-item">
+                                        <a href="{{ route('inventory_asset_part',[$asset->item_id,$asset->id]) }}" class="dropdown-item">
                                             <i class="ni ni-layers"></i> @lang('inventory::labels.parts')
                                         </a>
                                         @endif
@@ -80,7 +80,7 @@
                         </td>
                         <td class="align-middle">{{ $asset->location_name }}</td>
                         <td class="align-middle">{{ $asset->patrimonial_code }}</td>
-                        <td class="align-middle">{{ $asset->name_item }}</td>
+                        <td class="align-middle">{{ $asset->name_item.' '.$asset->description }}</td>
                         <td class="align-middle">{{ $asset->name_type_asset }}</td>
                         <td class="align-middle text-center">
                             @if($asset->state)

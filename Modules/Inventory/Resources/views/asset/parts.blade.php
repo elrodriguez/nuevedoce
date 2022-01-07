@@ -15,5 +15,5 @@
     </div>
 @endsection
 @section('content')
-    @livewire('inventory::asset.asset-parts',['item_id' => $id])
+    @livewire('inventory::asset.asset-parts',['item_id' => $item_id, 'asset_id' => $asset_id])
 @endsection

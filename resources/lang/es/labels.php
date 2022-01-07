@@ -169,6 +169,7 @@ return [
     'products' => 'Productos',
     'product' => 'Producto',
     'code' => 'Código',
+    'codes' => 'Códigos',
     'automatic' => 'Automático',
     'stock' => 'Stock',
     'stock_min' => 'Stock min',

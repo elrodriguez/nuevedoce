@@ -10,6 +10,7 @@ use Modules\Inventory\Entities\InvItemPart;
 use Modules\Inventory\Entities\InvItemPartAsset;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Modules\Inventory\Entities\InvAssetParts;
 
@@ -33,8 +34,12 @@ class AssetParts extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public function mount($item_id){
+    public function mount($item_id,$asset_id){
+
         $item = InvItem::find($item_id);
+
+        $this->asset_id  = $asset_id;
+
         if($item){
             $this->search_parent = $item;
             $this->show = 10;
@@ -57,7 +62,6 @@ class AssetParts extends Component
             ->where('part.name','like','%'.$this->search.'%')
             ->leftJoin('inv_categories', 'category_id', 'inv_categories.id')
             ->leftJoin('inv_brands', 'brand_id', 'inv_brands.id')
-            ->join('inv_assets as asset','asset.item_id','inv_item_parts.item_id')
             ->select(
                 'part.id',
                 'part.name',
@@ -72,7 +76,6 @@ class AssetParts extends Component
                 'inv_item_parts.id AS item_part_id',
                 'inv_item_parts.quantity',
                 'inv_item_parts.part_id',
-                'asset.id AS asset_id',
                 'inv_categories.description AS name_category',
                 'inv_brands.description AS name_brand'
             )
@@ -86,12 +89,11 @@ class AssetParts extends Component
     }
 
 
-    public function openModalCodes($name,$item_id,$quantity,$item_part_id,$asset_id){
+    public function openModalCodes($name,$item_id,$quantity,$item_part_id){
 
         $this->modal_title  = $name;
         $this->max_quantity = $quantity;
         $this->item_part_id = $item_part_id;
-        $this->asset_id     = $asset_id;
 
         $this->getArrayCodes($item_id,$item_part_id);
         $this->dispatchBrowserEvent('set-item-part-open-model', ['success' => true]);
@@ -133,6 +135,12 @@ class AssetParts extends Component
                                 ->whereColumn('inv_asset_parts.asset_part_id','inv_assets.id')
                                 ->where('inv_asset_parts.asset_id',$asset_id);
                         }, 'used')
+                        ->selectSub(function($query) use ($asset_id){
+                            $query->from('inv_asset_parts')
+                                ->selectRaw('COUNT(inv_asset_parts.asset_part_id)')
+                                ->whereColumn('inv_asset_parts.asset_part_id','inv_assets.id')
+                                ->where('inv_asset_parts.asset_id','<>',$asset_id);
+                        }, 'exists')
                         ->where('item_id',$item_id)
                         ->get();
 

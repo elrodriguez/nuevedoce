@@ -1,23 +1,25 @@
 <?php
 
-namespace Modules\Inventory\Entities;
+namespace Modules\TransferService\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class InvItemPartAsset extends Model
+class SerLoadOrderDetailAsset extends Model
 {
     use HasFactory;
+
     public $incrementing = false;
-    
+    public $timestamps = false;
+
     protected $fillable = [
-        'item_part_id',
         'item_id',
-        'asset_id'
+        'asset_id',
+        'load_order_id'
     ];
     
     protected static function newFactory()
     {
-        return \Modules\Inventory\Database\factories\InvItemPartAssetFactory::new();
+        return \Modules\TransferService\Database\factories\SerLoadOrderDetailAssetFactory::new();
     }
 }

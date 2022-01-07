@@ -82,7 +82,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer card-footer-background pb-0 d-flex flex-row align-items-center">
+        <div class="card-footer  pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $employees_type->links() }}</div>
         </div>
     </div>

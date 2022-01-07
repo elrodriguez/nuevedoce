@@ -170,6 +170,7 @@ return [
     'product' => 'Product',
     'create_product_income' => 'Crear producto',
     'code' => 'Code',
+    'codes' => 'Codes',
     'automatic' => 'Automatic',
     'stock' => 'Stock',
     'stock_min' => 'Stock min',
