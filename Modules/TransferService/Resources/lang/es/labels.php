@@ -152,5 +152,6 @@ return [
     'lbl_kilograms'         => 'K.G.',
     'lbl_print_guide'       => 'Imprimir Guías',
     'lbl_occurrence_note'   => 'Nota de Ocurrencias',
-    'lbl_it_is_necessary_to_mark_the_missing_items' => 'Es necesario marcar los items faltantes'
+    'lbl_it_is_necessary_to_mark_the_missing_items' => 'Es necesario marcar los items faltantes',
+    'lbl_events'                => 'Eventos'
 ];

@@ -162,6 +162,23 @@
                     </ul>
                 </li>
             @endcan
+            @can('serviciodetraslados_reportes')
+                <li class="{{ $path[0] == 'transferservice' && $path[1] == 'reports' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="Reportes" data-filter-tags="Reportes">
+                        <i class="fal fa-analytics"></i>
+                        <span class="nav-link-text" data-i18n="nav.reportes">{{ __('labels.reports') }}</span>
+                    </a>
+                    <ul>
+                        @can('serviciodetraslados_reporte_eventos')
+                            <li class="{{ $path[0] == 'transferservice' && $path[1] == 'reports' && $path[2] == 'events' ? 'active' : '' }}">
+                                <a href="{{ route('service_reports_events') }}" title="Reporte Eventos" data-filter-tags="Reporte Eventos">
+                                    <span class="nav-link-text" data-i18n="nav.reporte_eventos">{{ __('labels.report') }} {{ __('transferservice::labels.lbl_events') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>

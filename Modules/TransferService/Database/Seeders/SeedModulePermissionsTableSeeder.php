@@ -60,6 +60,8 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_nota_ocurrencias_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_nota_ocurrencias_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'serviciodetraslados_nota_ocurrencias_eliminar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_reportes','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'serviciodetraslados_reporte_eventos','guard_name' => 'sanctum']));
 
         $role = Role::find(1);
         foreach($permissions as $permission){

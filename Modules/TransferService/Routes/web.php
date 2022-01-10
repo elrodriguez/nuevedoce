@@ -57,4 +57,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_nota_ocurrencias_nuevo'])->get('ocurrencenote/create/{id}', 'LoadOrderController@ocurrenceNoteCreate')->name('service_load_order_ocurrencenote_create');
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_nota_ocurrencias_editar'])->get('ocurrencenote/edit/{id}/{code}', 'LoadOrderController@ocurrenceNoteEdit')->name('service_load_order_ocurrencenote_edit');
     });
+
+    Route::group(['prefix' => 'reports'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_reporte_eventos'])->get('events', 'ReportsController@events')->name('service_reports_events');
+    });
 });
