@@ -50,6 +50,7 @@ class LoadorderList extends Component
                 'ser_load_orders.uuid',
                 'ser_load_orders.state'
             )
+            ->orderBy('ser_load_orders.id','DESC')
             ->paginate($this->show);
     }
 

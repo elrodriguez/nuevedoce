@@ -68,6 +68,7 @@ class ItemPartList extends Component
                 'inv_item_parts.id AS item_part_id',
                 'inv_item_parts.quantity',
                 'inv_item_parts.part_id',
+                'inv_item_parts.show_guides',
                 'inv_categories.description AS name_category',
                 'inv_brands.description AS name_brand'
             )
@@ -166,5 +167,17 @@ class ItemPartList extends Component
             ->delete();
             
         $this->getArrayCodes($item_id,$this->item_part_id);
+    }
+
+    public function showGuidesActive($id){
+        InvItemPart::find($id)->update([
+            'show_guides' => true
+        ]);
+    }
+
+    public function showGuidesInactive($id){
+        InvItemPart::find($id)->update([
+            'show_guides' => false
+        ]);
     }
 }

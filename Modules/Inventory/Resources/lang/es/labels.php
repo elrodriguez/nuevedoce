@@ -102,5 +102,6 @@ return [
     'lbl_asset'         => 'Activo',
     'lbl_location_store'=> 'localizaciones (Almacenes)',
     'lbl_assets_with_code' => 'Activos con código',
-    'lbl_documents_purchases'=> 'documentos (Compras)'
+    'lbl_documents_purchases'=> 'documentos (Compras)',
+    'lbl_show_guide'            => 'Mostrar en Guías'
 ];

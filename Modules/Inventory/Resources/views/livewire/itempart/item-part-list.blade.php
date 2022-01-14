@@ -73,7 +73,19 @@
                                             <i class="fal fa-trash-alt mr-1"></i> @lang('inventory::labels.lbl_delete')
                                         </button>
                                     @endcan
-
+                                    <div class="dropdown-item">
+                                        @if($item_part->show_guides)
+                                            <div class="custom-control custom-switch">
+                                                <input wire:change="showGuidesInactive({{ $item_part->item_part_id }})" type="checkbox" class="custom-control-input" id="customSwitch{{ $item_part->id }}" checked>
+                                                <label class="custom-control-label" for="customSwitch{{ $item_part->id }}">{{ __('inventory::labels.lbl_show_guide') }}</label>
+                                            </div>
+                                        @else
+                                            <div class="custom-control custom-switch">
+                                                <input wire:change="showGuidesActive({{ $item_part->item_part_id }})" type="checkbox" class="custom-control-input" id="customSwitch{{ $item_part->id }}">
+                                                <label class="custom-control-label" for="customSwitch{{ $item_part->id }}">{{ __('inventory::labels.lbl_show_guide') }}</label>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </td>

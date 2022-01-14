@@ -3,6 +3,7 @@
 namespace Modules\TransferService\Http\Livewire\Loadorder;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Inventory\Entities\InvItemPart;
@@ -126,7 +127,12 @@ class LoadorderGuides extends Component
             $this->starting_point_r = $data_guide_exist_b->starting_point;
             $this->arrival_point_r = $data_guide_exist_b->arrival_point;
 
-            $this->loadorderdetails = SerGuideDetail::where('guide_id', '=', $this->id_guide_exit)->get();
+            $loadorderdetails = SerGuideDetail::where('guide_id', '=', $this->id_guide_exit)->get();
+
+            if($loadorderdetails){
+                $this->loadorderdetails = $loadorderdetails->toArray();
+            }
+            
         }else {
             $this->getSerie();
             $this->getDataAddressee();
@@ -264,7 +270,7 @@ class LoadorderGuides extends Component
     }
 
     public function getLoadOrderDetails(){
-        $this->loadorderdetails = InvItemPart::join('inv_items AS part','inv_item_parts.part_id','part.id')
+        $loadorderdetailsparts = InvItemPart::join('inv_items AS part','inv_item_parts.part_id','part.id')
             ->join('inv_items AS asset','inv_item_parts.item_id','asset.id')
             ->join('inv_categories','asset.category_id','inv_categories.id')
             ->join('ser_load_order_details','asset.id','ser_load_order_details.item_id')
@@ -279,7 +285,55 @@ class LoadorderGuides extends Component
                 'inv_item_parts.quantity'
             )
             ->where('ser_load_order_details.load_order_id', $this->loadorder_id)
+            ->where('inv_item_parts.show_guides',true)
             ->get();
+
+        $loadorderdetailsasset = SerLoadOrderDetail::join('inv_items','ser_load_order_details.item_id','inv_items.id')
+            ->join('inv_categories','inv_items.category_id','inv_categories.id')
+            ->join('inv_unit_measures','inv_items.unit_measure_id','inv_unit_measures.id')
+            ->select(
+                'inv_items.id AS code',
+                'inv_categories.description AS category_name',
+                'inv_items.name AS asset_name',
+                'inv_unit_measures.abbreviation AS unit',
+                'inv_items.description AS asset_description',
+                'inv_items.name AS part_name',
+                'ser_load_order_details.amount AS quantity'
+            )
+            ->where('ser_load_order_details.load_order_id', $this->loadorder_id)
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                      ->from('inv_item_parts')
+                      ->whereColumn('inv_item_parts.item_id', 'inv_items.id');
+            })
+            ->get();
+
+        $t = 0;    
+        foreach($loadorderdetailsparts as $k => $row){
+            $this->loadorderdetails[$k] = [
+                'code'                  => $row->code,
+                'category_name'         => $row->category_name,
+                'asset_name'            => $row->asset_name,
+                'unit'                  => $row->unit,
+                'asset_description'     => $row->asset_description,
+                'part_name'             => $row->part_name,
+                'quantity'              => $row->quantity
+            ];
+            $t = $k;
+        }
+
+        foreach($loadorderdetailsasset as $row){
+            $t = $t + 1;
+            $this->loadorderdetails[$t] = [
+                'code'                  => $row->code,
+                'category_name'         => $row->category_name,
+                'asset_name'            => $row->asset_name,
+                'unit'                  => $row->unit,
+                'asset_description'     => $row->asset_description,
+                'part_name'             => $row->part_name,
+                'quantity'              => $row->quantity
+            ];
+        }
     }
 
     public function getDataBusiness(){
@@ -346,10 +400,10 @@ class LoadorderGuides extends Component
                 foreach ($this->loadorderdetails as $row) {
                     SerGuideDetail::create([
                         'guide_id' => $save_guide_exit->id,
-                        'quantity' => $row->quantity,
-                        'unit' => $row->unit,
-                        'code' => str_pad($row->code, 6, '0', STR_PAD_LEFT),
-                        'description' => $row->asset_name . ' - ' . $row->part_name,
+                        'quantity' => $row['quantity'],
+                        'unit' => $row['unit'],
+                        'code' => str_pad($row['code'], 6, '0', STR_PAD_LEFT),
+                        'description' => $row['asset_name'] . ' - ' . $row['part_name'],
                         'person_create' => Auth::user()->person_id
                     ]);
                 }
@@ -381,10 +435,10 @@ class LoadorderGuides extends Component
                 foreach ($this->loadorderdetails as $row) {
                     SerGuideDetail::create([
                         'guide_id' => $save_guide_entry->id,
-                        'quantity' => $row->quantity,
-                        'unit' => $row->unit,
-                        'code' => str_pad($row->code, 6, '0', STR_PAD_LEFT),
-                        'description' => $row->asset_name . ' - ' . $row->part_name,
+                        'quantity' => $row['quantity'],
+                        'unit' => $row['unit'],
+                        'code' => str_pad($row['code'], 6, '0', STR_PAD_LEFT),
+                        'description' => $row['asset_name'] . ' - ' . $row['part_name'],
                         'person_create' => Auth::user()->person_id
                     ]);
                 }

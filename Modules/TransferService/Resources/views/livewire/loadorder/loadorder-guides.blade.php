@@ -127,17 +127,17 @@
                                     </thead>
                                     <tbody>
                                     @foreach($loadorderdetails as $key => $item)
-                                    <tr>
-                                        <td class="">{{ $key+1 }}</td>
-                                        <td class="">{{ $item->quantity }}</td>
-                                        <td class="">{{ $item->unit }}</td>
-                                        <td class="">{{ str_pad($item->code, 6, '0', STR_PAD_LEFT) }}</td>
-                                        @if($id_guide_exit == '')
-                                        <td class="">{{ $item->asset_name }} - {{ $item->part_name }}</td>
-                                        @else
-                                            <td class="">{{ $item->description }}</td>
-                                        @endif
-                                    </tr>
+                                        <tr>
+                                            <td class="">{{ $key+1 }}</td>
+                                            <td class="">{{ $item['quantity'] }}</td>
+                                            <td class="">{{ $item['unit'] }}</td>
+                                            <td class="">{{ str_pad($item['code'], 6, '0', STR_PAD_LEFT) }}</td>
+                                            @if($id_guide_exit == '')
+                                            <td class="">{{ $item['asset_name'] }} - {{ $item['part_name'] }}</td>
+                                            @else
+                                                <td class="">{{ $item['description'] }}</td>
+                                            @endif
+                                        </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
@@ -310,13 +310,13 @@
                                     @foreach($loadorderdetails as $key => $item)
                                         <tr>
                                             <td class="">{{ $key+1 }}</td>
-                                            <td class="">{{ $item->quantity }}</td>
-                                            <td class="">{{ $item->unit }}</td>
-                                            <td class="">{{ str_pad($item->code, 6, '0', STR_PAD_LEFT) }}</td>
+                                            <td class="">{{ $item['quantity'] }}</td>
+                                            <td class="">{{ $item['unit'] }}</td>
+                                            <td class="">{{ str_pad($item['code'], 6, '0', STR_PAD_LEFT) }}</td>
                                             @if($id_guide_exit == '')
-                                                <td class="">{{ $item->asset_name }} - {{ $item->part_name }}</td>
+                                                <td class="">{{ $item['asset_name'] }} - {{ $item['part_name'] }}</td>
                                             @else
-                                                <td class="">{{ $item->description }}</td>
+                                                <td class="">{{ $item['description'] }}</td>
                                             @endif
                                         </tr>
                                     @endforeach
