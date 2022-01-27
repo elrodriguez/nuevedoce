@@ -155,7 +155,7 @@
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="email">@lang('staff::labels.lbl_email') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="email">@lang('staff::labels.lbl_email') </label>
                         <input wire:model="email" type="text" class="form-control" id="email" required="">
                         @error('email')
                         <div class="invalid-feedback-2">{{ $message }}</div>

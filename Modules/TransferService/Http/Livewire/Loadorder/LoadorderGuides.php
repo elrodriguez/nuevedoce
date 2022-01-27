@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
+use Modules\Inventory\Entities\InvAsset;
 use Modules\Inventory\Entities\InvItemPart;
 use Modules\Setting\Entities\SetCompany;
 use Modules\TransferService\Entities\SerGuide;
 use Modules\TransferService\Entities\SerGuideDetail;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
+use Modules\TransferService\Entities\SerLoadOrderDetailAsset;
 use Modules\TransferService\Entities\SerSerie;
 use Modules\TransferService\Entities\SerVehicle;
 
@@ -79,6 +81,7 @@ class LoadorderGuides extends Component
     public $arrival_point_r; //punto de llegada
 
     public $loadorderdetails = [];
+
     public function mount($id){
         $this->loadorder_id = $id;
         $this->getDataBusiness();
@@ -172,9 +175,10 @@ class LoadorderGuides extends Component
                 $this->carrier = $row->carrier;
                 $this->document_carrier = $row->document_carrier;
                 $this->total_gross_weight = $row->charge_weight;
-                $this->shipping_date = ($row->departure_date == null ? '' : $row->departure_date);
+                $this->shipping_date = ($row->departure_date == null ? $row->upload_date : $row->departure_date);
+                
                 if ($this->shipping_date != '') {
-                    $this->shipping_date_f = \Carbon\Carbon::parse($this->shipping_date)->format('d/m/Y');
+                    $this->shipping_date_f = $this->shipping_date;
                 }
 
                 //For return
@@ -282,7 +286,8 @@ class LoadorderGuides extends Component
                 'inv_unit_measures.abbreviation AS unit',
                 'asset.description AS asset_description',
                 'part.name AS part_name',
-                'inv_item_parts.quantity'
+                'inv_item_parts.quantity',
+                'ser_load_order_details.load_order_id'
             )
             ->where('ser_load_order_details.load_order_id', $this->loadorder_id)
             ->where('inv_item_parts.show_guides',true)
@@ -298,7 +303,8 @@ class LoadorderGuides extends Component
                 'inv_unit_measures.abbreviation AS unit',
                 'inv_items.description AS asset_description',
                 'inv_items.name AS part_name',
-                'ser_load_order_details.amount AS quantity'
+                'ser_load_order_details.amount AS quantity',
+                'ser_load_order_details.load_order_id'
             )
             ->where('ser_load_order_details.load_order_id', $this->loadorder_id)
             ->whereNotExists(function ($query) {
@@ -310,6 +316,10 @@ class LoadorderGuides extends Component
 
         $t = 0;    
         foreach($loadorderdetailsparts as $k => $row){
+
+            $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
+            $codes = SerLoadOrderDetailAsset::where('load_order_id',$row->load_order_id)->pluck('asset_id');
+
             $this->loadorderdetails[$k] = [
                 'code'                  => $row->code,
                 'category_name'         => $row->category_name,
@@ -317,13 +327,19 @@ class LoadorderGuides extends Component
                 'unit'                  => $row->unit,
                 'asset_description'     => $row->asset_description,
                 'part_name'             => $row->part_name,
-                'quantity'              => $row->quantity
+                'quantity'              => $row->quantity,
+                'assets'                => $assets ? $assets->toArray() : [],
+                'codes'                 => $codes ? $codes->toArray() : []
             ];
             $t = $k;
         }
 
         foreach($loadorderdetailsasset as $row){
             $t = $t + 1;
+
+            $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
+            $codes = SerLoadOrderDetailAsset::where('load_order_id',$row->load_order_id)->pluck('asset_id');
+
             $this->loadorderdetails[$t] = [
                 'code'                  => $row->code,
                 'category_name'         => $row->category_name,
@@ -331,9 +347,13 @@ class LoadorderGuides extends Component
                 'unit'                  => $row->unit,
                 'asset_description'     => $row->asset_description,
                 'part_name'             => $row->part_name,
-                'quantity'              => $row->quantity
+                'quantity'              => $row->quantity,
+                'assets'                => $assets ? $assets->toArray() : [],
+                'codes'                 => $codes ? $codes->toArray() : []
             ];
         }
+
+        //$this->dispatchBrowserEvent('ser-load-order-select-assets', ['success' => true]);
     }
 
     public function getDataBusiness(){
@@ -397,6 +417,7 @@ class LoadorderGuides extends Component
 
                 //Save Detail
                 $this->getLoadOrderDetails();
+                
                 foreach ($this->loadorderdetails as $row) {
                     SerGuideDetail::create([
                         'guide_id' => $save_guide_exit->id,

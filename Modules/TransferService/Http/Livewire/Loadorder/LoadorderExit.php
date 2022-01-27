@@ -74,7 +74,7 @@ class LoadorderExit extends Component
                ser_vehicles.id AS vehicle_id,
                IF(LENGTH(people.telephone) = 9, people.telephone, '') AS telephone
             "))
-            ->orderBy('ser_load_orders.upload_date', 'DESC')
+            ->orderBy('ser_load_orders.id', 'DESC')
             ->paginate($this->show);
         return $data;
     }

@@ -154,10 +154,11 @@
                     </div>
                     <div class="form-group mt-3">
                         <div class="input-group">
-                            <div class="custom-file" wire:ignore>
-                                <input wire:model.defer="file" type="file" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03">
+                            <input wire:model.defer="file_excel" type="file" id="inputGroupFile03" aria-describedby="inputGroupFile03">
+                            {{-- <div class="custom-file" wire:ignore>
+                                <input wire:model.defer="file_excel" type="file" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFile03">
                                 <label class="custom-file-label" for="inputGroupFile03">Elija el archivo</label>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     @if($loading_import)

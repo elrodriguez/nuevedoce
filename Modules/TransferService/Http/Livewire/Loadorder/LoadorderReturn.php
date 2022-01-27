@@ -69,7 +69,7 @@ class LoadorderReturn extends Component
                 'ser_load_orders.uuid',
                 'ser_load_orders.state'
             )
-            ->orderBy('ser_load_orders.upload_date', 'DESC')
+            ->orderBy('ser_load_orders.id', 'DESC')
             ->paginate($this->show);
 
         return $data;

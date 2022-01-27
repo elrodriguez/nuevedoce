@@ -33,7 +33,7 @@
                             @foreach($odt_pending as $key => $odt)
                                 @if($odt_number_aux != $odt->internal_id)
                                     <tr style="font-weight: bold;">
-                                        <td colspan="8">{{$odt_number_aux = $odt->internal_id }}: {{ $odt->name_evento }} ( {{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }} )</td>
+                                        <td colspan="11">{{$odt_number_aux = $odt->internal_id }}: {{ $odt->name_evento }} ( {{ \Carbon\Carbon::parse($odt->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt->date_end)->format('d/m/Y') }} )</td>
                                     </tr>
                                 @endif
                                 <tr>
@@ -54,7 +54,7 @@
                                     <td class="align-middle text-center">{{ $odt['amount'] }}</td>
                                     <td class="align-middle text-center">{{ $odt['quantity_served'] }}</td>
                                     <td class="align-middle text-center">{{ $odt['amount_pending'] }}</td>
-                                    <td class="align-middle text-center"><input name="quantity[]" class="col-6" type="number" min="1" max="{{ $odt['amount_pending'] }}" id="quantity{{$key}}" style="height: 30px;" value="{{ $odt['amount_pending'] }}"></td>
+                                    <td class="align-middle text-center" width="100px"><input name="quantity[]" class="col-12" type="number" min="1" max="{{ $odt['amount_pending'] }}" id="quantity{{$key}}" style="height: 30px;" value="{{ $odt['amount_pending'] }}"></td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -151,37 +151,64 @@
                                     <th class="">{{ __('transferservice::labels.lbl_customer') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
                                     <th class="">{{ __('transferservice::labels.lbl_item') }}</th>
+                                    <th class="">{{ __('labels.codes') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($oc_registers as $key => $oc_register)
-                                    @if($odt_add_aux != $oc_register->internal_id)
+                                    @if($odt_add_aux != $oc_register['internal_id'])
                                         <tr style="font-weight: bold;">
-                                            <td colspan="8">{{$odt_add_aux = $oc_register->internal_id }}: {{ $oc_register->name_evento }} ( {{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }} )</td>
+                                            <td colspan="8">{{$odt_add_aux = $oc_register['internal_id'] }}: {{ $oc_register['name_evento'] }} ( {{ \Carbon\Carbon::parse($oc_register['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register['date_end'])->format('d/m/Y') }} )</td>
                                         </tr>
                                     @endif
                                     <tr>
                                         <td class="text-center align-middle">{{ $key + 1 }}</td>
                                         <td class="text-center tdw-50 align-middle">
                                             <div class="btn-group">
-                                                @if($this->departure_date == null or $this->departure_date == '')
-                                                <button onclick="confirmDelete({{ $oc_register->id }})" type="button" class="dropdown-item text-danger">
-                                                    <i class="fal fa-trash-alt mr-1"></i>
-                                                </button>
-                                                @else
-                                                <button type="button" class="dropdown-item text-danger">
-                                                    <i class="fal fa-trash-alt mr-1"></i>
-                                                </button>
-                                                @endif
+                                                <div class="btn-group btn-group-sm">
+                                                    @if(count($oc_register['codes']) > 0)
+                                                        <button wire:click="showDetailsItems({{ $oc_register['item_id'] }},'{{ $oc_register['name_item'] }}',{{ $key }})" type="button" class="btn btn-default waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="Ver Partes"><i class="fal fa-ballot-check"></i></button>
+                                                    @endif
+                                                    @if($this->departure_date == null or $this->departure_date == '')
+                                                        <button onclick="confirmDelete({{ $oc_register['id'] }})" type="button" class="btn btn-default waves-effect waves-themed btntooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="Eliminar">
+                                                            <i class="fal fa-trash-alt"></i>
+                                                        </button>
+                                                    @else
+                                                        <button type="button" class="btn btn-default waves-effect waves-themed btntooltip">
+                                                            <i class="fal fa-lock-alt"></i>
+                                                        </button>
+                                                    @endif
+                                                    
+                                                </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle">{{ $oc_register->internal_id }}</td>
-                                        <td class="align-middle">{{ $oc_register->name_evento }}</td>
-                                        <td class="align-middle">{{ $oc_register->name_customer }}</td>
-                                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register->date_end)->format('d/m/Y') }}</td>
-                                        <td class="align-middle">{{ $oc_register->name_item }}</td>
-                                        <td class="align-middle text-center">{{ $oc_register->amount }}</td>
+                                        <td class="align-middle">{{ $oc_register['internal_id'] }}</td>
+                                        <td class="align-middle">{{ $oc_register['name_evento'] }}</td>
+                                        <td class="align-middle">{{ $oc_register['name_customer'] }}</td>
+                                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register['date_end'])->format('d/m/Y') }}</td>
+                                        <td class="align-middle">{{ $oc_register['name_item'] }}</td>
+                                        <td>
+                                            @if(count($oc_register['assets']) > 0)
+                                                <div wire:ignore>
+                                                    <select onchange="selectCodesAsset({{ $key }})" id="selectma{{ $key }}" data-maximum-selection-length="{{ $oc_register['amount_select'] }}" class="selectAsset" multiple="multiple">
+                                                        <option value="">{{ __('labels.to_select') }}</option>
+                                                        @foreach($oc_register['assets'] as $asset)
+                                                            <option value="{{ $asset['id'] }}"
+                                                                @foreach($oc_register['codes'] as $code)
+                                                                    @if($code == $asset['id'])
+                                                                    selected
+                                                                    @endif
+                                                                @endforeach 
+                                                            >
+                                                            {{ $asset['patrimonial_code'] }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="align-middle text-center">{{ $oc_register['amount'] }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -196,6 +223,97 @@
             @if($this->departure_date == null or $this->departure_date == '')
             <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('transferservice::buttons.btn_save')</button>
             @endif
+        </div>
+    </div>
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" id="modalPartsDetails" tabindex="-1" aria-labelledby="modalPartsDetailsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPartsDetailsLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if(count($items_loadorder) > 0)
+                        @php
+                            $asset = '';
+                        @endphp
+                        <ul class="nav nav-tabs nav-fill" role="tablist">
+                            @foreach($items_loadorder as $key => $asset_loadorder)
+                                @if($asset_loadorder['asset_code'] != $asset)
+                                    <li class="nav-item"><a class="nav-link {{ $key == 0 ? 'active' : '' }}" data-toggle="tab" href="#tab_justified-{{ $asset_loadorder['asset_code'] }}" role="tab">{{ $asset_loadorder['asset_code'] }}</a></li>
+                                @endif
+                                @php
+                                    $asset = $asset_loadorder['asset_code'];
+                                @endphp
+                            @endforeach
+                        </ul>
+                        <div class="tab-content p-3">
+                            @php
+                                $asset_item = '';
+                            @endphp
+                            @foreach($items_loadorder as $key => $asset_loadorder)
+                                @if($asset_loadorder['asset_code'] != $asset_item)
+                                    <div class="tab-pane fade show {{ $key == 0 ? 'active' : '' }} tab-pane-content-select" id="tab_justified-{{ $asset_loadorder['asset_code'] }}" role="tabpanel">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">{{ __('labels.name') }}</th>
+                                                    <th scope="col">{{ __('labels.description') }}</th>
+                                                    <th scope="col">{{ __('labels.code') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $c = 1;
+                                                @endphp
+                                                @foreach($items_loadorder as $key => $item_loadorder)
+                                                    @if($item_loadorder['asset_code'] == $asset_loadorder['asset_code'])
+                                                        <tr>
+                                                            <td class="align-middle">{{ $c }}</td>
+                                                            <td class="align-middle">{{ $item_loadorder['name'] }}</td>
+                                                            <td class="align-middle">{{ $item_loadorder['description'] }}</td>
+                                                            <td class="align-middle">
+                                                                @if(count($item_loadorder['assets']) > 0)
+                                                                    <div wire:ignore>
+
+                                                                        @foreach($item_loadorder['assets'] as $asset)
+                                                                            <code>{{ $asset['patrimonial_code'] }}</code>
+                                                                        @endforeach
+
+                                                                    </div>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                        @php
+                                                            $c++;
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>  
+                                    </div>
+                                @endif
+                                @php
+                                    $asset_item = $asset_loadorder['asset_code'];
+                                @endphp
+                            @endforeach
+                            
+                        </div>
+                        
+                    @else
+                        <div class="alert alert-primary text-center" role="alert">
+                            No tiene partes
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
@@ -326,12 +444,13 @@
         document.addEventListener('livewire:load', function () {
             $('.pending_item_odt').prop('checked', false);
             $("#upload_date").inputmask('99/99/9999');
+            $('.selectAsset').select2({closeOnSelect: true});
             $("#charging_time").inputmask("99:99",{
                 "onincomplete": function(){
 
                 },
                 "oncomplete": function (){
-                @this.set('charging_time',this.value);
+                    @this.set('charging_time',this.value);
                 }
             });
 
@@ -347,8 +466,31 @@
                 language: "es",
                 autoclose: true
             }).on('hide', function(e){
-            @this.set('upload_date',this.value);
+                @this.set('upload_date',this.value);
             });
+        });
+
+        document.addEventListener('ser-load-order-select-assets', event => {
+            $('.selectAsset').select2({closeOnSelect: true});
+        });
+
+        function selectCodesAsset(index){
+            let max = $('#selectma'+index).attr('data-maximum-selection-length');
+            let sel = $('#selectma'+index);
+
+            if ( sel.val() && sel.val().length > max ) {
+                return false;
+            }else{
+                let selected = document.querySelectorAll('#selectma'+index+' option:checked');
+                let values = Array.from(selected).map(el => el.value);
+                @this.set(`oc_registers.${index}.codes`,values);
+            }
+
+        } 
+
+        document.addEventListener('ser-load-order-open-modal-details', event => {
+            $('#modalPartsDetailsLabel').html(event.detail.itemname);
+            $('#modalPartsDetails').modal('show');
         });
     </script>
 </div>

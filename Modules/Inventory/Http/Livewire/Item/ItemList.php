@@ -15,11 +15,12 @@ class ItemList extends Component
 {
     public $show;
     public $search;
-    public $file;
+    public $file_excel;
     public $loading_import = false;
 
     use WithPagination;
     use WithFileUploads;
+
     protected $paginationTheme = 'bootstrap';
 
     public function mount(){
@@ -81,12 +82,15 @@ class ItemList extends Component
     }
 
     public function import(){
+        //dd($this->file_excel);
         try {
-
-            if(Excel::import(new ItemsImport, $this->file)) {
-                $this->loading_import = true;
-            } else {
-                $this->loading_import = false;
+            if($this->file_excel){
+                
+                if(Excel::import(new ItemsImport, $this->file_excel)) {
+                    $this->loading_import = true;
+                } else {
+                    $this->loading_import = false;
+                }
             }
         } catch (Exception $e) {
             $this->loading_import = false;

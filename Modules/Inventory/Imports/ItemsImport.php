@@ -17,6 +17,7 @@ class ItemsImport implements ToModel
 {
     public function model(array $row)
     {
+
         if($row[0]){
             $row_5 = ($row[5]?$row[5]:1);
             $row_7 = ($row[7]?$row[7]:1);

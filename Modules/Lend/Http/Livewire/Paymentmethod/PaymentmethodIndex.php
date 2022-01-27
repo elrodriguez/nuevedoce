@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Lend\Http\Livewire\PaymentMethod;
+namespace Modules\Lend\Http\Livewire\Paymentmthod;
 
 use Livewire\Component;
 use Elrod\UserActivity\Activity;
