@@ -115,7 +115,7 @@
                         <fieldset class="border border p-2">
                             <legend class="w-auto" id="div_titulo_container"></legend>
                             <div class="table-responsive-sm">
-                                <table class="table m-0 table-hover" wire:ignore>
+                                <table class="table m-0 table-hover" wire:ignore.self>
                                     <thead>
                                     <tr>
                                         <th class="center">#</th>
@@ -123,20 +123,41 @@
                                         <th>@lang('transferservice::labels.lbl_unit')</th>
                                         <th>@lang('transferservice::labels.lbl_code')</th>
                                         <th>@lang('transferservice::labels.lbl_description')</th>
+                                        <th class="align-middle">{{ __('labels.codes') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($loadorderdetails as $key => $item)
                                         <tr>
-                                            <td class="">{{ $key+1 }}</td>
-                                            <td class="">{{ $item['quantity'] }}</td>
-                                            <td class="">{{ $item['unit'] }}</td>
-                                            <td class="">{{ str_pad($item['code'], 6, '0', STR_PAD_LEFT) }}</td>
+                                            <td class="align-middle">{{ $key+1 }}</td>
+                                            <td class="align-middle">{{ $item['quantity'] }}</td>
+                                            <td class="align-middle">{{ $item['unit'] }}</td>
+                                            <td class="align-middle">{{ str_pad($item['code'], 6, '0', STR_PAD_LEFT) }}</td>
                                             @if($id_guide_exit == '')
-                                            <td class="">{{ $item['asset_name'] }} - {{ $item['part_name'] }}</td>
+                                                <td class="align-middle">{{ $item['asset_name'] }} - {{ $item['part_name'] }}</td>
                                             @else
-                                                <td class="">{{ $item['description'] }}</td>
+                                                <td class="align-middle">{{ $item['asset_name'] }}</td>
                                             @endif
+                                            <td class="align-middle">
+                                                @if(count($item['assets']) > 0)
+                                                    <div wire:ignore>
+                                                        <select onchange="selectCodesAsset({{ $key }})" id="selectma{{ $key }}" data-maximum-selection-length="{{ $item['quantity'] }}" class="selectAsset1" multiple="multiple">
+                                                            <option value="">{{ __('labels.to_select') }}</option>
+                                                            @foreach($item['assets'] as $asset)
+                                                                <option value="{{ $asset['id'] }}"
+                                                                    @foreach($item['codes'] as $code)
+                                                                        @if($code == $asset['id'])
+                                                                        selected
+                                                                        @endif
+                                                                    @endforeach 
+                                                                >
+                                                                {{ $asset['patrimonial_code'] }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -317,26 +338,13 @@
                                             @if($id_guide_exit == '')
                                                 <td class="align-middle">{{ $item['asset_name'] }} - {{ $item['part_name'] }}</td>
                                             @else
-                                                <td class="align-middle">{{ $item['description'] }}</td>
+                                                <td class="align-middle">{{ $item['asset_name'] }}</td>
                                             @endif
                                             <td class="align-middle">
-                                                @if(count($item['assets']) > 0)
-                                                    <div wire:ignore>
-                                                        <select onchange="selectCodesAsset({{ $key }})" id="selectma{{ $key }}" data-maximum-selection-length="{{ $item['quantity'] }}" class="selectAsset" multiple="multiple">
-                                                            <option value="">{{ __('labels.to_select') }}</option>
-                                                            @foreach($item['assets'] as $asset)
-                                                                <option value="{{ $asset['id'] }}"
-                                                                    @foreach($item['codes'] as $code)
-                                                                        @if($code == $asset['id'])
-                                                                        selected
-                                                                        @endif
-                                                                    @endforeach 
-                                                                >
-                                                                {{ $asset['patrimonial_code'] }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                @if(count($item['codes']) > 0)
+                                                    @foreach($item['codes'] as $code)
+                                                        <code>{{ $code }}</code>
+                                                    @endforeach 
                                                 @endif
                                             </td>
                                         </tr>
@@ -436,7 +444,9 @@
     });
 
     document.addEventListener('livewire:load', function () {
-        $('.selectAsset').select2({closeOnSelect: true});
+
+        $('.selectAsset1').select2({closeOnSelect: true});
+
         $('#vehicle_id_r').change(function (){
             let license_r = $(this).find(':selected').attr('data-license');
             let carrier_r  = $(this).find(':selected').attr('data-carrier');
@@ -453,4 +463,18 @@
     document.addEventListener('ser-load-order-select-assets', event => {
         $('.selectAsset').select2({closeOnSelect: true});
     });
+
+    function selectCodesAsset(index){
+        let max = $('#selectma'+index).attr('data-maximum-selection-length');
+        let sel = $('#selectma'+index);
+
+        if ( sel.val() && sel.val().length > max ) {
+            return false;
+        }else{
+            let selected = document.querySelectorAll('#selectma'+index+' option:checked');
+            let values = Array.from(selected).map(el => el.value);
+            @this.set(`loadorderdetails.${index}.codes`,values);
+        }
+
+    } 
 </script>

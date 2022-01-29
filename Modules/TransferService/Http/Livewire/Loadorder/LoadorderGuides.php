@@ -11,6 +11,7 @@ use Modules\Inventory\Entities\InvItemPart;
 use Modules\Setting\Entities\SetCompany;
 use Modules\TransferService\Entities\SerGuide;
 use Modules\TransferService\Entities\SerGuideDetail;
+use Modules\TransferService\Entities\SerGuideDetailAssets;
 use Modules\TransferService\Entities\SerLoadOrder;
 use Modules\TransferService\Entities\SerLoadOrderDetail;
 use Modules\TransferService\Entities\SerLoadOrderDetailAsset;
@@ -133,7 +134,24 @@ class LoadorderGuides extends Component
             $loadorderdetails = SerGuideDetail::where('guide_id', '=', $this->id_guide_exit)->get();
 
             if($loadorderdetails){
-                $this->loadorderdetails = $loadorderdetails->toArray();
+                foreach($loadorderdetails as $k => $row){
+
+                    $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
+                    $codes = SerGuideDetailAssets::where('order_id',$row->load_order_id)->pluck('asset_id');
+        
+                    $this->loadorderdetails[$k] = [
+                        'code'                  => $row->code,
+                        'category_name'         => $row->category_name,
+                        'asset_name'            => $row->description,
+                        'unit'                  => $row->unit,
+                        'asset_description'     => $row->asset_description,
+                        'part_name'             => $row->part_name,
+                        'quantity'              => $row->quantity,
+                        'assets'                => $assets ? $assets->toArray() : [],
+                        'codes'                 => $codes ? $codes->toArray() : []
+                    ];
+
+                }
             }
             
         }else {
@@ -188,9 +206,9 @@ class LoadorderGuides extends Component
                 $this->document_carrier_r = $row->document_carrier;
                 break;
             }
-            //dd($this->shipping_date_f);
+
             $this->getLoadOrderDetails();
-            #dd($this->loadorderdetails);
+
             $this->number_of_packages = count($this->loadorderdetails);
         }
     }
@@ -318,7 +336,7 @@ class LoadorderGuides extends Component
         foreach($loadorderdetailsparts as $k => $row){
 
             $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
-            $codes = SerLoadOrderDetailAsset::where('load_order_id',$row->load_order_id)->pluck('asset_id');
+            $codes = SerGuideDetailAssets::where('order_id',$row->load_order_id)->pluck('asset_id');
 
             $this->loadorderdetails[$k] = [
                 'code'                  => $row->code,
@@ -338,7 +356,7 @@ class LoadorderGuides extends Component
             $t = $t + 1;
 
             $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
-            $codes = SerLoadOrderDetailAsset::where('load_order_id',$row->load_order_id)->pluck('asset_id');
+            $codes = SerGuideDetailAssets::where('load_order_id',$row->load_order_id)->pluck('asset_id');
 
             $this->loadorderdetails[$t] = [
                 'code'                  => $row->code,
@@ -382,16 +400,24 @@ class LoadorderGuides extends Component
     }
 
     public function saveExit(){
+
         $this->getSerie();
+        //dd($this->loadorderdetails);
         $result = 'OK';
+
         if($this->shipping_date == '' || $this->vehicle_id_r == ""){
+
             $result = 'ERROR';
             $message = Lang::get('transferservice::messages.msg_0014');
+
         }else{
+
             $data_exist = SerGuide::where('loadorder_id','=', $this->loadorder_id)
                 ->where('guide_type', '=', 'S')
                 ->get();
+
             if(count($data_exist) == 0) {
+
                 //Guide Exit
                 $save_guide_exit = SerGuide::create([
                     'loadorder_id' => $this->loadorder_id,
@@ -419,6 +445,7 @@ class LoadorderGuides extends Component
                 $this->getLoadOrderDetails();
                 
                 foreach ($this->loadorderdetails as $row) {
+
                     SerGuideDetail::create([
                         'guide_id' => $save_guide_exit->id,
                         'quantity' => $row['quantity'],
@@ -427,6 +454,16 @@ class LoadorderGuides extends Component
                         'description' => $row['asset_name'] . ' - ' . $row['part_name'],
                         'person_create' => Auth::user()->person_id
                     ]);
+
+                    foreach($row['codes'] as $code){
+                        SerGuideDetailAssets::create([
+                            'order_id' => $this->loadorder_id,
+                            'guide_id' => $save_guide_exit->id,
+                            'item_id'   => $row['code'],
+                            'asset_id' => $code
+                        ]);
+                    }
+
                 }
                 //Guide Entry
                 $save_guide_entry = SerGuide::create([
@@ -452,8 +489,11 @@ class LoadorderGuides extends Component
                 ]);
 
                 //Save Detail
+                
                 $this->getLoadOrderDetails();
+
                 foreach ($this->loadorderdetails as $row) {
+                    
                     SerGuideDetail::create([
                         'guide_id' => $save_guide_entry->id,
                         'quantity' => $row['quantity'],
@@ -462,6 +502,15 @@ class LoadorderGuides extends Component
                         'description' => $row['asset_name'] . ' - ' . $row['part_name'],
                         'person_create' => Auth::user()->person_id
                     ]);
+
+                    foreach($row['codes'] as $code){
+                        SerGuideDetailAssets::create([
+                            'order_id' => $this->loadorder_id,
+                            'guide_id' => $save_guide_entry->id,
+                            'item_id'   => $row['code'],
+                            'asset_id' => $code
+                        ]);
+                    }
                 }
 
                 //Save number serie:
