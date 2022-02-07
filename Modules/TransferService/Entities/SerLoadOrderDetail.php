@@ -16,7 +16,8 @@ class SerLoadOrderDetail extends Model
         'item_id',
         'amount',
         'person_create',
-        'person_edit'
+        'person_edit',
+        'model_description'
     ];
 
     protected static function newFactory()

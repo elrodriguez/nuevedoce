@@ -130,15 +130,17 @@ class LoadorderGuides extends Component
             $this->document_carrier_r = $data_guide_exist_b->document_carrier;
             $this->starting_point_r = $data_guide_exist_b->starting_point;
             $this->arrival_point_r = $data_guide_exist_b->arrival_point;
-
+            $this->loadorderdetails = [];
             $loadorderdetails = SerGuideDetail::where('guide_id', '=', $this->id_guide_exit)->get();
 
             if($loadorderdetails){
                 foreach($loadorderdetails as $k => $row){
 
                     $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
-                    $codes = SerGuideDetailAssets::where('order_id',$row->load_order_id)->pluck('asset_id');
-        
+                    $codes = SerGuideDetailAssets::where('order_id',$this->loadorder_id)
+                                ->where('item_id',(int) $row->code)
+                                ->pluck('asset_id');
+
                     $this->loadorderdetails[$k] = [
                         'code'                  => $row->code,
                         'category_name'         => $row->category_name,
@@ -152,6 +154,7 @@ class LoadorderGuides extends Component
                     ];
 
                 }
+                //dd($this->loadorderdetails);
             }
             
         }else {
@@ -292,6 +295,7 @@ class LoadorderGuides extends Component
     }
 
     public function getLoadOrderDetails(){
+        $this->loadorderdetails = [];
         $loadorderdetailsparts = InvItemPart::join('inv_items AS part','inv_item_parts.part_id','part.id')
             ->join('inv_items AS asset','inv_item_parts.item_id','asset.id')
             ->join('inv_categories','asset.category_id','inv_categories.id')
@@ -331,12 +335,14 @@ class LoadorderGuides extends Component
                       ->whereColumn('inv_item_parts.item_id', 'inv_items.id');
             })
             ->get();
-
+            //dd($loadorderdetailsasset);
         $t = 0;    
         foreach($loadorderdetailsparts as $k => $row){
 
             $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
-            $codes = SerGuideDetailAssets::where('order_id',$row->load_order_id)->pluck('asset_id');
+            $codes = SerGuideDetailAssets::where('order_id',$row->load_order_id)
+                        ->where('item_id',(int) $row->code)
+                        ->pluck('asset_id');
 
             $this->loadorderdetails[$k] = [
                 'code'                  => $row->code,
@@ -356,7 +362,9 @@ class LoadorderGuides extends Component
             $t = $t + 1;
 
             $assets = InvAsset::where('item_id',$row->code)->select('id','patrimonial_code')->get();
-            $codes = SerGuideDetailAssets::where('load_order_id',$row->load_order_id)->pluck('asset_id');
+            $codes = SerGuideDetailAssets::where('order_id',$row->load_order_id)
+                        ->where('item_id',(int) $row->code)
+                        ->pluck('asset_id');
 
             $this->loadorderdetails[$t] = [
                 'code'                  => $row->code,
@@ -370,7 +378,7 @@ class LoadorderGuides extends Component
                 'codes'                 => $codes ? $codes->toArray() : []
             ];
         }
-
+        
         //$this->dispatchBrowserEvent('ser-load-order-select-assets', ['success' => true]);
     }
 
@@ -442,7 +450,7 @@ class LoadorderGuides extends Component
                 ]);
 
                 //Save Detail
-                $this->getLoadOrderDetails();
+                //$this->getLoadOrderDetails();
                 
                 foreach ($this->loadorderdetails as $row) {
 
@@ -456,7 +464,7 @@ class LoadorderGuides extends Component
                     ]);
 
                     foreach($row['codes'] as $code){
-                        SerGuideDetailAssets::create([
+                        DB::table('ser_guide_detail_assets')->insert([
                             'order_id' => $this->loadorder_id,
                             'guide_id' => $save_guide_exit->id,
                             'item_id'   => $row['code'],
@@ -495,22 +503,22 @@ class LoadorderGuides extends Component
                 foreach ($this->loadorderdetails as $row) {
                     
                     SerGuideDetail::create([
-                        'guide_id' => $save_guide_entry->id,
-                        'quantity' => $row['quantity'],
-                        'unit' => $row['unit'],
-                        'code' => str_pad($row['code'], 6, '0', STR_PAD_LEFT),
-                        'description' => $row['asset_name'] . ' - ' . $row['part_name'],
+                        'guide_id'  => $save_guide_entry->id,
+                        'quantity'  => $row['quantity'],
+                        'unit'      => $row['unit'],
+                        'code'      => str_pad($row['code'], 6, '0', STR_PAD_LEFT),
+                        'description'   => $row['asset_name'] . ' - ' . $row['part_name'],
                         'person_create' => Auth::user()->person_id
                     ]);
 
-                    foreach($row['codes'] as $code){
-                        SerGuideDetailAssets::create([
-                            'order_id' => $this->loadorder_id,
-                            'guide_id' => $save_guide_entry->id,
-                            'item_id'   => $row['code'],
-                            'asset_id' => $code
-                        ]);
-                    }
+                    // foreach($row['codes'] as $code){
+                    //     DB::table('ser_guide_detail_assets')->insert([
+                    //         'order_id'  => $this->loadorder_id,
+                    //         'guide_id'  => $save_guide_entry->id,
+                    //         'item_id'   => $row['code'],
+                    //         'asset_id'  => $code
+                    //     ]);
+                    // }
                 }
 
                 //Save number serie:
@@ -545,6 +553,7 @@ class LoadorderGuides extends Component
         }
         $guideEntry->delete();
         $this->id_guide_entry = '';
+        $this->getLoadOrderDetails();
         $this->dispatchBrowserEvent('ser-guide-delete', ['msg' => Lang::get('transferservice::messages.msg_delete')]);
     }
 }

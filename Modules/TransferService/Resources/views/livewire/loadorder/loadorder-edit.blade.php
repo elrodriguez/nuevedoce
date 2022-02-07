@@ -151,7 +151,8 @@
                                     <th class="">{{ __('transferservice::labels.lbl_customer') }}</th>
                                     <th class="text-center">{{ __('transferservice::labels.lbl_event_date') }}</th>
                                     <th class="">{{ __('transferservice::labels.lbl_item') }}</th>
-                                    <th class="">{{ __('labels.codes') }}</th>
+                                    <th class="">{{ __('labels.additional_information') }}</th>
+                                    {{-- <th class="">{{ __('labels.codes') }}</th> --}}
                                     <th class="text-center">{{ __('transferservice::labels.lbl_amount') }}</th>
                                 </tr>
                                 </thead>
@@ -188,7 +189,10 @@
                                         <td class="align-middle">{{ $oc_register['name_customer'] }}</td>
                                         <td class="align-middle text-center">{{ \Carbon\Carbon::parse($oc_register['date_start'])->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($oc_register['date_end'])->format('d/m/Y') }}</td>
                                         <td class="align-middle">{{ $oc_register['name_item'] }}</td>
-                                        <td>
+                                        <td class="align-middle">
+                                            <textarea rows="1" wire:model.defer="oc_registers.{{ $key }}.model_description"></textarea>
+                                        </td>
+                                        {{-- <td>
                                             @if(count($oc_register['assets']) > 0)
                                                 <div wire:ignore>
                                                     <select onchange="selectCodesAsset({{ $key }})" id="selectma{{ $key }}" data-maximum-selection-length="{{ $oc_register['amount_select'] }}" class="selectAsset" multiple="multiple">
@@ -207,7 +211,7 @@
                                                     </select>
                                                 </div>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td class="align-middle text-center">{{ $oc_register['amount'] }}</td>
                                     </tr>
                                 @endforeach

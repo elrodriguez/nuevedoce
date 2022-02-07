@@ -58,9 +58,10 @@ class ItemsImport implements ToModel
                 
                 $family = InvCategory::where('description','=',$row[0])->first();
 
-                $model  = InvModel::where('description','=',$row[2])->first();
+                // $model  = InvModel::where('description','=',$row[2])->first();
 
-                $asset  = InvItem::where('name','=',$row[1])->where('description','=',$row[2])->first();
+                // $asset  = InvItem::where('name','=',$row[1])->where('description','=',$row[2])->first();
+                $asset  = InvItem::where('name','=',$row[1])->first();
 
                 if($family){
                     $family_id = $family->id;
@@ -74,16 +75,16 @@ class ItemsImport implements ToModel
                     $family_id = $family_new->id;
                 }
 
-                if($model){
-                    $model_id = $model->id;
-                }else{
+                // if($model){
+                //     $model_id = $model->id;
+                // }else{
                     
-                    $model_new = InvModel::create([
-                        'description'   => ($row[2]?$row[2]:'SIN MODELO')
-                    ]);
+                //     $model_new = InvModel::create([
+                //         'description'   => ($row[2]?$row[2]:'SIN MODELO')
+                //     ]);
 
-                    $model_id = $model_new->id;
-                }
+                //     $model_id = $model_new->id;
+                // }
 
                 if($asset){
                     $asset_id = $asset->id;
@@ -92,7 +93,7 @@ class ItemsImport implements ToModel
                     if($row[1]){
                         $asset_new = InvItem::create([
                             'name'          => $row[1],
-                            'description'   => $row[2],
+                            //'description'   => $row[2],
                             'part'          => false,
                             'weight'        => 0,
                             'width'         => 0,
@@ -103,7 +104,7 @@ class ItemsImport implements ToModel
                             'brand_id'      => $brand_id,
                             'category_id'   => $family_id,
                             'person_create' => Auth::user()->person_id,
-                            'model_id'      => $model_id,
+                            //'model_id'      => $model_id,
                             'unit_measure_id' => 1
                         ]);
                         

@@ -111,6 +111,7 @@ class LoadorderEdit extends Component
                 'ser_load_order_details.odt_request_id AS odt_request_id',
                 'ser_load_order_details.item_id AS item_id',
                 'ser_load_order_details.load_order_id',
+                'ser_load_order_details.model_description',
                 'ser_odt_requests.internal_id',
                 'ser_odt_requests.description AS name_evento',
                 'people.full_name AS name_customer',
@@ -145,6 +146,7 @@ class LoadorderEdit extends Component
             $detail_a['weight']             = $row->weight;
             $detail_a['assets']             = $assets ? $assets->toArray() : [];
             $detail_a['codes']              = $codes ? $codes->toArray() : [];
+            $detail_a['model_description']  = $row->model_description;
             $detail_odt[] = $detail_a;
         }
 
@@ -381,6 +383,9 @@ class LoadorderEdit extends Component
                 ]);
             }
 
+            SerLoadOrderDetail::find($odt['id'])->update([
+                'model_description' => $odt['model_description']
+            ]);
         }
 
         $activity = new Activity;
