@@ -19,8 +19,8 @@ function nameNumerDay($date){
     $fechats = strtotime($date); //a timestamp
     $array_date = explode('-',$date);
     $string = '';
-    //el parametro w en la funcion date indica que queremos el dia de la semana
-    //lo devuelve en numero 0 domingo, 1 lunes,....
+    // el parametro w en la funcion date indica que queremos el dia de la semana
+    // lo devuelve en numero 0 domingo, 1 lunes,....
     switch (date('w', $fechats)){
         case 0: $string = "Domingo ". $array_date[2]; break;
         case 1: $string = "Lunes ". $array_date[2]; break;

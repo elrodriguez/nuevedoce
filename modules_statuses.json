@@ -4,5 +4,7 @@
     "Inventory": true,
     "TransferService": true,
     "Lend": true,
-    "Staff": true
+    "Staff": true,
+    "Sale": true,
+    "Sales": true
 }
