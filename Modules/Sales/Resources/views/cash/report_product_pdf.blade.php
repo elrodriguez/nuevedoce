@@ -87,7 +87,9 @@ $establishment = $cash->user->establishment;
                         <p><strong>Ruc: </strong>{{$company->number}}</p>
                     </td>
                     <td class="width-custom">
-                        <p><strong>Establecimiento: </strong>{{$establishment->address}} - {{$establishment->department->description}} - {{$establishment->district->description}}</p>
+                        @if($establishment)
+                            <p><strong>Establecimiento: </strong>{{$establishment->address}} - {{$establishment->department->description}} - {{$establishment->district->description}}</p>
+                        @endif
                     </td>
                 </tr>
 

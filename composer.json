@@ -20,7 +20,10 @@
         "luecano/numero-a-letras": "^3.0",
         "maatwebsite/excel": "^3.1",
         "mhmiton/laravel-modules-livewire": "^1.2",
+        "mpdf/mpdf": "^8.0",
+        "mpdf/qrcode": "^1.2",
         "nwidart/laravel-modules": "^8.2",
+        "robrichards/xmlseclibs": "^3.1",
         "spatie/laravel-permission": "^5.1"
     },
     "require-dev": {

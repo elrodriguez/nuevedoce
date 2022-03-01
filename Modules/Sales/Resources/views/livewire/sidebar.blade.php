@@ -35,6 +35,13 @@
                         <span class="nav-link-text" data-i18n="nav.clientes">{{ __('sales::labels.lbl_administration') }}</span>
                     </a>
                     <ul>
+                        @can('ventas_administration_series')
+                        <li class="{{ $path[0] == 'sales' && $path[1] == 'administration' && $path[2] == 'series' ? 'active' : '' }}">
+                            <a href="{{ route('sales_administration_series') }}" title="@lang('labels.series')" data-filter-tags="@lang('labels.series')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('labels.series')">@lang('labels.series')</span>
+                            </a>
+                        </li>
+                        @endcan
                         @can('ventas_administracion_caja_chica')
                         <li class="{{ $path[0] == 'sales' && $path[1] == 'administration' && $path[2] == 'cash' ? 'active' : '' }}">
                             <a href="{{ route('sales_administration_cash') }}" title="@lang('labels.petty_cash')" data-filter-tags="@lang('labels.petty_cash')">
@@ -43,6 +50,31 @@
                         </li>
                         @endcan
 
+                    </ul>
+                </li>
+            @endcan
+            @can('ventas_comprobante')
+                <li class="{{ ($path[0] === 'sales' && $path[1] === 'documents')?'active open':'' }}">
+                    <a href="#" title="@lang('labels.sales')" data-filter-tags="@lang('labels.sales')">
+                        <i class="fal fa-file-invoice-dollar"></i>
+                        <span class="nav-link-text" data-i18n="nav.@lang('labels.sales')"> @lang('sales::labels.voucher')</span>
+                    </a>
+                    <ul>
+                        @can('ventas_comprobante_listado')
+                        <li class="{{ ($path[0] === 'sales' && $path[1] === 'documents' && $path[2] === 'list') ? 'active' : '' }}">
+                            <a href="{{ route('sales_document_list') }}" title="@lang('labels.voucher_list')" data-filter-tags="@lang('labels.voucher_list')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('labels.list')">@lang('labels.voucher_list')</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('ventas_comprobante_nuevo')
+                        <li class="{{ ($path[0] === 'sales' && $path[1] === 'documents' && $path[2] === 'create')?'active':'' }}">
+                            <a href="{{ route('sales_document_create') }}" title="@lang('labels.new')" data-filter-tags="@lang('labels.new_document')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('labels.new_document')">@lang('labels.new_document')</span>
+                            </a>
+                        </li>
+                        @endcan
+                        
                     </ul>
                 </li>
             @endcan

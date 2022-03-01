@@ -73,8 +73,9 @@ class CompanyEdit extends Component
         $this->validate();
         $logo = $this->logo_view;
         $logo_store = $this->logo_store_view;
-
+        //dd($this->logo);
         if($this->logo){
+            
             $logo_name = 'company'.DIRECTORY_SEPARATOR.'logos'.DIRECTORY_SEPARATOR;
             $this->logo->storeAs($logo_name,'logo.jpg','public');
             $logo = $logo_name.DIRECTORY_SEPARATOR.'logo.jpg';

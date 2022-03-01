@@ -41,8 +41,7 @@ class CompanyCreate extends Component
         'phone_mobile' => 'required|max:12',
         'representative_name' => 'required|min:6',
         'representative_number' => 'required|min:8',
-        'logo' => 'required|image|max:2048', // 1MB Max
-        'logo_store' => 'required|image|max:2048'
+
     ];
 
     public function save(){

@@ -610,5 +610,7 @@ return [
     'user_data' => 'Datos de Usuario',
     'lcorrect' => 'Corregir',
     'username_password_incorrect' => 'El nombre de usuario o contraseña es incorrecto',
-    'done_text' => 'Hecho'
+    'done_text' => 'Hecho',
+    'available_user'=> 'Disponibles para el usuario',
+    'lbl_excellent'     => 'Excelente',
 ];

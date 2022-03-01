@@ -16,4 +16,5 @@
 @endsection
 @section('content')
 @livewire('setting::user.user-list')
+@livewire('setting::user.user-establishment')
 @endsection

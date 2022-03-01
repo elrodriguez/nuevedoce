@@ -42,7 +42,13 @@
                     <td class="text-center align-middle">{{ $item->reference_number }}</td>
                     <td class="align-middle">{{ $item->name }}</td>
                     <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->date_opening)->format('d/m/Y') }}<br><code>{{ $item->time_opening }}</code></td>
-                    <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->date_closed)->format('d/m/Y') }}<br><code>{{ $item->time_closed }}</code></td>
+                    <td class="text-center align-middle">
+                        @if(!$item->state)
+                            {{ \Carbon\Carbon::parse($item->date_closed)->format('d/m/Y') }}
+                            <br>
+                            <code>{{ $item->time_closed }}</code>
+                        @endif
+                    </td>
                     <td class="text-right align-middle">{{ $item->beginning_balance }}</td>
                     <td class="text-right align-middle">{{ $item->final_balance }}</td>
                     <td class="text-center align-middle">
@@ -56,43 +62,73 @@
             @endforeach
         </tbody>
         @if($collection->links())
-        <tfoot>
-            <tr>
-                <td colspan="10">
-                    <div class="row">
-                        <div class="col-md-12 d-flex flex-row align-items-center">
-                            <div class="ml-auto">{{ $collection->links() }}</div>
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+                        <div class="row">
+                            <div class="col-md-12 d-flex flex-row align-items-center">
+                                <div class="ml-auto">{{ $collection->links() }}</div>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </tfoot>
+                    </td>
+                </tr>
+            </tfoot>
         @endif
     </table>
-    <script defer>
-        function closeCash(close_url){
-            Swal.fire({
-                title: "¿Estás seguro?",
-                text: "¡No podrás revertir esto!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Cerrar la caja",
-                cancelButtonText: "Cancelar"
-            }).then(function(result)
-            {
-                if (result.value)
+    <script type="text/javascript">
+        function closeCash(close_url) {
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
+            let box = bootbox.confirm({
+                title: "<i class='fal fa-times-circle text-danger mr-2'></i> {{__('lend::messages.msg_0001')}}",
+                message: "<span><strong>{{__('lend::labels.lbl_warning')}}: </strong> {{__('lend::messages.msg_0002')}}</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons:
+                    {
+                        confirm:
+                            {
+                                label: '{{__('labels.yes')}}',
+                                className: 'btn-danger shadow-0'
+                            },
+                        cancel:
+                            {
+                                label: '{{__('labels.no')}}',
+                                className: 'btn-default'
+                            }
+                    },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function(result)
                 {
-                    $.get(close_url, function(data) {
-                        if(data.success == true){
-                            @this.listCash();
-                            Swal.fire("¡Exito!", "Caja cerrada", "success");
-                        }
-                    }).fail(function( data ) {
-                        Swal.fire("¡Error!","{{ __('labels.msg_access_permission') }}", "error");
-                    });
-
+                    if(result){
+                        $.get(close_url, function(data) {
+                            if(data.success == true){
+                                @this.listCash();
+                                initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
+                                let box = bootbox.alert({
+                                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>¡Exito!</span>",
+                                    message: "<span><strong>{{__('lend::labels.lbl_excellent')}}... </strong>Caja cerrada</span>",
+                                    centerVertical: true,
+                                    className: "modal-alert",
+                                    closeButton: false
+                                });
+                                box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+                            }
+                        }).fail(function( data ) {
+                            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+                            let box = bootbox.alert({
+                                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>¡Error!</span>",
+                                message: "<span><strong>Fatal... </strong>{{ __('messages.msg_access_permission') }}</span>",
+                                centerVertical: true,
+                                className: "modal-alert",
+                                closeButton: false
+                            });
+                            box.find('.modal-content').css({'background-color': 'rgba(205, 97, 85, 0.5)'});
+                        });
+                    }
                 }
             });
+            box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
     </script>
 </div>

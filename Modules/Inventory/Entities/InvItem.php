@@ -28,7 +28,16 @@ class InvItem extends Model
         'person_create',
         'person_edit',
         'model_id',
-        'unit_measure_id'
+        'has_plastic_bag_taxes',
+        'stock_min',
+        'unit_measure_id',
+        'currency_type_id',
+        'digemid',
+        'sale_affectation_igv_type_id',
+        'item_type_id',
+        'stock',
+        'unit_type_id',
+        'internal_id'
     ];
 
     protected static function newFactory()

@@ -62,6 +62,11 @@
                                         <i class="fal fa-lock-open-alt mr-1"></i>{{ __('setting::labels.roles') }}
                                     </a>
                                     @endcan
+                                    @can('configuraciones_usuarios_establesimientos')
+                                    <a wire:click="$emit('openModalUserEstablishment',{{ $user->id }})" href="javascript:void(0)" class="dropdown-item">
+                                        <i class="fal fa-store-alt mr-1"></i>{{ __('labels.establishment') }}
+                                    </a>
+                                    @endcan
                                     @can('configuraciones_usuarios_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $user->id }})" type="button" class="dropdown-item text-danger">

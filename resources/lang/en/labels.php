@@ -609,5 +609,7 @@ return [
     'user_data' => 'User Data',
     'lcorrect' => 'Corregir',
     'username_password_incorrect' => 'The username or password is incorrect',
-    'done_text' => 'Done'
+    'done_text' => 'Done',
+    'available_user'=> 'Disponibles para el usuario',
+    'lbl_excellent'     => 'Excellent',
 ];

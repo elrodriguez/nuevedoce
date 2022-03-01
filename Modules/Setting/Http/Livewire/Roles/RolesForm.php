@@ -6,6 +6,7 @@ use Livewire\Component;
 use Spatie\Permission\Models\Role;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 class RolesForm extends Component
 {
     public $roles = [];
@@ -21,15 +22,20 @@ class RolesForm extends Component
         $this->validate([
             'name' => 'required|unique:roles,name'
         ]);
-        $role = Role::create(['name' => $this->name]);
+
+        $role = Role::create(['name' => $this->name,'guard_name' => 'sanctum']);
 
         $activity = new Activity;
-        $activity->modelOn(Role::class,$$role->id,'roles');
+        $activity->modelOn(Role::class,$role->id,'roles');
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('setting_roles'));
         $activity->logType('create');
         $activity->log('creó un nuevo rol '.$this->name);
         $activity->save();
+
+        $this->name = null;
+
+        $this->dispatchBrowserEvent('set-role-save-add', ['msg' => Lang::get('setting::labels.msg_success')]);
     }
 
     public function removeRole($id){

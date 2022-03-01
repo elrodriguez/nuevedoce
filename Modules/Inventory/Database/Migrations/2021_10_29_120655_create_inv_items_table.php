@@ -31,6 +31,8 @@ class CreateInvItemsTable extends Migration
             $table->unsignedBigInteger('unit_measure_id')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
+            $table->boolean('has_plastic_bag_taxes')->default(false);
+            $table->decimal('stock_min',8,2)->default(1);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('brand_id')->references('id')->on('inv_brands');

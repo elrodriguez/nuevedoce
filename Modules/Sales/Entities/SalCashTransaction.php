@@ -9,10 +9,20 @@ class SalCashTransaction extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'cash_id',
+        'payment_method_type_id',
+        'description',
+        'payment'
+    ];
     
     protected static function newFactory()
     {
         return \Modules\Sales\Database\factories\SalCashTransactionFactory::new();
+    }
+
+    public function payment_method_type()
+    {
+        return $this->belongsTo(\App\Models\CatPaymentMethodTypes::class,'payment_method_type_id');
     }
 }

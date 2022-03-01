@@ -1,7 +1,7 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-body">
-            <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
+
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="name">@lang('setting::labels.name_short') <span class="text-danger">*</span> </label>
@@ -66,8 +66,8 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="logo">Logo Sistema<span class="text-danger">*</span> </label>
-                        <input wire:model="logo" type="file" id="logo" required="">
+                        <label class="form-label" for="logo">Logo Sistema</label>
+                        <input wire:model="logo" type="file" id="logo">
                         @error('logo')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -76,8 +76,8 @@
                         @endif
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="logo_store">Logo Documentos <span class="text-danger">*</span> </label>
-                        <input wire:model="logo_store" type="file" id="logo_store" required="">
+                        <label class="form-label" for="logo_store">Logo Documentos </label>
+                        <input wire:model="logo_store" type="file" id="logo_store">
                         @error('logo_store')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -95,7 +95,6 @@
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
             <a href="{{ route('setting_company')}}" type="button" class="btn btn-secondary waves-effect waves-themed">{{ __('setting::buttons.list') }}</a>

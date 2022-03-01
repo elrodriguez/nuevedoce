@@ -40,7 +40,7 @@
                         <th class="text-center">#</th>
                         <th class="text-center">Acciones</th>
                         <th>Descripcion</th>
-                        <th>Status</th>
+                        <th>{{ __('labels.state') }}</th>
                     </tr>
                 </thead>
                 <tbody class="">

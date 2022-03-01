@@ -9,7 +9,14 @@ class SalExpensePayment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'expense_id',
+        'date_of_payment',
+        'expense_method_type_id',
+        'has_card',
+        'reference',
+        'payment'
+    ];
     
     protected static function newFactory()
     {

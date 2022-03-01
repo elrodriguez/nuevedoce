@@ -18,6 +18,8 @@ class ModulePermissionsTableSeeder extends Seeder
      */
     public function run()
     {
+        Role::create(['name' => 'Vendedor','guard_name' => 'sanctum']);
+
         $module = SetModule::create([
             'uuid' => Str::uuid(),
             'logo' => 'fal fa-store-alt',
@@ -32,7 +34,14 @@ class ModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'ventas_administracion','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administracion_caja_chica','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administracion_caja_chica_cerrar','guard_name' => 'sanctum']));
-
+        array_push($permissions,Permission::create(['name' => 'ventas_comprobante','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_comprobantes_listado','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_comprobante_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_administration_series','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_administration_series_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_administration_series_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_administration_series_eliminar','guard_name' => 'sanctum']));
+        
         $role = Role::find(1);
 
         foreach($permissions as $permission){

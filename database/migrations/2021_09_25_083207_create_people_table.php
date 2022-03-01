@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Customer;
+use App\Models\Person;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,10 +18,10 @@ class CreatePeopleTable extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
-            $table->char('country_id',2);
-            $table->char('department_id',2);
-            $table->char('province_id',4);
-            $table->char('district_id',6);
+            $table->char('country_id',2)->nullable();
+            $table->char('department_id',2)->nullable();
+            $table->char('province_id',4)->nullable();
+            $table->char('district_id',6)->nullable();
             $table->string('identity_document_type_id');
             $table->string('number');
             $table->string('names');
@@ -63,6 +65,30 @@ class CreatePeopleTable extends Migration
             'telephone' => null,
             'sex' => 'M',
             'birth_date' => '2000-09-30'
+        ]);
+
+        $person = Person::create([
+            'country_id' => 'PE',
+            'department_id' => '02',
+            'province_id' => '0218',
+            'district_id' => '021801',
+            'identity_document_type_id' => '0',
+            'number' => '99999999',
+            'names' => 'Clientes',
+            'last_name_father' => 'Varios',
+            'last_name_mother' => null,
+            'full_name' => 'Clientes Varios',
+            'trade_name' => 'Clientes Varios',
+            'address' => 'web',
+            'email' => 'clientesvarios@gmail.com',
+            'telephone' => null,
+            'sex' => 'M',
+            'birth_date' => '2000-09-30'
+        ]);
+
+        Customer::create([
+            'person_id' => $person->id,
+            'direct'    => 1
         ]);
 
         DB::table('users')->where('id', 1)->update(['person_id' => 1]);

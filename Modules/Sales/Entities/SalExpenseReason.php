@@ -9,7 +9,7 @@ class SalExpenseReason extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['description'];
     
     protected static function newFactory()
     {

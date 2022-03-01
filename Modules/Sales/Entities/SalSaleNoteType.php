@@ -9,7 +9,9 @@ class SalSaleNoteType extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'active','description','debit'
+    ];
     
     protected static function newFactory()
     {

@@ -24,7 +24,7 @@ class CreateSalDocumentsTable extends Migration
             $table->string('ubl_version');
             $table->char('group_id', 2);
             $table->string('document_type_id');
-            $table->string('series', 4)->index();
+            $table->string('series', 4);
             $table->integer('number')->index();
             $table->date('date_of_issue')->index();
             $table->time('time_of_issue');
@@ -82,6 +82,7 @@ class CreateSalDocumentsTable extends Migration
             $table->foreign('group_id')->references('id')->on('groups');
             $table->foreign('document_type_id')->references('id')->on('document_types');
             $table->foreign('currency_type_id')->references('id')->on('currency_types');
+            $table->foreign('series')->references('id')->on('sal_series');
         });
     }
 

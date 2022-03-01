@@ -36,11 +36,12 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
-                        <th class="text-center">Acciones</th>
+                        <th class="text-center">{{ __('labels.actions') }}</th>
                         <th>{{ __('labels.name') }}</th>
                         <th>{{ __('setting::labels.address') }}</th>
                         <th>{{ __('setting::labels.telephone') }}</th>
-                        <th>Email</th>
+                        <th>{{ __('labels.email') }}</th>
+                        <th>{{ __('labels.state') }}</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -55,13 +56,18 @@
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
                                     @can('configuraciones_establecimientos_editar')
                                     <a href="{{ route('setting_establishment_edit',$establishment->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i>Editar
+                                        <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
+                                    </a>
+                                    @endcan
+                                    @can('configuraciones_establecimientos_series')
+                                    <a wire:click="$emit('openModalEstablismentSeries',{{ $establishment->id }})" href="javascript:void(0)" class="dropdown-item">
+                                        <i class="fal fa-hashtag mr-1"></i>{{ __('labels.series') }}
                                     </a>
                                     @endcan
                                     @can('configuraciones_establecimientos_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $establishment->id }})" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i>Eliminar
+                                        <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
                                     </button>
                                     @endcan
                                 </div>
@@ -71,6 +77,13 @@
                         <td class="align-middle">{{ $establishment->address }}</td>
                         <td class="align-middle">{{ $establishment->phone }}</td>
                         <td class="align-middle">{{ $establishment->email }}</td>
+                        <td class="align-middle">
+                            @if($establishment->state)
+                            <span class="badge badge-warning">{{ __('labels.active') }}</span>
+                            @else
+                            <span class="badge badge-danger">{{ __('labels.inactive') }}</span>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

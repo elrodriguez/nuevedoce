@@ -20,7 +20,8 @@ class SetCompany extends Model
         'phone_mobile',
         'representative_name',
         'representative_number',
-        'main'
+        'main',
+        'soap_type_id'
     ];
     
     protected static function newFactory()

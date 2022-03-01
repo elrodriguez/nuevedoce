@@ -200,7 +200,9 @@ $cash_final_balance = $final_balance + $cash->beginning_balance;
                         <p><strong>Ruc: </strong>{{$company->number}}</p>
                     </td>
                     <td class="width-custom">
+                        @if($establishment)
                         <p><strong>Establecimiento: </strong>{{$establishment->address}} - {{$establishment->department->description}} - {{$establishment->district->description}}</p>
+                        @endif
                     </td>
                 </tr>
 

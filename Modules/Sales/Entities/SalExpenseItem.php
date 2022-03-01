@@ -9,7 +9,9 @@ class SalExpenseItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'expense_id','description','total'
+    ];
     
     protected static function newFactory()
     {

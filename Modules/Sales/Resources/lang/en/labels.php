@@ -5,4 +5,6 @@ return  [
     'petty_cash' => 'small box',
     'cant_continue' => 'cant continue',
     'report' => 'Reporte',
+    'voucher' => 'Voucher',
+    'series' => 'Series'
 ];
