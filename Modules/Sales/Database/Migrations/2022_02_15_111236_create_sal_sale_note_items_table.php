@@ -37,9 +37,9 @@ class CreateSalSaleNoteItemsTable extends Migration
             $table->decimal('total_charge',12,2);
             $table->decimal('total_discount',12,2);
             $table->decimal('total',12,2);
-            $table->json('attributes');
-            $table->json('discounts');
-            $table->json('charges');
+            $table->json('attributes')->nullable();
+            $table->json('discounts')->nullable();
+            $table->json('charges')->nullable();
             $table->unsignedBigInteger('kardex_id')->nullable();
             $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->timestamps();

@@ -18,6 +18,7 @@ class CreateSalDocumentPaymentsTable extends Migration
             $table->unsignedBigInteger('document_id');
             $table->date('date_of_payment');
             $table->string('payment_method_type_id')->nullable();
+            $table->string('payment_destination_id')->nullable();
             $table->boolean('has_card')->default(false);
             $table->string('card_brand_id')->nullable();
             $table->string('reference')->nullable();

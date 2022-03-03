@@ -28,12 +28,23 @@ use Modules\Setting\Entities\SetEstablishment;
 use Illuminate\Support\Str;
 use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvKardex;
-use Modules\Sales\Entities\SalDocument;
+use Mpdf\Mpdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+use Mpdf\HTMLParserMode;
 use Illuminate\Support\Facades\DB;
+use Modules\Sales\Entities\SalSaleNote;
+use Modules\Sales\Entities\SalSaleNoteItem;
+use Modules\Sales\Entities\SalSaleNotePayment;
+use App\CoreBilling\Template;
+use App\CoreBilling\Helpers\Storage\StorageDocument;
 
-class DocumentCreateForm extends Component
+class SaleNotesCreateForm extends Component
 {
-    public $document_type_id = '03';
+
+    use StorageDocument;
+
+    public $document_type_id = '80';
     public $document_types;
     public $identity_document_types = [];
     public $series;
@@ -87,9 +98,8 @@ class DocumentCreateForm extends Component
     public $provinces = [];
     public $districts = [];
     public $soap_type_id;
-
+    
     public function mount(){
-        
         $this->value_icbper = Parameter::where('id_parameter','PRT006ICP')->value('value_default');
         $this->igv = (int) Parameter::where('id_parameter','PRT002IGV')->value('value_default');
         $this->warehouse_id = 1;
@@ -124,7 +134,6 @@ class DocumentCreateForm extends Component
         $activity->componentOn('sales::document.document-create-form');
         $activity->log('ingresó a la vista nuevo comprobante');
         $activity->save();
-
     }
 
     public function render()
@@ -145,7 +154,7 @@ class DocumentCreateForm extends Component
                 $this->customer_id = $this->xgenerico->value;
             }
         }
-        return view('sales::livewire.document.document-create-form');
+        return view('sales::livewire.document.sale-notes-create-form');
     }
 
     public function changeSeries(){
@@ -210,53 +219,33 @@ class DocumentCreateForm extends Component
             'document_type_id' => 'required',
             'serie_id' => 'required',
             'f_issuance' => 'required',
-            'f_expiration' => 'required',
+            //'f_expiration' => 'required',
             'customer_id' => 'required'
         ]);
 
-        $tdi = $this->document_type_id;
-        $ps = true;
-        if($tdi ==  '03'){
-            $ps = true;
-        }else{
-
-            $ruc_exists = Person::where('id',$this->customer_id)
-                ->where('identity_document_type_id',6)
-                ->exists();
-            //dd($this->customer_id);
-            if($ruc_exists){
-                $ps = true;
-            }else{
-                $ps = false;
+        if ($this->box_items > 0) {
+            foreach($this->box_items as $key => $val)
+            {
+                $this->validate([
+                    'box_items.'.$key.'.quantity' => 'numeric|required'
+                ]);
             }
         }
 
-        if($ps){
-            if ($this->box_items > 0) {
-                foreach($this->box_items as $key => $val)
-                {
-                    $this->validate([
-                        'box_items.'.$key.'.quantity' => 'numeric|required'
-                    ]);
-                }
-            }
+        $total_amount = 0;
 
-            $total_amount = 0;
-
-            if ($this->payment_method_types > 0) {
-                foreach($this->payment_method_types as $key => $val){
-                    $total_amount = $total_amount + $val['amount'];
-                }
+        if ($this->payment_method_types > 0) {
+            foreach($this->payment_method_types as $key => $val){
+                $total_amount = $total_amount + $val['amount'];
             }
-
-            if($this->total == $total_amount){
-                $this->store();
-            }else{
-                $this->dispatchBrowserEvent('response_payment_total_different', ['message' => Lang::get('labels.msg_totaldtc')]);
-            }
-        }else{
-            $this->dispatchBrowserEvent('response_customer_not_ruc_exists', ['message' => Lang::get('labels.msg_client_does_not_registered_ruc')]);
         }
+
+        if($this->total == $total_amount){
+            $this->store();
+        }else{
+            $this->dispatchBrowserEvent('response_payment_total_different', ['message' => Lang::get('labels.msg_totaldtc')]);
+        }
+ 
 
     }
 
@@ -265,49 +254,26 @@ class DocumentCreateForm extends Component
 
         $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
         $customer_json = Person::where('id',$this->customer_id)->first();
-        $company = SetCompany::where('main',true)->first();
+        //$company = SetCompany::first();
         list($di,$mi,$yi) = explode('/',$this->f_issuance);
         list($de,$me,$ye) = explode('/',$this->f_expiration);
         $date_of_issue = $yi.'-'.$mi.'-'.$di;
-        $date_of_due = $ye.'-'.$me.'-'.$de;
+        //$date_of_due = $ye.'-'.$me.'-'.$de;
 
         $numberletters = new NumberNumberLetter();
 
         $legends = json_encode(["code" => 1000, "value" => $numberletters->convertToLetter($this->total)]);
         $this->external_id = Str::uuid()->toString();
-
-        $payments = [];
-
-        foreach($this->payment_method_types as $key => $value){
-            list($d,$m,$y) = explode('/',$value['date_of_payment']);
-            $date_of_payment = $y.'-'.$m.'-'.$d;
-            $payments[$key ] = [
-                'id' => null,
-                'document_id' => null,
-                'sale_note_id' => null,
-                'date_of_payment' => $date_of_payment,
-                'payment_method_type_id' => $value['method'],
-                'payment_destination_id' => $value['destination'],
-                'reference'=>$value['reference'],
-                'payment'=> $value['amount']
-            ];
-        }
-
-        $invoice = [
-            'operation_type_id' => '0101',
-            'date_of_due' => $date_of_due
-        ];
         $this->total_taxes = $this->total_igv;
-        $inputDocument = [
+
+        $sale_note = SalSaleNote::create([
             'user_id' => Auth::id(),
             'external_id' => $this->external_id,
-            'establishment_id'=> $this->establishment_id,
+            'establishment_id' => $this->establishment_id,
             'establishment' => $establishment_json,
             'soap_type_id' => $this->soap_type_id,
             'state_type_id' => '01',
-            'ubl_version' => '2.1',
-            'group_id' => ($this->document_type_id == '03'?'02':$this->document_type_id),
-            'document_type_id' => $this->document_type_id,
+            'prefix' => 'NV',
             'series' => $this->serie_id,
             'number' => $this->correlative,
             'date_of_issue' => $date_of_issue,
@@ -329,60 +295,65 @@ class DocumentCreateForm extends Component
             'total_isc' => $this->total_isc,
             'total_base_other_taxes' => 0,
             'total_other_taxes' => 0,
-            'total_plastic_bag_taxes' => $this->total_plastic_bag_taxes,
             'total_taxes' => $this->total_taxes,
             'total_value' => $this->total_taxed,
             'total' => $this->total,
-            'send_server' => 0,
             'legends' => $legends,
-            'filename' => ($company->number.'-'.$this->document_type_id.'-'.$this->serie_id.'-'.((int) $this->correlative)),
-            'additional_information' => $this->additional_information,
-            'module' => 'MAR',
-            'items' => $this->box_items,
-            'payments' => $payments,
-            'invoice' => $invoice,
-            'type'=>'invoice',
-            'route'=> 'sales/document'
-        ];
+            'total_canceled' => true
+        ]);
 
-        try {
-            $billing = new Billing();
-            $billing->save($inputDocument);
-            $billing->createXmlUnsigned();
-            $billing->signXmlUnsigned();
-            $billing->updateHash();
-            $billing->updateQr();
-            $billing->createPdf();
-            $billing->senderXmlSignedBill();
-            $result_invoice = $billing->getResponse();
-        } catch (Exception $e) {
-            dd($e->getMessage());
+        foreach($this->box_items as $row) {
+
+            SalSaleNoteItem::create([
+                'sale_note_id' => $sale_note->id,
+                'item_id' => $row['item_id'],
+                'item' => $row['item'],
+                'quantity' => $row['quantity'],
+                'unit_value' => $row['unit_value'],
+                'affectation_igv_type_id' => $row['affectation_igv_type_id'],
+                'total_base_igv' => $row['total_base_igv'],
+                'percentage_igv' => $row['percentage_igv'],
+                'total_igv' => $row['total_igv'],
+                'system_isc_type_id' => $row['system_isc_type_id'],
+                'total_base_isc' => $row['total_base_isc'],
+                'percentage_isc' => $row['percentage_isc'],
+                'total_isc' => $row['total_isc'],
+                'total_base_other_taxes' => $row['total_base_other_taxes'],
+                'percentage_other_taxes' => $row['percentage_other_taxes'],
+                'total_other_taxes' => $row['total_other_taxes'],
+                'total_taxes' => $row['total_taxes'],
+                'price_type_id' => $row['price_type_id'],
+                'unit_price' => $row['unit_price'],
+                'total_value' => $row['total_value'],
+                'total_charge' => $row['total_charge'],
+                'total_discount' => $row['total_discount'],
+                'total' => $row['total']
+            ]);
+
         }
 
+        $this->savePayments($sale_note);
 
         SalSerie::where('id',$this->serie_id)->increment('correlative');
+
         $this->selectCorrelative($this->serie_id);
-        $document_old_id = SalDocument::max('id');
-        if($result_invoice['sent']){
-            SalDocument::where('id', $document_old_id)->update([
-                'has_xml' => '1',
-                'has_pdf' => '1',
-                'has_cdr' => '1'
-            ]);
-        }
+        
+        $this->setFilename($sale_note);
+        $this->createPdf($sale_note,"a4");
+
         $user = Auth::user();
         $activity = new Activity;
-        $activity->modelOn(SalDocument::class,$document_old_id);
+        $activity->modelOn(SalSaleNote::class,$sale_note);
         $activity->causedBy($user);
-        $activity->routeOn(route('sales_document_create'));
-        $activity->componentOn('sales::document.document-create-form');
-        $activity->dataOld($inputDocument);
+        $activity->routeOn(route('sales_documents_sale_notes_create'));
+        $activity->componentOn('sales::document.sale-notes-create-form');
+        $activity->dataOld($sale_note);
         $activity->logType('create');
-        $activity->log('Registro el documento de venta');
+        $activity->log('Registro nueva nota de venta');
         $activity->save();
 
         $this->clearForm();
-
+        dd('ffffff');
         $this->dispatchBrowserEvent('response_success_document_charges_store', ['message' => Lang::get('labels.successfully_registered')]);
 
     }
@@ -697,5 +668,207 @@ class DocumentCreateForm extends Component
     public function getPDistricts(){
         $this->districts = District::where('province_id',$this->province_id)
             ->where('active',true)->get();
+    }
+
+    private function savePayments($sale_note){
+        list($di,$mi,$yi) = explode('/',$this->f_issuance);
+        $date_of_issue = $yi.'-'.$mi.'-'.$di;
+
+        foreach($this->payment_method_types as $key => $value){
+            SalSaleNotePayment::create([
+                'sale_note_id' => $sale_note->id,
+                'date_of_payment' => $date_of_issue,
+                'payment_method_type_id' => $value['method'],
+                'payment_destination_id' => $value['destination'],
+                'reference' => $value['reference'],
+                'payment' => $value['amount']
+            ]);
+        }
+    }
+
+    private function setFilename($sale_note){
+
+        $name = [$sale_note->series,$sale_note->number,date('Ymd')];
+        $sale_note->filename = join('-', $name);
+        $sale_note->save();
+
+    }
+
+    public function createPdf($sale_note = null, $format_pdf = null) {
+
+        ini_set("pcre.backtrack_limit", "5000000");
+        $template = new Template();
+        $pdf = new Mpdf();
+
+        $company = SetCompany::where('main',true)->first();
+        $document = $sale_note;
+
+        $base_template = Parameter::where('id_parameter','PRT003THM')->first()->value_default;
+
+        $html = $template->pdf($base_template, "sale_note", $company, $document, $format_pdf);
+
+        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
+
+            $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
+
+            $company_logo      = ($company->logo) ? 40 : 0;
+            $company_name      = (strlen($company->name) / 20) * 10;
+            $company_address   = (strlen($document->establishment->address) / 30) * 10;
+            $company_number    = $document->establishment->telephone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->name) > '25' ? '10' : '0';
+            $customer_address  = (strlen($document->customer->address) / 200) * 10;
+            $p_order           = $document->purchase_order != '' ? '10' : '0';
+
+            $total_exportation = $document->total_exportation != '' ? '10' : '0';
+            $total_free        = $document->total_free != '' ? '10' : '0';
+            $total_unaffected  = $document->total_unaffected != '' ? '10' : '0';
+            $total_exonerated  = $document->total_exonerated != '' ? '10' : '0';
+            $total_taxed       = $document->total_taxed != '' ? '10' : '0';
+            $quantity_rows     = count($document->items);
+            $payments          = $document->payments()->count() * 2;
+
+            $extra_by_item_description = 0;
+            $discount_global = 0;
+            foreach ($document->items as $it) {
+                if(strlen($it->item->description)>100){
+                    $extra_by_item_description +=24;
+                }
+                if ($it->discounts) {
+                    $discount_global = $discount_global + 1;
+                }
+            }
+            $legends = $document->legends != '' ? '10' : '0';
+
+
+            $pdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => [
+                    $width,
+                    40 +
+                    (($quantity_rows * 8) + $extra_by_item_description) +
+                    ($discount_global * 3) +
+                    $company_logo +
+                    $payments +
+                    $company_name +
+                    $company_address +
+                    $company_number +
+                    $customer_name +
+                    $customer_address +
+                    $p_order +
+                    $legends +
+                    $total_exportation +
+                    $total_free +
+                    $total_unaffected +
+                    $total_exonerated +
+                    $total_taxed],
+                'margin_top' => 0,
+                'margin_right' => 2,
+                'margin_bottom' => 0,
+                'margin_left' => 2
+            ]);
+        } else if($format_pdf === 'a5'){
+
+            $company_name      = (strlen($company->name) / 20) * 10;
+            $company_address   = (strlen($document->establishment->address) / 30) * 10;
+            $company_number    = $document->establishment->telephone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->name) > '25' ? '10' : '0';
+            $customer_address  = (strlen($document->customer->address) / 200) * 10;
+            $p_order           = $document->purchase_order != '' ? '10' : '0';
+
+            $total_exportation = $document->total_exportation != '' ? '10' : '0';
+            $total_free        = $document->total_free != '' ? '10' : '0';
+            $total_unaffected  = $document->total_unaffected != '' ? '10' : '0';
+            $total_exonerated  = $document->total_exonerated != '' ? '10' : '0';
+            $total_taxed       = $document->total_taxed != '' ? '10' : '0';
+            $quantity_rows     = count($document->items);
+            $discount_global = 0;
+            foreach ($document->items as $it) {
+                if ($it->discounts) {
+                    $discount_global = $discount_global + 1;
+                }
+            }
+            $legends           = $document->legends != '' ? '10' : '0';
+
+
+            $alto = ($quantity_rows * 8) +
+                    ($discount_global * 3) +
+                    $company_name +
+                    $company_address +
+                    $company_number +
+                    $customer_name +
+                    $customer_address +
+                    $p_order +
+                    $legends +
+                    $total_exportation +
+                    $total_free +
+                    $total_unaffected +
+                    $total_exonerated +
+                    $total_taxed;
+            $diferencia = 148 - (float) $alto;
+
+            $pdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => [
+                    210,
+                    $diferencia + $alto
+                    ],
+                'margin_top' => 2,
+                'margin_right' => 5,
+                'margin_bottom' => 0,
+                'margin_left' => 5
+            ]);
+
+
+       } else {
+
+            $pdf_font_regular = config('tenant.pdf_name_regular');
+            $pdf_font_bold = config('tenant.pdf_name_bold');
+
+            if ($pdf_font_regular != false) {
+                $defaultConfig = (new ConfigVariables())->getDefaults();
+                $fontDirs = $defaultConfig['fontDir'];
+
+                $defaultFontConfig = (new FontVariables())->getDefaults();
+                $fontData = $defaultFontConfig['fontdata'];
+
+                $pdf = new Mpdf([
+                    'fontDir' => array_merge($fontDirs, [
+                        app_path('CoreBilling'.DIRECTORY_SEPARATOR.'Templates'.
+                                                DIRECTORY_SEPARATOR.'pdf'.
+                                                DIRECTORY_SEPARATOR.$base_template.
+                                                DIRECTORY_SEPARATOR.'font')
+                    ]),
+                    'fontdata' => $fontData + [
+                        'custom_bold' => [
+                            'R' => $pdf_font_bold.'.ttf',
+                        ],
+                        'custom_regular' => [
+                            'R' => $pdf_font_regular.'.ttf',
+                        ],
+                    ]
+                ]);
+            }
+
+        }
+
+        $path_css = app_path('CoreBilling'.DIRECTORY_SEPARATOR.'Templates'.
+                                             DIRECTORY_SEPARATOR.'pdf'.
+                                             DIRECTORY_SEPARATOR.$base_template.
+                                             DIRECTORY_SEPARATOR.'style.css');
+
+        $stylesheet = file_get_contents($path_css);
+
+        $pdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
+        $pdf->WriteHTML($html, HTMLParserMode::HTML_BODY);
+
+        $footer = true;
+
+        if($footer) {
+            $html_footer = $template->pdfFooter($base_template);
+            $pdf->SetHTMLFooter($html_footer);
+        }
+
+        $this->uploadStorage($document->filename, $pdf->output('', 'S'), 'sale_note');
+    
     }
 }

@@ -31,4 +31,30 @@ class SetEstablishment extends Model
     {
         return \Modules\Setting\Database\factories\SetEstablishmentFactory::new();
     }
+
+    public function country()
+    {
+        return $this->belongsTo(\App\Models\Country::class, 'country_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(\App\Models\Department::class,'department_id');
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(\App\Models\Province::class,'province_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(\App\Models\District::class,'district_id');
+    }
+
+    public function getAddressFullAttribute()
+    {
+        $address = ($this->address != '-')? $this->address.' ,' : '';
+        return "{$address} {$this->department->description} - {$this->province->description} - {$this->district->description}";
+    }
 }

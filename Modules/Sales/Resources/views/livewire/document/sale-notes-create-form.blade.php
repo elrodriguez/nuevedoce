@@ -51,18 +51,6 @@
                     <div class="col-md-6 mb-3">
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="document_type_id">@lang('labels.voucher_type') <span class="text-danger">*</span> </label>
-                                <select class="custom-select form-control" wire:change="changeSeries" wire:model.defer="document_type_id">
-
-                                    @foreach ($document_types as $document_type)
-                                    <option value="{{ $document_type->id }}">{{ $document_type->description }}</option>
-                                    @endforeach
-                                </select>
-                                @error('document_type_id')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
                                 <label class="form-label" for="serie_id">@lang('labels.serie') <span class="text-danger">*</span> </label>
                                 <div class="input-group">
                                     <select class="custom-select form-control" wire:change="selectCorrelative" wire:model.defer="serie_id">
@@ -79,8 +67,6 @@
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="f_issuance">@lang('labels.f_issuance') <span class="text-danger">*</span> </label>
                                 <div class="input-group">
@@ -92,6 +78,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-row">
+                            
                             <div class="col-md-6 mb-3" style="display: none">
                                 <label class="form-label" for="f_expiration">@lang('labels.f_expiration') <span class="text-danger">*</span> </label>
                                 <div class="input-group">
@@ -542,8 +531,9 @@
             }
         });
         window.addEventListener('response_success_document_charges_store', event => {
-           openModalPrint();
-           clearSelect2();
+            alert('aaaaaa');
+            openModalPrint();
+            clearSelect2();
         });
         window.addEventListener('response_customer_not_ruc_exists', event => {
             let msg = event.detail.message;

@@ -1,7 +1,19 @@
 @php
-    $establishment = $document->establishment;
+    $establishment = \Modules\Setting\Entities\SetEstablishment::find($document->establishment_id);
+    $accounts = \App\Models\BankAccount::all();
+    $documentType = \App\Models\DocumentType::find($document->document_type_id);
+    $district = \Illuminate\Support\Facades\DB::table('districts')->where('id',$establishment->district_id)->first();
+    $province = \Illuminate\Support\Facades\DB::table('provinces')->where('id',$establishment->province_id)->first();
+    $department = \Illuminate\Support\Facades\DB::table('departments')->where('id',$establishment->department_id)->first();
+    //dd($document);
     $customer = $document->customer;
-    //$path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
+    $identity_document_type = \App\Models\IdentityDocumentType::find($customer->identity_document_type_id);
+    $customer_district = \Illuminate\Support\Facades\DB::table('districts')->where('id',$customer->district_id)->first();
+    $customer_province = \Illuminate\Support\Facades\DB::table('provinces')->where('id',$customer->province_id)->first();
+    $customer_department = \Illuminate\Support\Facades\DB::table('departments')->where('id',$customer->department_id)->first();
+
+    $currency_type = \App\Models\CurrencyType::find($document->currency_type_id);
+    $user = \App\Models\User::find($document->user_id);
 
     $left =  ($document->series) ? $document->series : $document->prefix;
     $tittle = $left.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
@@ -19,7 +31,7 @@
         @if($company->logo)
             <td width="20%">
                 <div class="company_logo_box">
-                    <img src="data:{{mime_content_type(public_path("storage/uploads/logos/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/uploads/logos/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo" style="max-width: 150px;">
+                    <img src="data:{{mime_content_type(public_path("storage/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo" style="max-width: 150px;">
                 </div>
             </td>
         @else
@@ -31,10 +43,10 @@
                 <h4 class="">{{ $company->name }}</h4>
                 <h5>{{ 'RUC '.$company->number }}</h5>
                 <h6>
-                    {{ ($establishment->address !== '-')? $establishment->address : '' }}
-                    {{ ($establishment->district_id !== '-')? ', '.$establishment->district->description : '' }}
-                    {{ ($establishment->province_id !== '-')? ', '.$establishment->province->description : '' }}
-                    {{ ($establishment->department_id !== '-')? '- '.$establishment->department->description : '' }}
+                    {{ $establishment->address }}
+                    {{ ', '.$district->description }}
+                    {{ ', '.$province->description }}
+                    {{ '- '.$department->description }}
                 </h6>
                 <h6>{{ ($establishment->email !== '-')? $establishment->email : '' }}</h6>
                 <h6>{{ ($establishment->telephone !== '-')? $establishment->telephone : '' }}</h6>
@@ -49,12 +61,12 @@
 <table class="full-width mt-5">
     <tr>
         <td width="15%">Cliente:</td>
-        <td width="45%">{{ $customer->name }}</td>
+        <td width="45%">{{ $customer->names }}</td>
         <td width="25%">Fecha de emisión:</td>
         <td width="15%">{{ $document->date_of_issue->format('Y-m-d') }}</td>
     </tr>
     <tr>
-        <td>{{ $customer->identity_document_type->description }}:</td>
+        <td>{{ $identity_document_type->description }}:</td>
         <td>{{ $customer->number }}</td>
     </tr>
     @if ($customer->address !== '')
@@ -62,9 +74,11 @@
         <td class="align-top">Dirección:</td>
         <td colspan="3">
             {{ $customer->address }}
-            {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
-            {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
-            {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+            @if($customer_district && $customer_province && $customer_department)
+                {{ ', '.$customer_district->description }}
+                {{ ', '.$customer_province->description }}
+                {{ '- '.$customer_department->description }}
+            @endif
         </td>
     </tr>
     @endif
@@ -128,9 +142,9 @@
                     {{ number_format($row->quantity, 0) }}
                 @endif
             </td>
-            <td class="text-center align-top">{{ $row->item->unit_type_id }}</td>
+            <td class="text-center align-top">{{ json_decode($row->item)->unit_type_id }}</td>
             <td class="text-left">
-                {!!$row->item->description!!} @if (!empty($row->item->presentation)) {!!$row->item->presentation->description!!} @endif
+                {{ json_decode($row->item)->description }} @if (!empty($row->item->presentation)) {!!$row->item->presentation->description!!} @endif
 
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
@@ -143,21 +157,21 @@
                     @endforeach
                 @endif
 
-                @if($row->item->is_set == 1)
+                {{-- @if($row->item->is_set == 1)
                  <br>
-                 @inject('itemSet', 'App\Services\ItemSetService')
+                @inject('itemSet', 'App\Services\ItemSetService')
                     {{join( "-", $itemSet->getItemsSet($row->item_id) )}}
-                @endif
+                @endif --}}
 
             </td>
             <td class="text-center align-top">
-                @inject('itemLotGroup', 'App\Services\ItemLotsGroupService')
+                {{-- @inject('itemLotGroup', 'App\Services\ItemLotsGroupService')
                 @php
                     $lot_code = isset($row->item->lots_group) ? collect($row->item->lots_group)->first(function($row){ return $row->checked == true;}):null;
                 @endphp
                 {{ 
                     $itemLotGroup->getLote($lot_code ? $lot_code->id : null)
-                }}
+                }} --}}
 
             </td>
             <td class="text-center align-top">
@@ -251,7 +265,6 @@
         @endforeach
         <tr><td><strong>SALDO:</strong> {{ $document->currency_type->symbol }} {{ number_format($document->total - $payment, 2) }}</td>
     </tr>
-
 </table>
 </body>
 </html>

@@ -74,7 +74,13 @@
                             </a>
                         </li>
                         @endcan
-                        
+                        @can('ventas_nota_venta')
+                        <li class="{{ ($path[0] === 'sales' && $path[1] === 'documents' && $path[2] === 'note')?'active':'' }}">
+                            <a href="{{ route('sales_documents_sale_notes') }}" title="@lang('sales::labels.sales_notes')" data-filter-tags="@lang('sales::labels.sales_notes')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('sales::labels.sales_notes')">@lang('sales::labels.sales_notes')</span>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan

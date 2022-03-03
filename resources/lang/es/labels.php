@@ -613,4 +613,5 @@ return [
     'done_text' => 'Hecho',
     'available_user'=> 'Disponibles para el usuario',
     'lbl_excellent'     => 'Excelente',
+    'no_records_to_display' => 'No hay registros que mostrar'
 ];

@@ -7,13 +7,13 @@
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('sales::labels.module_name')</li>
-    <li class="breadcrumb-item">@lang('sales::labels.voucher')</li>
-    <li class="breadcrumb-item active">@lang('labels.new')</li>
+    <li class="breadcrumb-item">@lang('sales::labels.sales_notes')</li>
+    <li class="breadcrumb-item active">@lang('labels.list')</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-file-invoice-dollar'></i>{{ __('sales::labels.voucher') }}<sup class='badge badge-primary fw-500'>{{__('labels.new')}}</sup>
+        <i class='subheader-icon fal fa-file-invoice-dollar'></i>{{ __('sales::labels.sales_notes') }}<sup class='badge badge-primary fw-500'>{{__('labels.list')}}</sup>
         <small>@lang('labels.available_user')</small>
     </h1>
     <div class="subheader-block">
@@ -21,7 +21,7 @@
     </div>
 @endsection
 @section('content')
-    @livewire('sales::document.document-create-form')
+    @livewire('sales::document.sale-notes-create-form')
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>

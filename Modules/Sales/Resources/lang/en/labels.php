@@ -6,5 +6,6 @@ return  [
     'cant_continue' => 'cant continue',
     'report' => 'Reporte',
     'voucher' => 'Voucher',
-    'series' => 'Series'
+    'series' => 'Series',
+    'sales_notes' => 'Sales Notes',
 ];

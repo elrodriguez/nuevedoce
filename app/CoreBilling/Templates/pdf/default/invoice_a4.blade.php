@@ -143,13 +143,13 @@
     <tr>
         <td>{{ $identity_document_type->description }}</td>
         <td>:</td>
-        <td>{{$customer->number}}</td>
+        <td>{{ $customer->number }}</td>
 
         @if ($document->detraction)
 
             <td width="120px">P. DETRACCIÓN</td>
             <td width="8px">:</td>
-            <td>{{ $document->detraction->percentage}}%</td>
+            <td>{{ $document->detraction->percentage }}%</td>
         @endif
     </tr>
     @if ($customer->address !== '')

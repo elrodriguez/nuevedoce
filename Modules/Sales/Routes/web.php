@@ -47,11 +47,15 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('sales')->group(function
 
         Route::middleware(['middleware' => 'role_or_permission:ventas_documentos_nota'])->get('note/{id}', function ($id) {
             return view('sales.sales.note')->with('external_id',$id);
-        })->name('sales_note');
+        })->name('sales_notes');
 
         Route::get('sale/search_customers','CustomersController@searchCustomers')->name('sales_customers_search');
 
         Route::get('print/{external_id}/{format?}', 'DocumentsController@toPrintInvoice');
+    
+        Route::middleware(['middleware' => 'role_or_permission:ventas_nota_venta'])->get('notes', 'SaleNotesController@index')->name('sales_documents_sale_notes');
+        Route::middleware(['middleware' => 'role_or_permission:ventas_nota_venta_nuevo'])->get('notes/create', 'SaleNotesController@create')->name('sales_documents_sale_notes_create');
+    
     });
 
 });

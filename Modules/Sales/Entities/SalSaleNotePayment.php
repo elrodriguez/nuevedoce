@@ -5,27 +5,24 @@ namespace Modules\Sales\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SalDocumentPayment extends Model
+class SalSaleNotePayment extends Model
 {
     use HasFactory;
 
-    protected $with = ['payment_method_type', 'card_brand'];
-    
     protected $fillable = [
-        'document_id',
+        'sale_note_id',
         'date_of_payment',
         'payment_method_type_id',
         'payment_destination_id',
         'has_card',
         'card_brand_id',
         'reference',
-        'change',
         'payment'
     ];
     
     protected static function newFactory()
     {
-        return \Modules\Sales\Database\factories\SalDocumentPaymentFactory::new();
+        return \Modules\Sales\Database\factories\SalSaleNotePaymentFactory::new();
     }
 
     protected $casts = [
@@ -34,7 +31,7 @@ class SalDocumentPayment extends Model
 
     public function payment_method_type()
     {
-        return $this->belongsTo(\App\Models\CatPaymentMethodType::class,'payment_method_type_id','id');
+        return $this->belongsTo(\App\Models\CatPaymentMethodType::class,'payment_method_type_id');
     }
 
     public function card_brand()
@@ -42,20 +39,14 @@ class SalDocumentPayment extends Model
         return $this->belongsTo(\App\Models\EntityCard::class,'card_brand_id');
     }
 
-    public function document()
-    {
-        return $this->belongsTo(SalDocument::class, 'document_id');
-    }
-
-
     public function global_payment()
     {
         return $this->morphOne(\App\Models\GlobalPayment::class, 'payment');
     }
-
+ 
     public function associated_record_payment()
     {
-        return $this->belongsTo(SalDocument::class, 'document_id');
+        return $this->belongsTo(SalSaleNote::class, 'sale_note_id');
     }
 
     // public function payment_file()

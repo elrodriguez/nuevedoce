@@ -8,5 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class District extends Model
 {
     use HasFactory;
+
     public $incrementing = false;
+
+    static function idByDescription($description, $province_id)
+    {
+        $district = District::where('description', $description)
+                            ->where('province_id', $province_id)
+                            ->first();
+        if ($district) {
+            return $district->id;
+        }
+        return '150101';
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class)->with('department');
+    }
 }

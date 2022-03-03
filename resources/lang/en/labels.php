@@ -612,4 +612,5 @@ return [
     'done_text' => 'Done',
     'available_user'=> 'Disponibles para el usuario',
     'lbl_excellent'     => 'Excellent',
+    'no_records_to_display' => 'No records to display'
 ];

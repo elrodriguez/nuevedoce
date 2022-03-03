@@ -6,5 +6,6 @@ return  [
     'cant_continue' => 'No puede continuar',
     'report' => 'Reporte',
     'voucher' => 'Comprobantes',
-    'series' => 'Series'
+    'series' => 'Series',
+    'sales_notes' => 'Notas de venta',
 ];

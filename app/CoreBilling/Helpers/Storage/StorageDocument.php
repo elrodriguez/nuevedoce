@@ -12,7 +12,9 @@ trait StorageDocument
     public function uploadStorage($filename, $file_content, $file_type, $root = null)
     {
         $this->setData($filename, $file_type, $root);
+        
         Storage::disk('public')->put($this->_folder.DIRECTORY_SEPARATOR.$this->_filename, $file_content);
+    
     }
 
     public function downloadStorage($filename, $file_type, $root = null)
