@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Lang;
 use Livewire\WithPagination;
 use Modules\Lend\Entities\LenPaymentMethod;
 
-class PaymentMethodIndex extends Component
+class PaymentmethodIndex extends Component
 {
     public $show;
     public $search;

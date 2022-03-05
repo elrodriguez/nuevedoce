@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Modules\Lend\Entities\LenPaymentMethod;
 
-class PaymentMethodCreate extends Component
+class PaymentmethodCreate extends Component
 {
     public $description;
     public $state = true;
