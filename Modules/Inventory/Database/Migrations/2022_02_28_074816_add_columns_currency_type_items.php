@@ -17,12 +17,11 @@ class AddColumnsCurrencyTypeItems extends Migration
             $table->string('currency_type_id')->nullable();
             $table->string('digemid')->nullable();
             $table->string('sale_affectation_igv_type_id')->nullable();
-            $table->char('item_type_id ',2)->nullable();
-            $table->decimal('stock ',8,2)->nullable();
+            $table->char('item_type_id',2)->nullable();
+            $table->decimal('stock',8,2)->nullable();
             $table->string('unit_type_id')->nullable();
             $table->string('internal_id')->nullable();
             $table->string('item_code')->nullable();
-            $table->string('')->nullable();
         });
     }
 
