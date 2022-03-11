@@ -20,7 +20,7 @@
 @endsection
 @section('content')
     @if($interfaz == '8')
-        @livewire('inventory::item.item-list')
+        @livewire('inventory::item.item-create')
     @else
         <livewire:inventory::item.item-create-generic />
     @endif

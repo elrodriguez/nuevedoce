@@ -49,21 +49,11 @@ class OdtrequestsCreate extends Component
     public $items_data = [];
 
     public function mount(){
-        $this->locals       = SerLocal::where('state', true)->get();
-        $this->wholesalers  = Person::where('identity_document_type_id', '6')->get();
+
     }
 
     public function render()
     {
-
-        $this->companies    = Person::where('identity_document_type_id', '6')
-            ->select('id', 'full_name AS name', 'number')
-            ->get();
-
-        $this->supervisors  = StaEmployee::where('state', true)
-            ->join('people', 'person_id', 'people.id')
-            ->select('sta_employees.id', 'people.full_name')
-            ->get();
 
         $anio = date('Y');
         $code = SerOdtRequest::whereRaw('LEFT(internal_id,4) = ?',[$anio])

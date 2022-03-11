@@ -187,13 +187,13 @@ class ItemEdit extends Component
                 //Actualizando Peso Item
                 $search_item_parent =  InvItem::find($this->item_aa);
 
-                $parent_item = $search_item_parent->update([
+                $search_item_parent->update([
                     'weight' => $this->weight,
                     'number_parts' => $this->number_parts,
                     'person_edit' => Auth::user()->person_id
                 ]);
 
-                $this->parts_item = InvItem::where('item_id', $this->item_aa)->get();
+                $this->parts_item = InvItemPart::where('item_id', $this->item_aa)->get();
                 $this->parts_item_count = count($this->parts_item);
 
                 $this->part_text = '';

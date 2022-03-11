@@ -34,12 +34,14 @@
             </div>
         </div>
         <div class="card-body p-0">
+            <div class="table-responsive">
             <table class="table m-0">
                 <thead>
                 <tr>
                     <th class="text-center">#</th>
                     <th class="text-center">@lang('staff::labels.lbl_actions')</th>
                     <th>@lang('staff::labels.lbl_name')</th>
+                    <th>@lang('labels.trade_name')</th>
                     <th>@lang('staff::labels.lbl_identity_document_type')</th>
                     <th>@lang('staff::labels.lbl_number')</th>
                     <th>@lang('staff::labels.lbl_telephone')</th>
@@ -72,6 +74,7 @@
                             </div>
                         </td>
                         <td class="align-middle">{{ $company->full_name }}</td>
+                        <td class="align-middle">{{ $company->trade_name }}</td>
                         <td class="align-middle text-center">{{ $company->name_document_type }}</td>
                         <td class="align-middle text-center">{{ $company->number }}</td>
                         <td class="align-middle text-center">{{ $company->telephone }}</td>
@@ -87,6 +90,7 @@
                 @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="card-footer  pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $companies->links() }}</div>

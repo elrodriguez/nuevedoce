@@ -17,7 +17,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $PRT0001GN = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
+        $PRT0001GN = Parameter::where('id_parameter','PRT0001GN')->first()->value_default;
 
         return view('inventory::item.index')->with('interfaz',$PRT0001GN);
         
@@ -29,7 +29,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        $PRT0001GN = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
+        $PRT0001GN = Parameter::where('id_parameter','PRT0001GN')->first()->value_default;
         return view('inventory::item.create')->with('interfaz',$PRT0001GN);
     }
 
@@ -40,7 +40,7 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-        $PRT0001GN = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
+        $PRT0001GN = Parameter::where('id_parameter','PRT0001GN')->first()->value_default;
         return view('inventory::item.edit')->with('id',$id)->with('interfaz',$PRT0001GN);
     }
 

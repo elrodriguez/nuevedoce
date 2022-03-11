@@ -33,7 +33,7 @@ class ItemCreate extends Component
     public $item_id;
     public $brand_id = 1;
     public $category_id;
-    public $unit_measure_id;
+    public $unit_measure_id = 'NIU';
     //images
     public $images = [];
     public $image;

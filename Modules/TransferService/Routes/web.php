@@ -42,6 +42,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('transferservice')->grou
         Route::middleware(['middleware' => 'role_or_permission:serviciodetraslados_solicitudes_odt_nuevo_programacion'])->get('programming', 'OdtRequestController@programming')->name('service_odt_requests_programming');
         Route::get('search', 'OdtRequestController@autocomplete')->name('service_odt_requests_search');
         Route::get('search_item', 'OdtRequestController@autocompleteItems')->name('service_odt_items_search');
+        Route::get('search_companies', 'OdtRequestController@autocompleteCompanies')->name('service_odt_companies_search');
+        Route::get('search_wholesalers', 'OdtRequestController@autocompleteWholesalers')->name('service_odt_wholesalers_search');
+        Route::get('search_supervisors', 'OdtRequestController@autocompleteSupervisors')->name('service_odt_supervisors_search');
+        Route::get('search_locals', 'OdtRequestController@autocompleteLocals')->name('service_odt_local_search');
     });
     
     Route::group(['prefix' => 'load_order'], function() {

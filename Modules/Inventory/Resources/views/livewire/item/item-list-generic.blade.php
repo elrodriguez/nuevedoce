@@ -37,6 +37,7 @@
             </div>
         </div>
         <div class="card-body p-0">
+            <div class="table-responsive">
             <table class="table m-0">
                 <thead>
                 <tr>
@@ -104,6 +105,7 @@
                     @endif
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="card-footer  pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $items->links() }}</div>

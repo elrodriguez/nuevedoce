@@ -39,6 +39,7 @@ class CompaniesEdit extends Component
     public $provinces = [];
     public $districts = [];
     public $type_people = [];
+    public $trade_name;
 
     //Combos Data:
     public $companies;
@@ -71,6 +72,7 @@ class CompaniesEdit extends Component
         $this->identity_document_type_id = $this->person_search->identity_document_type_id;
         $this->number = $this->person_search->number;
         $this->type_person_id = $this->person_search->type_person_id;
+        $this->trade_name = $this->person_search->trade_name;
 
         $this->getProvinves();
         $this->getPDistricts();
@@ -94,7 +96,7 @@ class CompaniesEdit extends Component
             //'address' => 'required|min:3|max:255',
             'email' => 'nullable|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
             //'telephone' => 'required|min:3|max:255',
-            //'sex' => 'required',
+            'trade_name' => 'required|max:500',
             'type_person_id' => 'required'
         ]);
 
@@ -114,7 +116,7 @@ class CompaniesEdit extends Component
             'last_name_father' => $this->last_name_father,
             'last_name_mother' => $this->last_name_mother,
             'full_name' => $this->names,
-            'trade_name' => null,
+            'trade_name' => $this->trade_name,
             'address' => $this->address,
             'email' => $this->email,
             'telephone' => $this->telephone,

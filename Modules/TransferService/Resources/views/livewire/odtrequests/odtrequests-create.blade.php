@@ -3,78 +3,58 @@
         <div class="card-body p-0">
             <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
                 <div class="form-row p-3">
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="description">@lang('transferservice::labels.lbl_code_internal') <span class="text-danger">*</span> </label>
                         <input wire:model="internal_id" disabled type="text" class="form-control" id="internal_id" required="">
                         @error('internal_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="description">@lang('transferservice::labels.lbl_code_document') <span class="text-danger">*</span> </label>
-                        <input wire:model="backus_id" type="text" class="form-control" id="backus_id" required="">
+                        <input wire:model.defer="backus_id" type="text" class="form-control" id="backus_id" required="">
                         @error('backus_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-5 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label" for="description">@lang('transferservice::labels.lbl_event') <span class="text-danger">*</span> </label>
-                        <input wire:model="description" type="text" class="form-control" id="txt_description" required="">
+                        <input wire:model.defer="description" type="text" class="form-control" id="txt_description" required="">
                         @error('description')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="company_id">@lang('transferservice::labels.lbl_company') <span class="text-danger">*</span> </label>
-                        <select wire:model="company_id" id="company_id" class="custom-select" required="">
-                            <option value="">@lang('transferservice::labels.lbl_select')</option>
-                            @foreach($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->number }} - {{ $company->name }}</option>
-                            @endforeach
-                        </select>
+                        <input id="company_id" class="form-control companiesAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_companies_search') }}" autocomplete="off" />
                         @error('company_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3" wire:ignore>
                         <label class="form-label" for="customer_text">@lang('transferservice::labels.lbl_customer') <span class="text-danger">*</span> </label>
-                        <input wire:model="customer_text" id="customer_text" class="form-control basicAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_requests_search') }}" autocomplete="off" />
+                        <input id="customer_text" class="form-control basicAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_requests_search') }}" autocomplete="off" />
                         @error('customer_text')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="wholesaler_id">@lang('transferservice::labels.lbl_wholesaler') <span class="text-danger">*</span> </label>
-                        <select wire:model="wholesaler_id" id="wholesaler_id" class="custom-select" required="">
-                            <option value="">@lang('transferservice::labels.lbl_select')</option>
-                            @foreach($wholesalers as $wholesaler)
-                                <option value="{{ $wholesaler->id }}">{{ $wholesaler->number }} - {{ $wholesaler->full_name }}</option>
-                            @endforeach
-                        </select>
+                        <input id="wholesaler_id" class="form-control wholesalerAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_wholesalers_search') }}" autocomplete="off" />
                         @error('wholesaler_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3" wire:ingnore>
                         <label class="form-label" for="supervisor_id">@lang('transferservice::labels.lbl_supervisor') <span class="text-danger">*</span> </label>
-                        <select wire:model="supervisor_id" id="supervisor_id" class="custom-select" required="">
-                            <option value="">@lang('transferservice::labels.lbl_select')</option>
-                            @foreach($supervisors as $supervisor)
-                                <option value="{{ $supervisor->id }}">{{ $supervisor->full_name }}</option>
-                            @endforeach
-                        </select>
+                        <input id="supervisor_id" class="form-control supervisorAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_supervisors_search') }}" autocomplete="off" />
                         @error('supervisor_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="local_id">@lang('transferservice::labels.lbl_local') <span class="text-danger">*</span> </label>
-                        <select wire:model="local_id" id="local_id" class="custom-select" required="">
-                            <option value="">@lang('transferservice::labels.lbl_select')</option>
-                            @foreach($locals as $local)
-                                <option value="{{ $local->id }}">{{ $local->name }}</option>
-                            @endforeach
-                        </select>
+                        <input id="local_id" class="form-control localAutoComplete" type="text" placeholder="" data-url="{{ route('service_odt_local_search') }}" autocomplete="off" />
                         @error('local_id')
                         <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
@@ -257,8 +237,22 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
-
+        
         document.addEventListener('livewire:load', function () {
+            $('.localAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
+                @this.set('local_id',item.value);
+            });
+            $('.supervisorAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
+                @this.set('supervisor_id',item.value);
+            });
+
+            $('.wholesalerAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
+                @this.set('wholesaler_id',item.value);
+            });
+            $('.companiesAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
+                @this.set('company_id',item.value);
+            });
+
             $('.basicAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
                 @this.set('customer_id',item.value);
                 @this.set('customer_text',item.text);

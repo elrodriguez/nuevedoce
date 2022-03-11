@@ -34,6 +34,7 @@ class CompaniesList extends Component
                 'identity_document_types.description AS name_document_type',
                 'people.number',
                 'people.telephone',
+                'people.trade_name',
                 'people.email',
                 'people.type_person_id',
                 'sta_person_types.name AS name_type_person'

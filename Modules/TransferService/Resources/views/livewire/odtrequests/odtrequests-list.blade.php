@@ -36,6 +36,7 @@
             </div>
         </div>
         <div class="card-body p-0">
+            <div class="table-responsive">
             <table class="table m-0">
                 <thead>
                 <tr>
@@ -52,49 +53,54 @@
                 </tr>
                 </thead>
                 <tbody class="">
-                @foreach($odt_requests as $key => $odt_request)
-                    <tr>
-                        <td class="text-center align-middle">{{ $key + 1 }}</td>
-                        <td class="text-center tdw-50 align-middle">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i class="fal fa-cogs"></i>
-                                </button>
-                                <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('serviciodetraslados_solicitudes_odt_editar')
-                                        <a href="{{ route('service_odt_requests_edit',$odt_request->id) }}" class="dropdown-item">
-                                            <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
-                                        </a>
-                                    @endcan
-                                    @can('serviciodetraslados_solicitudes_odt_eliminar')
-                                        <div class="dropdown-divider"></div>
-                                        <button onclick="confirmDelete({{ $odt_request->id }})" type="button" class="dropdown-item text-danger">
-                                            <i class="fal fa-trash-alt mr-1"></i>@lang('transferservice::buttons.btn_delete')
+                    @if(count($odt_requests) > 0)
+                        @foreach($odt_requests as $key => $odt_request)
+                            <tr>
+                                <td class="text-center align-middle">{{ $key + 1 }}</td>
+                                <td class="text-center tdw-50 align-middle">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <i class="fal fa-cogs"></i>
                                         </button>
-                                    @endcan
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">{{ $odt_request->description }}</td>
-                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_company }},1)" href="javascript:void(0)" type="button">{{ $odt_request->name_company }}</a></td>
-                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_employee }},2)" href="javascript:void(0)" type="button">{{ $odt_request->name_employee }}</a></td>
-                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_customer }},3)" href="javascript:void(0)" type="button">{{ $odt_request->name_customer }}</a></td>
-                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_local }},4)" href="javascript:void(0)" type="button">{{ $odt_request->name_local }}</a></td>
-                        <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_wholesaler }},5)" href="javascript:void(0)" type="button">{{ $odt_request->name_wholesaler }}</a></td>
-                        <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt_request->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt_request->date_end)->format('d/m/Y') }}</td>
-                        <td class="text-center align-middle">
-                            @if($odt_request->state == 'P')
-                                <span class="badge badge-success">{{ __('transferservice::labels.lbl_pending') }}</span>
-                            @elseif($odt_request->state == 'A')
-                                <span class="badge badge-primary">{{ __('transferservice::labels.lbl_attended') }}</span>
-                            @elseif($odt_request->state == 'R')
-                                <span class="badge badge-danger">{{ __('transferservice::labels.lbl_rejected') }}</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+                                        <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                            @can('serviciodetraslados_solicitudes_odt_editar')
+                                                <a href="{{ route('service_odt_requests_edit',$odt_request->id) }}" class="dropdown-item">
+                                                    <i class="fal fa-pencil-alt mr-1"></i>@lang('transferservice::buttons.btn_edit')
+                                                </a>
+                                            @endcan
+                                            @can('serviciodetraslados_solicitudes_odt_eliminar')
+                                                <div class="dropdown-divider"></div>
+                                                <button onclick="confirmDelete({{ $odt_request->id }})" type="button" class="dropdown-item text-danger">
+                                                    <i class="fal fa-trash-alt mr-1"></i>@lang('transferservice::buttons.btn_delete')
+                                                </button>
+                                            @endcan
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">{{ $odt_request->description }}</td>
+                                <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_company }},1)" href="javascript:void(0)" type="button">{{ $odt_request->name_company }}</a></td>
+                                <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_employee }},2)" href="javascript:void(0)" type="button">{{ $odt_request->name_employee }}</a></td>
+                                <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_customer }},3)" href="javascript:void(0)" type="button">{{ $odt_request->name_customer }}</a></td>
+                                <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_local }},4)" href="javascript:void(0)" type="button">{{ $odt_request->name_local }}</a></td>
+                                <td class="align-middle"><a wire:click="openModalDetails({{ $odt_request->id_wholesaler }},5)" href="javascript:void(0)" type="button">{{ $odt_request->name_wholesaler }}</a></td>
+                                <td class="align-middle text-center">{{ \Carbon\Carbon::parse($odt_request->date_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($odt_request->date_end)->format('d/m/Y') }}</td>
+                                <td class="text-center align-middle">
+                                    @if($odt_request->state == 'P')
+                                        <span class="badge badge-success">{{ __('transferservice::labels.lbl_pending') }}</span>
+                                    @elseif($odt_request->state == 'A')
+                                        <span class="badge badge-primary">{{ __('transferservice::labels.lbl_attended') }}</span>
+                                    @elseif($odt_request->state == 'R')
+                                        <span class="badge badge-danger">{{ __('transferservice::labels.lbl_rejected') }}</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr class="odd"><td valign="top" colspan="10" class="dataTables_empty text-center">{{ __('labels.no_records_to_display') }}</td></tr>
+                    @endif
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="card-footer  pb-0 d-flex flex-row align-items-center">
             <div class="ml-auto">{{ $odt_requests->links() }}</div>

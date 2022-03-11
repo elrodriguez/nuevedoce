@@ -2,6 +2,7 @@
 
 namespace Modules\TransferService\Http\Livewire\Loadorder;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
@@ -201,7 +202,7 @@ class LoadorderGuides extends Component
                 if ($this->shipping_date != '') {
                     $this->shipping_date_f = $this->shipping_date;
                 }
-
+                
                 //For return
                 $this->vehicle_id_r = $row->id_vehicle;
                 $this->license_plate_r = $row->license_plate;
@@ -213,7 +214,10 @@ class LoadorderGuides extends Component
             $this->getLoadOrderDetails();
 
             $this->number_of_packages = count($this->loadorderdetails);
+
+            $this->shipping_date_f = Carbon::now()->format('Y-m-d');
         }
+        
     }
 
     public function render(){
@@ -538,6 +542,7 @@ class LoadorderGuides extends Component
     }
 
     public function deleteGuideExit($id){
+        $this->loadorderdetails = [];
         $guideExit = SerGuide::find($id);
         $guideDetail = SerGuideDetail::where('guide_id', '=', $id)->get();
         foreach ($guideDetail as $key=>$row){

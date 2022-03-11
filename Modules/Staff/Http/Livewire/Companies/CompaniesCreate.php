@@ -40,6 +40,7 @@ class CompaniesCreate extends Component
     public $districts = [];
     public $type_people = [];
     public $type_person_id;
+    public $trade_name;
 
     //Combos Data:
     public $companies;
@@ -58,8 +59,6 @@ class CompaniesCreate extends Component
         $this->departments = Department::where('active',true)->get();
         $this->type_people = StaPersonType::where('state',true)->get();
 
-        $this->getProvinves();
-        $this->getPDistricts();
     }
 
     public function render()
@@ -79,7 +78,7 @@ class CompaniesCreate extends Component
             //'address' => 'required|min:3|max:255',
             'email' => 'nullable|regex:/(.+)@(.+)\.(.+)/i|min:3|max:255|unique:users,email',
             //'telephone' => 'required|min:3|max:255',
-            //'sex' => 'required',
+            'trade_name' => 'required|max:500',
             'type_person_id' => 'required'
         ]);
 
@@ -94,7 +93,7 @@ class CompaniesCreate extends Component
             'last_name_father' => '',
             'last_name_mother' => '',
             'full_name' => $this->names,
-            'trade_name' => null,
+            'trade_name' => $this->trade_name,
             'address' => $this->address,
             'email' => $this->email,
             'telephone' => $this->telephone,
@@ -110,9 +109,10 @@ class CompaniesCreate extends Component
         $activity->logType('create');
         $activity->log('Se Creó una nueva Empresa');
         $activity->save();
-
-        $this->dispatchBrowserEvent('per-companies-type-save', ['msg' => Lang::get('staff::labels.msg_success')]);
+        
         $this->clearForm();
+        $this->dispatchBrowserEvent('per-companies-type-save', ['msg' => Lang::get('staff::labels.msg_success')]);
+        
     }
 
     public function getProvinves(){
@@ -141,5 +141,6 @@ class CompaniesCreate extends Component
         $this->identity_document_type_id = null;
         $this->number = null;
         $this->type_person_id = null;
+        $this->trade_name = null;
     }
 }
