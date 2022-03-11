@@ -16,7 +16,12 @@
     </div>
 @endsection
 @section('content')
-@livewire('inventory::item.item-edit',['item_id' => $id])
+
+    @if($interfaz == '8')
+    @livewire('inventory::item.item-edit',['item_id' => $id])
+    @else
+        <livewire:inventory::item.item-edit-generic :item_id="$id" />
+    @endif
 @endsection
 @section('script')
 <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>

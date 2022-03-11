@@ -22,6 +22,7 @@
 @endsection
 @section('content')
     @livewire('sales::document.sale-notes-list')
+    @livewire('sales::document.sale-notes-modal-payments')
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>

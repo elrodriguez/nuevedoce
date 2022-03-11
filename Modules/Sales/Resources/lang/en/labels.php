@@ -8,4 +8,8 @@ return  [
     'voucher' => 'Voucher',
     'series' => 'Series',
     'sales_notes' => 'Sales Notes',
+    'sale_note' => 'Sale Note',
+    'payment_methods' => 'Payment methods',
+    'destination' => 'Destination',
+    'reference' => 'Reference'
 ];

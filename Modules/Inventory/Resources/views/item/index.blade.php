@@ -1,4 +1,7 @@
 @extends('inventory::layouts.master')
+@section('styles')
+    <link rel="stylesheet" media="screen, print" href="{{ url('themes/smart-admin/css/datagrid/datatables/datatables.bundle.css') }}">
+@endsection
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('inventory::labels.lbl_inventory')</li>
@@ -14,5 +17,9 @@
     </div>
 @endsection
 @section('content')
-@livewire('inventory::item.item-list')
+    @if($interfaz == '8')
+        @livewire('inventory::item.item-list')
+    @else
+        @livewire('inventory::item.item-list-generic')
+    @endif
 @endsection

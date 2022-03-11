@@ -336,16 +336,16 @@ class Billing
 
             $total_plastic_bag_taxes       = $this->document->total_plastic_bag_taxes != '' ? '10' : '0';
 
-            $document_items = SalDocumentItem::where('document_id',$this->document->id)->get();
-            $payments = SalDocumentPayment::where('document_id',$this->document->id)->get();
+            //$document_items = SalDocumentItem::where('document_id',$this->document->id)->get();
+            //$payments = SalDocumentPayment::where('document_id',$this->document->id)->get();
 
-            $quantity_rows     = count($document_items) + $was_deducted_prepayment;
-            $document_payments     = count($payments);
+            $quantity_rows     = count($this->document->items) + $was_deducted_prepayment;
+            $document_payments     = count($this->document->payments);
 
             $extra_by_item_additional_information = 0;
             $extra_by_item_description = 0;
             $discount_global = 0;
-            foreach ($document_items as $it) {
+            foreach ($this->document->items as $it) {
                 if(strlen($it->description)>100){
                     $extra_by_item_description +=24;
                 }
@@ -709,16 +709,16 @@ class Billing
             }
         }
 
-//        if($this->isDemo) {
-//            $this->pathCertificate = app_path('CoreBilling'.DIRECTORY_SEPARATOR.
-//                'WS'.DIRECTORY_SEPARATOR.
-//                'Signed'.DIRECTORY_SEPARATOR.
-//                'Resources'.DIRECTORY_SEPARATOR.
-//                'certificate.pem');
-//        } else {
-//            $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
-//                'certificates'.DIRECTORY_SEPARATOR.$this->company->certificate);
-//        }
+        // if($this->isDemo) {
+        //     $this->pathCertificate = app_path('CoreBilling'.DIRECTORY_SEPARATOR.
+        //         'WS'.DIRECTORY_SEPARATOR.
+        //         'Signed'.DIRECTORY_SEPARATOR.
+        //         'Resources'.DIRECTORY_SEPARATOR.
+        //         'certificate.pem');
+        // } else {
+        //     $this->pathCertificate = storage_path('app'.DIRECTORY_SEPARATOR.
+        //         'certificates'.DIRECTORY_SEPARATOR.$this->company->certificate);
+        // }
     }
 
     private function setSoapCredentials()
@@ -865,7 +865,7 @@ class Billing
     public function createGlobalPayment($model, $row){
 
         $destination = $this->getDestinationRecord($row);
-        $company = SetCompany::first();
+        $company = SetCompany::where('main',true)->first();
 
         $model->global_payment()->create([
             'user_id' => auth()->id(),
@@ -881,7 +881,7 @@ class Billing
         if($row['payment_destination_id'] === 'cash'){
 
             $destination_id = $this->getCash()['cash_id'];
-            $destination_type = Cash::class;
+            $destination_type = SalCash::class;
 
         }else{
 
@@ -930,7 +930,8 @@ class Billing
             return [
                 'id' => 'cash',
                 'cash_id' => $cash->id,
-                'description' => ($cash->reference_number) ? "CAJA GENERAL - {$cash->reference_number}" : "CAJA GENERAL",
+                //'description' => ($cash->reference_number) ? "CAJA GENERAL - {$cash->reference_number}" : "CAJA GENERAL",
+                'description' => ($cash->reference_number) ? "CAJA CHICA - {$cash->reference_number}" : "CAJA CHICA"
             ];
 
         }

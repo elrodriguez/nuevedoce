@@ -103,5 +103,8 @@ return [
     'lbl_location_store'=> 'localizaciones (Almacenes)',
     'lbl_assets_with_code' => 'Activos con código',
     'lbl_documents_purchases'=> 'documentos (Compras)',
-    'lbl_show_guide'            => 'Mostrar en Guías'
+    'lbl_show_guide'            => 'Mostrar en Guías',
+    'lbl_price_sale'            => 'Precio venta',
+    'lbl_internal_code'         => 'Código Interno',
+    'lbl_sunat_code'            => 'Código Sunat'
 ];

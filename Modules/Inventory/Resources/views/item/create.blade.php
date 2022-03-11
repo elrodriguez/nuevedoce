@@ -1,4 +1,8 @@
 @extends('inventory::layouts.master')
+
+@section('styles')
+
+@stop
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('inventory::labels.lbl_inventory')</li>
@@ -9,16 +13,19 @@
 @section('subheader')
     <h1 class="subheader-title">
         <i class="ni ni-social-dropbox"></i> @lang('inventory::labels.btn_new') <span class='fw-300'>@lang('inventory::labels.lbl_item')</span> <sup class='badge badge-primary fw-500'>@lang('inventory::labels.btn_new')</sup>
-
     </h1>
     <div class="subheader-block">
         @lang('inventory::labels.btn_new')
     </div>
 @endsection
 @section('content')
-@livewire('inventory::item.item-create')
+    @if($interfaz == '8')
+        @livewire('inventory::item.item-list')
+    @else
+        <livewire:inventory::item.item-create-generic />
+    @endif
 @endsection
 @section('script')
-<script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
+<script src="{{ asset('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
 <script src="{{ asset('themes/smart-admin/js/formplugins/autocomplete-bootstrap/bootstrap-autocomplete.min.js') }}" defer></script>
 @endsection

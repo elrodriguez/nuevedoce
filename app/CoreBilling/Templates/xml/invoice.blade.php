@@ -354,7 +354,7 @@
     @foreach($document->items as $row)
     <cac:InvoiceLine>
         <cbc:ID>{{ $loop->iteration }}</cbc:ID>
-        <cbc:InvoicedQuantity unitCode="{{ json_decode($row->item, true)['unit_type_id'] }}" unitCodeListID="UN/ECE rec 20">{{ $row->quantity }}</cbc:InvoicedQuantity>
+        <cbc:InvoicedQuantity unitCode="{{ json_decode($row->item, true)['unit_measure_id'] }}" unitCodeListID="UN/ECE rec 20">{{ $row->quantity }}</cbc:InvoicedQuantity>
         <cbc:LineExtensionAmount currencyID="{{ $document->currency_type_id }}">{{ $row->total_value }}</cbc:LineExtensionAmount>
         <cac:PricingReference>
             <cac:AlternativeConditionPrice>

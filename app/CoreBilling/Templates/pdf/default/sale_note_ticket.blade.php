@@ -1,10 +1,24 @@
 @php
-    $establishment = $document->establishment;
+    $establishment = \Modules\Setting\Entities\SetEstablishment::find($document->establishment_id);
+    $accounts = \App\Models\BankAccount::all();
+    $documentType = \App\Models\DocumentType::find($document->document_type_id);
+    $district = \Illuminate\Support\Facades\DB::table('districts')->where('id',$establishment->district_id)->first();
+    $province = \Illuminate\Support\Facades\DB::table('provinces')->where('id',$establishment->province_id)->first();
+    $department = \Illuminate\Support\Facades\DB::table('departments')->where('id',$establishment->department_id)->first();
+    //dd($document);
     $customer = $document->customer;
-    $invoice = $document->invoice;
-    //$path_style = app_path('CoreFacturalo'.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'pdf'.DIRECTORY_SEPARATOR.'style.css');
-    $tittle = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
+    $identity_document_type = \App\Models\IdentityDocumentType::find($customer->identity_document_type_id);
+    $customer_district = \Illuminate\Support\Facades\DB::table('districts')->where('id',$customer->district_id)->first();
+    $customer_province = \Illuminate\Support\Facades\DB::table('provinces')->where('id',$customer->province_id)->first();
+    $customer_department = \Illuminate\Support\Facades\DB::table('departments')->where('id',$customer->department_id)->first();
+
+    $currency_type = \App\Models\CurrencyType::find($document->currency_type_id);
+    $user = \App\Models\User::find($document->user_id);
+
+    $left =  ($document->series) ? $document->series : $document->prefix;
+    $tittle = $left.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $payments = $document->payments;
+
 
 @endphp
 <html>
@@ -60,10 +74,10 @@
 
     <tr>
         <td class="align-top"><p class="desc">Cliente:</p></td>
-        <td><p class="desc">{{ $customer->name }}</p></td>
+        <td><p class="desc">{{ $customer->names }}</p></td>
     </tr>
     <tr>
-        <td><p class="desc">{{ $customer->identity_document_type->description }}:</p></td>
+        <td><p class="desc">{{ $identity_document_type->description }}:</p></td>
         <td><p class="desc">{{ $customer->number }}</p></td>
     </tr>
     @if ($customer->address !== '')
@@ -72,9 +86,11 @@
             <td>
                 <p class="desc">
                     {{ $customer->address }}
-                    {{ ($customer->district_id !== '-')? ', '.$customer->district->description : '' }}
-                    {{ ($customer->province_id !== '-')? ', '.$customer->province->description : '' }}
-                    {{ ($customer->department_id !== '-')? '- '.$customer->department->description : '' }}
+                    @if($customer_district && $customer_province && $customer_department)
+                        {{ ', '.$customer_district->description }}
+                        {{ ', '.$customer_province->description }}
+                        {{ '- '.$customer_department->description }}
+                    @endif
                 </p>
             </td>
         </tr>
@@ -113,9 +129,9 @@
                     {{ number_format($row->quantity, 0) }}
                 @endif
             </td>
-            <td class="text-center desc-9 align-top">{{ $row->item->unit_type_id }}</td>
+            <td class="text-center desc-9 align-top">{{ json_decode($row->item)->unit_measure_id }}</td>
             <td class="text-left desc-9 align-top">
-                {!!$row->item->description!!} @if (!empty($row->item->presentation)) {!!$row->item->presentation->description!!} @endif
+                {!! json_decode($row->item)->description !!} @if (!empty($row->item->presentation)) {!!$row->item->presentation->description!!} @endif
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
                         <br/>{!! $attr->description !!} : {{ $attr->value }}
@@ -183,18 +199,21 @@
 <table class="full-width">
     <tr>
 
-        @foreach(array_reverse((array) $document->legends) as $row)
+        {{-- @foreach(array_reverse((array) $document->legends) as $row) --}}
+            @php
+                $legend = $document->legends;
+            @endphp
             <tr>
-                @if ($row->code == "1000")
-                    <td class="desc pt-3">Son: <span class="font-bold">{{ $row->value }} {{ $document->currency_type->description }}</span></td>
+                @if ($legend->code == "1000")
+                    <td class="desc pt-3">Son: <span class="font-bold">{{ $legend ->value }} {{ $currency_type->description }}</span></td>
                     @if (count((array) $document->legends)>1)
                     <tr><td class="desc pt-3"><span class="font-bold">Leyendas</span></td></tr>
                     @endif
                 @else
-                    <td class="desc pt-3">{{$row->code}}: {{ $row->value }}</td>
+                    <td class="desc pt-3">{{$legend->code}}: {{ $legend->value }}</td>
                 @endif
             </tr>
-        @endforeach
+        {{-- @endforeach --}}
     </tr>
 
 

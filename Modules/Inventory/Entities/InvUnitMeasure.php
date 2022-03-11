@@ -9,11 +9,10 @@ class InvUnitMeasure extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    
     protected $fillable = [
-        'id',
-        'name',
-        'abbreviation',
-        'state'
+        'id','name','abbreviation','state','person_create','person_edit'
     ];
 
     protected static function newFactory()

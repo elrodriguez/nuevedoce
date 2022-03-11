@@ -28,10 +28,10 @@ class CreateParametersTable extends Migration
         DB::table('parameters')->insert([
             [
                 'type' =>'2',
-                'code_sql'=>'1,hotel|2,Restaurante|3,Almacen|4,Pesquero|5,Colegio|6,Educacion Superior|7,farmacia o botica',
+                'code_sql'=>'1,hotel|2,Restaurante|3,Almacen|4,Pesquero|5,Colegio|6,Educacion Superior|7,farmacia o botica|8,Servicio de Transporte',
                 'id_parameter'=>'PRT0001GN',
                 'description'=>'En este parametro definimos en que rubro se desempeña la empresa, este paramtro ajusta ciertos campos y criterios del sistema, en la interfaz y los procesos de registro',
-                'value_default'=>'5'
+                'value_default'=>'7'
             ],
             [
                 'type' =>'1',

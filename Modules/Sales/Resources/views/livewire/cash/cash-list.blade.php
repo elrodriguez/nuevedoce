@@ -20,46 +20,52 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($collection as $item)
-                <tr>
-                    <td class="text-center align-middle">
-                        <div class="dropdown">
-                            <a href="javascript:void(0)" class="btn btn-info rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fal fa-cogs"></i>
-                            </a>
-                            <div class="dropdown-menu" style="">
-                                @if ($item->state)
-                                    <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#cashModalForm" wire:click="showEdit('{{ $item->id }}')" ><i class="fal fa-edit mr-1"></i>{{ __('labels.edit') }}</a>
-                                    <a class="dropdown-item text-danger" href="javascript:closeCash('{{ route('sales_administration_cash_close',$item->id) }}')"><i class="fal fa-lock-alt mr-1"></i>Cerrar Caja</a>
-                                    <div class="dropdown-divider"></div>
-                                @endif
-                                <a class="dropdown-item" href="{{ route('sales_administration_cash_report_pdf',$item->id) }}" target="_blank"><i class="fal fa-file-pdf mr-1"></i>Reporte Caja PDF</a>
-                                <a class="dropdown-item" href="{{ route('sales_administration_cash_report_products_pdf',$item->id) }}" target="_blank"><i class="fal fa-file-pdf mr-1"></i>Reporte Productos PDF</a>
-                                <a class="dropdown-item" href="{{ route('sales_administration_cash_reportproducts_excel_pdf',$item->id) }}"><i class="fal fa-file-excel mr-1"></i>Reporte Productos EXCEL</a>
+            @if(count($collection)>0)
+                @foreach ($collection as $item)
+                    <tr>
+                        <td class="text-center align-middle">
+                            <div class="dropdown">
+                                <a href="javascript:void(0)" class="btn btn-info rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fal fa-cogs"></i>
+                                </a>
+                                <div class="dropdown-menu" style="">
+                                    @if ($item->state)
+                                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#cashModalForm" wire:click="showEdit('{{ $item->id }}')" ><i class="fal fa-edit mr-1"></i>{{ __('labels.edit') }}</a>
+                                        <a class="dropdown-item text-danger" href="javascript:closeCash('{{ route('sales_administration_cash_close',$item->id) }}')"><i class="fal fa-lock-alt mr-1"></i>Cerrar Caja</a>
+                                        <div class="dropdown-divider"></div>
+                                    @endif
+                                    <a class="dropdown-item" href="{{ route('sales_administration_cash_report_pdf',$item->id) }}" target="_blank"><i class="fal fa-file-pdf mr-1"></i>Reporte Caja PDF</a>
+                                    <a class="dropdown-item" href="{{ route('sales_administration_cash_report_products_pdf',$item->id) }}" target="_blank"><i class="fal fa-file-pdf mr-1"></i>Reporte Productos PDF</a>
+                                    <a class="dropdown-item" href="{{ route('sales_administration_cash_reportproducts_excel_pdf',$item->id) }}"><i class="fal fa-file-excel mr-1"></i>Reporte Productos EXCEL</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td class="text-center align-middle">{{ $item->reference_number }}</td>
-                    <td class="align-middle">{{ $item->name }}</td>
-                    <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->date_opening)->format('d/m/Y') }}<br><code>{{ $item->time_opening }}</code></td>
-                    <td class="text-center align-middle">
-                        @if(!$item->state)
-                            {{ \Carbon\Carbon::parse($item->date_closed)->format('d/m/Y') }}
-                            <br>
-                            <code>{{ $item->time_closed }}</code>
-                        @endif
-                    </td>
-                    <td class="text-right align-middle">{{ $item->beginning_balance }}</td>
-                    <td class="text-right align-middle">{{ $item->final_balance }}</td>
-                    <td class="text-center align-middle">
-                        @if ($item->state)
-                            <span class="badge badge-info">Aperturada</span>
-                        @else
-                            <span class="badge badge-success">Cerrada</span>
-                        @endif
-                    </td>
+                        </td>
+                        <td class="text-center align-middle">{{ $item->reference_number }}</td>
+                        <td class="align-middle">{{ $item->name }}</td>
+                        <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->date_opening)->format('d/m/Y') }}<br><code>{{ $item->time_opening }}</code></td>
+                        <td class="text-center align-middle">
+                            @if(!$item->state)
+                                {{ \Carbon\Carbon::parse($item->date_closed)->format('d/m/Y') }}
+                                <br>
+                                <code>{{ $item->time_closed }}</code>
+                            @endif
+                        </td>
+                        <td class="text-right align-middle">{{ $item->beginning_balance }}</td>
+                        <td class="text-right align-middle">{{ $item->final_balance }}</td>
+                        <td class="text-center align-middle">
+                            @if ($item->state)
+                                <span class="badge badge-info">Aperturada</span>
+                            @else
+                                <span class="badge badge-success">Cerrada</span>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="10" class="dataTables_empty text-center" valign="top">{{ __('labels.no_records_to_display') }}</td>
                 </tr>
-            @endforeach
+            @endif
         </tbody>
         @if($collection->links())
             <tfoot>

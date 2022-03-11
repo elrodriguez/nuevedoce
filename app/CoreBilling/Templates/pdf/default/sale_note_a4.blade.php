@@ -142,9 +142,9 @@
                     {{ number_format($row->quantity, 0) }}
                 @endif
             </td>
-            <td class="text-center align-top">{{ json_decode($row->item)->unit_type_id }}</td>
+            <td class="text-center align-top">{{ json_decode($row->item)->unit_measure_id }}</td>
             <td class="text-left">
-                {{ json_decode($row->item)->description }} @if (!empty($row->item->presentation)) {!!$row->item->presentation->description!!} @endif
+                {{ json_decode($row->item)->name }} @if (!empty($row->item->presentation)) {!!$row->item->presentation->description!!} @endif
 
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)

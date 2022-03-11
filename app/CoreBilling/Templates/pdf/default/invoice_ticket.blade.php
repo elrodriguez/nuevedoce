@@ -284,7 +284,7 @@
                     {{ number_format($row->quantity, 0) }}
                 @endif
             </td>
-            <td class="text-center desc-9 align-top">{{ json_decode($row->item)->unit_type_id }}</td>
+            <td class="text-center desc-9 align-top">{{ json_decode($row->item)->unit_measure_id }}</td>
             <td class="text-left desc-9 align-top">
                 @if($row->name_product_pdf)
                     {!!$row->name_product_pdf!!}
@@ -415,7 +415,7 @@
            $legend = json_decode($document->legends);
        @endphp
             <tr>
-                @if ($legend ->code == "1000")
+                @if ($legend->code == "1000")
                     <td class="desc pt-3">Son: <span class="font-bold">{{ $legend ->value }} {{ $currency_type->description }}</span></td>
                     @if (count((array) $document->legends)>1)
                     <tr><td class="desc pt-3"><span class="font-bold">Leyendas</span></td></tr>

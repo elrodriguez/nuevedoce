@@ -37,6 +37,8 @@
     $balance = ($document->total - $total_payment) - $payments->sum('change');
     $colspan = 5;
     $colspan6 = 6;
+
+    //dd($company);
 @endphp
 <html>
 <head>
@@ -59,7 +61,7 @@
             </td>
         @else
             <td width="20%">
-                {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">--}}
+                <img src="{{ asset('logo/logo.jpg') }}" class="company_logo" style="max-width: 150px">
             </td>
         @endif
         <td width="50%" class="pl-3">
@@ -329,7 +331,7 @@
                     {{ number_format($row->quantity, 0) }}
                 @endif
             </td>
-            <td class="text-center align-top">{{ json_decode($row->item)->unit_type_id }}</td>
+            <td class="text-center align-top">{{ json_decode($row->item)->unit_measure_id }}</td>
             <td class="text-left align-top">
                 {{ json_decode($row->item)->description }}
             </td>

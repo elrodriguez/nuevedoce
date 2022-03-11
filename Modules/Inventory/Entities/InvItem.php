@@ -10,7 +10,6 @@ class InvItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'name',
         'description',
         'part',
@@ -27,17 +26,21 @@ class InvItem extends Model
         'unit_measure_id',
         'person_create',
         'person_edit',
-        'model_id',
         'has_plastic_bag_taxes',
         'stock_min',
-        'unit_measure_id',
+        'model_id',
         'currency_type_id',
         'digemid',
         'sale_affectation_igv_type_id',
         'item_type_id',
         'stock',
-        'unit_type_id',
-        'internal_id'
+        'internal_id',
+        'item_code',
+        'has_igv',
+        'purchase_affectation_igv_type_id',
+        'web_show',
+        'barcode',
+        'item_code_gs1'
     ];
 
     protected static function newFactory()

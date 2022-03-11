@@ -211,7 +211,7 @@
                     {{ number_format($row->quantity, 0) }}
                 @endif
             </td>
-            <td class="text-center desc-9 align-top">{{ $row->item->unit_type_id }}</td>
+            <td class="text-center desc-9 align-top">{{ $row->item->unit_measure_id }}</td>
             <td class="text-left desc-9 align-top">
                 @if($row->name_product_pdf)
                     {!!$row->name_product_pdf!!}

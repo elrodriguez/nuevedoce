@@ -13,6 +13,7 @@
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(function() {
     Route::get('dashboard', 'SettingController@index')->name('setting_dashboard');
+    Route::get('parameters', 'ParametersController@index')->name('parameters');
 
     Route::group(['prefix' => 'company'], function() {
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas'])->get('list', 'SetCompanyController@index')->name('setting_company');

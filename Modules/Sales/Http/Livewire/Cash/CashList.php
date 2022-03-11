@@ -36,9 +36,9 @@ class CashList extends Component
     public function listCash(){
         $user = User::find(Auth::id());
         $role = $user->getRoleNames();
-        $roles = array('Administrador','SuperAdmin');
+        $roles = array('Administrador','Gerente','TI');
         $bool = in_array($role, $roles);
-        $user_id = $user ->id;
+        $user_id = $user->id;
 
         return SalCash::join('users','sal_cashes.user_id','users.id')
             ->select(
@@ -54,7 +54,7 @@ class CashList extends Component
                 'sal_cashes.reference_number',
                 'users.name'
             )
-            ->when($bool == true, function ($query) use ($user_id){
+            ->when($bool == false, function ($query) use ($user_id){
                 return $query->where('sal_cashes.user_id', $user_id);
             })
             ->orderBy('sal_cashes.id','DESC')

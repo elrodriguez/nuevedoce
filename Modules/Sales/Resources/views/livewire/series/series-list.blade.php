@@ -47,42 +47,48 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach($series as $key => $serie)
-                    <tr>
-                        <td class="text-center align-middle">{{ $key + 1 }}</td>
-                        <td class="text-center tdw-50 align-middle">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i class="fal fa-cogs"></i>
-                                </button>
-                                <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
-                                    @can('ventas_administration_series_editar')
-                                    <a href="{{ route('sales_administration_serie_edit',$serie->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
-                                    </a>
-                                    @endcan
-                                    <div class="dropdown-divider"></div>
-                                    @can('ventas_administration_series_eliminar')
-                                    <button onclick="confirmDelete('{{ $serie->id }}')" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
+                    @if(count($series)>0)
+                        @foreach($series as $key => $serie)
+                        <tr>
+                            <td class="text-center align-middle">{{ $key + 1 }}</td>
+                            <td class="text-center tdw-50 align-middle">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <i class="fal fa-cogs"></i>
                                     </button>
-                                    @endcan
+                                    <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
+                                        @can('ventas_administration_series_editar')
+                                        <a href="{{ route('sales_administration_serie_edit',$serie->id) }}" class="dropdown-item">
+                                            <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
+                                        </a>
+                                        @endcan
+                                        <div class="dropdown-divider"></div>
+                                        @can('ventas_administration_series_eliminar')
+                                        <button onclick="confirmDelete('{{ $serie->id }}')" type="button" class="dropdown-item text-danger">
+                                            <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
+                                        </button>
+                                        @endcan
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="align-middle text-center">{{ $serie->id }}</td>
-                        <td class="align-middle text-right">{{ $serie->correlative }}</td>
-                        <td class="align-middle">{{ $serie->name }}</td>
-                        <td class="align-middle">{{ $serie->description }}</td>
-                        <td class="align-middle">
-                            @if($serie->status)
-                            <span class="badge badge-warning">{{ __('inventory::labels.active') }}</span>
-                            @else
-                            <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
+                            </td>
+                            <td class="align-middle text-center">{{ $serie->id }}</td>
+                            <td class="align-middle text-right">{{ $serie->correlative }}</td>
+                            <td class="align-middle">{{ $serie->name }}</td>
+                            <td class="align-middle">{{ $serie->description }}</td>
+                            <td class="align-middle">
+                                @if($serie->status)
+                                <span class="badge badge-warning">{{ __('inventory::labels.active') }}</span>
+                                @else
+                                <span class="badge badge-danger">{{ __('inventory::labels.inactive') }}</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="10" class="dataTables_empty text-center" valign="top">{{ __('labels.no_records_to_display') }}</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

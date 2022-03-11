@@ -24,24 +24,28 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="noteSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
+                <input wire:keydown.enter="updatingSearchSaleNote" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
                 <div class="input-group-append">
-                    <button wire:click="noteSearch" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
+                    <button wire:click="updatingSearchSaleNote" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
                     <a href="{{ route('sales_documents_sale_notes_create') }}" class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
                 </div>
             </div>
         </div>
         <div class="card-body p-0">
+            <div class="table-responsive">
             <table class="table m-0">
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">{{ __('labels.actions') }}</th>
-                        <th>{{ __('labels.name') }}</th>
-                        <th>{{ __('setting::labels.address') }}</th>
-                        <th>{{ __('setting::labels.telephone') }}</th>
-                        <th>{{ __('labels.email') }}</th>
+                        <th class="text-center">{{ __('labels.broadcast_date') }}</th>
+                        <th>{{ __('labels.customer') }}</th>
+                        <th class="text-center">{{ __('sales::labels.sale_note') }}</th>
                         <th>{{ __('labels.state') }}</th>
+                        <th class="text-center">{{ __('labels.total') }}</th>
+                        <th class="text-center">{{ __('sales::labels.voucher') }}</th>
+                        <th>{{ __('labels.state') }} {{ __('labels.paid') }}</th>
+                        <th class="text-center">{{ __('labels.payments') }}</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -70,16 +74,39 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle">{{ $note->name }}</td>
-                            <td class="align-middle">{{ $note->address }}</td>
-                            <td class="align-middle">{{ $note->phone }}</td>
-                            <td class="align-middle">{{ $note->email }}</td>
+                            <td class="align-middle text-center">{{ \Carbon\Carbon::parse($note->date_of_issue)->format('d/m/Y') }}</td>
+                            <td class="align-middle">{{ $note->customer->full_name }}</td>
+                            <td class="align-middle text-center">{{ $note->series.'-'.str_pad($note->number, 8, "0", STR_PAD_LEFT) }}</td>
                             <td class="align-middle">
-                                @if($note->state)
-                                <span class="badge badge-warning">{{ __('labels.active') }}</span>
-                                @else
-                                <span class="badge badge-danger">{{ __('labels.inactive') }}</span>
+                                @if ($note->state_type_id == '01')
+                                    <span class="badge badge-info">{{ $note->description }}</span>
+                                @elseif ($note->state_type_id == '03')
+                                    <span class="badge badge-success">{{ $note->description }}</span>
+                                @elseif ($note->state_type_id == '05')
+                                    <span class="badge badge-primary">{{ $note->description }}</span>
+                                @elseif ($note->state_type_id == '07')
+                                    <span class="badge badge-secondary">{{ $note->description }}</span>
+                                @elseif ($note->state_type_id == '09')
+                                    <span class="badge badge-danger">{{ $note->description }}</span>
+                                @elseif ($note->state_type_id == '11')
+                                    <span class="badge badge-dark">{{ $note->description }}</span>
+                                @elseif ($note->state_type_id == '13')
+                                    <span class="badge badge-warning">{{ $note->description }}</span>
                                 @endif
+                            </td>
+                            <td class="align-middle text-right">{{ $note->total }}</td>
+                            <td>{{ $note->voucher }}</td>
+                            <td class="align-middle">
+                                @if($note->paid)
+                                <span class="badge badge-success">{{ __('labels.paid') }}</span>
+                                @else
+                                <span class="badge badge-warning">{{ __('labels.pending') }}</span>
+                                @endif
+                            </td>
+                            <td class="align-middle text-center">
+                                <button wire:click="$emit('openModalNotePayments',{{ $note->id }})" class="btn btn-warning btn-icon rounded-circle waves-effect waves-themed">
+                                    <i class="fal fa-comment-alt-dollar"></i>
+                                </button>
                             </td>
                         </tr>
                         @endforeach
@@ -88,11 +115,13 @@
                     @endif
                 </tbody>
             </table>
+            </div>
         </div>
-        <div class="card-footer  pb-0 d-flex flex-row align-items-center">
+        <div class="card-footer  pb-0 d-flex flex-row align-notes-center">
             <div class="ml-auto">{{ $notes->links() }}</div>
         </div>
     </div>
+    
     <script type="text/javascript">
         function confirmDelete(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')

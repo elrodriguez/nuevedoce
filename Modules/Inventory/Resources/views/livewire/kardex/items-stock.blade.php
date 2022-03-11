@@ -56,46 +56,52 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach ($items as $key => $item)
-                    <tr>
-                        <td class="align-middle">{{ $key+1 }}</td>
-                        <td class="align-middle">{{ $item->category_name }}</td>
-                        <td class="align-middle">{{ $item->brand_name }}</td>
-                        <td class="align-middle">{{ $item->model_name }}</td>
-                        <td class="align-middle">{{ $item->name.' '.$item->description }}</td>
-                        <td class="align-middle">{{ $item->created_at }}</td>
-                        <td class="align-middle">
-                            @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
-                                @if ($item->quantity>0)
-                                    {{ __('Compra') }}
+                    @if(count($items)>0)
+                        @foreach ($items as $key => $item)
+                        <tr>
+                            <td class="align-middle">{{ $key+1 }}</td>
+                            <td class="align-middle">{{ $item->category_name }}</td>
+                            <td class="align-middle">{{ $item->brand_name }}</td>
+                            <td class="align-middle">{{ $item->model_name }}</td>
+                            <td class="align-middle">{{ $item->name.' '.$item->description }}</td>
+                            <td class="align-middle">{{ $item->created_at }}</td>
+                            <td class="align-middle">
+                                @if($item->inventory_kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
+                                    @if ($item->quantity>0)
+                                        {{ __('Compra') }}
+                                    @else
+                                        {{ __('Anulación Compra') }}
+                                    @endif
                                 @else
-                                    {{ __('Anulación Compra') }}
+                                    {{ $item->detail }} 
                                 @endif
-                            @else
-                                {{ $item->detail }} 
-                            @endif
-                        </td>
-                        <td class="align-middle">{{ $item->purchase_number }}</td>
-                        <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
-                            @if($item->kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
-                                @if ($item->quantity>0)
+                            </td>
+                            <td class="align-middle">{{ $item->purchase_number }}</td>
+                            <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
+                                @if($item->kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
+                                    @if ($item->quantity>0)
+                                        <td class="align-middle text-right">{{ $item->quantity }}</td>
+                                        <td class="align-middle text-center">-</td>
+                                    @else
+                                        <td class="align-middle text-center">-</td>
+                                        <td class="align-middle text-right text-danger">{{ $item->quantity }}</td>
+                                    @endif
+                                @else
                                     <td class="align-middle text-right">{{ $item->quantity }}</td>
                                     <td class="align-middle text-center">-</td>
-                                @else
-                                    <td class="align-middle text-center">-</td>
-                                    <td class="align-middle text-right text-danger">{{ $item->quantity }}</td>
                                 @endif
-                            @else
-                                <td class="align-middle text-right">{{ $item->quantity }}</td>
-                                <td class="align-middle text-center">-</td>
-                            @endif
-                            @php
-                                $balance = $balance + $item->quantity
-                            @endphp
-                        <td class="align-middle text-right">{{ number_format($balance, 2, '.', '') }}</td>
-                    </tr>
-    
-                    @endforeach
+                                @php
+                                    $balance = $balance + $item->quantity
+                                @endphp
+                            <td class="align-middle text-right">{{ number_format($balance, 2, '.', '') }}</td>
+                        </tr>
+        
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="12" class="dataTables_empty text-center" valign="top">{{ __('labels.no_records_to_display') }}</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -1,4 +1,7 @@
 @extends('sales::layouts.master')
+@section('styles')
+    <link rel="stylesheet" media="screen, print" href="{{ url('themes/smart-admin/css/datagrid/datatables/datatables.bundle.css') }}">
+@endsection
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">{{ __('sales::labels.module_name') }}</li>

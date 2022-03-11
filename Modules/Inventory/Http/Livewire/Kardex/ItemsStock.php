@@ -2,10 +2,10 @@
 
 namespace Modules\Inventory\Http\Livewire\Kardex;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Elrod\UserActivity\Activity;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Entities\InvKardex;
 use Modules\Inventory\Entities\InvPurchase;
@@ -29,6 +29,8 @@ class ItemsStock extends Component
 
     public function mount(){
         $this->show = 10;
+        $this->start = Carbon::now()->format('Y-m-d');
+        $this->end = Carbon::now()->format('Y-m-d');
     }
 
     public function getEstablishment(){
@@ -53,12 +55,12 @@ class ItemsStock extends Component
     }
 
     public function getItems(){
-        //dd(InvPurchase::class);
+        
         $start = $this->start;
         $end = $this->end;
         $item_id = $this->item_id;
         $location_id = $this->location_id;
-
+        //dd($this->location_id);
         $items = InvKardex::join('inv_items','inv_kardexes.item_id','inv_items.id')
                 ->leftJoin('inv_purchases', function($query)
                 {
@@ -87,8 +89,10 @@ class ItemsStock extends Component
                 ->whereBetween('inv_kardexes.date_of_issue', [$start, $end])
                 ->orderBy('inv_kardexes.date_of_issue')
                 ->paginate($this->show);
-                    return $items;
+        
         //dd($items);
+
+        return $items;
 
     }
 

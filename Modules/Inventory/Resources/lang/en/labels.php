@@ -103,5 +103,8 @@ return [
     'lbl_location_store'=> 'locations (Warehouses)',
     'lbl_assets_with_code' => 'Assets with code',
     'lbl_documents_purchases'=> 'documentos (Compras)',
-    'lbl_show_guide'            => 'Show in Guides'
+    'lbl_show_guide'            => 'Show in Guides',
+    'lbl_price_sale'            => 'Sale price',
+    'lbl_internal_code'         => 'Internal Code',
+    'lbl_sunat_code'            => 'Sunat Code'
 ];

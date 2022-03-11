@@ -3,11 +3,9 @@
 namespace Modules\Sales\Http\Livewire\Document;
 
 use App\Models\CatPaymentMethodType;
-use App\Models\DocumentType;
 use App\Models\IdentityDocumentType;
 use App\Models\Person;
 use Livewire\Component;
-use Exception;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -38,14 +36,13 @@ use Modules\Sales\Entities\SalSaleNoteItem;
 use Modules\Sales\Entities\SalSaleNotePayment;
 use App\CoreBilling\Template;
 use App\CoreBilling\Helpers\Storage\StorageDocument;
+use App\Models\GlobalPayment;
 
 class SaleNotesCreateForm extends Component
 {
-
     use StorageDocument;
 
     public $document_type_id = '80';
-    public $document_types;
     public $identity_document_types = [];
     public $series;
     public $f_issuance;
@@ -130,9 +127,9 @@ class SaleNotesCreateForm extends Component
 
         $activity = new Activity;
         $activity->causedBy(Auth::user());
-        $activity->routeOn(route('sales_document_create'));
-        $activity->componentOn('sales::document.document-create-form');
-        $activity->log('ingresó a la vista nuevo comprobante');
+        $activity->routeOn(route('sales_documents_sale_notes_create'));
+        $activity->componentOn('sales::document.sale-notes-create-form');
+        $activity->log('ingresó a la vista nota de venta');
         $activity->save();
     }
 
@@ -142,7 +139,7 @@ class SaleNotesCreateForm extends Component
         $this->cat_payment_method_types = CatPaymentMethodType::all();
         $billing = new Billing();
         $this->cat_expense_method_types = $billing->getPaymentDestinations();
-        $this->document_types = DocumentType::whereIn('id',['01','03'])->get();
+
         $this->identity_document_types = IdentityDocumentType::where('active',1)->get();
 
         $this->xgenerico = Person::where('trade_name','like','%Clientes Varios%')
@@ -240,18 +237,16 @@ class SaleNotesCreateForm extends Component
             }
         }
 
-        if($this->total == $total_amount){
+        // if($this->total == $total_amount){
             $this->store();
-        }else{
-            $this->dispatchBrowserEvent('response_payment_total_different', ['message' => Lang::get('labels.msg_totaldtc')]);
-        }
- 
+        // }else{
+        //     $this->dispatchBrowserEvent('response_payment_total_different', ['message' => Lang::get('labels.msg_totaldtc')]);
+        // }
 
     }
 
     public function store(){
-        $this->selectCorrelative($this->serie_id);
-
+        
         $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
         $customer_json = Person::where('id',$this->customer_id)->first();
         //$company = SetCompany::first();
@@ -262,9 +257,14 @@ class SaleNotesCreateForm extends Component
 
         $numberletters = new NumberNumberLetter();
 
-        $legends = json_encode(["code" => 1000, "value" => $numberletters->convertToLetter($this->total)]);
+        $legends = array('code' => 1000, 'value' => $numberletters->convertToLetter($this->total));
+
         $this->external_id = Str::uuid()->toString();
         $this->total_taxes = $this->total_igv;
+        $paid = 0;
+        foreach($this->payment_method_types as $key => $value){
+            $paid = $paid + $value['amount'];
+        }
 
         $sale_note = SalSaleNote::create([
             'user_id' => Auth::id(),
@@ -299,7 +299,8 @@ class SaleNotesCreateForm extends Component
             'total_value' => $this->total_taxed,
             'total' => $this->total,
             'legends' => $legends,
-            'total_canceled' => true
+            'total_canceled' => true,
+            'paid' => ($paid == $this->total ? true : false)
         ]);
 
         foreach($this->box_items as $row) {
@@ -343,7 +344,7 @@ class SaleNotesCreateForm extends Component
 
         $user = Auth::user();
         $activity = new Activity;
-        $activity->modelOn(SalSaleNote::class,$sale_note);
+        $activity->modelOn(SalSaleNote::class,$sale_note->id);
         $activity->causedBy($user);
         $activity->routeOn(route('sales_documents_sale_notes_create'));
         $activity->componentOn('sales::document.sale-notes-create-form');
@@ -353,8 +354,8 @@ class SaleNotesCreateForm extends Component
         $activity->save();
 
         $this->clearForm();
-        dd('ffffff');
-        $this->dispatchBrowserEvent('response_success_document_charges_store', ['message' => Lang::get('labels.successfully_registered')]);
+
+        $this->dispatchBrowserEvent('response_sale_note_store', ['msg' => Lang::get('labels.successfully_registered')]);
 
     }
 
@@ -675,15 +676,34 @@ class SaleNotesCreateForm extends Component
         $date_of_issue = $yi.'-'.$mi.'-'.$di;
 
         foreach($this->payment_method_types as $key => $value){
-            SalSaleNotePayment::create([
-                'sale_note_id' => $sale_note->id,
-                'date_of_payment' => $date_of_issue,
-                'payment_method_type_id' => $value['method'],
-                'payment_destination_id' => $value['destination'],
-                'reference' => $value['reference'],
-                'payment' => $value['amount']
-            ]);
+            if($value['amount'] > 0){
+                $payment = SalSaleNotePayment::create([
+                    'sale_note_id' => $sale_note->id,
+                    'date_of_payment' => $date_of_issue,
+                    'payment_method_type_id' => $value['method'],
+                    'payment_destination_id' => $value['destination'],
+                    'reference' => $value['reference'],
+                    'payment' => $value['amount']
+                ]);
+                $this->createGlobalPayment($payment->id,$value['destination']);
+            }
         }
+    }
+
+    public function createGlobalPayment($id, $destination){
+        $row['payment_destination_id'] = $destination;
+        $billing = new Billing();
+        $destination = $billing->getDestinationRecord($row);
+        $company = SetCompany::where('main',true)->first();
+
+        GlobalPayment::create([
+            'user_id' => auth()->id(),
+            'soap_type_id' => $company->soap_type_id,
+            'destination_id' => $destination['destination_id'],
+            'destination_type' => $destination['destination_type'],
+            'payment_id' => $id,
+            'payment_type' => SalSaleNotePayment::class
+        ]);
     }
 
     private function setFilename($sale_note){
@@ -714,8 +734,8 @@ class SaleNotesCreateForm extends Component
             $company_logo      = ($company->logo) ? 40 : 0;
             $company_name      = (strlen($company->name) / 20) * 10;
             $company_address   = (strlen($document->establishment->address) / 30) * 10;
-            $company_number    = $document->establishment->telephone != '' ? '10' : '0';
-            $customer_name     = strlen($document->customer->name) > '25' ? '10' : '0';
+            $company_number    = $document->establishment->phone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->names) > '25' ? '10' : '0';
             $customer_address  = (strlen($document->customer->address) / 200) * 10;
             $p_order           = $document->purchase_order != '' ? '10' : '0';
 
@@ -730,7 +750,7 @@ class SaleNotesCreateForm extends Component
             $extra_by_item_description = 0;
             $discount_global = 0;
             foreach ($document->items as $it) {
-                if(strlen($it->item->description)>100){
+                if(strlen(json_decode($it->item)->name)>100){
                     $extra_by_item_description +=24;
                 }
                 if ($it->discounts) {
@@ -770,8 +790,8 @@ class SaleNotesCreateForm extends Component
 
             $company_name      = (strlen($company->name) / 20) * 10;
             $company_address   = (strlen($document->establishment->address) / 30) * 10;
-            $company_number    = $document->establishment->telephone != '' ? '10' : '0';
-            $customer_name     = strlen($document->customer->name) > '25' ? '10' : '0';
+            $company_number    = $document->establishment->phone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->names) > '25' ? '10' : '0';
             $customer_address  = (strlen($document->customer->address) / 200) * 10;
             $p_order           = $document->purchase_order != '' ? '10' : '0';
 

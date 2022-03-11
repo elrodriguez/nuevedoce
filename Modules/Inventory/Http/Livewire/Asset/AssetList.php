@@ -30,7 +30,7 @@ class AssetList extends Component
     public function getAssets(){
         return InvAsset::where('inv_assets.patrimonial_code','like','%'.$this->search.'%')
             ->orWhere('inv_items.name','like','%'.$this->search.'%')
-            ->join('inv_asset_types', 'asset_type_id', 'inv_asset_types.id')
+            ->leftJoin('inv_asset_types', 'asset_type_id', 'inv_asset_types.id')
             ->join('inv_items', 'inv_assets.item_id', 'inv_items.id')
             ->leftJoin('inv_locations', 'inv_assets.location_id', 'inv_locations.id')
             ->select(

@@ -19,13 +19,13 @@ class SetCompany extends Migration
             $table->string('name');
             $table->string('number');
             $table->string('email');
-            $table->string('tradename');
-            $table->string('logo');
-            $table->string('logo_store');
-            $table->string('phone');
-            $table->string('phone_mobile');
-            $table->string('representative_name');
-            $table->string('representative_number');
+            $table->string('tradename')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('logo_store')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('phone_mobile')->nullable();
+            $table->string('representative_name')->nullable();
+            $table->string('representative_number')->nullable();
             $table->boolean('main')->default(false);
             $table->timestamps();
             $table->softDeletes();
@@ -36,8 +36,8 @@ class SetCompany extends Migration
             'number' => '12345678901',
             'email' => 'nueve@gmail.com',
             'tradename' => 'nueve 12',
-            'logo' => 1,
-            'logo_store' => 2,
+            'logo' => null,
+            'logo_store' => null,
             'phone' => '123456',
             'phone_mobile' => '123456789',
             'representative_name' => 'Ivan Gerente',

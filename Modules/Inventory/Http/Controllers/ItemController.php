@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Http\Controllers;
 
+use App\Models\Parameter;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -16,7 +17,10 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return view('inventory::item.index');
+        $PRT0001GN = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
+
+        return view('inventory::item.index')->with('interfaz',$PRT0001GN);
+        
     }
 
     /**
@@ -25,7 +29,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view('inventory::item.create');
+        $PRT0001GN = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
+        return view('inventory::item.create')->with('interfaz',$PRT0001GN);
     }
 
     /**
@@ -35,7 +40,8 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-        return view('inventory::item.edit')->with('id',$id);
+        $PRT0001GN = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
+        return view('inventory::item.edit')->with('id',$id)->with('interfaz',$PRT0001GN);
     }
 
     /**

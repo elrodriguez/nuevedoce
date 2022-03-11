@@ -187,7 +187,7 @@ class SalSaleNote extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     public function soap_type()

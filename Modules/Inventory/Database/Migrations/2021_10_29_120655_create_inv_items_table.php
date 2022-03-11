@@ -28,7 +28,7 @@ class CreateInvItemsTable extends Migration
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->unsignedBigInteger('unit_measure_id')->nullable();
+            $table->string('unit_measure_id')->nullable();
             $table->unsignedBigInteger('person_create')->nullable();
             $table->unsignedBigInteger('person_edit')->nullable();
             $table->boolean('has_plastic_bag_taxes')->default(false);

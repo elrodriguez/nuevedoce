@@ -34,7 +34,6 @@ class DocumentsController extends Controller
 
     public function toPrintInvoice($external_id, $format = null) {
 
-
         $document = SalDocument::where('external_id', $external_id)->first();
 
         if (!$document) throw new Exception("El código {$external_id} es inválido, no se encontro documento relacionado");

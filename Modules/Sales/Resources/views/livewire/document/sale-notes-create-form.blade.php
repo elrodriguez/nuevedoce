@@ -1,6 +1,6 @@
 <div>
     <div class="panel-container show">
-        <form class="needs-validation {{ ($errors->any()?'was-validated':'') }}" novalidate wire:ignore.self>
+        <form wire:ignore.self>
             <div class="panel-content">
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -113,13 +113,13 @@
                         <div class="table-responsive">
                             <table class="table m-0 table-bordered table-sm table-striped">
                                 <thead class="bg-info-900">
-                                  <tr>
-                                    <th class="text-center"></th>
-                                    <th>{{ __('labels.description') }}</th>
-                                    <th class="text-center">{{ __('labels.price') }}</th>
-                                    <th class="text-center">{{ __('labels.quantity') }}</th>
-                                    <th class="text-center">{{ __('labels.total') }}</th>
-                                  </tr>
+                                    <tr>
+                                        <th class="text-center"></th>
+                                        <th>{{ __('labels.description') }}</th>
+                                        <th class="text-center">{{ __('labels.price') }}</th>
+                                        <th class="text-center">{{ __('labels.quantity') }}</th>
+                                        <th class="text-center">{{ __('labels.total') }}</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     @if (count($box_items)>0)
@@ -298,122 +298,122 @@
             </div>
             @endif
         </form>
-        {{-- modals --}}
-        <div class="modal fade" id="exampleModalClientNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  wire:ignore.self>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{ __('labels.new') }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3" wire:ignore.self>
-                                <label class="form-label" for="identity_document_type_id">Tipo Doc. Identidad <span class="text-danger">*</span> </label>
-                                <select class="custom-select form-control" wire:model.defer="identity_document_type_id">
-                                    @foreach ($identity_document_types as $identity_document_type)
-                                        <option value="{{ $identity_document_type->id }}">{{ $identity_document_type->description }}</option>
-                                    @endforeach
-                                </select>
-                                @error('identity_document_type_id')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3" wire:ignore.self>
-                                <label class="form-label" for="number_id">{{ __('labels.number') }} <span class="text-danger">*</span> </label>
-                                <input type="text" class="form-control" name="number_id" wire:model.defer="number_id">
-                                @error('number_id')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
+    </div>
+    {{-- modals --}}
+    <div class="modal fade" id="exampleModalClientNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  wire:ignore.self>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{ __('labels.new') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3" wire:ignore.self>
+                            <label class="form-label" for="identity_document_type_id">Tipo Doc. Identidad <span class="text-danger">*</span> </label>
+                            <select class="custom-select form-control" wire:model.defer="identity_document_type_id">
+                                @foreach ($identity_document_types as $identity_document_type)
+                                    <option value="{{ $identity_document_type->id }}">{{ $identity_document_type->description }}</option>
+                                @endforeach
+                            </select>
+                            @error('identity_document_type_id')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-4 mb-3" wire:ignore.self>
-                                <label class="form-label" for="name">{{ __('labels.name') }} <span class="text-danger">*</span> </label>
-                                <input type="text" class="form-control" name="name" wire:model.defer="name">
-                                @error('name')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3" wire:ignore.self>
-                                <label class="form-label" for="last_paternal">{{ __('labels.last_paternal') }} <span class="text-danger">*</span> </label>
-                                <input type="text" class="form-control" name="last_paternal" wire:model.defer="last_paternal">
-                                @error('last_paternal')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3" wire:ignore.self>
-                                <label class="form-label" for="last_maternal">{{ __('labels.last_maternal') }} <span class="text-danger">*</span> </label>
-                                <input type="text" class="form-control" name="last_maternal" wire:model.defer="last_maternal">
-                                @error('last_maternal')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-12 mb-3" wire:ignore.self>
-                                <label class="form-label" for="trade_name">{{ __('labels.trade_name') }}</label>
-                                <input type="text" class="form-control" name="trade_name" wire:model.defer="trade_name">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="department_id">@lang('setting::labels.department') <span class="text-danger">*</span> </label>
-                                <select wire:change="getProvinves" wire:model="department_id" id="department_id" class="custom-select" required="">
-                                    <option value="">Seleccionar</option>
-                                    @foreach($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->description }}</option>
-                                    @endforeach
-                                </select>
-                                @error('department_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="province_id">@lang('setting::labels.province') <span class="text-danger">*</span> </label>
-                                <select wire:change="getPDistricts" wire:model="province_id" id="province_id" class="custom-select" required="">
-                                    <option value="">Seleccionar</option>
-                                    @foreach($provinces as $province)
-                                    <option value="{{ $province->id }}">{{ $province->description }}</option>
-                                    @endforeach
-                                </select>
-                                @error('province_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="district_id">@lang('setting::labels.district') <span class="text-danger">*</span> </label>
-                                <select wire:model="district_id" id="district_id" class="custom-select" required="">
-                                    <option value="">Seleccionar</option>
-                                    @foreach($districts as $district)
-                                    <option value="{{ $district->id }}">{{ $district->description }}</option>
-                                    @endforeach
-                                </select>
-                                @error('district_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="sex">@lang('labels.sex')</label>
-                                <select class="custom-select form-control" wire:model.defer="sex" id="sex" name="sex" required="">
-                                    <option>@lang('labels.to_select')</option>
-                                    <option value="m">Masculino</option>
-                                    <option value="f">Femenino</option>
-                                </select>
-                                @error('sex')
-                                <div class="invalid-feedback-2">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="col-md-6 mb-3" wire:ignore.self>
+                            <label class="form-label" for="number_id">{{ __('labels.number') }} <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control" name="number_id" wire:model.defer="number_id">
+                            @error('number_id')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
-                        <button type="button" class="btn btn-primary" wire:click="storeClient">{{ __('labels.save') }}</button>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3" wire:ignore.self>
+                            <label class="form-label" for="name">{{ __('labels.name') }} <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control" name="name" wire:model.defer="name">
+                            @error('name')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3" wire:ignore.self>
+                            <label class="form-label" for="last_paternal">{{ __('labels.last_paternal') }} <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control" name="last_paternal" wire:model.defer="last_paternal">
+                            @error('last_paternal')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3" wire:ignore.self>
+                            <label class="form-label" for="last_maternal">{{ __('labels.last_maternal') }} <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control" name="last_maternal" wire:model.defer="last_maternal">
+                            @error('last_maternal')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3" wire:ignore.self>
+                            <label class="form-label" for="trade_name">{{ __('labels.trade_name') }}</label>
+                            <input type="text" class="form-control" name="trade_name" wire:model.defer="trade_name">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="department_id">@lang('setting::labels.department') <span class="text-danger">*</span> </label>
+                            <select wire:change="getProvinves" wire:model="department_id" id="department_id" class="custom-select" required="">
+                                <option value="">Seleccionar</option>
+                                @foreach($departments as $department)
+                                <option value="{{ $department->id }}">{{ $department->description }}</option>
+                                @endforeach
+                            </select>
+                            @error('department_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="province_id">@lang('setting::labels.province') <span class="text-danger">*</span> </label>
+                            <select wire:change="getPDistricts" wire:model="province_id" id="province_id" class="custom-select" required="">
+                                <option value="">Seleccionar</option>
+                                @foreach($provinces as $province)
+                                <option value="{{ $province->id }}">{{ $province->description }}</option>
+                                @endforeach
+                            </select>
+                            @error('province_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="district_id">@lang('setting::labels.district') <span class="text-danger">*</span> </label>
+                            <select wire:model="district_id" id="district_id" class="custom-select" required="">
+                                <option value="">Seleccionar</option>
+                                @foreach($districts as $district)
+                                <option value="{{ $district->id }}">{{ $district->description }}</option>
+                                @endforeach
+                            </select>
+                            @error('district_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="sex">@lang('labels.sex')</label>
+                            <select class="custom-select form-control" wire:model.defer="sex" id="sex" name="sex" required="">
+                                <option>@lang('labels.to_select')</option>
+                                <option value="m">Masculino</option>
+                                <option value="f">Femenino</option>
+                            </select>
+                            @error('sex')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                    <button type="button" class="btn btn-primary" wire:click="storeClient">{{ __('labels.save') }}</button>
                 </div>
             </div>
         </div>
@@ -530,8 +530,8 @@
                 swalAlert(event.detail.message)
             }
         });
-        window.addEventListener('response_success_document_charges_store', event => {
-            alert('aaaaaa');
+        window.addEventListener('response_sale_note_store', event => {
+            //alert('aaaaaa');
             openModalPrint();
             clearSelect2();
         });
@@ -574,6 +574,5 @@
             $('#exampleModalClientNew').modal('hide');
             @this.set('customer_id', id);
         }
-
     </script>
 </div>

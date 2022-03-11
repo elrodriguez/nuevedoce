@@ -55,7 +55,7 @@ class SeriesCreateForm extends Component
     
     public function clearForm(){
         $this->serie = null;
-        $this->number = null;
+        $this->number = 1;
         $this->establishment_id = null;
         $this->document_type_id = null;
         $this->state = true;
