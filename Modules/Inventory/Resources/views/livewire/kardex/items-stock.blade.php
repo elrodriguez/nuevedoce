@@ -76,19 +76,25 @@
                                     {{ $item->detail }} 
                                 @endif
                             </td>
-                            <td class="align-middle">{{ $item->purchase_number }}</td>
+                            <td class="align-middle">
+                                @if($item->kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
+                                    {{ $item->purchase_number }}
+                                @elseif($item->kardexable_type == 'Modules\Sales\Entities\SalDocument')
+                                    {{ $item->document_number }}
+                                @elseif($item->kardexable_type == 'Modules\Sales\Entities\SalSaleNote')
+                                    {{ $item->sale_note_number }}
+                                @endif
+                            </td>
                             <td class="align-middle text-center">{{ $item->date_of_issue }}</td>
                                 @if($item->kardexable_type == 'Modules\Inventory\Entities\InvPurchase')
-                                    @if ($item->quantity>0)
-                                        <td class="align-middle text-right">{{ $item->quantity }}</td>
-                                        <td class="align-middle text-center">-</td>
-                                    @else
-                                        <td class="align-middle text-center">-</td>
-                                        <td class="align-middle text-right text-danger">{{ $item->quantity }}</td>
-                                    @endif
-                                @else
                                     <td class="align-middle text-right">{{ $item->quantity }}</td>
                                     <td class="align-middle text-center">-</td>
+                                @elseif($item->kardexable_type == 'Modules\Sales\Entities\SalDocument')
+                                    <td class="align-middle text-center">-</td>
+                                    <td class="align-middle text-right">{{ $item->quantity }}</td>
+                                @elseif($item->kardexable_type == 'Modules\Sales\Entities\SalSaleNote')
+                                    <td class="align-middle text-center">-</td>
+                                    <td class="align-middle text-right">{{ $item->quantity }}</td>
                                 @endif
                                 @php
                                     $balance = $balance + $item->quantity

@@ -141,7 +141,7 @@
                                                     <i class="fal fa-trash-alt"></i>
                                                 </button>
                                             </td>
-                                            <td width="50%" class="align-middle">{{ json_decode($box_item['item'])->description }}</td>
+                                            <td width="50%" class="align-middle">{{ json_decode($box_item['item'])->name }}</td>
                                             <td class="align-middle  text-right">{{ $box_item['input_unit_price_value'] }}</td>
                                             <td width="10%" class="align-middle text-center">
                                                 @if (json_decode($box_item['item'])->item_type_id== '01')
@@ -294,16 +294,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 offset-md-8">
-                        <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-6 col-form-label text-right"></label>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-primary btn-block waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm()">
-                                    <span wire:loading wire:target="validateForm" wire:loading.class="spinner-border spinner-border-sm" wire:loading.class.remove="fal fa-check" class="fal fa-check mr-2" role="status" aria-hidden="true"></span>
-                                    <span>Pagar</span>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="col-md-3 offset-md-9">
+                        <button type="button" class="btn btn-primary btn-block waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm()">
+                            <span wire:loading wire:target="validateForm" wire:loading.class="spinner-border spinner-border-sm" wire:loading.class.remove="fal fa-check" class="fal fa-check mr-2" role="status" aria-hidden="true"></span>
+                            <span>{{ __('sales::labels.generate') }}</span>
+                        </button>
                     </div>
                 </div>
             </div>

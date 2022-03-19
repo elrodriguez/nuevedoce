@@ -37,6 +37,11 @@ class SaleNotesController extends Controller
         return view('sales::document.sale_notes_create');
     }
 
+    public function edit($id)
+    {
+        return view('sales::document.sale_notes_edit')->with('id',$id);
+    }
+
     public function toPrintInvoice($external_id, $format = null) {
 
         $document = SalSaleNote::where('external_id', $external_id)->first();

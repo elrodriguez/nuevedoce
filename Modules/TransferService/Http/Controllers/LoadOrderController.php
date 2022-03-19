@@ -78,42 +78,54 @@ class LoadOrderController extends Controller
         return $data;
     }
 
-    public function htmlPdf($head_report, $htmlDetail){
-        $html = '
-        <table align="center" width="100%">
-            <thead>
-                <tr>
-                    <th style="text-align: center; font-size: 14px; font-weight: bold; text-transform: uppercase;">'.mb_strtoupper(Lang::get('transferservice::labels.lbl_load_order')).'</th>
-                </tr>
-                <tr>
-                    <th style="text-align: center; font-size: 14px; font-weight: bold">'.date('d/m/Y', strtotime($head_report->upload_date)).' '.$head_report->charging_time.'</th>
-                </tr>
-                <tr>
-                    <th style="text-align: center; font-size: 14px; font-weight: bold">&nbsp;</th>
-                </tr>
-                <tr>
-                    <th style="text-align: center; font-size: 14px; font-weight: bold">&nbsp;</th>
-                </tr>
-            </thead>
-        </table>
+    public function htmlPdf($head_report, $htmlDetail,$c = 99){
+        $html = '';
+
+        if($c == 0){
+            $html .='
+                <table align="center" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; font-size: 14px; font-weight: bold; text-transform: uppercase;">'.mb_strtoupper(Lang::get('transferservice::labels.lbl_load_order')).'</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; font-size: 14px; font-weight: bold">'.date('d/m/Y', strtotime($head_report->upload_date)).' '.$head_report->charging_time.'</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; font-size: 14px; font-weight: bold">&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; font-size: 14px; font-weight: bold">&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+                <table align="center" width="100%">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_driver').'</td>
+                            <td style="text-align: left; width: 280px;">: '.$head_report->name_vehicle_crewmen.'</td>
+                            <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_license_plate').'</td>
+                            <td style="text-align: left; width: 280px;">: '.$head_report->license_plate.'</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_code').'</td>
+                            <td style="text-align: left; width: 560px;" colspan="3">: '.$head_report->uuid.'</td>
+                        </tr>
+                    </tbody>
+                </table>
+            ';
+        }
+        
+        $html .='
+        
         <table align="center" width="100%">
             <tbody>
                 <tr>
-                    <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_driver').'</td>
-                    <td style="text-align: left; width: 280px;">: '.$head_report->name_vehicle_crewmen.'</td>
-                    <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_license_plate').'</td>
-                    <td style="text-align: left; width: 280px;">: '.$head_report->license_plate.'</td>
-                </tr>
-                 <tr>
-                    <td style="text-align: left;" colspan="4">&nbsp;</td>
+                    <td colspan="4" height="20px"></td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_code').'</td>
-                    <td style="text-align: left; width: 560px;" colspan="3">: '.$head_report->uuid.'</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_event').'</td>
-                    <td style="text-align: left; width: 560px;" colspan="3">: '.$head_report->name_event.'</td>
+                    <th style="text-align: left; width: 80px;"><b>'.Lang::get('transferservice::labels.lbl_event').'</b></th>
+                    <th style="text-align: left; width: 560px;" colspan="3"><b>: '.$head_report->name_event.'</b></th>
                 </tr>
                 <tr>
                     <td style="text-align: left; width: 80px;">'.Lang::get('transferservice::labels.lbl_date').'</td>
@@ -206,12 +218,15 @@ class LoadOrderController extends Controller
         $bp = false;
         $detail_html = '';
         $a = 1;
+        $c = 0;
         foreach ($data as $row){
             if($aux_odt != $row['internal_id']){
                 if($bp){
-                    PDF::writeHTML($this->htmlPdf($head_report, $detail_html), true, false, true, false, '');
-                    PDF::Cell(0, 10, 'Página '.PDF::getAliasNumPage().'/'.PDF::getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-                    PDF::AddPage();
+                    //dd($bp);
+                    PDF::writeHTML($this->htmlPdf($head_report, $detail_html, $c), true, false, true, false, '');
+                    //PDF::Cell(0, 10, 'Página '.PDF::getAliasNumPage().'/'.PDF::getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                    //PDF::AddPage();
+                    $c++;
                 }
                 $head_report = $row;
                 $detail_html = '';

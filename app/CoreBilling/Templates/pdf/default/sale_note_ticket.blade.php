@@ -30,12 +30,12 @@
 
 @if($company->logo)
     <div class="text-center company_logo_box pt-5">
-        <img src="data:{{mime_content_type(public_path("storage/uploads/logos/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/uploads/logos/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo_ticket contain">
+        <img src="data:{{mime_content_type(public_path("storage/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo_ticket contain">
     </div>
-{{--@else--}}
-    {{--<div class="text-center company_logo_box pt-5">--}}
-        {{--<img src="{{ asset('logo/logo.jpg') }}" class="company_logo_ticket contain">--}}
-    {{--</div>--}}
+@else
+    <div class="text-center company_logo_box pt-5">--}}
+        <img src="{{ asset('logo/logo.jpg') }}" class="company_logo_ticket contain">
+    </div>
 @endif
 <table class="full-width">
     <tr>

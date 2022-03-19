@@ -60,15 +60,15 @@
                                     </button>
                                     <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
 
-                                        @can('configuraciones_establecimientos_series')
-                                        <a wire:click="$emit('openModalEstablismentSeries',{{ $note->id }})" href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fal fa-hashtag mr-1"></i>{{ __('labels.series') }}
+                                        @can('ventas_nota_venta_editar')
+                                        <a href="{{ route('sales_documents_sale_notes_edit',$note->external_id) }}" class="dropdown-item">
+                                            <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
                                         </a>
                                         @endcan
                                         @can('configuraciones_establecimientos_eliminar')
                                         <div class="dropdown-divider"></div>
-                                        <button onclick="confirmDelete({{ $note->id }})" type="button" class="dropdown-item text-danger">
-                                            <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
+                                        <button onclick="confirmCancel({{ $note->id }})" type="button" class="dropdown-item text-danger">
+                                            <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.ticket_cancel') }}
                                         </button>
                                         @endcan
                                     </div>
@@ -123,10 +123,10 @@
     </div>
     
     <script type="text/javascript">
-        function confirmDelete(id){
+        function confirmCancel(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
-                title: "<i class='fal fa-times-circle text-danger mr-2'></i> ¿Desea eliminar estos datos?",
+                title: "<i class='fal fa-times-circle text-danger mr-2'></i> ¿{{ __('labels.you_want_to_cancel_document') }}?",
                 message: "<span><strong>Advertencia: </strong> ¡Esta acción no se puede deshacer!</span>",
                 centerVertical: true,
                 swapButtonOrder: true,
@@ -148,17 +148,17 @@
                 callback: function(result)
                 {
                     if(result){
-                        @this.deleteEstablishment(id)
+                        @this.cancelDocument(id)
                     }
                 }
             });
             box.find('.modal-content').css({'background-color': 'rgba(255, 0, 0, 0.5)'});
         }
-        document.addEventListener('set-note-delete', event => {
+        document.addEventListener('response_anulation_sale_note', event => {
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>Éxito!</span>",
-                message: "<span><strong>Excelente... </strong>"+event.detail.msg+"</span>",
+                message: "<span><strong>Excelente... </strong>"+event.detail.message+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false

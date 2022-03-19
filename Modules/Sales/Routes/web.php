@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('sales')->group(function
     
         Route::middleware(['middleware' => 'role_or_permission:ventas_nota_venta'])->get('notes', 'SaleNotesController@index')->name('sales_documents_sale_notes');
         Route::middleware(['middleware' => 'role_or_permission:ventas_nota_venta_nuevo'])->get('notes/create', 'SaleNotesController@create')->name('sales_documents_sale_notes_create');
+        Route::middleware(['middleware' => 'role_or_permission:ventas_nota_venta_editar'])->get('notes/edit/{id}', 'SaleNotesController@edit')->name('sales_documents_sale_notes_edit');
         Route::get('notes/print/{external_id}/{format?}', 'SaleNotesController@toPrintInvoice');
     
     });

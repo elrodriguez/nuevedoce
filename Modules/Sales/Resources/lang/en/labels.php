@@ -11,5 +11,6 @@ return  [
     'sale_note' => 'Sale Note',
     'payment_methods' => 'Payment methods',
     'destination' => 'Destination',
-    'reference' => 'Reference'
+    'reference' => 'Reference',
+    'generate' => 'Generate'
 ];

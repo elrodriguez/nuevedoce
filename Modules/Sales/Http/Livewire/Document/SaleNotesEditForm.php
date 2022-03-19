@@ -40,8 +40,9 @@ use App\Models\GlobalPayment;
 use Modules\Inventory\Entities\InvAsset;
 use Modules\Inventory\Entities\InvLocation;
 
-class SaleNotesCreateForm extends Component
+class SaleNotesEditForm extends Component
 {
+
     use StorageDocument;
 
     public $document_type_id = '80';
@@ -97,12 +98,19 @@ class SaleNotesCreateForm extends Component
     public $provinces = [];
     public $districts = [];
     public $soap_type_id;
+    public $note_id;
+    public $note;
+    public $customer_name;
     public $stock_notes;
     
-    public function mount(){
-        $this->value_icbper = Parameter::where('id_parameter','PRT006ICP')->value('value_default');
-        $this->igv = (int) Parameter::where('id_parameter','PRT002IGV')->value('value_default');
+    public function mount($note_id){
+
+        $this->external_id = $note_id;
+        
         $this->stock_notes = (boolean) Parameter::where('id_parameter','PRT008DSN')->value('value_default');
+
+        $this->igv = (int) Parameter::where('id_parameter','PRT002IGV')->value('value_default');
+        
     
         $this->establishments = UserEstablishment::join('set_establishments','establishment_id','set_establishments.id')
                             ->select(
@@ -117,18 +125,17 @@ class SaleNotesCreateForm extends Component
                                         ->where('main',true)
                                         ->value('establishment_id');
         }
-
         $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id)->where('state',true)->first()->id;
+        
         $this->changeSeries();
 
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
 
-        $this->f_issuance = Carbon::now()->format('d/m/Y');
-        $this->f_expiration = Carbon::now()->format('d/m/Y');
-
         $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
 
+        
+        //dd($customer_name);
         $activity = new Activity;
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('sales_documents_sale_notes_create'));
@@ -139,6 +146,7 @@ class SaleNotesCreateForm extends Component
 
     public function render()
     {
+        $this->getDataSaleNote();
         $this->recalculateAll();
         $this->cat_payment_method_types = CatPaymentMethodType::all();
         $billing = new Billing();
@@ -146,16 +154,9 @@ class SaleNotesCreateForm extends Component
 
         $this->identity_document_types = IdentityDocumentType::where('active',1)->get();
 
-        $this->xgenerico = Person::where('trade_name','like','%Clientes Varios%')
-            ->where('identity_document_type_id',0)
-            ->select('people.id AS value',DB::raw('CONCAT(people.number," - ",people.trade_name) AS text'))
-            ->first();
-        if($this->xgenerico){
-            if(!$this->customer_id){
-                $this->customer_id = $this->xgenerico->value;
-            }
-        }
-        return view('sales::livewire.document.sale-notes-create-form');
+        $this->customer_id = $this->note->customer_id;
+        $this->customer_name = $this->note->customer->number.' - '.$this->note->customer->full_name;
+        return view('sales::livewire.document.sale-notes-edit-form');
     }
 
     public function changeSeries(){
@@ -177,9 +178,15 @@ class SaleNotesCreateForm extends Component
     }
 
     public function removeItem($key){
+
         unset($this->box_items[$key]);
+       
         $this->calculateTotal();
-        $this->payment_method_types[0]['amount'] = $this->total;
+
+        if(!$this->payment_method_types[0]['id']){
+            $this->payment_method_types[0]['amount'] = $this->total;
+        }
+        
     }
 
     public function recalculateAll(){
@@ -193,12 +200,13 @@ class SaleNotesCreateForm extends Component
 
             $this->box_items = $data;
             $this->calculateTotal();
-            $this->payment_method_types[0]['amount'] = $this->total;
+            //$this->payment_method_types[0]['amount'] = $this->total;
         }
     }
 
     public function newPaymentMethodTypes(){
         $data = [
+            'id' => null,
             'method' => '01',
             'destination' => 'cash',
             'date_of_payment' => Carbon::now()->format('d/m/Y'),
@@ -214,7 +222,7 @@ class SaleNotesCreateForm extends Component
 
     public function validateForm(){
         //dd($this->customer_id);
-        $this->external_id = null;
+        //$this->external_id = null;
 
         $this->validate([
             'document_type_id' => 'required',
@@ -250,10 +258,11 @@ class SaleNotesCreateForm extends Component
     }
 
     public function store(){
-        
+        $this->deleteAll();
         $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
         $customer_json = Person::where('id',$this->customer_id)->first();
         $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id)->where('state',true)->first()->id;
+
         //$company = SetCompany::first();
         list($di,$mi,$yi) = explode('/',$this->f_issuance);
         list($de,$me,$ye) = explode('/',$this->f_expiration);
@@ -264,7 +273,6 @@ class SaleNotesCreateForm extends Component
 
         $legends = array('code' => 1000, 'value' => $numberletters->convertToLetter($this->total));
 
-        $this->external_id = Str::uuid()->toString();
         $this->total_taxes = $this->total_igv;
         $paid = 0;
         foreach($this->payment_method_types as $key => $value){
@@ -360,7 +368,7 @@ class SaleNotesCreateForm extends Component
 
         SalSerie::where('id',$this->serie_id)->increment('correlative');
 
-        $this->selectCorrelative($this->serie_id);
+        //$this->selectCorrelative($this->serie_id);
         
         $this->setFilename($sale_note);
         $this->createPdf($sale_note,"a4");
@@ -376,20 +384,8 @@ class SaleNotesCreateForm extends Component
         $activity->log('Registro nueva nota de venta');
         $activity->save();
 
-        $this->clearForm();
-
         $this->dispatchBrowserEvent('response_sale_note_store', ['msg' => Lang::get('labels.successfully_registered')]);
 
-    }
-
-    public function clearForm(){
-        $this->f_issuance = Carbon::now()->format('d/m/Y');
-        $this->f_expiration = Carbon::now()->format('d/m/Y');
-        $this->box_items = [];
-        $this->payment_method_types = [];
-        $this->total = 0;
-        $this->payments = [];
-        $this->additional_information = null;
     }
 
     public function calculateTotal() {
@@ -523,6 +519,7 @@ class SaleNotesCreateForm extends Component
                     $affectation_igv_type = AffectationIgvType::where('id',$item['sale_affectation_igv_type_id'])->first()->toArray();
 
                     $data = [
+                        'id' => null,
                         'item_id'=> $item['id'],
                         'item' => json_encode($item),
                         'currency_type_id' => $item['currency_type_id'],
@@ -913,5 +910,111 @@ class SaleNotesCreateForm extends Component
 
         $this->uploadStorage($document->filename, $pdf->output('', 'S'), 'sale_note');
     
+    }
+
+    public function setItems($row){
+        $affectation_igv_type = AffectationIgvType::where('id',$row->affectation_igv_type_id)->first()->toArray();
+        $data = [
+            'id' => $row->id,
+            'item_id' => $row->item_id,
+            'item' => $row->item,
+            'currency_type_id' => $row->currency_type_id,
+            'quantity' => $row->quantity,
+            'unit_value' => $row->unit_value,
+            'affectation_igv_type_id' => $row->affectation_igv_type_id,
+            'affectation_igv_type'=> json_encode($affectation_igv_type),
+            'total_base_igv'=> $row->total_base_igv,
+            'percentage_igv' => $row->percentage_igv,
+            'total_igv' => $row->total_igv,
+            'system_isc_type_id' => $row->system_isc_type_id,
+            'total_base_isc'=> $row->total_base_isc,
+            'percentage_isc'=> $row->percentage_isc,
+            'total_isc'=> $row->total_isc,
+            'total_base_other_taxes'=> $row->total_base_other_taxes,
+            'percentage_other_taxes'=> $row->percentage_other_taxes,
+            'total_other_taxes'=> $row->total_other_taxes,
+            'total_plastic_bag_taxes'=> $row->total_plastic_bag_taxes,
+            'total_taxes'=> $row->total_taxes,
+            'price_type_id'=> $row->price_type_id,
+            'unit_price'=> $row->unit_price,
+            'input_unit_price_value' => $row->unit_price,
+            'total_value' => $row->total_value,
+            'total_discount' => $row->total_discount,
+            'total_charge' => $row->total_charge,
+            'total' => $row->total
+        ];
+        array_push($this->box_items,$data);
+    }
+
+    public function setPaymentMethodTypes($row){
+        $data = [
+            'id' => $row->id,
+            'method' => $row->payment_method_type_id,
+            'destination' => $row->payment_destination_id,
+            'date_of_payment' => Carbon::parse($row->date_of_payment)->format('d/m/Y'),
+            'reference' => $row->reference,
+            'amount' => $row->payment
+        ];
+        array_push($this->payment_method_types,$data);
+    }
+
+    public function deleteAll(){
+        $payments = SalSaleNotePayment::where('sale_note_id',$this->note_id)->get();
+        $items = $this->note->items;
+        $warehouse_id = InvLocation::where('establishment_id',$this->note->establishment_id)->first()->id;
+        foreach($payments as $payment){
+            GlobalPayment::where('payment_id', $payment->id)
+                ->where('payment_type',SalSaleNotePayment::class)
+                ->delete();
+        }
+        foreach($items as $item){
+            if($this->stock_notes){
+                InvAsset::where('item_id',$item->item_id)
+                        ->where('location_id',$warehouse_id)
+                        ->increment('stock',$item->quantity);
+                InvItem::where('id',$item->item_id)->increment('stock',$item->quantity);
+                InvKardex::create([
+                    'date_of_issue' => Carbon::now()->format('Y-m-d'),
+                    'establishment_id' => $this->note->establishment_id,
+                    'item_id' => $item->item_id,
+                    'kardexable_id' => $this->note->id,
+                    'kardexable_type' => SalSaleNote::class,
+                    'location_id' => $warehouse_id,
+                    'quantity'=> $item->quantity,
+                    'detail' => 'Anulación de Venta'
+                ]);
+            }
+        }
+        SalSaleNotePayment::where('sale_note_id',$this->note_id)->delete();
+        SalSaleNoteItem::where('sale_note_id',$this->note_id)->delete();
+        SalSaleNote::find($this->note_id)->delete();
+    }
+
+    public function getDataSaleNote(){
+        $this->note = SalSaleNote::where('external_id',$this->external_id)->first();
+        $this->note_id = $this->note->id;
+        $this->value_icbper = Parameter::where('id_parameter','PRT006ICP')->value('value_default');
+        
+        $this->f_issuance = Carbon::parse($this->note->date_of_issue)->format('d/m/Y');
+        $this->f_expiration = Carbon::parse($this->note->date_of_issue)->format('d/m/Y');
+        $this->box_items = [];
+        $this->payment_method_types = [];
+        $this->total = $this->note->total;
+        $this->payments = [];
+        $this->additional_information = $this->note->observation;
+        $this->establishment_id = $this->note->establishment_id;
+        $this->serie_id = $this->note->series;
+        $this->correlative = str_pad($this->note->number, 8, "0", STR_PAD_LEFT);
+
+        $items = $this->note->items;
+        $payments = $this->note->payments;
+
+        foreach($items as $item){
+            $this->setItems($item);
+        }
+        
+        foreach($payments as $payment){
+            $this->setPaymentMethodTypes($payment);
+        }
     }
 }

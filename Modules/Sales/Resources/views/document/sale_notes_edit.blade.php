@@ -8,20 +8,20 @@
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('sales::labels.module_name')</li>
     <li class="breadcrumb-item"><a href="{{ route('sales_documents_sale_notes') }}" >@lang('sales::labels.sales_notes')</a></li>
-    <li class="breadcrumb-item active">@lang('labels.new')</li>
+    <li class="breadcrumb-item active">@lang('labels.edit')</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-file-invoice-dollar'></i>{{ __('sales::labels.sales_notes') }}<sup class='badge badge-primary fw-500'>{{__('labels.new')}}</sup>
+        <i class='subheader-icon fal fa-file-invoice-dollar'></i>{{ __('sales::labels.sales_notes') }}<sup class='badge badge-primary fw-500'>{{__('labels.edit')}}</sup>
         <small>@lang('labels.available_user')</small>
     </h1>
     <div class="subheader-block">
-        @lang('labels.new')
+        @lang('labels.edit')
     </div>
 @endsection
 @section('content')
-    @livewire('sales::document.sale-notes-create-form')
+    @livewire('sales::document.sale-notes-edit-form',['note_id' => $id])
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>

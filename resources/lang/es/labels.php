@@ -614,5 +614,8 @@ return [
     'available_user'=> 'Disponibles para el usuario',
     'lbl_excellent'     => 'Excelente',
     'no_records_to_display' => 'No hay registros que mostrar',
-    'digemid' => 'DIGEMID'
+    'digemid' => 'DIGEMID',
+    'go_to_the_list' => 'Ir al listado',
+    'you_want_to_cancel_document' => 'Desea anular documento',
+    'document_canceled_correctly' => 'Documento Anulado Correctamente'
 ];

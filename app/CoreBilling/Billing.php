@@ -122,6 +122,7 @@ class Billing
                 break;
             case 'invoice':
                 $document = SalDocument::create($inputs);
+                $this->warehouse_id = InvLocation::where('establishment_id',$inputs['establishment_id'])->where('state',true)->first()->id;
                 $this->savePayments($document, $inputs['payments']);
                 //$this->saveFee($document, $inputs['fee']);
                 foreach ($inputs['items'] as $row) {
@@ -129,7 +130,7 @@ class Billing
                     InvAsset::where('item_id',$row['item_id'])
                         ->where('location_id',$this->warehouse_id)
                         ->decrement('stock',$row['quantity']);
-                    InvItem::where('id',$row['item_id'])->increment('stock', $row['quantity']);
+                    InvItem::where('id',$row['item_id'])->decrement('stock', $row['quantity']);
                     InvKardex::create([
                         'date_of_issue' => Carbon::now()->format('Y-m-d'),
                         'establishment_id' => $document->establishment_id,
@@ -137,7 +138,8 @@ class Billing
                         'kardexable_id' => $document->id,
                         'kardexable_type' => SalDocument::class,
                         'location_id' => $this->warehouse_id,
-                        'quantity'=> (-$row['quantity'])
+                        'quantity'=> (-$row['quantity']),
+                        'detail' => 'Venta'
                     ]);
                 }
                 $this->updatePrepaymentDocuments($inputs);

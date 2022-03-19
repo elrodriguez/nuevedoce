@@ -53,7 +53,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="serie_id">@lang('labels.serie') <span class="text-danger">*</span> </label>
                                 <div class="input-group">
-                                    <select class="custom-select form-control" wire:change="selectCorrelative" wire:model.defer="serie_id">
+                                    <select disabled class="custom-select form-control" wire:model.defer="serie_id">
 
                                         @foreach ($series as $serie)
                                         <option value="{{ $serie->id }}">{{ $serie->id }}</option>
@@ -247,11 +247,9 @@
                             <div class="form-row">
 
                                 <div class="col-md-1 mb-3 align-middle">
-                                    @if ($key > 0)
                                     <a href="javascript:void(0);" class="btn btn-dark btn-sm btn-icon waves-effect waves-themed" wire:click="removePaymentMethodTypes('{{ $key }}')">
                                         <i class="fal fa-times"></i>
                                     </a>
-                                    @endif
                                 </div>
 
                                 <div class="col-md-3 mb-3" wire:ignore.self>
@@ -286,7 +284,7 @@
                     <div class="col-md-3 offset-md-9">
                         <button type="button" class="btn btn-primary btn-block waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm()">
                             <span wire:loading wire:target="validateForm" wire:loading.class="spinner-border spinner-border-sm" wire:loading.class.remove="fal fa-check" class="fal fa-check mr-2" role="status" aria-hidden="true"></span>
-                            <span>{{ __('sales::labels.generate') }}</span>
+                            <span>{{ __('labels.to_update') }}</span>
                         </button>
                     </div>
                 </div>
@@ -458,7 +456,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <script defer>
         document.addEventListener('livewire:load', function () {
 
             $("#datepicker-1").datepicker({
@@ -473,12 +471,12 @@
                 autoclose:true
             }).datepicker('setDate','0');
 
-            $('.basicAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
-                //console.log(item.value)
+            $('.basicAutoComplete').autoComplete('set', { 
+                    value: "{{ $customer_id }}", 
+                    text: "{{ $customer_name }}" 
+            }).on('autocomplete.select', function (evt, item) {
                 selectCustomer(item.value);
             });
-
-            $('.basicAutoComplete').autoComplete('set', { value: "{{ $xgenerico->value }}", text: "{{ $xgenerico->text }}" });
 
             $('.basicAutoCompleteProduct').autoComplete({
                 resolver: 'custom',
@@ -514,11 +512,6 @@
             @this.set('item_id', id);
             @this.clickAddItem();
         }
-        function clearSelect2(){
-            $('.basicAutoComplete').autoComplete('set', { value: "{{ $xgenerico->value }}", text: "{{ $xgenerico->text }}" });
-
-        }
-
         window.addEventListener('response_clear_select_products_alert', event => {
             let showmsg = event.detail.showmsg;
             if(showmsg == true){
@@ -526,9 +519,7 @@
             }
         });
         window.addEventListener('response_sale_note_store', event => {
-            //alert('aaaaaa');
             openModalPrint();
-            clearSelect2();
         });
         window.addEventListener('response_customer_not_ruc_exists', event => {
             let msg = event.detail.message;
@@ -558,7 +549,7 @@
         }
         function printPDF(format){
             let external_id = $('#document_external_id').val();
-            window.open(`print/`+external_id+`/`+format, '_blank');
+            window.open(`../print/`+external_id+`/`+format, '_blank');
         }
         window.addEventListener('response_success_customer_store', event => {
            swalAlert(event.detail.message);
