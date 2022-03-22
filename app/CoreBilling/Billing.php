@@ -26,9 +26,8 @@ use Modules\Inventory\Entities\InvLocation;
 use Modules\Sales\Entities\SalCash;
 use Modules\Sales\Entities\SalCashDocument;
 use Modules\Sales\Entities\SalDocument;
-use Modules\Sales\Entities\SalDocumentItem;
-use Modules\Sales\Entities\SalDocumentPayment;
 use Modules\Sales\Entities\SalInvoice;
+use Modules\Sales\Entities\SalSummary;
 use Modules\Setting\Entities\SetCompany;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
@@ -74,7 +73,7 @@ class Billing
     {
         $this->sunat_alternate_server = Parameter::where('id_parameter','PRT004SRS')->first()->value_default;
         $this->base_pdf_template = Parameter::where('id_parameter','PRT003THM')->first()->value_default;
-        $this->company = SetCompany::first();
+        $this->company = SetCompany::where('main',true)->first();
         $this->isDemo = ($this->company->soap_type_id === '01')?true:false;
         $this->isOse = ($this->company->soap_send_id === '02')?true:false;
         $this->signer = new XmlSigned();
@@ -105,7 +104,7 @@ class Billing
 
     public function save($inputs)
     {
-        $this->actions = array_key_exists('actions', $inputs)?$inputs['actions']:[];
+        $this->actions = array_key_exists('actions', $inputs) ? $inputs['actions'] : [];
         //dd($this->actions);
         $this->type = $inputs['type'];
         $this->route = $inputs['route'];
@@ -150,11 +149,14 @@ class Billing
                 $this->document = SalDocument::find($document->id);
                 break;
             case 'summary':
-                // $document = Summary::create($inputs);
-                // foreach ($inputs['documents'] as $row) {
-                //     $document->documents()->create($row);
-                // }
-                // $this->document = Summary::find($document->id);
+                $document = SalSummary::create($inputs);
+                foreach ($inputs['documents'] as $row) {
+                    $document->documents()->create($row);
+                    SalDocument::find($row['document_id'])->update([
+                        'state_type_id' => '03'
+                    ]);
+                }
+                $this->document = SalSummary::find($document->id);
                 break;
             case 'voided':
                 // $document = Voided::create($inputs);

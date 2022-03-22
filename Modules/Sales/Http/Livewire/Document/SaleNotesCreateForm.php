@@ -219,6 +219,7 @@ class SaleNotesCreateForm extends Component
         $this->validate([
             'document_type_id' => 'required',
             'serie_id' => 'required',
+            'correlative' => 'unique:sal_sale_notes,number,NULL,id,series,' . $this->serie_id,
             'f_issuance' => 'required',
             //'f_expiration' => 'required',
             'customer_id' => 'required'

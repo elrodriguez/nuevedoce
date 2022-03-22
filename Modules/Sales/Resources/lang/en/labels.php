@@ -12,5 +12,13 @@ return  [
     'payment_methods' => 'Payment methods',
     'destination' => 'Destination',
     'reference' => 'Reference',
-    'generate' => 'Generate'
+    'generate' => 'Generate',
+    'sunat_answer' => 'Sunat Answer',
+    'summary_and_cancellations' => 'Summary and Cancellations',
+    'summaries' => 'Summaries',
+    'cancellations' => 'Cancellations',
+    'lbl_success'       => 'Success',
+    'lbl_excellent'     => 'Excellent',
+    'lbl_error'     => 'Error',
+    'cannot_continue_process' => 'Cannot continue the process'
 ];

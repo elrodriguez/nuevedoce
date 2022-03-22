@@ -66,6 +66,9 @@
                                 @error('serie_id')
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
+                                @error('correlative')
+                                <div class="invalid-feedback-2">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="f_issuance">@lang('labels.f_issuance') <span class="text-danger">*</span> </label>

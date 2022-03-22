@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateSalSaleNoteTypesTable extends Migration
+class CreateSalNoteTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateSalSaleNoteTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sal_sale_note_types', function (Blueprint $table) {
+        Schema::create('sal_note_types', function (Blueprint $table) {
             $table->string('id')->index();
             $table->boolean('active');
             $table->string('description');
@@ -22,7 +22,7 @@ class CreateSalSaleNoteTypesTable extends Migration
             $table->timestamps();
         });
 
-        DB::table('sal_sale_note_types')->insert([
+        DB::table('sal_note_types')->insert([
             ['id' => '01', 'active' => true, 'description' => 'Anulación de la operación','debit' => false],
             ['id' => '02', 'active' => true, 'description' => 'Anulación por error en el RUC','debit' => false],
             ['id' => '03', 'active' => true, 'description' => 'Corrección por error en la descripción','debit' => false],
@@ -50,6 +50,6 @@ class CreateSalSaleNoteTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sal_sale_note_types');
+        Schema::dropIfExists('sal_note_types');
     }
 }

@@ -133,7 +133,7 @@
     <tr>
         <td>CLIENTE:</td>
         <td>:</td>
-        <td>{{ $customer->names }}</td>
+        <td>{{ $customer->full_name }}</td>
 
         @if ($document->detraction)
             <td width="120px">MÉTODO DE PAGO</td>

@@ -112,7 +112,7 @@
         window.addEventListener('modal-sales-note-payments', event => {
             $('#modalSaleNotePaymentsLabel').html(event.detail.vaucher);
             $('#modalSaleNotePayments').modal('show');
-        })
+        });
         document.addEventListener('livewire:load', function () {
             $("#inputDatePayment").datepicker({
                 format: 'dd/mm/yyyy',

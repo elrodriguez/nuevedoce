@@ -78,6 +78,9 @@
                                 @error('serie_id')
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
+                                @error('correlative')
+                                <div class="invalid-feedback-2">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-row">
@@ -316,9 +319,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-row">
-                            <div class="col-md-6 mb-3" wire:ignore.self>
+                            <div class="col-md-6 mb-3"f>
                                 <label class="form-label" for="identity_document_type_id">Tipo Doc. Identidad <span class="text-danger">*</span> </label>
-                                <select class="custom-select form-control" wire:model.defer="identity_document_type_id">
+                                <select class="custom-select form-control" wire:model="identity_document_type_id">
                                     @foreach ($identity_document_types as $identity_document_type)
                                         <option value="{{ $identity_document_type->id }}">{{ $identity_document_type->description }}</option>
                                     @endforeach
@@ -327,7 +330,7 @@
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3" wire:ignore.self>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label" for="number_id">{{ __('labels.number') }} <span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" name="number_id" wire:model.defer="number_id">
                                 @error('number_id')
@@ -336,23 +339,23 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-4 mb-3" wire:ignore.self>
+                            <div class="col-md-12 mb-3">
                                 <label class="form-label" for="name">{{ __('labels.name') }} <span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" name="name" wire:model.defer="name">
                                 @error('name')
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 mb-3" wire:ignore.self>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label" for="last_paternal">{{ __('labels.last_paternal') }} <span class="text-danger">*</span> </label>
-                                <input type="text" class="form-control" name="last_paternal" wire:model.defer="last_paternal">
+                                <input {{ $identity_document_type_id == '6' ? 'disabled': '' }} type="text" class="form-control" name="last_paternal" wire:model.defer="last_paternal">
                                 @error('last_paternal')
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 mb-3" wire:ignore.self>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label" for="last_maternal">{{ __('labels.last_maternal') }} <span class="text-danger">*</span> </label>
-                                <input type="text" class="form-control" name="last_maternal" wire:model.defer="last_maternal">
+                                <input {{ $identity_document_type_id == '6' ? 'disabled': '' }} type="text" class="form-control" name="last_maternal" wire:model.defer="last_maternal">
                                 @error('last_maternal')
                                 <div class="invalid-feedback-2">{{ $message }}</div>
                                 @enderror
@@ -462,10 +465,10 @@
                         </div>
                     </div>
                 </div>
-                <!--div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-                </div-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                    <a href="{{ route('sales_document_list') }}" type="button" class="btn btn-primary">{{ __('labels.list') }}</a>
+                </div>
             </div>
         </div>
     </div>

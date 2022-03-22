@@ -29,14 +29,16 @@ class ModulePermissionsTableSeeder extends Seeder
         ]);
 
         $permissions = [];
-
+        
         array_push($permissions,Permission::create(['name' => 'ventas_dashboard','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administracion','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administracion_caja_chica','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administracion_caja_chica_cerrar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_comprobante','guard_name' => 'sanctum']));
-        array_push($permissions,Permission::create(['name' => 'ventas_comprobantes_listado','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_comprobante_listado','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_comprobante_resumen','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_comprobante_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_comprobante_notas','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administration_series','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administration_series_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_administration_series_editar','guard_name' => 'sanctum']));

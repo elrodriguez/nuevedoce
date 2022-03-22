@@ -20,7 +20,7 @@ class DocumentsController extends Controller
      */
     public function index()
     {
-        return view('sales::index');
+        return view('sales::document.index');
     }
 
     /**
@@ -30,6 +30,11 @@ class DocumentsController extends Controller
     public function create()
     {
         return view('sales::document.create');
+    }
+
+    public function notes($id)
+    {
+        return view('sales::document.note')->with('external_id',$id);
     }
 
     public function toPrintInvoice($external_id, $format = null) {
@@ -50,4 +55,34 @@ class DocumentsController extends Controller
         $billing->createPdf($document,'invoice',$format, $route);
     }
 
+    public function downloadExternal($domain, $type, $filename, $format = null) {
+        $extension = 'xml';
+        switch ($type) {
+            case 'pdf':
+                $folder = 'pdf';
+                $extension = 'pdf';
+                break;
+            case 'xml':
+                $folder = 'signed';
+                $extension = 'xml';
+                break;
+            case 'cdr':
+                $folder = 'cdr';
+                $extension = 'zip';
+                break;
+            case 'quotation':
+                $folder = 'quotation';
+                break;
+            case 'sale_note':
+                $folder = 'sale_note';
+                break;
+
+            default:
+                throw new Exception('Tipo de archivo a descargar es inválido');
+        }
+
+        $route = 'storage'.DIRECTORY_SEPARATOR.$domain.DIRECTORY_SEPARATOR.'document'.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR.$filename.'.'.$extension;
+        
+        return response()->download(public_path($route));
+    }
 }

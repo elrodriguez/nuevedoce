@@ -66,18 +66,18 @@
     @endforeach
     @endif
     @if($document->prepayments)
-    @foreach($document->prepayments as $prepayment)
-    <cac:AdditionalDocumentReference>
-        <cbc:ID>{{ $prepayment->number }}</cbc:ID>
-        <cbc:DocumentTypeCode>{{ $prepayment->document_type_id }}</cbc:DocumentTypeCode>
-        <cbc:DocumentStatusCode>{{ $loop->iteration }}</cbc:DocumentStatusCode>
-        <cac:IssuerParty>
-            <cac:PartyIdentification>
-                <cbc:ID schemeID="6">{{ $company->number }}</cbc:ID>
-            </cac:PartyIdentification>
-        </cac:IssuerParty>
-    </cac:AdditionalDocumentReference>
-    @endforeach
+        @foreach($document->prepayments as $prepayment)
+        <cac:AdditionalDocumentReference>
+            <cbc:ID>{{ $prepayment->number }}</cbc:ID>
+            <cbc:DocumentTypeCode>{{ $prepayment->document_type_id }}</cbc:DocumentTypeCode>
+            <cbc:DocumentStatusCode>{{ $loop->iteration }}</cbc:DocumentStatusCode>
+            <cac:IssuerParty>
+                <cac:PartyIdentification>
+                    <cbc:ID schemeID="6">{{ $company->number }}</cbc:ID>
+                </cac:PartyIdentification>
+            </cac:IssuerParty>
+        </cac:AdditionalDocumentReference>
+        @endforeach
     @endif
     <cac:Signature>
         <cbc:ID>{{ config('configuration.signature_uri') }}</cbc:ID>
@@ -143,7 +143,7 @@
                 <cbc:ID schemeID="{{ $customer->identity_document_type_id }}">{{ $customer->number }}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName><![CDATA[{{ $customer->names }}]]></cbc:RegistrationName>
+                <cbc:RegistrationName><![CDATA[{{ $customer->full_name }}]]></cbc:RegistrationName>
                 @if($customer->address && $customer->address !== '-')
                 <cac:RegistrationAddress>
                     @if($customer->district_id)
@@ -170,6 +170,11 @@
             @endif
         </cac:Party>
     </cac:AccountingCustomerParty>
+    {{-- este espasio segun la forma de pago aun por mejorar --}}
+    <cac:PaymentTerms>
+        <cbc:ID>FormaPago</cbc:ID>
+        <cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>
+    </cac:PaymentTerms>
     @if($document->detraction)
         @php($detraction = $document->detraction)
         <cac:PaymentMeans>
@@ -185,19 +190,19 @@
         </cac:PaymentTerms>
     @endif
     @if($document->perception)
-    @php($perception = $document->perception)
-    <cac:PaymentTerms>
-        <cbc:ID>Percepcion</cbc:ID>
-        <cbc:Amount currencyID="PEN">{{ $perception->amount }}</cbc:Amount>
-    </cac:PaymentTerms>
+        @php($perception = $document->perception)
+        <cac:PaymentTerms>
+            <cbc:ID>Percepcion</cbc:ID>
+            <cbc:Amount currencyID="PEN">{{ $perception->amount }}</cbc:Amount>
+        </cac:PaymentTerms>
     @endif
     @if($document->prepayments)
-    @foreach($document->prepayments as $prepayment)
-    <cac:PrepaidPayment>
-        <cbc:ID>{{ $loop->iteration }}</cbc:ID>
-        <cbc:PaidAmount currencyID="{{ $document->currency_type_id }}">{{ $prepayment->amount }}</cbc:PaidAmount>
-    </cac:PrepaidPayment>
-    @endforeach
+        @foreach($document->prepayments as $prepayment)
+        <cac:PrepaidPayment>
+            <cbc:ID>{{ $loop->iteration }}</cbc:ID>
+            <cbc:PaidAmount currencyID="{{ $document->currency_type_id }}">{{ $prepayment->amount }}</cbc:PaidAmount>
+        </cac:PrepaidPayment>
+        @endforeach
     @endif
     @if($document->charges)
     @foreach($document->charges as $charge)
@@ -445,7 +450,7 @@
             @endif
         </cac:TaxTotal>
         <cac:Item>
-            <cbc:Description><![CDATA[{{ json_decode($row->item, true)['description'] }}]]></cbc:Description>
+            <cbc:Description><![CDATA[{{ json_decode($row->item, true)['name'] }}]]></cbc:Description>
             @if(json_decode($row->item, true)['internal_id'])
             <cac:SellersItemIdentification>
                 <cbc:ID>{{ json_decode($row->item, true)['internal_id'] }}</cbc:ID>

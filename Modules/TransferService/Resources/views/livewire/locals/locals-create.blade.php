@@ -73,9 +73,6 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
-        document.addEventListener('livewire:load', function () {
-
-        });
 
         function initMap() {
             const myLatlng = { lat: -9.189967, lng: -75.015152 };

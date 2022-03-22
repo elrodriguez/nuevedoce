@@ -129,7 +129,7 @@
     @endisset
     <tr>
         <td class="align-top"><p class="desc">Cliente:</p></td>
-        <td><p class="desc">{{ $customer->names }}</p></td>
+        <td><p class="desc">{{ $customer->full_name }}</p></td>
     </tr>
     <tr>
         <td><p class="desc">{{ $identity_document_type->description }}:</p></td>

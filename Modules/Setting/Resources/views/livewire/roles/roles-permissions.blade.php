@@ -46,4 +46,17 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('set-role-save-add-permission', event => {
+            initApp.playSound('themes/smart-admin/media/sound', 'voice_on')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-success mr-2'></i> <span class='text-success fw-500'>{{ __('setting::labels.success') }}!</span>",
+                message: "<span><strong>{{ __('setting::labels.excellent') }}... </strong>"+event.detail.msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+        });
+    </script>
 </div>

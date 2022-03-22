@@ -7,7 +7,7 @@
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">@lang('sales::labels.module_name')</li>
-    <li class="breadcrumb-item">@lang('sales::labels.voucher')</li>
+    <li class="breadcrumb-item"><a href="{{ route('sales_document_list') }}" >@lang('sales::labels.voucher')</a></li>
     <li class="breadcrumb-item active">@lang('labels.new')</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>
 @endsection
@@ -17,7 +17,7 @@
         <small>@lang('labels.available_user')</small>
     </h1>
     <div class="subheader-block">
-        @lang('labels.list')
+        @lang('labels.new')
     </div>
 @endsection
 @section('content')

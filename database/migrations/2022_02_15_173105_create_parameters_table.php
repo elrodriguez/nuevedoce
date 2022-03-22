@@ -88,6 +88,13 @@ class CreateParametersTable extends Migration
                 'id_parameter' => 'PRT008DSN',
                 'description' => 'Descontar stock al emitir notas de venta',
                 'value_default' => '1'
+            ],
+            [
+                'type' => '1',
+                'code_sql' => null,
+                'id_parameter' => 'PRT009VUL',
+                'description' => 'Versión de UBL',
+                'value_default' => '2.0'
             ]
         ]);
     }

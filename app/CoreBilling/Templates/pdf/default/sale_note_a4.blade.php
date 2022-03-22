@@ -61,7 +61,7 @@
 <table class="full-width mt-5">
     <tr>
         <td width="15%">Cliente:</td>
-        <td width="45%">{{ $customer->names }}</td>
+        <td width="45%">{{ $customer->full_name }}</td>
         <td width="25%">Fecha de emisión:</td>
         <td width="15%">{{ $document->date_of_issue->format('Y-m-d') }}</td>
     </tr>

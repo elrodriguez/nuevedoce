@@ -122,7 +122,7 @@
                 callback: function(result)
                 {
                     if(result){
-                    @this.deleteCustomer(id)
+                        @this.deleteCustomer(id)
                     }
                 }
             });

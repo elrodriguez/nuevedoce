@@ -532,6 +532,7 @@ return [
     'ticket_attended_by_user' => 'Ticket Atendidos por Usuario',
     'bank_accounts' => 'Cuentas Bancarias',
     'bank' => 'Banco',
+    'bank_entities' => 'Entidades bancarias',
     'cci' => 'CCI',
     'balance' => 'Saldo',
     'version_sicmact' => 'Versión Sicmact',

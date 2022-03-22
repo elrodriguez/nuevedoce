@@ -58,7 +58,7 @@ class SaleNotesList extends Component
                 'sal_sale_notes.paid',
                 DB::raw('CONCAT(sal_documents.series,"-",sal_documents.number) AS voucher')
             )
-            ->orderBy('sal_sale_notes.date_of_issue','DESC')
+            ->orderBy('sal_sale_notes.number','DESC')
             ->paginate($this->show);
     }
 

@@ -23,7 +23,7 @@ class BrandList extends Component
         return view('inventory::livewire.brand.brand-list',['brands'=>$this->getBrands()]);
     }
 
-    public function userSearch()
+    public function brandSearch()
     {
         $this->resetPage();
     }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'module_name'       => 'Settings',
     'name' => 'Name',
     'names' => 'Names',
     'name_short' => 'Short name',

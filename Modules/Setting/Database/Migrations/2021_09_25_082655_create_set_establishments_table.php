@@ -48,6 +48,9 @@ class CreateSetEstablishmentsTable extends Migration
             'state' => true,
             'company_id' => 1,
             'country_id' => 'PE',
+            'department_id' => '02',
+            'province_id' => '0218',
+            'district_id' => '021801',
             'email' => 'establecimiento@gmail.com'
         ]);
     }

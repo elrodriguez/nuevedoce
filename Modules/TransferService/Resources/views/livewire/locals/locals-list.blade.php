@@ -114,7 +114,7 @@
                 callback: function(result)
                 {
                     if(result){
-                    @this.deleteLocal(id)
+                        @this.deleteLocal(id)
                     }
                 }
             });

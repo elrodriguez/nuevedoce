@@ -1,3 +1,6 @@
+@php
+    //dd($company->number);
+@endphp
 {!! '<?xml version="1.0" encoding="utf-8" standalone="no"?>' !!}
 <SummaryDocuments
         xmlns="urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1"
@@ -44,14 +47,15 @@
         </cac:Party>
     </cac:AccountingSupplierParty>
     @foreach($document->documents as $row)
+    
     @php($doc = $row->document)
     <sac:SummaryDocumentsLine>
         <cbc:LineID>{{ $loop->iteration }}</cbc:LineID>
         <cbc:DocumentTypeCode>{{ $doc->document_type_id }}</cbc:DocumentTypeCode>
         <cbc:ID>{{ $doc->series }}-{{ $doc->number }}</cbc:ID>
         <cac:AccountingCustomerParty>
-            <cbc:CustomerAssignedAccountID>{{ $doc->customer->number }}</cbc:CustomerAssignedAccountID>
-            <cbc:AdditionalAccountID>{{ $doc->customer->identity_document_type_id }}</cbc:AdditionalAccountID>
+            <cbc:CustomerAssignedAccountID>{{ json_decode($doc->customer)->number }}</cbc:CustomerAssignedAccountID>
+            <cbc:AdditionalAccountID>{{ json_decode($doc->customer)->identity_document_type_id }}</cbc:AdditionalAccountID>
         </cac:AccountingCustomerParty>
         @if(in_array($doc->document_type_id, ['07', '08']))
         @php($affected_document = ($doc->note->affected_document) ? $doc->note->affected_document : $doc->note->data_affected_document)

@@ -13,6 +13,7 @@ use Modules\Setting\Entities\SetEstablishment;
 use Illuminate\Support\Facades\DB;
 use Modules\Sales\Entities\SalDocument;
 use Modules\Sales\Entities\SalSaleNote;
+use Modules\TransferService\Entities\SerLoadOrder;
 
 class ItemsStock extends Component
 {
@@ -79,6 +80,11 @@ class ItemsStock extends Component
                     $query->on('inv_kardexes.kardexable_id','sal_sale_notes.id')
                         ->where('inv_kardexes.kardexable_type', SalSaleNote::class);
                 })
+                ->leftJoin('ser_load_orders', function($query)
+                {
+                    $query->on('inv_kardexes.kardexable_id','ser_load_orders.id')
+                        ->where('inv_kardexes.kardexable_type', SerLoadOrder::class);
+                })
                 ->leftJoin('inv_categories','inv_items.category_id','inv_categories.id')
                 ->leftJoin('inv_brands','inv_items.brand_id','inv_brands.id')
                 ->leftJoin('inv_models','inv_items.model_id','inv_models.id')
@@ -97,6 +103,7 @@ class ItemsStock extends Component
                     DB::raw("CONCAT(inv_purchases.serie,'-',inv_purchases.number) AS purchase_number"),
                     DB::raw("CONCAT(sal_documents.series,'-',sal_documents.number) AS document_number"),
                     DB::raw("CONCAT(sal_sale_notes.series,'-',sal_sale_notes.number) AS sale_note_number"),
+                    "ser_load_orders.uuid AS load_order_number",
                 )
                 ->where('inv_kardexes.location_id',$location_id)
                 ->where('inv_kardexes.item_id',$item_id)

@@ -41,13 +41,12 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('sales')->group(function
         
         Route::get('products_search', 'ItemsController@searchItems')->name('sales_products_search');
         
-        Route::middleware(['middleware' => 'role_or_permission:ventas_comprobantes_listado'])->get('documents_list', function () {
-            return view('sales.sales.document_list');
-        })->name('sales_document_list');
+        Route::middleware(['middleware' => 'role_or_permission:ventas_comprobante_listado'])->get('documents_list','DocumentsController@index')->name('sales_document_list');
 
-        Route::middleware(['middleware' => 'role_or_permission:ventas_documentos_nota'])->get('note/{id}', function ($id) {
-            return view('sales.sales.note')->with('external_id',$id);
-        })->name('sales_notes');
+        Route::get('download/{domain}/{type}/{filename}', 'DocumentsController@downloadExternal')->name('download_sale_document');
+        Route::get('download_summaries/{domain}/{type}/{filename}', 'SummariesController@downloadExternal')->name('download_sale_summaries');
+
+        Route::middleware(['middleware' => 'role_or_permission:ventas_comprobante_notas'])->get('note/{id}','DocumentsController@notes')->name('sales_notes');
 
         Route::get('sale/search_customers','CustomersController@searchCustomers')->name('sales_customers_search');
 

@@ -52,9 +52,9 @@
             @endcan
             @can('configuraciones_establecimientos')
                 <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">
+                    <a href="javascript:void(0);" title="establecimientos" data-filter-tags="establecimientos">
                         <i class="fal fa-store-alt"></i>
-                        <span class="nav-link-text" data-i18n="nav.empresa">{{ __('setting::labels.establishment') }}</span>
+                        <span class="nav-link-text" data-i18n="nav.establecimientos">{{ __('setting::labels.establishment') }}</span>
                     </a>
                     <ul>
                         <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'list' ? 'active' : '' }}">
@@ -66,6 +66,35 @@
                         <li class="{{ $path[0] == 'setting' && $path[1] == 'establishment' && $path[2] == 'create' ? 'active' : '' }}">
                             <a href="{{ route('setting_establishment_create') }}" title="Datos Generales" data-filter-tags="Datos Generales">
                                 <span class="nav-link-text" data-i18n="nav.datos_generales">Nuevo</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('configuraciones_bancos')
+                <li class="{{ $path[0] == 'setting' && $path[1] == 'banks' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="bancos" data-filter-tags="bancos">
+                        <i class="fal fa-pig"></i>
+                        <span class="nav-link-text" data-i18n="nav.bancos">{{ __('labels.bank_entities') }}</span>
+                    </a>
+                    <ul>
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'banks' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('setting_banks') }}" title="bancos listado" data-filter-tags="bancos listado">
+                                <span class="nav-link-text" data-i18n="nav.bancos_listado">{{ __('labels.list') }}</span>
+                            </a>
+                        </li>
+                        @can('configuraciones_establecimientos_nuevo')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'banks' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('setting_banks_create') }}" title="bancos nuevo" data-filter-tags="bancos nuevo">
+                                <span class="nav-link-text" data-i18n="nav.bancos_nuevo">{{ __('labels.new') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('configuraciones_bancos_cuentas')
+                        <li class="{{ $path[0] == 'setting' && $path[1] == 'banks' && $path[2] == 'accounts' ? 'active' : '' }}">
+                            <a href="{{ route('setting_banks_accounts') }}" title="{{ __('labels.bank_accounts') }}" data-filter-tags="{{ __('labels.bank_accounts') }}">
+                                <span class="nav-link-text" data-i18n="nav.bancos_cuentas">{{ __('labels.bank_accounts') }}</span>
                             </a>
                         </li>
                         @endcan

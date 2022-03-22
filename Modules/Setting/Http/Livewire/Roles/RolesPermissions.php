@@ -5,7 +5,9 @@ namespace Modules\Setting\Http\Livewire\Roles;
 use Livewire\Component;
 use Modules\Setting\Entities\SetModulePermission;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Facades\Auth;
+use Elrod\UserActivity\Activity;
+use Illuminate\Support\Facades\Lang;
 class RolesPermissions extends Component
 {
     public $role_name;
@@ -54,6 +56,16 @@ class RolesPermissions extends Component
                 $this->role->revokePermissionTo($permission);
             }
         }
+
+        $activity = new Activity;
+        $activity->modelOn(Role::class,$this->role->id,'roles');
+        $activity->causedBy(Auth::user());
+        $activity->routeOn(route('setting_roles_permissions',$this->role_id));
+        $activity->logType('update');
+        $activity->log('agrego permisos al rol: '.$this->role->name);
+        $activity->save();
+
+        $this->dispatchBrowserEvent('set-role-save-add-permission', ['msg' => Lang::get('setting::labels.msg_update')]);
     }
 
     public function selectAll($module_id){

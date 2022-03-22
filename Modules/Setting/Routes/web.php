@@ -43,4 +43,12 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_roles'])->get('list', 'RolesController@index')->name('setting_roles');
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_roles_permisos'])->get('permissions/{id}', 'RolesController@permissions')->name('setting_roles_permissions');
     });
+    Route::group(['prefix' => 'banks'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_bancos_listado'])->get('list', 'BanksController@index')->name('setting_banks');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_bancos_nuevo'])->get('create', 'BanksController@create')->name('setting_banks_create');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_bancos_editar'])->get('edit/{id}', 'BanksController@edit')->name('setting_banks_edit');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_bancos_cuentas'])->get('accounts', 'BanksController@accounts')->name('setting_banks_accounts');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_bancos_cuentas'])->get('accounts/create', 'BanksController@accountsCreate')->name('setting_banks_accounts_create');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_bancos_cuentas'])->get('accounts/edit/{id}', 'BanksController@accountsEdit')->name('setting_banks_accounts_edit');
+    });
 });

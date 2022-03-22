@@ -531,6 +531,7 @@ return [
     'ticket_attended_by_user' => 'Ticket attended by user',
     'bank_accounts' => 'Bank Accounts',
     'bank' => 'Bank',
+    'bank_entities' => 'Bank entities',
     'cci' => 'CCI',
     'balance' => 'Balance',
     'version_sicmact' => 'Version Sicmact',

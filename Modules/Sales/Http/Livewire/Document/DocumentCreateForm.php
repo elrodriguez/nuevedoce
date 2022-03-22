@@ -30,6 +30,7 @@ use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvKardex;
 use Modules\Sales\Entities\SalDocument;
 use Illuminate\Support\Facades\DB;
+use Modules\Inventory\Entities\InvLocation;
 
 class DocumentCreateForm extends Component
 {
@@ -92,7 +93,6 @@ class DocumentCreateForm extends Component
         
         $this->value_icbper = Parameter::where('id_parameter','PRT006ICP')->value('value_default');
         $this->igv = (int) Parameter::where('id_parameter','PRT002IGV')->value('value_default');
-        $this->warehouse_id = 1;
     
         $this->establishments = UserEstablishment::join('set_establishments','establishment_id','set_establishments.id')
                             ->select(
@@ -108,6 +108,8 @@ class DocumentCreateForm extends Component
                                         ->value('establishment_id');
         }
 
+        $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id )->first();
+        
         $this->changeSeries();
 
         $this->countries = Country::where('active',true)->get();
@@ -209,6 +211,7 @@ class DocumentCreateForm extends Component
         $this->validate([
             'document_type_id' => 'required',
             'serie_id' => 'required',
+            'correlative' => 'unique:sal_documents,number,NULL,id,series,' . $this->serie_id,
             'f_issuance' => 'required',
             'f_expiration' => 'required',
             'customer_id' => 'required'
@@ -306,7 +309,7 @@ class DocumentCreateForm extends Component
             'soap_type_id' => $this->soap_type_id,
             'state_type_id' => '01',
             'ubl_version' => '2.1',
-            'group_id' => ($this->document_type_id == '03'?'02':$this->document_type_id),
+            'group_id' => ($this->document_type_id == '03' ? '02' : $this->document_type_id),
             'document_type_id' => $this->document_type_id,
             'series' => $this->serie_id,
             'number' => $this->correlative,
@@ -337,7 +340,6 @@ class DocumentCreateForm extends Component
             'legends' => $legends,
             'filename' => ($company->number.'-'.$this->document_type_id.'-'.$this->serie_id.'-'.((int) $this->correlative)),
             'additional_information' => $this->additional_information,
-            'module' => 'MAR',
             'items' => $this->box_items,
             'payments' => $payments,
             'invoice' => $invoice,
@@ -353,8 +355,14 @@ class DocumentCreateForm extends Component
             $billing->updateHash();
             $billing->updateQr();
             $billing->createPdf();
-            $billing->senderXmlSignedBill();
-            $result_invoice = $billing->getResponse();
+
+            $result_invoice['sent'] = false;
+
+            if($this->document_type_id == '01'){
+                $billing->senderXmlSignedBill();
+                $result_invoice = $billing->getResponse();
+            }
+            
         } catch (Exception $e) {
             dd($e->getMessage());
         }
@@ -367,7 +375,8 @@ class DocumentCreateForm extends Component
             SalDocument::where('id', $document_old_id)->update([
                 'has_xml' => '1',
                 'has_pdf' => '1',
-                'has_cdr' => '1'
+                'has_cdr' => ($result_invoice['code'] == 0 ? true : false),
+                'data_json' => $result_invoice
             ]);
         }
         $user = Auth::user();
@@ -662,10 +671,10 @@ class DocumentCreateForm extends Component
             'number' => $this->number_id,
             'names' => $this->name,
             'country_id' => 'PE',
-            'trade_name' => ($this->trade_name == null?$this->name.' '.$this->last_paternal.' '.$this->last_maternal:$this->trade_name),
+            'trade_name' => ($this->trade_name == null ? $this->name.' '.$this->last_paternal.' '.$this->last_maternal : $this->trade_name),
             'last_paternal' => $this->last_paternal,
             'last_maternal' => $this->last_maternal,
-            'full_name'=> $this->last_paternal.' '.$this->last_maternal.' '.$this->name,
+            'full_name'=> ($this->identity_document_type_id == '6'? $this->name : $this->name.' '.$this->last_paternal.' '.$this->last_maternal),
             'department_id' => $this->department_id,
             'province_id'   => $this->province_id,
             'district_id'   => $this->district_id,
