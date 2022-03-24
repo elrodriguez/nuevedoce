@@ -160,6 +160,14 @@
                     </ul>
                 </li>
             @endcan
+            @can('configuraciones_parametros')
+            <li class="{{ $path[0] == 'setting' && $path[1] == 'parameters' ? 'active' : '' }}">
+                <a href="{{ route('parameters') }}" title="{{ __('setting::labels.parameters') }}" data-filter-tags="{{ __('setting::labels.parameters') }}">
+                    <i class="fal fa-puzzle-piece"></i>
+                    <span class="nav-link-text" data-i18n="nav.{{ __('setting::labels.parameters') }}">{{ __('setting::labels.parameters') }}</span>
+                </a>
+            </li>
+            @endcan
         </ul>
     </nav>
 </div>

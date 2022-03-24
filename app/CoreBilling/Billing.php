@@ -944,4 +944,15 @@ class Billing
 
     }
 
+    public function updateResponseSunat(){
+        $result_invoice = $this->getResponse();
+        $document_old_id = $this->document->id;
+        
+        SalDocument::where('id', $document_old_id)->update([
+            'has_xml' => '1',
+            'has_pdf' => '1',
+            'has_cdr' => ($result_invoice['code'] == 0 ? true : false),
+            'data_json' => $result_invoice
+        ]);
+    }
 }

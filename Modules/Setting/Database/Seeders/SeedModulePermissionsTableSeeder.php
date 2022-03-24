@@ -57,6 +57,10 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'configuraciones_bancos_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_bancos_eliminar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_bancos_cuentas','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'configuraciones_parametros','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'configuraciones_acceso_directo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'configuraciones_acceso_directo_eliminar','guard_name' => 'sanctum']));
+
         $role = Role::find(1);
         foreach($permissions as $permission){
             SetModulePermission::create([

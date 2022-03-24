@@ -2,7 +2,7 @@
     <div class="card mb-g rounded-top">
         <div class="card-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label class="form-label" for="button-addon5">Permiso</label>
                         <div class="input-group">

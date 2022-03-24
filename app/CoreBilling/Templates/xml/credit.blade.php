@@ -43,7 +43,7 @@
     <cbc:DocumentCurrencyCode>{{ $document->currency_type_id }}</cbc:DocumentCurrencyCode>
     <cac:DiscrepancyResponse>
         <cbc:ReferenceID>{{ $series.'-'.$number }}</cbc:ReferenceID>
-        <cbc:ResponseCode>{{ $note->note_credit_type_id }}</cbc:ResponseCode>
+        <cbc:ResponseCode>{{ $note->note_type->code }}</cbc:ResponseCode>
         <cbc:Description>{{ $note->note_description }}</cbc:Description>
     </cac:DiscrepancyResponse>
     @if($document->purchase_order)
@@ -83,7 +83,7 @@
                 <cbc:ID>{{ $company->number }}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name><![CDATA[{{ $company->trade_name }}]]></cbc:Name>
+                <cbc:Name><![CDATA[{{ $company->tradename }}]]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>
@@ -99,7 +99,7 @@
                 <cbc:ID schemeID="6">{{ $company->number }}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name><![CDATA[{{ $company->trade_name }}]]></cbc:Name>
+                <cbc:Name><![CDATA[{{ $company->tradename }}]]></cbc:Name>
             </cac:PartyName>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA[{{ $company->name }}]]></cbc:RegistrationName>
@@ -141,7 +141,7 @@
                 <cbc:ID schemeID="{{ $customer->identity_document_type_id }}">{{ $customer->number }}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName><![CDATA[{{ $customer->name }}]]></cbc:RegistrationName>
+                <cbc:RegistrationName><![CDATA[{{ $customer->full_name }}]]></cbc:RegistrationName>
                 @if($customer->address && $customer->address !== '-')
                 <cac:RegistrationAddress>
                     @if($customer->district_id)
@@ -285,9 +285,12 @@
     </cac:LegalMonetaryTotal>
     
     @foreach($document->items as $row)
+    @php
+        $xitem = json_decode($row->item, true);
+    @endphp
     <cac:CreditNoteLine>
         <cbc:ID>{{ $loop->iteration }}</cbc:ID>
-        <cbc:CreditedQuantity unitCode="{{ $row->unit_type_id }}">{{ $row->quantity }}</cbc:CreditedQuantity>
+        <cbc:CreditedQuantity unitCode="{{ json_decode($row->item, true)['unit_measure_id'] }}">{{ $row->quantity }}</cbc:CreditedQuantity>
         @if($row->total_value > 0)
         <cbc:LineExtensionAmount currencyID="{{ $document->currency_type_id }}">{{ $row->total_value }}</cbc:LineExtensionAmount>
         @endif
@@ -358,20 +361,20 @@
             @endif
         </cac:TaxTotal>
         <cac:Item>
-            <cbc:Description><![CDATA[{{ $row->description }}]]></cbc:Description>
-            @if($row->internal_id)
+            <cbc:Description><![CDATA[{{ $xitem['name'] }}]]></cbc:Description>
+            @if($xitem['internal_id'])
             <cac:SellersItemIdentification>
-                <cbc:ID>{{ $row->internal_id }}</cbc:ID>
+                <cbc:ID>{{ $xitem['internal_id'] }}</cbc:ID>
             </cac:SellersItemIdentification>
             @endif
-            @if($row->item_code)
+            @if($xitem['item_code'])
             <cac:CommodityClassification>
-                <cbc:ItemClassificationCode>{{ $row->item_code }}</cbc:ItemClassificationCode>
+                <cbc:ItemClassificationCode>{{ $xitem['item_code'] }}</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             @endif
-            @if($row->item_code_gs1)
+            @if($xitem['item_code_gs1'])
             <cac:StandardItemIdentification>
-                <cbc:ID>{{ $row->item_code_gs1 }}</cbc:ID>
+                <cbc:ID>{{ $xitem['item_code_gs1'] }}</cbc:ID>
             </cac:StandardItemIdentification>
             @endif
             @if($row->attributes)

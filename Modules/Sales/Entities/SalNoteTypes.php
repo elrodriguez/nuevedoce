@@ -9,10 +9,9 @@ class SalNoteTypes extends Model
 {
     use HasFactory;
 
-    public $incrementing = false;
-    
+   
     protected $fillable = [
-        'id','active','description','debit'
+        'id','code','active','description','debit'
     ];
     
     protected static function newFactory()

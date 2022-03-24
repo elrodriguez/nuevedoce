@@ -293,9 +293,16 @@
             }
             clearSelect3();
         });
-        window.addEventListener('response_success_document_charges_store', event => {
-           openModalPrint();
-           clearSelect2();
+        window.addEventListener('response_success_document_note', event => {
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>¡Enhorabuena!</span>",
+                message: "<span><strong>{{__('labels.lbl_excellent')}}... </strong>"+event.detail.message+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
         window.addEventListener('response_customer_not_ruc_exists', event => {
             swalAlert(event.detail.message);
@@ -321,5 +328,12 @@
             $('#exampleModalClientNew').modal('hide');
             @this.set('customer_id', id);
         }
+        document.addEventListener('livewire:load', function () {
+            $("#datepicker-1").datepicker({
+                format: 'dd/mm/yyyy',
+                language:"{{ app()->getLocale() }}",
+                autoclose:true
+            }).datepicker('setDate','0');
+        });
     </script>
 </div>

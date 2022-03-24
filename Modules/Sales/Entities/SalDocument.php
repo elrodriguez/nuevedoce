@@ -90,8 +90,8 @@ class SalDocument extends Model
         return $this->belongsTo(\App\Models\DocumentType::class, 'document_type_id');
     }
 
-    // public function note()
-    // {
-    //     return $this->hasOne(\App\Models\Master\Note::class,'document_id');
-    // }
+    public function note()
+    {
+        return $this->hasOne(SalNote::class,'document_id');
+    }
 }

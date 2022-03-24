@@ -8,16 +8,19 @@ use App\Models\Parameter;
 use App\Models\UserEstablishment;
 use Carbon\Carbon;
 use Livewire\Component;
-use Modules\Inventory\Entities\InvLocation;
+use App\CoreBilling\Helpers\Number\NumberLetter as NumberNumberLetter;
 use Exception;
 use App\CoreBilling\Billing;
 use App\Models\DocumentType;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Modules\Sales\Entities\SalDocument;
 use Modules\Sales\Entities\SalNoteTypes;
 use Modules\Sales\Entities\SalSerie;
-
+use Modules\Setting\Entities\SetCompany;
+use Modules\Setting\Entities\SetEstablishment;
+use Illuminate\Support\Str;
 class NoteCreate extends Component
 {
     public $document_type_id = '07';
@@ -57,11 +60,17 @@ class NoteCreate extends Component
     public $total_discount = 0;
     public $total_isc = 0;
     public $warehouse_id;
+    public $soap_type_id;
+    public $ubl_version;
 
     public function mount($external_id){
         $this->external_id = $external_id;
-        $this->changeSeries();
+        $this->establishment_id = UserEstablishment::where('user_establishments.user_id',Auth::id())
+                                        ->where('main',true)
+                                        ->value('establishment_id');
+        $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
         $this->igv = (int) Parameter::where('id_parameter','PRT002IGV')->value('value_default');
+        $this->ubl_version = Parameter::where('id_parameter','PRT009VUL')->value('value_default');
 
         $activity = new Activity;
         $activity->causedBy(Auth::user());
@@ -71,12 +80,15 @@ class NoteCreate extends Component
         $activity->save();
 
         $this->document = SalDocument::where('external_id',$this->external_id)->with('items')->first();
+        //dd($this->document);
         $this->currencyTypeIdActive = $this->document->currency_type_id;
         $this->exchangeRateSale = $this->document->exchange_rate_sale;
         $this->cdt = $this->document->document_type_id;
         $this->customer_id = $this->document->customer_id;
         $this->customer = $this->document->customer;
         $this->f_expiration = Carbon::now()->format('Y-m-d');
+        $this->f_issuance = Carbon::now()->format('Y-m-d');
+        $this->changeSeries();
         $this->addItems();
     }
 
@@ -93,11 +105,12 @@ class NoteCreate extends Component
 
     public function changeSeries(){
         $std =  ($this->cdt == '01'?'F':'B');
+        //dd($this->cdt);
         $this->series = SalSerie::where('document_type_id',$this->document_type_id)
-            ->where('establishment_id',Auth::user()->establishment_id)
+            ->where('establishment_id',$this->establishment_id)
             ->whereRaw('LEFT(id,1)=?',[$std])
             ->get();
-
+        
         $this->serie_id = $this->series->max('id');
 
         if($this->document_type_id == '07'){
@@ -174,7 +187,8 @@ class NoteCreate extends Component
 
                 $unit_value = ($value['total_value']/$value['quantity']) / (1 + $value['percentage_igv'] / 100);
                 $total_value_partial = $unit_value * $value['quantity'];
-                $total_taxes = $value['total_value'] - $total_value_partial;
+                //$total_taxes = $value['total_value'] - $total_value_partial;
+                $total_taxes = $total_igv;
                 $this->box_items[$key]['total_igv'] = $value['total_value'] - $total_value_partial;
                 $this->box_items[$key]['total_base_igv'] = $total_value_partial;
                 $total_value = $total_value - $value['total_value'];
@@ -182,7 +196,7 @@ class NoteCreate extends Component
             }
 
         }
-
+        //dd($affectation_igv);
         $this->total_exportation = number_format($total_exportation, 2, '.', '');
         $this->total_taxed = number_format($total_taxed, 2, '.', '');
         $this->total_exonerated = number_format($total_exonerated, 2, '.', '');
@@ -346,23 +360,22 @@ class NoteCreate extends Component
 
     public function store(){
 
-        //dd('aca llego');
-
         $this->selectCorrelative($this->serie_id);
 
         list($di,$mi,$yi) = explode('/',$this->f_issuance);
         $date_of_issue = $yi.'-'.$mi.'-'.$di;
 
-        $company = Company::first();
+        $company = SetCompany::where('main',true)->first();
 
         $numberletters = new NumberNumberLetter();
 
         $legends = json_encode(["code" => 1000, "value" => $numberletters->convertToLetter($this->total)]);
 
-        $this->external_id = uuids();
-        $establishment_json = Establishment::where('id',Auth::user()->establishment_id)->first();
+        $this->external_id = Str::uuid()->toString();
+        $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
+        $this->total_taxes = $this->total_igv;
         $inputDocument = [
-            'establishment_id' => Auth::user()->establishment_id,
+            'establishment_id' => $this->establishment_id,
             'establishment' => $establishment_json,
             'customer' => $this->document->customer,
             'user_id' => Auth::id(),
@@ -403,16 +416,13 @@ class NoteCreate extends Component
             'send_server' => 0,
             'legends' => $legends,
             'filename' => ($company->number.'-'.$this->document_type_id.'-'.$this->serie_id.'-'.((int) $this->correlative)),
-            'module' => 'MAR',
-            'soap_type_id' => '02',
+            'soap_type_id' => $this->soap_type_id,
             'state_type_id' => '01',
-            'ubl_version' => '2.1',
+            'ubl_version' => $this->ubl_version,
             'group_id' => ($this->cdt == '03'?'02':'01'),
-            'route'=> 'market/saledocument',
+            'route'=> 'sales/notes',
             'note' => [
-                'note_type' => ($this->document_type_id=='07' ? 'credit' : 'debit'),
-                'note_credit_type_id' => ($this->document_type_id=='07' ? $this->note_type_id : null),
-                'note_debit_type_id' => ($this->document_type_id=='08' ? $this->note_type_id : null),
+                'note_type_id' => $this->note_type_id,
                 'note_description' => $this->note_description,
                 'affected_document_id' => $this->document->id,
                 'data_affected_document' => $this->document
@@ -428,47 +438,30 @@ class NoteCreate extends Component
             $billing->updateQr();
             $billing->createPdf();
             $billing->senderXmlSignedBill();
+            $billing->updateResponseSunat();
+
         } catch (Exception $e) {
             dd($e->getMessage());
         }
 
-        Serie::where('id',$this->serie_id)->increment('correlative');
+        SalSerie::where('id',$this->serie_id)->increment('correlative');
 
         $this->selectCorrelative($this->serie_id);
-        $document_old_id = Document::max('id');
+        $document_old_id = SalDocument::find($this->document->id);
         $user = Auth::user();
         $activity = new Activity;
-        $activity->modelOn(Document::class,$document_old_id);
+        $activity->modelOn(SalDocument::class,$document_old_id->id,'sal_document');
         $activity->causedBy($user);
-        $activity->routeOn(route('charges_new_document'));
-        $activity->componentOn('academic.charges.new-document-form');
+        $activity->routeOn(route('sales_notes',$this->external_id));
+        $activity->componentOn('sales::document.note-create');
         $activity->dataOld($inputDocument);
         $activity->logType('create');
-        $activity->log('Registro el documento de venta');
+        $activity->log('Registro el Nota de '.($this->document_type_id=='07' ? 'credito' : 'debito'));
         $activity->save();
 
-        $this->clearForm();
-        $this->dispatchBrowserEvent('response_success_document_charges_store', ['message' => Lang::get('messages.successfully_registered')]);
+        $this->dispatchBrowserEvent('response_success_document_note', ['message' => Lang::get('labels.successfully_registered')]);
 
         return redirect()->route('sales_document_list');
     }
 
-    public function clearForm(){
-        $this->f_issuance = Carbon::now()->format('d/m/Y');
-        $this->customer_id = null;
-        $this->box_items = [];
-        $this->total = 0;
-        $this->note_description = null;
-        $this->note_type_id = null;
-        $this->total_exportation = null;
-        $this->total_taxed = null;
-        $this->total_exonerated = null;
-        $this->total_unaffected = null;
-        $this->total_free = null;
-        $this->total_igv = null;
-        $this->total_value = null;
-        $this->total_taxes = null;
-        $this->total_plastic_bag_taxes = null;
-        $this->total_prepayment = null;
-    }
 }

@@ -14,5 +14,7 @@
     </div>
 @endsection
 @section('content')
-
+<livewire:setting::parameters.parameters-list />
+<livewire:setting::parameters.parameters-create />
+<livewire:setting::parameters.parameters-edit />
 @endsection

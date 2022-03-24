@@ -20,12 +20,13 @@ class CreateSetShortCutsTable extends Migration
             $table->string('name');
             $table->string('route_name')->nullable();
             $table->string('role_name');
+            $table->string('permission',300)->nullable();
             $table->timestamps();
         });
 
         DB::table('set_short_cuts')->insert([
-            ['icon' => 'fal fa-home', 'name' => 'Inicio', 'route_name' => 'dashboard', 'role_name' => 'TI'],
-            ['icon' => 'fal fa-puzzle-piece', 'name' => 'Parámetros', 'route_name' => 'parameters', 'role_name' => 'TI']
+            ['icon' => 'fal fa-home', 'name' => 'Inicio', 'route_name' => 'dashboard', 'role_name' => 'TI','permission' => 'configuraciones_dashboard'],
+            ['icon' => 'fal fa-puzzle-piece', 'name' => 'Parámetros', 'route_name' => 'parameters', 'role_name' => 'TI','permission' => 'configuraciones_parametros']
         ]);
     }
 

@@ -285,7 +285,7 @@
     <tr>
         <td>TIPO DE NOTA</td>
         <td>:</td>
-        <td>{{ ($document_base->note_type === 'credit')?$document_base->note_credit_type->description:$document_base->note_debit_type->description}}</td>
+        <td>{{ $document_base->note_type->description }}</td>
     </tr>
     <tr>
         <td>DESCRIPCIÓN</td>

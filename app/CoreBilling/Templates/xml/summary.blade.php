@@ -28,7 +28,7 @@
                 <cbc:ID>{{ $company->number }}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name><![CDATA[{{ $company->trade_name }}]]></cbc:Name>
+                <cbc:Name><![CDATA[{{ $company->tradename }}]]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>

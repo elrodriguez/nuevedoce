@@ -15,7 +15,8 @@ class CreateSalNoteTypesTable extends Migration
     public function up()
     {
         Schema::create('sal_note_types', function (Blueprint $table) {
-            $table->string('id')->index();
+            $table->id();
+            $table->string('code')->index();
             $table->boolean('active');
             $table->string('description');
             $table->boolean('debit')->default(false);
@@ -23,23 +24,23 @@ class CreateSalNoteTypesTable extends Migration
         });
 
         DB::table('sal_note_types')->insert([
-            ['id' => '01', 'active' => true, 'description' => 'Anulación de la operación','debit' => false],
-            ['id' => '02', 'active' => true, 'description' => 'Anulación por error en el RUC','debit' => false],
-            ['id' => '03', 'active' => true, 'description' => 'Corrección por error en la descripción','debit' => false],
-            ['id' => '04', 'active' => true, 'description' => 'Descuento global','debit' => false],
-            ['id' => '05', 'active' => true, 'description' => 'Descuento por ítem','debit' => false],
-            ['id' => '06', 'active' => true, 'description' => 'Devolución total','debit' => false],
-            ['id' => '07', 'active' => true, 'description' => 'Devolución por ítem','debit' => false],
-            ['id' => '08', 'active' => true, 'description' => 'Bonificación','debit' => false],
-            ['id' => '09', 'active' => true, 'description' => 'Disminución en el valor','debit' => false],
-            ['id' => '10', 'active' => true, 'description' => 'Otros Conceptos','debit' => false],
-            ['id' => '11', 'active' => true, 'description' => 'Ajustes de operaciones de exportación','debit' => false],
-            ['id' => '12', 'active' => true, 'description' => 'Ajustes afectos al IVAP','debit' => false],
-            ['id' => '01', 'active' => true, 'description' => 'Intereses por mora','debit' => true],
-            ['id' => '02', 'active' => true, 'description' => 'Aumento en el valor','debit' => true],
-            ['id' => '03', 'active' => true, 'description' => 'Penalidades/ otros conceptos','debit' => true],
-            ['id' => '10', 'active' => true, 'description' => 'Ajustes de operaciones de exportación','debit'=>true],
-            ['id' => '11', 'active' => true, 'description' => 'Ajustes afectos al IVAP','debit' => true],
+            ['code' => '01', 'active' => true, 'description' => 'Anulación de la operación','debit' => false],
+            ['code' => '02', 'active' => true, 'description' => 'Anulación por error en el RUC','debit' => false],
+            ['code' => '03', 'active' => true, 'description' => 'Corrección por error en la descripción','debit' => false],
+            ['code' => '04', 'active' => true, 'description' => 'Descuento global','debit' => false],
+            ['code' => '05', 'active' => true, 'description' => 'Descuento por ítem','debit' => false],
+            ['code' => '06', 'active' => true, 'description' => 'Devolución total','debit' => false],
+            ['code' => '07', 'active' => true, 'description' => 'Devolución por ítem','debit' => false],
+            ['code' => '08', 'active' => true, 'description' => 'Bonificación','debit' => false],
+            ['code' => '09', 'active' => true, 'description' => 'Disminución en el valor','debit' => false],
+            ['code' => '10', 'active' => true, 'description' => 'Otros Conceptos','debit' => false],
+            ['code' => '11', 'active' => true, 'description' => 'Ajustes de operaciones de exportación','debit' => false],
+            ['code' => '12', 'active' => true, 'description' => 'Ajustes afectos al IVAP','debit' => false],
+            ['code' => '01', 'active' => true, 'description' => 'Intereses por mora','debit' => true],
+            ['code' => '02', 'active' => true, 'description' => 'Aumento en el valor','debit' => true],
+            ['code' => '03', 'active' => true, 'description' => 'Penalidades/ otros conceptos','debit' => true],
+            ['code' => '10', 'active' => true, 'description' => 'Ajustes de operaciones de exportación','debit'=>true],
+            ['code' => '11', 'active' => true, 'description' => 'Ajustes afectos al IVAP','debit' => true],
         ]);
     }
 

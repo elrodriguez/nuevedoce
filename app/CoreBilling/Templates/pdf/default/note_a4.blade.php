@@ -17,8 +17,7 @@
     $document_number = $document->series.'-'.str_pad($document->number, 8, '0', STR_PAD_LEFT);
     $currency_type = \App\Models\CurrencyType::find($document->currency_type_id);
 
-    $note_credit_type = \App\Models\NoteCreditType::find($document_base->note_credit_type_id);
-    $note_debit_type = \App\Models\NoteDebitType::find($document_base->note_debit_type_id);
+    $note_type = \Modules\Sales\Entities\SalNoteTypes::find($document_base->note_type_id);
 
     $document_type_description_array = [
         '01' => 'FACTURA',
@@ -50,7 +49,7 @@
         @if($company->logo)
             <td width="20%">
                 <div class="company_logo_box">
-                    <img src="data:{{mime_content_type(public_path("storage/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/{$company->logo}")))}}" alt="{{$company->name}}" alt="{{ $company->name }}" class="company_logo" style="max-width: 150px;">
+                    <img src="data:{{mime_content_type(public_path("storage/{$company->logo}"))}};base64, {{base64_encode(file_get_contents(public_path("storage/{$company->logo}")))}}" alt="{{$company->name}}" class="company_logo" style="max-width: 150px;">
                 </div>
             </td>
         @else
@@ -88,7 +87,7 @@
     <tr>
         <td>CLIENTE</td>
         <td>:</td>
-        <td>{{ $customer->name }}</td>
+        <td>{{ $customer->full_name }}</td>
     </tr>
     <tr>
         
@@ -145,7 +144,7 @@
     <tr>
         <td>TIPO DE NOTA</td>
         <td>:</td>
-        <td>{{ ($document_base->note_type === 'credit')?$note_credit_type->description:$note_debit_type->description}}</td>
+        <td>{{ $note_type->description }}</td>
     </tr>
     <tr>
         <td>DESCRIPCIÓN</td>
@@ -178,10 +177,10 @@
             </td>
             <td class="text-center">{{ $row->unit_type_id }}</td>
             <td class="text-left">
-                {!! $row->description !!}
+                {!! $row->name !!}
                 @if($row->attributes)
                     @foreach($row->attributes as $attr)
-                        <br/><span style="font-size: 9px">{!! $attr->description !!} : {{ $attr->value }}</span>
+                        <br/><span style="font-size: 9px">{!! $attr->name !!} : {{ $attr->value }}</span>
                     @endforeach
                 @endif
                 @if($row->discounts)

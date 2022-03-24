@@ -11,7 +11,7 @@
                 @endphp
                     @foreach($modules_permissions as $key => $module)
                         @if($label != $module['label'])
-                            <div class="card" id="card-{{ $module['module_id'] }}">
+                            <div class="card id="card-{{ $module['module_id'] }}">
                                 <div class="card-header bg-warning-100 d-flex pr-2 align-items-center flex-wrap">
                                     <div class="d-flex">
                                         <div class="custom-control custom-switch ">

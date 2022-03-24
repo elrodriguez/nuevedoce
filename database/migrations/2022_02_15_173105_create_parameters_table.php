@@ -55,8 +55,8 @@ class CreateParametersTable extends Migration
                 'value_default'=>'0'
             ],
             [
-                'type' => '2',
-                'code_sql'=> '01,Demo|02,Producción',
+                'type' => '3',
+                'code_sql'=> 'SELECT id,description FROM soap_types',
                 'id_parameter'=>'PRT005SOP',
                 'description'=>'SOAP Tipo (Entorno del Sistema)',
                 'value_default'=>'01'

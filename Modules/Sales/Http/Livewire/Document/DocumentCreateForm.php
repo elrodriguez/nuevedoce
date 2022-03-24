@@ -88,6 +88,7 @@ class DocumentCreateForm extends Component
     public $provinces = [];
     public $districts = [];
     public $soap_type_id;
+    public $ubl_version;
 
     public function mount(){
         
@@ -107,9 +108,9 @@ class DocumentCreateForm extends Component
                                         ->where('main',true)
                                         ->value('establishment_id');
         }
-
-        $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id )->first();
         
+        $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id)->value('id');
+
         $this->changeSeries();
 
         $this->countries = Country::where('active',true)->get();
@@ -119,6 +120,7 @@ class DocumentCreateForm extends Component
         $this->f_expiration = Carbon::now()->format('d/m/Y');
 
         $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
+        $this->ubl_version = Parameter::where('id_parameter','PRT009VUL')->value('value_default');
 
         $activity = new Activity;
         $activity->causedBy(Auth::user());
@@ -308,7 +310,7 @@ class DocumentCreateForm extends Component
             'establishment' => $establishment_json,
             'soap_type_id' => $this->soap_type_id,
             'state_type_id' => '01',
-            'ubl_version' => '2.1',
+            'ubl_version' => $this->ubl_version,
             'group_id' => ($this->document_type_id == '03' ? '02' : $this->document_type_id),
             'document_type_id' => $this->document_type_id,
             'series' => $this->serie_id,

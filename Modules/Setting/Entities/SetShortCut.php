@@ -10,7 +10,11 @@ class SetShortCut extends Model
     use HasFactory;
 
     protected $fillable = [
-        'icon','name','route_name','role_name'
+        'icon',
+        'name',
+        'route_name',
+        'role_name',
+        'permission'
     ];
     
     protected static function newFactory()

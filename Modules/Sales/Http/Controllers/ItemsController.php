@@ -7,12 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Inventory\Entities\InvItem;
+use Modules\Inventory\Entities\InvLocation;
 
 class ItemsController extends Controller
 {
     public function searchItems(Request $request){
-        $warehouse_id = $request->input('est');
+        $establishment_id = $request->input('est');
         $search = $request->input('qry');
+
+        $warehouse_id = InvLocation::where('establishment_id',$establishment_id)->value('id');
 
         $items = InvItem::leftJoin('inv_brands','inv_items.brand_id','inv_brands.id')
             ->leftJoin('inv_assets','inv_assets.item_id','inv_items.id')
@@ -29,7 +32,7 @@ class ItemsController extends Controller
                 ->whereColumn('inv_kardexes.item_id','inv_items.id')
                 ->whereColumn('inv_kardexes.location_id','inv_assets.location_id');
             }, 'stock')
-            ->where('inv_assets.location_id',1)
+            ->where('inv_assets.location_id',$warehouse_id)
             ->where(function($query) use ($search){
                 $query->where('inv_assets.patrimonial_code','=', $search)
                     ->orWhere(DB::raw("REPLACE(inv_items.name, ' ', '')"), 'like', "%" .str_replace(' ','',$search). "%");

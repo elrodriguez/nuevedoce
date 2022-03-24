@@ -42,6 +42,7 @@ return [
     'permissions' => 'Permisos',
     'msg_not_peptra' => 'No se puede eliminar porque tiene registro asociados',
     'roles' => 'Roles',
+    'role' => 'Rol',
     'error' => 'Error',
     'went_wrong' => 'Salió mal',
     'save' => 'Guardar',
@@ -63,5 +64,9 @@ return [
     'yes' => 'Si',
     'observation' => 'Observación',
     'activities_system' => 'Actividades en el sistema',
-    'description' => 'Descripcion'
+    'description' => 'Descripcion',
+    'parameters' => 'Parámetros',
+    'add_more' => 'Añadir más',
+    'permission' => 'Permiso',
+    'route' => 'Ruta'
 ];

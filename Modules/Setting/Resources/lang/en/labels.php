@@ -42,6 +42,7 @@ return [
     'permissions' => 'Permissions',
     'msg_not_peptra' => 'It cannot be deleted because it has associated records',
     'roles' => 'Roles',
+    'role' => 'Role',
     'error' => 'Error',
     'went_wrong' => 'Went wrong',
     'save' => 'Save',
@@ -63,5 +64,9 @@ return [
     'yes' => 'Yes',
     'observation' => 'Observation',
     'activities_system' => 'Activities in the system',
-    'description' => 'Description'
+    'description' => 'Description',
+    'parameters' => 'Parámetros',
+    'add_more' => 'Add More',
+    'permission' => 'Permission',
+    'route' => 'Route'
 ];
