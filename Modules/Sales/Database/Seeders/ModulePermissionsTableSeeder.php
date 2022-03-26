@@ -47,6 +47,11 @@ class ModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'ventas_nota_venta_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_nota_venta_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'ventas_nota_venta_anular','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_gastos','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_gastos_nuevo','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_gastos_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'ventas_gastos_eliminar','guard_name' => 'sanctum']));
+        
         $role = Role::find(1);
 
         foreach($permissions as $permission){

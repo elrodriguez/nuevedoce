@@ -110,6 +110,31 @@
                     </ul>
                 </li>
             <?php endif; ?>
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ventas_gastos')): ?>
+                <li class="<?php echo e($path[0] == 'sales' && $path[1] == 'expenses' ? 'active open' : ''); ?>">
+                    <a href="javascript:void(0);" title="<?php echo e(__('sales::labels.expenses')); ?>" data-filter-tags="<?php echo e(__('sales::labels.expenses')); ?>">
+                        <i class="fal fa-money-bill-wave"></i>
+                        <span class="nav-link-text" data-i18n="nav.<?php echo e(__('sales::labels.expenses')); ?>"><?php echo e(__('sales::labels.expenses')); ?></span>
+                    </a>
+                    <ul>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ventas_gastos')): ?>
+                        <li class="<?php echo e($path[0] == 'sales' && $path[1] == 'expenses' && $path[2] == 'list' ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('sales_expenses_list')); ?>" title="<?php echo app('translator')->get('labels.list'); ?>" data-filter-tags="<?php echo app('translator')->get('labels.list'); ?>">
+                                <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('labels.list'); ?>"><?php echo app('translator')->get('labels.list'); ?></span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ventas_gastos_nuevo')): ?>
+                        <li class="<?php echo e($path[0] == 'sales' && $path[1] == 'expenses' && $path[2] == 'create' ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('sales_expenses_create')); ?>" title="<?php echo app('translator')->get('labels.new'); ?>" data-filter-tags="<?php echo app('translator')->get('labels.new'); ?>">
+                                <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('labels.new'); ?>"><?php echo app('translator')->get('labels.new'); ?></span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                    </ul>
+                </li>
+            <?php endif; ?>
         </ul>
     </nav>
 </div>

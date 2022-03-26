@@ -31,7 +31,16 @@
                                     </td>
                                     <td class="text-center">{{ \Carbon\Carbon::parse($payment->date_of_payment)->format('d/m/Y') }}</td>
                                     <td>{{ $payment->description }}</td>
-                                    <td>{{ $payment->cash_name ? $payment->cash_name : $payment->banck_name }}</td>
+                                    <td>
+                                        @php
+                                            $destination_type = \App\Models\BankAccount::class;
+                                        @endphp
+                                        @if($payment->destination_type == $destination_type)
+                                        {{ $payment->banck_name }}
+                                        @else
+                                        {{ $payment->cash_name }}
+                                        @endif
+                                    </td>
                                     <td>{{ $payment->reference }}</td>
                                     <td class="text-right">{{ number_format($payment->payment, 2, '.', '') }}</td>
                                 </tr>

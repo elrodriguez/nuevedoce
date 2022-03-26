@@ -31,7 +31,18 @@
                                     </td>
                                     <td class="text-center"><?php echo e(\Carbon\Carbon::parse($payment->date_of_payment)->format('d/m/Y')); ?></td>
                                     <td><?php echo e($payment->description); ?></td>
-                                    <td><?php echo e($payment->cash_name ? $payment->cash_name : $payment->banck_name); ?></td>
+                                    <td>
+                                        <?php
+                                            $destination_type = \App\Models\BankAccount::class;
+                                        ?>
+                                        <?php if($payment->destination_type == $destination_type): ?>
+                                        <?php echo e($payment->banck_name); ?>
+
+                                        <?php else: ?>
+                                        <?php echo e($payment->cash_name); ?>
+
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?php echo e($payment->reference); ?></td>
                                     <td class="text-right"><?php echo e(number_format($payment->payment, 2, '.', '')); ?></td>
                                 </tr>

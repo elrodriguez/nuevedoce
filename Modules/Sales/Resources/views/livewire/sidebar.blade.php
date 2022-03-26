@@ -84,6 +84,31 @@
                     </ul>
                 </li>
             @endcan
+            @can('ventas_gastos')
+                <li class="{{ $path[0] == 'sales' && $path[1] == 'expenses' ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" title="{{ __('sales::labels.expenses') }}" data-filter-tags="{{ __('sales::labels.expenses') }}">
+                        <i class="fal fa-money-bill-wave"></i>
+                        <span class="nav-link-text" data-i18n="nav.{{ __('sales::labels.expenses') }}">{{ __('sales::labels.expenses') }}</span>
+                    </a>
+                    <ul>
+                        @can('ventas_gastos')
+                        <li class="{{ $path[0] == 'sales' && $path[1] == 'expenses' && $path[2] == 'list' ? 'active' : '' }}">
+                            <a href="{{ route('sales_expenses_list') }}" title="@lang('labels.list')" data-filter-tags="@lang('labels.list')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('labels.list')">@lang('labels.list')</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('ventas_gastos_nuevo')
+                        <li class="{{ $path[0] == 'sales' && $path[1] == 'expenses' && $path[2] == 'create' ? 'active' : '' }}">
+                            <a href="{{ route('sales_expenses_create') }}" title="@lang('labels.new')" data-filter-tags="@lang('labels.new')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('labels.new')">@lang('labels.new')</span>
+                            </a>
+                        </li>
+                        @endcan
+
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </nav>
 </div>

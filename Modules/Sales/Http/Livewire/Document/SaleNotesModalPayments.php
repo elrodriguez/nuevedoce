@@ -226,6 +226,7 @@ class SaleNotesModalPayments extends Component
                                 'sal_sale_note_payments.date_of_payment',
                                 'sal_sale_note_payments.reference',
                                 'sal_sale_note_payments.payment',
+                                'global_payments.destination_type',
                                 DB::raw('CONCAT("CAJA CHICA",IF(sal_cashes.reference_number IS NULL,"",CONCAT(" - ",sal_cashes.reference_number))) AS cash_name'),
                                 DB::raw('CONCAT(banks.description," - ",bank_accounts.currency_type_id," - ",banks.description) AS banck_name')
                             )

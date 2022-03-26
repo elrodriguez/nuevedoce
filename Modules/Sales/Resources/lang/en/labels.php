@@ -20,5 +20,8 @@ return  [
     'lbl_success'       => 'Success',
     'lbl_excellent'     => 'Excellent',
     'lbl_error'     => 'Error',
-    'cannot_continue_process' => 'Cannot continue the process'
+    'cannot_continue_process' => 'Cannot continue the process',
+    'expenses' => 'Expenses',
+    'expense' => 'Expense',
+    'add_detail' => 'Add Detail'
 ];

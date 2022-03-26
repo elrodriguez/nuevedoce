@@ -849,13 +849,13 @@ class Billing
         }
     }
 
-    private function saveCashDocument($id,$type){
+    public function saveCashDocument($id,$type){
         $cash =  SalCash::where([['user_id',Auth::id()],['state',true]])->first();
         SalCashDocument::create([
             'cash_id' => $cash->id,
             'document_id' => ($type=='invoice'?$id:null),
-            'sale_note_id',
-            'expense_payment_id'
+            'sale_note_id' => ($type=='sale_note'?$id:null),
+            'expense_id' => null
         ]);
     }
 

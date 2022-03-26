@@ -13,7 +13,7 @@ class SalCashDocument extends Model
         'cash_id',
         'document_id',
         'sale_note_id',
-        'expense_payment_id'
+        'expense_id'
     ];
     
     protected static function newFactory()

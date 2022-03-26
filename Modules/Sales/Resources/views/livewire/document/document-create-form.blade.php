@@ -519,7 +519,15 @@
             swalAlertError(event.detail.message);
         });
         function swalAlertError(msg){
-            Swal.fire("Error", msg, "error");
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-times-hexagon text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.error') }}!</span>",
+                message: "<span><strong>{{ __('setting::labels.went_wrong') }}... </strong>"+msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(214, 36, 16, 0.5)'});
         }
         function selectCustomer(val){
             @this.set('customer_id', val);

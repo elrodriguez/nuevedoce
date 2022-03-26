@@ -26,6 +26,21 @@ class SalExpense extends Model
         'expense_reason_id'
     ];
     
+    public function expense_reasons()
+    {
+        return $this->belongsTo(SalExpenseReason::class, 'expense_reason_id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(SalExpenseItem::class,'expense_id');
+    }
+
+    public function expense_payments()
+    {
+        return $this->hasMany(SalExpensePayment::class,'expense_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Sales\Database\factories\SalExpenseFactory::new();

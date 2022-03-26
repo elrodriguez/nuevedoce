@@ -192,7 +192,7 @@ class SalesTablesTypes extends Migration
         });
 
         DB::table('expense_method_types')->insert([
-            ['id' => '1', 'description' => 'Caja chica', 'has_card' => false],
+            ['id' => '1', 'description' => 'Efectivo', 'has_card' => false],
             ['id' => '2', 'description' => 'Tarjeta de crédito', 'has_card' => true],
             ['id' => '3', 'description' => 'Tarjeta de débito',  'has_card' => true],
         ]);

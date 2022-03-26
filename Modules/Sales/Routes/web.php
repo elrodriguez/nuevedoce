@@ -59,4 +59,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('sales')->group(function
     
     });
 
+    Route::group(['prefix' => 'expenses'], function() {
+        Route::middleware(['middleware' => 'role_or_permission:ventas_gastos'])->get('list','ExpensesController@index')->name('sales_expenses_list');
+        Route::middleware(['middleware' => 'role_or_permission:ventas_gastos_nuevo'])->get('create','ExpensesController@create')->name('sales_expenses_create');
+        Route::middleware(['middleware' => 'role_or_permission:ventas_gastos_nuevo'])->get('edit/{id}','ExpensesController@edit')->name('sales_expenses_edit');
+        Route::get('supplier_search','ExpensesController@autocompleteCompanies')->name('sales_expenses_supplier_search');
+    });
+
 });

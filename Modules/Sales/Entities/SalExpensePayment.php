@@ -15,9 +15,15 @@ class SalExpensePayment extends Model
         'expense_method_type_id',
         'has_card',
         'reference',
-        'payment'
+        'payment',
+        'expense_destination_id'
     ];
     
+    public function expense()
+    {
+        return $this->belongsTo(SalExpense::class, 'expense_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Sales\Database\factories\SalExpensePaymentFactory::new();

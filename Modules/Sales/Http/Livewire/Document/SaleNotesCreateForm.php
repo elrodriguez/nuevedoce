@@ -356,6 +356,8 @@ class SaleNotesCreateForm extends Component
             }
 
         }
+        $billing = new Billing();
+        $billing->saveCashDocument($sale_note->id,'sale_note');
 
         $this->savePayments($sale_note);
 
@@ -644,8 +646,8 @@ class SaleNotesCreateForm extends Component
             'identity_document_type_id' => 'required',
             'number_id'     => 'required|numeric',
             'name'          => 'required',
-            'last_paternal' => 'required',
-            'last_maternal' => 'required',
+            // 'last_paternal' => 'required',
+            // 'last_maternal' => 'required',
             'sex'           => 'required',
             'department_id' => 'required',
             'province_id'   => 'required',

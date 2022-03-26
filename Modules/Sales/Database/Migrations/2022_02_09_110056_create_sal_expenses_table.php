@@ -21,7 +21,7 @@ class CreateSalExpensesTable extends Migration
             $table->unsignedBigInteger('person_id');
             $table->string('currency_type_id');
             $table->uuid('external_id');
-            $table->integer('number');
+            $table->string('number',20)->nullable();
             $table->date('date_of_issue');
             $table->time('time_of_issue');
             $table->json('supplier');

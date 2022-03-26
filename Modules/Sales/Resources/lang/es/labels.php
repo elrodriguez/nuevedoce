@@ -20,5 +20,8 @@ return  [
     'lbl_success'       => 'Éxito',
     'lbl_excellent'     => 'Excelente',
     'lbl_error'     => 'Error',
-    'cannot_continue_process' => 'No puede continuar el proceso'
+    'cannot_continue_process' => 'No puede continuar el proceso',
+    'expenses' => 'Gastos diversos',
+    'expense' => 'Gastos',
+    'add_detail' => 'Agregar Detalle'
 ];

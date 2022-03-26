@@ -11,7 +11,7 @@
 @endsection
 @section('subheader')
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-cash-register'></i>{{ __('sales::labels.petty_cash') }}<sup class='badge badge-primary fw-500'>{{__('lend::labels.lbl_list')}}</sup>
+        <i class='subheader-icon fal fa-cash-register'></i>{{ __('sales::labels.petty_cash') }}<sup class='badge badge-primary fw-500'>{{__('labels.list')}}</sup>
         <small>@lang('labels.available_user')</small>
     </h1>
     <div class="subheader-block">
