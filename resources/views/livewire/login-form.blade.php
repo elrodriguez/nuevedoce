@@ -2,8 +2,15 @@
     <div class="blankpage-form-field">
         <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
             <a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-                <img src="{{ url('themes/smart-admin/img/logo.png') }}" alt="SmartAdmin WebApp" aria-roledescription="logo">
-                <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
+                @if($company)
+                    @if(file_exists(public_path('storage/'.$company->logo)))
+                        <img src="{{ url('storage/'.$company->logo) }}" alt="{{ env('APP_NAME', 'Laravel') }}" aria-roledescription="logo">
+                    @endif
+                    <span class="page-logo-text mr-1">{{ $company->name }}</span>
+                @else
+                    <img src="{{ url('themes/smart-admin/img/logo.png') }}" alt="{{ env('APP_NAME', 'Laravel') }}" aria-roledescription="logo">
+                    <span class="page-logo-text mr-1">{{ env('APP_NAME', 'Laravel') }}</span>
+                @endif
                 <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
             </a>
         </div>

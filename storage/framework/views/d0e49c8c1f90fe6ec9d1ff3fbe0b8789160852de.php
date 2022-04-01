@@ -37,7 +37,7 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('subheader'); ?>
     <h1 class="subheader-title">
-        <i class='subheader-icon fal fa-cash-register'></i><?php echo e(__('sales::labels.petty_cash')); ?><sup class='badge badge-primary fw-500'><?php echo e(__('lend::labels.lbl_list')); ?></sup>
+        <i class='subheader-icon fal fa-cash-register'></i><?php echo e(__('sales::labels.petty_cash')); ?><sup class='badge badge-primary fw-500'><?php echo e(__('labels.list')); ?></sup>
         <small><?php echo app('translator')->get('labels.available_user'); ?></small>
     </h1>
     <div class="subheader-block">
@@ -48,15 +48,15 @@
     <?php
 if (! isset($_instance)) {
     $html = \Livewire\Livewire::mount('sales::cash.cash-list')->html();
-} elseif ($_instance->childHasBeenRendered('3bMoqyD')) {
-    $componentId = $_instance->getRenderedChildComponentId('3bMoqyD');
-    $componentTag = $_instance->getRenderedChildComponentTagName('3bMoqyD');
+} elseif ($_instance->childHasBeenRendered('UYDXjaM')) {
+    $componentId = $_instance->getRenderedChildComponentId('UYDXjaM');
+    $componentTag = $_instance->getRenderedChildComponentTagName('UYDXjaM');
     $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
-    $_instance->preserveRenderedChild('3bMoqyD');
+    $_instance->preserveRenderedChild('UYDXjaM');
 } else {
     $response = \Livewire\Livewire::mount('sales::cash.cash-list');
     $html = $response->html();
-    $_instance->logRenderedChild('3bMoqyD', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+    $_instance->logRenderedChild('UYDXjaM', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
 }
 echo $html;
 ?>

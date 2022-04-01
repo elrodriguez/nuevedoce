@@ -13,6 +13,7 @@ class CompanyLogo extends Component
      * @return void
      */
     public $company;
+    
     public function __construct()
     {
         $this->company = SetCompany::where('main',true)->first();

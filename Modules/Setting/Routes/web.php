@@ -19,6 +19,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('setting')->group(functi
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas'])->get('list', 'SetCompanyController@index')->name('setting_company');
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas_nuevo'])->get('create', 'SetCompanyController@create')->name('setting_company_create');
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas_editar'])->get('edit/{id}', 'SetCompanyController@edit')->name('setting_company_edit');
+        Route::middleware(['middleware' => 'role_or_permission:configuraciones_empresas_entorno_del_sistema'])->get('system_environment/{id}', 'SetCompanyController@systemEnvironment')->name('setting_company_system_environment');
     });
     Route::group(['prefix' => 'users'], function() {
         Route::middleware(['middleware' => 'role_or_permission:configuraciones_usuarios'])->get('list', 'UsersController@index')->name('setting_users');

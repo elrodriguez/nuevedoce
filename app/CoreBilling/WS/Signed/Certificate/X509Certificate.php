@@ -31,6 +31,7 @@ class X509Certificate
     {
         $this->pfx = $pfx;
         $this->password = $password;
+        
         $this->parsePfx($pfx, $password);
     }
 

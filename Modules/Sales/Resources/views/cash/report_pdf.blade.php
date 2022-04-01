@@ -316,12 +316,12 @@ $cash_final_balance = $final_balance + $cash->beginning_balance;
                                         $total = null;
 
                                         if($value->sale_note){
-
+                                            
                                             $type_transaction =  'Venta';
                                             $document_type_description =  'NOTA DE VENTA';
                                             $number = $value->sale_note->series.'-'.$value->sale_note->number;
                                             $date_of_issue = $value->sale_note->date_of_issue->format('Y-m-d');
-                                            $customer_name = $value->sale_note->customer->name;
+                                            $customer_name = $value->sale_note->customer->full_name;
                                             $customer_number = $value->sale_note->customer->number;
 
                                             $total = $value->sale_note->total;
@@ -338,8 +338,8 @@ $cash_final_balance = $final_balance + $cash->beginning_balance;
                                             $type_transaction =  'Venta';
                                             $document_type_description =  $value->document->document_type->description;
                                             $number = $value->document->series.'-'.$value->document->number;
-                                            $date_of_issue = $value->document->date_of_issue->format('Y-m-d');
-                                            $customer_name = json_decode($value->document->customer)->name;
+                                            $date_of_issue = \Carbon\Carbon::parse($value->document->date_of_issue)->format('Y-m-d');
+                                            $customer_name = json_decode($value->document->customer)->full_name;
                                             $customer_number = json_decode($value->document->customer)->number;
                                             $total = $value->document->total;
 

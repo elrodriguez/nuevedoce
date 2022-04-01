@@ -9,7 +9,7 @@
                                 @can($shortcut->permission)
                                     <li>
                                         @can('configuraciones_acceso_directo_eliminar')
-                                        <button onclick="confirmDelete({{ $shortcut->id }})" class="btn btn-link m-0 p-0 text-center text-light" >{{ __('labels.delete') }}</button>
+                                        <button onclick="confirmDeleteShortCut({{ $shortcut->id }})" class="btn btn-link m-0 p-0 text-center text-light" >{{ __('labels.delete') }}</button>
                                         @endcan
                                         <a href="{{ route($shortcut->route_name) }}" class="app-list-item text-white border-0 m-0">
                                             <div class="icon-stack">
@@ -120,7 +120,7 @@
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
-        function confirmDelete(id){
+        function confirmDeleteShortCut(id){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'bigbox')
             let box = bootbox.confirm({
                 title: "<i class='fal fa-times-circle text-danger mr-2'></i> ¿Desea eliminar estos datos?",

@@ -6,7 +6,7 @@
             <?php endif; ?>
             <span class="page-logo-text mr-1"><?php echo e($this->company->name); ?></span>
         <?php else: ?>
-            <img src="<?php echo e(url('themes/smart-admin/img/logo.png')); ?>" alt="SmartAdmin WebApp" aria-roledescription="logo">
+            <img src="<?php echo e(url('themes/smart-admin/img/logo.png')); ?>" alt="<?php echo e(config('app.name', 'Laravel')); ?>" aria-roledescription="logo">
             <span class="page-logo-text mr-1"><?php echo e(config('app.name', 'Laravel')); ?></span>
         <?php endif; ?>
         <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>

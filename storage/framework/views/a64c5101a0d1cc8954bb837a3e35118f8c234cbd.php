@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
+            <div style="scroll:auto">
             <table class="table m-0">
                 <thead>
                     <tr>
@@ -58,13 +58,21 @@
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('configuraciones_establecimientos_editar')): ?>
                                     <a href="<?php echo e(route('setting_company_edit',$company->id)); ?>" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i>Editar
+                                        <i class="fal fa-pencil-alt mr-1"></i><?php echo e(__('labels.edit')); ?>
+
+                                    </a>
+                                    <?php endif; ?>
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('configuraciones_empresas_entorno_del_sistema')): ?>
+                                    <a href="<?php echo e(route('setting_company_system_environment',$company->id)); ?>" class="dropdown-item">
+                                        <i class="fal fa-tools mr-1"></i><?php echo e(__('setting::labels.system_environment')); ?>
+
                                     </a>
                                     <?php endif; ?>
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('configuraciones_establecimientos_eliminar')): ?>
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete(<?php echo e($company->id); ?>)" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i>Eliminar
+                                        <i class="fal fa-trash-alt mr-1"></i><?php echo e(__('labels.delete')); ?>
+
                                     </button>
                                     <?php endif; ?>
                                 </div>

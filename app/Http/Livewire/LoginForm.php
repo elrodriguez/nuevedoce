@@ -5,11 +5,17 @@ namespace App\Http\Livewire;
 use App\Models\UserSession;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Modules\Setting\Entities\SetCompany;
 class LoginForm extends Component
 {
     public $username;
     public $password;
     public $rememberme;
+
+    public $company;
+    public function mount(){
+        $this->company = SetCompany::where('main',true)->first();
+    }
 
     public function render()
     {

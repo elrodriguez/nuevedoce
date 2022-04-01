@@ -38,6 +38,6 @@ class SalCashDocument extends Model
 
     public function expense_payment()
     {
-        return $this->belongsTo(\App\Models\CatExpenseMethodTypes::class);
+        return $this->belongsTo(\App\Models\ExpenseMethodType::class);
     }
 }

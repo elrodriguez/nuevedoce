@@ -32,6 +32,7 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'configuraciones_empresas','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_empresas_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_empresas_editar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'configuraciones_empresas_entorno_del_sistema','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_establecimientos','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_establecimientos_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'configuraciones_establecimientos_editar','guard_name' => 'sanctum']));

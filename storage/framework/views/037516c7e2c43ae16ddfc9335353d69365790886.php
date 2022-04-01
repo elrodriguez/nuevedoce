@@ -1,6 +1,6 @@
 <footer class="page-footer" role="contentinfo">
     <div class="d-flex align-items-center flex-1 text-muted">
-        <span class="hidden-md-down fw-700">2020 © <?php echo e($company->name); ?> by&nbsp;<a href='<?php echo e(env('DEV_LINK')); ?>' class='text-primary fw-500' title='gotbootstrap.com' target='_blank'><?php echo e(env('DEV_NAME')); ?></a></span>
+        <span class="hidden-md-down fw-700"><?php echo e(\Carbon\Carbon::now()->format('Y')); ?> © <?php echo e(env('APP_NAME', 'Laravel')); ?> by&nbsp;<a href='<?php echo e(env('DEVELOPER_GITHUB', 'Laravel')); ?>' class='text-primary fw-500' title='gotbootstrap.com' target='_blank'><?php echo e(env('DEVELOPER_NAME', 'Laravel')); ?></a></span>
     </div>
     <div>
         <ul class="list-table m-0">

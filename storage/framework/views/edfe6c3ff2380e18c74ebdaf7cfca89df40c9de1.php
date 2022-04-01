@@ -9,7 +9,7 @@
                                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check($shortcut->permission)): ?>
                                     <li>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('configuraciones_acceso_directo_eliminar')): ?>
-                                        <button onclick="confirmDelete(<?php echo e($shortcut->id); ?>)" class="btn btn-link m-0 p-0 text-center text-light" ><?php echo e(__('labels.delete')); ?></button>
+                                        <button onclick="confirmDeleteShortCut(<?php echo e($shortcut->id); ?>)" class="btn btn-link m-0 p-0 text-center text-light" ><?php echo e(__('labels.delete')); ?></button>
                                         <?php endif; ?>
                                         <a href="<?php echo e(route($shortcut->route_name)); ?>" class="app-list-item text-white border-0 m-0">
                                             <div class="icon-stack">
@@ -164,7 +164,7 @@ unset($__errorArgs, $__bag); ?>
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
-        function confirmDelete(id){
+        function confirmDeleteShortCut(id){
             initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'bigbox')
             let box = bootbox.confirm({
                 title: "<i class='fal fa-times-circle text-danger mr-2'></i> ¿Desea eliminar estos datos?",

@@ -51,7 +51,7 @@
             <div class="row">
                 @if($permissions)
                     @foreach($permissions as $k => $permission)
-                        <div class="col-4 mt-2">
+                        <div class="col-6 mt-2">
                             <div class="input-group">
                                 <div class="input-group-append">
                                     <div class="input-group-text">

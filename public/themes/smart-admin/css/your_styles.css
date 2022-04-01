@@ -20,3 +20,8 @@
 .select2-container--open {
     z-index: 9999999;
 }
+.valid-feedback-2{
+    font-size: .6875rem;
+    margin-top: 0.325rem;
+    color: #1dc9b7;
+}

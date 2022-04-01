@@ -119,7 +119,7 @@ class DocumentCreateForm extends Component
         $this->f_issuance = Carbon::now()->format('d/m/Y');
         $this->f_expiration = Carbon::now()->format('d/m/Y');
 
-        $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
+        $this->soap_type_id = SetCompany::where('main',true)->first()->soap_type_id;
         $this->ubl_version = Parameter::where('id_parameter','PRT009VUL')->value('value_default');
 
         $activity = new Activity;

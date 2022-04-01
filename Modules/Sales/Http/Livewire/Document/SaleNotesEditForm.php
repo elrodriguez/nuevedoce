@@ -132,7 +132,7 @@ class SaleNotesEditForm extends Component
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
 
-        $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
+        $this->soap_type_id = SetCompany::where('main',true)->first()->soap_type_id;
 
         
         //dd($customer_name);

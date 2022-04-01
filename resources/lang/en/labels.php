@@ -617,5 +617,7 @@ return [
     'digemid' => 'DIGEMID',
     'go_to_the_list' => 'Go to the list',
     'you_want_to_cancel_document' => 'You want to cancel document',
-    'document_canceled_correctly' => 'Document Canceled Correctly'
+    'document_canceled_correctly' => 'Document Canceled Correctly',
+    'log_in' => 'Log in',
+    'already_member' => 'Already a member?'
 ];

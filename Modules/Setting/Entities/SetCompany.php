@@ -21,7 +21,14 @@ class SetCompany extends Model
         'representative_name',
         'representative_number',
         'main',
-        'soap_type_id'
+        'soap_type_id',
+        'detraction_account',
+        'soap_send_id',
+        'soap_user',
+        'soap_password',
+        'certificate_pfx',
+        'certificate_pem',
+        'certificate_password'
     ];
     
     protected static function newFactory()

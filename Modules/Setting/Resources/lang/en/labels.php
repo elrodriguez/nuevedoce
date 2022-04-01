@@ -68,5 +68,6 @@ return [
     'parameters' => 'Parámetros',
     'add_more' => 'Add More',
     'permission' => 'Permission',
-    'route' => 'Route'
+    'route' => 'Route',
+    'system_environment' => 'System Environment'
 ];

@@ -631,7 +631,15 @@ unset($__errorArgs, $__bag); ?>
             swalAlertError(event.detail.message);
         });
         function swalAlertError(msg){
-            Swal.fire("Error", msg, "error");
+            initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='fal fa-times-hexagon text-warning mr-2'></i> <span class='text-warning fw-500'><?php echo e(__('setting::labels.error')); ?>!</span>",
+                message: "<span><strong><?php echo e(__('setting::labels.went_wrong')); ?>... </strong>"+msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': 'rgba(214, 36, 16, 0.5)'});
         }
         function selectCustomer(val){
             window.livewire.find('<?php echo e($_instance->id); ?>').set('customer_id', val);

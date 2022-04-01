@@ -76,13 +76,13 @@ class CompanyEdit extends Component
         //dd($this->logo);
         if($this->logo){
             
-            $logo_name = 'company'.DIRECTORY_SEPARATOR.'logos'.DIRECTORY_SEPARATOR;
+            $logo_name = 'company'.DIRECTORY_SEPARATOR.'logos';
             $this->logo->storeAs($logo_name,'logo.jpg','public');
             $logo = $logo_name.DIRECTORY_SEPARATOR.'logo.jpg';
         }
 
         if($this->logo_store){
-            $logo_store_name = 'company'.DIRECTORY_SEPARATOR.'logos'.DIRECTORY_SEPARATOR;
+            $logo_store_name = 'company'.DIRECTORY_SEPARATOR.'logos';
             $this->logo_store->storeAs($logo_store_name,'logo_store.jpg','public');
             $logo_store = $logo_store_name.DIRECTORY_SEPARATOR.'logo_store.jpg';
         }

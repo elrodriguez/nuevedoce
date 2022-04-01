@@ -58,7 +58,7 @@ unset($__errorArgs, $__bag); ?>
             <div class="row">
                 <?php if($permissions): ?>
                     <?php $__currentLoopData = $permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-4 mt-2">
+                        <div class="col-6 mt-2">
                             <div class="input-group">
                                 <div class="input-group-append">
                                     <div class="input-group-text">

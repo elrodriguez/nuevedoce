@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
+            <div style="scroll:auto">
             <table class="table m-0">
                 <thead>
                     <tr>
@@ -58,13 +58,18 @@
                                 <div class="dropdown-menu" style="position: absolute; will-change: top, left; top: 35px; left: 0px;" x-placement="bottom-start">
                                     @can('configuraciones_establecimientos_editar')
                                     <a href="{{ route('setting_company_edit',$company->id) }}" class="dropdown-item">
-                                        <i class="fal fa-pencil-alt mr-1"></i>Editar
+                                        <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
+                                    </a>
+                                    @endcan
+                                    @can('configuraciones_empresas_entorno_del_sistema')
+                                    <a href="{{ route('setting_company_system_environment',$company->id) }}" class="dropdown-item">
+                                        <i class="fal fa-tools mr-1"></i>{{ __('setting::labels.system_environment') }}
                                     </a>
                                     @endcan
                                     @can('configuraciones_establecimientos_eliminar')
                                     <div class="dropdown-divider"></div>
                                     <button onclick="confirmDelete({{ $company->id }})" type="button" class="dropdown-item text-danger">
-                                        <i class="fal fa-trash-alt mr-1"></i>Eliminar
+                                        <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
                                     </button>
                                     @endcan
                                 </div>

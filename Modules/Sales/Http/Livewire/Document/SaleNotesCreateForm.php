@@ -127,7 +127,7 @@ class SaleNotesCreateForm extends Component
         $this->f_issuance = Carbon::now()->format('d/m/Y');
         $this->f_expiration = Carbon::now()->format('d/m/Y');
 
-        $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
+        $this->soap_type_id = SetCompany::where('main',true)->first()->soap_type_id;
 
         $activity = new Activity;
         $activity->causedBy(Auth::user());
@@ -511,9 +511,11 @@ class SaleNotesCreateForm extends Component
                 if($success){
 
                     $unit_price = $item['sale_price'];
+                    
                     $currencyTypeIdActive = 'PEN';
                     $exchangeRateSale = 0.01;
-                    $currency_type_id_old = $item['currency_type_id'];
+                    $currency_type_id_old = $item['currency_type_id'] ? $item['currency_type_id'] : 'PEN';
+
 
                     if ($currency_type_id_old === 'PEN' && $currency_type_id_old !== $currencyTypeIdActive){
                         $unit_price = $unit_price / $exchangeRateSale;
@@ -524,7 +526,7 @@ class SaleNotesCreateForm extends Component
                     }
 
                     $affectation_igv_type = AffectationIgvType::where('id',$item['sale_affectation_igv_type_id'])->first()->toArray();
-
+                    
                     $data = [
                         'item_id'=> $item['id'],
                         'item' => json_encode($item),
@@ -594,7 +596,7 @@ class SaleNotesCreateForm extends Component
             $quantity = 0;
         }
         $total_value_partial = $unit_value * $quantity;
-
+        
         $total_isc = 0;
         $total_other_taxes = 0;
         $discount_base = 0;

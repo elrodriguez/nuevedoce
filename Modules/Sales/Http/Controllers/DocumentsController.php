@@ -85,4 +85,8 @@ class DocumentsController extends Controller
         
         return response()->download(public_path($route));
     }
+
+    public function documentSearch(){
+        return view('sales::document.search');
+    }
 }

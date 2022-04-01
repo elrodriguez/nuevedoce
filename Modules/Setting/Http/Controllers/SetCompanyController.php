@@ -24,4 +24,8 @@ class SetCompanyController extends Controller
     {
         return view('setting::company.edit')->with('id',$id);
     }
+
+    public function systemEnvironment($id){
+        return view('setting::company.system_environment')->with('id',$id);
+    }
 }

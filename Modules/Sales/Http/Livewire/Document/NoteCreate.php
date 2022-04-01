@@ -68,7 +68,7 @@ class NoteCreate extends Component
         $this->establishment_id = UserEstablishment::where('user_establishments.user_id',Auth::id())
                                         ->where('main',true)
                                         ->value('establishment_id');
-        $this->soap_type_id = Parameter::where('id_parameter','PRT005SOP')->value('value_default');
+        $this->soap_type_id = SetCompany::where('main',true)->first()->soap_type_id;
         $this->igv = (int) Parameter::where('id_parameter','PRT002IGV')->value('value_default');
         $this->ubl_version = Parameter::where('id_parameter','PRT009VUL')->value('value_default');
 

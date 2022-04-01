@@ -95,8 +95,11 @@ class Shortcuts extends Component
 
     public function deleteshortcut($id){
         try {
-            SetShortCut::find($id)->delete();
-            $res = 'success';
+            $delete = SetShortCut::find($id);
+            if($delete){
+                SetShortCut::find($id)->delete();
+                $res = 'success';
+            }
         } catch (\Illuminate\Database\QueryException $e) {
             $res = 'error';
         }

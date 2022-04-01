@@ -618,5 +618,7 @@ return [
     'digemid' => 'DIGEMID',
     'go_to_the_list' => 'Ir al listado',
     'you_want_to_cancel_document' => 'Desea anular documento',
-    'document_canceled_correctly' => 'Documento Anulado Correctamente'
+    'document_canceled_correctly' => 'Documento Anulado Correctamente',
+    'log_in' => 'Iniciar Sesión',
+    'already_member' => '¿Ya eres usuario?'
 ];

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale(); }}">
     <head>
         <meta charset="utf-8">
         <title>
-            {{ config('app.name', 'Laravel') }}
+            {{ env('APP_NAME', 'Laravel') }}
         </title>
         <meta name="description" content="Page Title">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
