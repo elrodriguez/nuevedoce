@@ -25,3 +25,12 @@
     margin-top: 0.325rem;
     color: #1dc9b7;
 }
+.my-custom-scrollbar {
+    position: relative;
+    height: 270px;
+    overflow: auto;
+}
+.table-wrapper-scroll-y {
+    display: block;
+}
+

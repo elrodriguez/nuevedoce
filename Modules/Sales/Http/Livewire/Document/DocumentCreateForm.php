@@ -338,7 +338,6 @@ class DocumentCreateForm extends Component
             'total_taxes' => $this->total_taxes,
             'total_value' => $this->total_taxed,
             'total' => $this->total,
-            'send_server' => 0,
             'legends' => $legends,
             'filename' => ($company->number.'-'.$this->document_type_id.'-'.$this->serie_id.'-'.((int) $this->correlative)),
             'additional_information' => $this->additional_information,
@@ -346,7 +345,13 @@ class DocumentCreateForm extends Component
             'payments' => $payments,
             'invoice' => $invoice,
             'type'=>'invoice',
-            'route'=> 'sales/document'
+            'route'=> 'sales/document',
+            'actions' => [
+                'send_email' => false,
+                'send_xml_signed' => $this->document_type_id == '03' ? false : true,
+                'format_pdf' => 'a4'
+            ],
+            'send_server' => false
         ];
 
         try {
@@ -357,13 +362,8 @@ class DocumentCreateForm extends Component
             $billing->updateHash();
             $billing->updateQr();
             $billing->createPdf();
+            $billing->senderXmlSignedBill();
 
-            $result_invoice['sent'] = false;
-
-            if($this->document_type_id == '01'){
-                $billing->senderXmlSignedBill();
-                $result_invoice = $billing->getResponse();
-            }
             
         } catch (Exception $e) {
             dd($e->getMessage());
@@ -373,14 +373,7 @@ class DocumentCreateForm extends Component
         SalSerie::where('id',$this->serie_id)->increment('correlative');
         $this->selectCorrelative($this->serie_id);
         $document_old_id = SalDocument::max('id');
-        if($result_invoice['sent']){
-            SalDocument::where('id', $document_old_id)->update([
-                'has_xml' => '1',
-                'has_pdf' => '1',
-                'has_cdr' => ($result_invoice['code'] == 0 ? true : false),
-                'data_json' => $result_invoice
-            ]);
-        }
+
         $user = Auth::user();
         $activity = new Activity;
         $activity->modelOn(SalDocument::class,$document_old_id);

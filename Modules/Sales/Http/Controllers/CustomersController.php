@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\DB;
 class CustomersController extends Controller
 {
     public function searchCustomers(Request $request){
-        $persons = Person::where('trade_name','like','%'.$request->input('q').'%')
-            ->select(
+        $search = $request->input('q');
+        
+        $persons = Person::select(
                 'people.id AS value',
                 DB::raw('CONCAT(people.number," - ",people.trade_name) AS text')
             )
+            ->where('people.number','=',$search)
+            ->orWhere('full_name','like','%'.$search.'%')
             ->limit(200)
             ->get();
 

@@ -71,6 +71,11 @@
                                                     <i class="fal fa-pencil-alt mr-1"></i> @lang('inventory::labels.lbl_edit')
                                                 </a>
                                             @endcan
+                                            {{-- @can('inventario_items_fotos')
+                                                <a href="{{ route('inventory_item_file',$item->id) }}" class="dropdown-item">
+                                                    <i class="ni ni-picture"></i> @lang('inventory::labels.lbl_images')
+                                                </a>
+                                            @endcan --}}
                                             <div class="dropdown-divider"></div>
                                             @can('inventario_items_eliminar')
                                                 <button onclick="confirmDelete({{ $item->id }})" type="button" class="dropdown-item text-danger">

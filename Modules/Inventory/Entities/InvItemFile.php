@@ -17,6 +17,11 @@ class InvItemFile extends Model
         'item_id'
     ];
 
+    public function item()
+    {
+        return $this->belongsTo(InvItem::class, 'item_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Inventory\Database\factories\InvAssetFileFactory::new();

@@ -35,9 +35,78 @@
         <i class='subheader-icon fal fa-tachometer-alt-fast'></i>Tablero <span class='fw-300'>de resumen</span> <sup class='badge badge-primary fw-500'>New</sup>
         <small>Disponibles para el usuario</small>
     </h1>
-    <div class="subheader-block">
-        Dashboard
+    <?php
+if (! isset($_instance)) {
+    $html = \Livewire\Livewire::mount('sales::dashboard.total-expense', [])->html();
+} elseif ($_instance->childHasBeenRendered('l3qZmt6')) {
+    $componentId = $_instance->getRenderedChildComponentId('l3qZmt6');
+    $componentTag = $_instance->getRenderedChildComponentTagName('l3qZmt6');
+    $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
+    $_instance->preserveRenderedChild('l3qZmt6');
+} else {
+    $response = \Livewire\Livewire::mount('sales::dashboard.total-expense', []);
+    $html = $response->html();
+    $_instance->logRenderedChild('l3qZmt6', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+}
+echo $html;
+?>
+    <?php
+if (! isset($_instance)) {
+    $html = \Livewire\Livewire::mount('sales::dashboard.total-sales', [])->html();
+} elseif ($_instance->childHasBeenRendered('pxEXJQy')) {
+    $componentId = $_instance->getRenderedChildComponentId('pxEXJQy');
+    $componentTag = $_instance->getRenderedChildComponentTagName('pxEXJQy');
+    $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
+    $_instance->preserveRenderedChild('pxEXJQy');
+} else {
+    $response = \Livewire\Livewire::mount('sales::dashboard.total-sales', []);
+    $html = $response->html();
+    $_instance->logRenderedChild('pxEXJQy', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+}
+echo $html;
+?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <?php
+if (! isset($_instance)) {
+    $html = \Livewire\Livewire::mount('sales::dashboard.total-document', [])->html();
+} elseif ($_instance->childHasBeenRendered('KmxD05j')) {
+    $componentId = $_instance->getRenderedChildComponentId('KmxD05j');
+    $componentTag = $_instance->getRenderedChildComponentTagName('KmxD05j');
+    $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
+    $_instance->preserveRenderedChild('KmxD05j');
+} else {
+    $response = \Livewire\Livewire::mount('sales::dashboard.total-document', []);
+    $html = $response->html();
+    $_instance->logRenderedChild('KmxD05j', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+}
+echo $html;
+?>
+        </div>
+        <div class="col-12 col-sm-6">
+            <?php
+if (! isset($_instance)) {
+    $html = \Livewire\Livewire::mount('sales::dashboard.series', [])->html();
+} elseif ($_instance->childHasBeenRendered('cmiCZDN')) {
+    $componentId = $_instance->getRenderedChildComponentId('cmiCZDN');
+    $componentTag = $_instance->getRenderedChildComponentTagName('cmiCZDN');
+    $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
+    $_instance->preserveRenderedChild('cmiCZDN');
+} else {
+    $response = \Livewire\Livewire::mount('sales::dashboard.series', []);
+    $html = $response->html();
+    $_instance->logRenderedChild('cmiCZDN', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+}
+echo $html;
+?>
+        </div>
     </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+
+<script src="<?php echo e(url('themes/smart-admin/js/statistics/flot/flot.bundle.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('sales::layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\nuevedoce\Modules/Sales\Resources/views/index.blade.php ENDPATH**/ ?>

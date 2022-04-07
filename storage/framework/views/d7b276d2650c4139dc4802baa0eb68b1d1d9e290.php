@@ -71,6 +71,7 @@
                                                     <i class="fal fa-pencil-alt mr-1"></i> <?php echo app('translator')->get('inventory::labels.lbl_edit'); ?>
                                                 </a>
                                             <?php endif; ?>
+                                            
                                             <div class="dropdown-divider"></div>
                                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('inventario_items_eliminar')): ?>
                                                 <button onclick="confirmDelete(<?php echo e($item->id); ?>)" type="button" class="dropdown-item text-danger">

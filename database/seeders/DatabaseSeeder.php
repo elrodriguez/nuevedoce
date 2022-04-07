@@ -8,6 +8,7 @@ use Modules\Inventory\Database\Seeders\InventoryDatabaseSeeder;
 use Modules\Staff\Database\Seeders\StaffDatabaseSeeder;
 use Modules\TransferService\Database\Seeders\TransferServiceDatabaseSeeder;
 use Modules\Lend\Database\Seeders\LendDatabaseSeeder;
+use Modules\Pharmacy\Database\Seeders\PharmacyDatabaseSeeder;
 use Modules\Sales\Database\Seeders\SalesDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
             LendDatabaseSeeder::class,
             StaffDatabaseSeeder::class,
             SalesDatabaseSeeder::class,
+            PharmacyDatabaseSeeder::class,
         ]);
     }
 }

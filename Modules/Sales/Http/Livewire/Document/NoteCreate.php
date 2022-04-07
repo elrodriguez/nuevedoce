@@ -410,10 +410,8 @@ class NoteCreate extends Component
             'affected_document_id' => $this->document->id,
             'note_credit_or_debit_type_id' => $this->note_type_id,
             'note_description' => $this->note_description,
-            'actions' => ['format_pdf' => 'a4'],
             'operation_type_id' => null,
             'type'=> ($this->document_type_id=='07'?'credit':'debit'),
-            'send_server' => 0,
             'legends' => $legends,
             'filename' => ($company->number.'-'.$this->document_type_id.'-'.$this->serie_id.'-'.((int) $this->correlative)),
             'soap_type_id' => $this->soap_type_id,
@@ -426,7 +424,13 @@ class NoteCreate extends Component
                 'note_description' => $this->note_description,
                 'affected_document_id' => $this->document->id,
                 'data_affected_document' => $this->document
-            ]
+            ],
+            'actions' => [
+                'send_email' => false,
+                'send_xml_signed' => true,
+                'format_pdf' => 'a4'
+            ],
+            'send_server' => false
         ];
 
         try {
@@ -438,7 +442,6 @@ class NoteCreate extends Component
             $billing->updateQr();
             $billing->createPdf();
             $billing->senderXmlSignedBill();
-            $billing->updateResponseSunat();
 
         } catch (Exception $e) {
             dd($e->getMessage());

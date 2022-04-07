@@ -126,12 +126,12 @@ class ItemEditGeneric extends Component
             $this->extension_photo = $this->image->extension();
             InvItemFile::create([
                 'name' => $imagen_name,
-                'route' => 'storage/items_images/'.$this->item_save->id.'/'.$imagen_name,
+                'route' => 'storage/items_images/'.$this->item->id.'/'.$imagen_name,
                 'extension' => $this->extension_photo,
-                'item_id' => $this->item_save->id
+                'item_id' => $this->item->id
             ]);
 
-            $this->image->storeAs('items_images/'.$this->item_save->id.'/', $imagen_name,'public');
+            $this->image->storeAs('items_images/'.$this->item->id.'/', $imagen_name,'public');
         }
 
         $this->dispatchBrowserEvent('inv-item-edit', ['msg' => Lang::get('inventory::labels.msg_update')]);

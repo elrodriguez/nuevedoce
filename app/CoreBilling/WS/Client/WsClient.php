@@ -16,16 +16,21 @@ class WsClient
      */
     public function __construct($wsdl = '', $parameters = [])
     {
+        
         if (empty($wsdl)) {
             $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
                             DIRECTORY_SEPARATOR.'wsdl'.
                             DIRECTORY_SEPARATOR.'billService.wsdl';
+                            
         }else if($wsdl === 'consultCdrStatus'){
             $wsdl = __DIR__.DIRECTORY_SEPARATOR.'Resources'.
                             DIRECTORY_SEPARATOR.'wsdl'.
                             DIRECTORY_SEPARATOR.'billConsultService.wsdl';
+
         }
+        //dd($wsdl);
         $this->client = new SoapClient($wsdl, $parameters);
+        
     }
 
     /**

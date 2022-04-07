@@ -6,5 +6,6 @@
     "Lend": true,
     "Staff": true,
     "Sale": true,
-    "Sales": true
+    "Sales": true,
+    "Pharmacy": true
 }

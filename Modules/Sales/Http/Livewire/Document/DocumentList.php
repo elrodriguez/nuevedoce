@@ -70,7 +70,7 @@ class DocumentList extends Component
                 'document_types.description AS document_type_description',
                 'sal_documents.id',
                 'sal_documents.has_cdr',
-                'sal_documents.data_json',
+                'sal_documents.sunat_shipping_status',
                 'external_id',
                 DB::raw('CONCAT(DATE_FORMAT(sal_documents.date_of_issue,"%d/%m/%Y")," ",DATE_FORMAT(sal_documents.created_at,"%H:%i:%s")) AS document_date'),
                 'customer',

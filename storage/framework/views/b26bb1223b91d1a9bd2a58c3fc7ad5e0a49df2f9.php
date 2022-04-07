@@ -119,7 +119,7 @@
                             <td class="align-middle">
                                 <?php if($item->state_type_id == '01'): ?>
                                     <button class="btn btn-info btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -128,16 +128,16 @@
                                                 <div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>
                                     ><?php echo e($item->description); ?></button>
                                 <?php elseif($item->state_type_id == '03'): ?>
                                     <button class="btn btn-success btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -146,16 +146,16 @@
                                                 <div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>
                                     ><?php echo e($item->description); ?></button>
                                 <?php elseif($item->state_type_id == '05'): ?>
                                     <button class="btn btn-primary btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -164,16 +164,16 @@
                                                 <div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>
                                     ><?php echo e($item->description); ?></button>
                                 <?php elseif($item->state_type_id == '07'): ?>
                                     <button class="btn btn-secondary btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -182,16 +182,16 @@
                                                 <div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>
                                     ><?php echo e($item->description); ?></button>
                                 <?php elseif($item->state_type_id == '09'): ?>
                                     <button class="btn btn-danger btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -200,16 +200,16 @@
                                                 <div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>
                                     ><?php echo e($item->description); ?></button>
                                 <?php elseif($item->state_type_id == '11'): ?>
                                     <button class="btn btn-dark btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -218,16 +218,16 @@
                                                 <div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>
                                     ><?php echo e($item->description); ?></button>
                                 <?php elseif($item->state_type_id == '13'): ?>
                                     <button class="btn btn-warning btn-sm btn-block waves-effect waves-themed"
-                                        <?php if($item->data_json): ?>
+                                        <?php if($item->sunat_shipping_status): ?>
                                             data-toggle="popover" 
                                             data-placement="top" 
                                             title="<h4 class='fw-500 width-sm'><i class='fal fa-info mr-2'></i><?php echo e(__('sales::labels.sunat_answer')); ?></h4>" 
@@ -235,9 +235,9 @@
                                             data-content='<div>
                                                     <dl class="row">
                                                         <dt class="col-sm-4">CODE</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->code); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->code); ?></dd>
                                                         <dt class="col-sm-4">DESCRIPTION</dt>
-                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->data_json)->description); ?></dd>
+                                                        <dd class="col-sm-8"><?php echo e(json_decode($item->sunat_shipping_status)->description); ?></dd>
                                                     </dl>
                                                 </div>'
                                         <?php endif; ?>

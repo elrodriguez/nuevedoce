@@ -105,7 +105,6 @@ class Billing
     public function save($inputs)
     {
         $this->actions = array_key_exists('actions', $inputs) ? $inputs['actions'] : [];
-        //dd($this->actions);
         $this->type = $inputs['type'];
         $this->route = $inputs['route'];
 
@@ -237,7 +236,7 @@ class Billing
     {
         $this->document->update([
             'state_type_id' => $state_type_id,
-            'soap_shipping_response' => isset($this->response['sent']) ? $this->response:null
+            'soap_shipping_response' => isset($this->response['sent']) ? $this->response : null
         ]);
 
     }
@@ -532,12 +531,12 @@ class Billing
 
     public function senderXmlSignedBill()
     {
-        // if(!$this->actions['send_xml_signed']) {
-        //     $this->response = [
-        //         'sent' => false,
-        //     ];
-        //     return;
-        // }
+        if(!$this->actions['send_xml_signed']) {
+            $this->response = [
+                'sent' => false,
+            ];
+            return;
+        }
         $this->onlySenderXmlSignedBill();
 
     }
@@ -636,10 +635,12 @@ class Billing
 
     public function statusSummary($ticket)
     {
+        
         $extService = new ExtService();
         $extService->setClient($this->wsClient);
         $extService->setCodeProvider(new XmlErrorCodeProvider());
         $res = $extService->getStatus($ticket);
+
         if(!$res->isSuccess()) {
             throw new Exception("Code: {$res->getError()->getCode()}; Description: {$res->getError()->getMessage()}");
         } else {
@@ -952,7 +953,7 @@ class Billing
             'has_xml' => '1',
             'has_pdf' => '1',
             'has_cdr' => ($result_invoice['code'] == 0 ? true : false),
-            'data_json' => $result_invoice
+            'soap_shipping_response' => $result_invoice
         ]);
     }
 }

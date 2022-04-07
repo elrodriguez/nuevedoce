@@ -42,7 +42,10 @@ class InvItem extends Model
         'barcode',
         'item_code_gs1'
     ];
-
+    public function images()
+    {
+        return $this->hasMany(InvItemFile::class,'item_id');
+    }
     protected static function newFactory()
     {
         return \Modules\Inventory\Database\factories\InvItemFactory::new();
