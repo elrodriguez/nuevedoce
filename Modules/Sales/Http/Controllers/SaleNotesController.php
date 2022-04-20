@@ -186,8 +186,8 @@ class SaleNotesController extends Controller
 
        } else {
 
-            $pdf_font_regular = config('tenant.pdf_name_regular');
-            $pdf_font_bold = config('tenant.pdf_name_bold');
+            $pdf_font_regular = env('PDF_NAME_REGULAR');
+            $pdf_font_bold = env('PDF_NAME_BOLD');
 
             if ($pdf_font_regular != false) {
                 $defaultConfig = (new ConfigVariables())->getDefaults();

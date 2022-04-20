@@ -5,6 +5,7 @@
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">{{ __('pharmacy::labels.module_name') }}</li>
+    <li class="breadcrumb-item">{{ __('labels.administration') }}</li>
     <li class="breadcrumb-item">{{ __('labels.products') }}</li>
     <li class="breadcrumb-item active">{{ __('pharmacy::labels.related') }}</li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><x-js-get-date></x-js-get-date></li>

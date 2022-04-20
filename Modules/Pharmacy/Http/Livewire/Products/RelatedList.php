@@ -10,6 +10,11 @@ class RelatedList extends Component
     public $show;
     public $search;
 
+    public function searchRelated()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         return view('pharmacy::livewire.products.related-list',['relateds' => $this->getRelated()]);

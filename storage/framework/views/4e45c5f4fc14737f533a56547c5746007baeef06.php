@@ -176,10 +176,60 @@ unset($__errorArgs, $__bag); ?>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="btn-group mb-3">
-                        <?php $__currentLoopData = $document_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $document_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <button wire:click="$set('document_type_id', <?php echo e($document_type->id); ?>)" type="button" class="btn btn-outline-secondary waves-effect waves-themed <?php echo e($document_type->id == $document_type_id ? 'active' : ''); ?>"><?php echo e($document_type->description); ?></button>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="document_type_id"><?php echo app('translator')->get('labels.voucher_type'); ?> <span class="text-danger">*</span> </label>
+                            <select class="custom-select form-control" wire:change="changeSeries" wire:model.defer="document_type_id">
+
+                                <?php $__currentLoopData = $document_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $document_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($document_type->id); ?>"><?php echo e($document_type->description); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <?php $__errorArgs = ['document_type_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback-2"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="serie_id"><?php echo app('translator')->get('labels.serie'); ?> <span class="text-danger">*</span> </label>
+                            <div class="input-group">
+                                <select class="custom-select form-control" wire:change="selectCorrelative" wire:model.defer="serie_id">
+
+                                    <?php $__currentLoopData = $series; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $serie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($serie->id); ?>"><?php echo e($serie->id); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><?php echo e($correlative); ?></span>
+                                </div>
+                            </div>
+                            <?php $__errorArgs = ['serie_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback-2"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <?php $__errorArgs = ['correlative'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="invalid-feedback-2"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
                     </div>
                     <div class="card border mb-g">
                         <!-- notice the additions of utility paddings and display properties on .card-header -->
@@ -277,8 +327,8 @@ unset($__errorArgs, $__bag); ?>
                         <?php echo e(__('labels.cancel')); ?>
 
                     </button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="fal fa-donate mr-1"></i>
+                    <button type="button" class="btn btn-primary waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm">
+                        <span wire:loading wire:target="validateForm" wire:loading.class="spinner-border spinner-border-sm" wire:loading.class.remove="fal fa-check" class="fal fa-check mr-1" role="status" aria-hidden="true"></span>
                         <span class="mr-5">PAGAR</span>
                         <span><?php echo e($total); ?></span>
                     </button>
@@ -465,6 +515,52 @@ unset($__errorArgs, $__bag); ?>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModalprint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Imprimir</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="document_external_id" value="<?php echo e($external_id); ?>">
+                    <input type="hidden" id="document_type_print" value="<?php echo e($typePRINT); ?>">
+                    <div class="row js-list-filter">
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center align-items-center mb-g">
+                            <a type="button" onclick="printPDF('a4')" href="javascript:void(0)" class="rounded bg-white p-0 m-0 d-flex flex-column w-100 h-100 js-showcase-icon shadow-hover-2">
+                                <div class="rounded-top color-fusion-300 w-100 bg-primary-300">
+                                    <div class="rounded-top d-flex align-items-center justify-content-center w-100 pt-3 pb-3 pr-2 pl-2 fa-3x hover-bg">
+                                        <i class="fal fa-file"></i>
+                                    </div>
+                                </div>
+                                <div class="rounded-bottom p-1 w-100 d-flex justify-content-center align-items-center text-center">
+                                    <span class="d-block text-truncate text-muted">A4</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center align-items-center mb-g">
+                            <a type="button" onclick="printPDF('ticket')" href="javascript:void(0)" class="rounded bg-white p-0 m-0 d-flex flex-column w-100 h-100 js-showcase-icon shadow-hover-2">
+                                <div class="rounded-top color-fusion-300 w-100 bg-primary-300">
+                                    <div class="rounded-top d-flex align-items-center justify-content-center w-100 pt-3 pb-3 pr-2 pl-2 fa-3x hover-bg">
+                                        <i class="fal fa-receipt"></i>
+                                    </div>
+                                </div>
+                                <div class="rounded-bottom p-1 w-100 d-flex justify-content-center align-items-center text-center">
+                                    <span class="d-block text-truncate text-muted">Ticket</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(__('labels.close')); ?></button>
+                    <a href="<?php echo e(route('sales_document_list')); ?>" type="button" class="btn btn-primary"><?php echo e(__('labels.list')); ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('livewire:load', function () {
             let xbody = document.querySelector('body');
@@ -494,13 +590,13 @@ unset($__errorArgs, $__bag); ?>
         function swalAlert(msg){
             initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>¡Enhorabuena!</span>",
+                title: "<i class='<?php echo e(env('BOOTBOX_SUCCESS_ICON')); ?> text-warning mr-2'></i> <span class='text-warning fw-500'>¡Enhorabuena!</span>",
                 message: "<span><strong><?php echo e(__('labels.lbl_excellent')); ?>... </strong>"+msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false
             });
-            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+            box.find('.modal-content').css({'background-color': '<?php echo e(env("BOOTBOX_SUCCESS_COLOR")); ?>'});
         }
         window.addEventListener('response_clear_select_products_alert', event => {
             let showmsg = event.detail.showmsg;
@@ -516,6 +612,44 @@ unset($__errorArgs, $__bag); ?>
             $('.basicAutoComplete').autoComplete('set', { value: id, text: title });
             $('#exampleModalClientNew').modal('hide');
             window.livewire.find('<?php echo e($_instance->id); ?>').set('customer_id', id);
+        }
+        window.addEventListener('response_success_document_charges_store', event => {
+           openModalPrint();
+           $('.basicAutoComplete').autoComplete('set', { value: "<?php echo e($xgenerico->value); ?>", text: "<?php echo e($xgenerico->text); ?>" });
+        });
+        function openModalPrint(){
+            $('#exampleModalprint').modal('show');
+        }
+        function printPDF(format){
+            let external_id = $('#document_external_id').val();
+            let typePRINT = $('#document_type_print').val();
+            window.open(`print/`+external_id+`/`+format+`/`+typePRINT, '_blank');
+        }
+        window.addEventListener('response_customer_not_ruc_exists', event => {
+            let msg = event.detail.message;
+            initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='<?php echo e(env('BOOTBOX_ERROR_ICON')); ?> text-warning mr-2'></i> <span class='text-warning fw-500'>¡Error!</span>",
+                message: "<span><strong>No se puede continuar... </strong>"+msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': '<?php echo e(env("BOOTBOX_ERROR_COLOR")); ?>'});
+        });
+        window.addEventListener('response_payment_total_different', event => {
+            swalAlertError(event.detail.message);
+        });
+        function swalAlertError(msg){
+            initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='<?php echo e(env('BOOTBOX_ERROR_ICON')); ?> text-warning mr-2'></i> <span class='text-warning fw-500'><?php echo e(__('setting::labels.error')); ?>!</span>",
+                message: "<span><strong><?php echo e(__('setting::labels.went_wrong')); ?>... </strong>"+msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': '<?php echo e(env("BOOTBOX_ERROR_COLOR")); ?>'});
         }
     </script>
 </div>

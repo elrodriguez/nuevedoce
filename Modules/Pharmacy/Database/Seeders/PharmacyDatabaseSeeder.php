@@ -18,7 +18,8 @@ class PharmacyDatabaseSeeder extends Seeder
 
         $this->call([
             ModulePermissionsTableSeeder::class,
-
+            DiseasesTableSeeder::class,
+            SymptomTableSeeder::class,
         ]);
     }
 }

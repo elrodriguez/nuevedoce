@@ -27,6 +27,7 @@
 <?php unset($__componentOriginalffde9e6d15fb644ab927a95d1432ec09268242d9); ?>
 <?php endif; ?>
     <li class="breadcrumb-item"><?php echo e(__('pharmacy::labels.module_name')); ?></li>
+    <li class="breadcrumb-item"><?php echo e(__('labels.administration')); ?></li>
     <li class="breadcrumb-item"><?php echo e(__('labels.products')); ?></li>
     <li class="breadcrumb-item"><a href="<?php echo e(route('pharmacy_administration_products_related')); ?>"><?php echo e(__('pharmacy::labels.related')); ?></a></li>
     <li class="breadcrumb-item active"><?php echo e(__('labels.new')); ?></li>
@@ -58,15 +59,15 @@
 <?php
 if (! isset($_instance)) {
     $html = \Livewire\Livewire::mount('pharmacy::products.related-create', [])->html();
-} elseif ($_instance->childHasBeenRendered('s7oxqjK')) {
-    $componentId = $_instance->getRenderedChildComponentId('s7oxqjK');
-    $componentTag = $_instance->getRenderedChildComponentTagName('s7oxqjK');
+} elseif ($_instance->childHasBeenRendered('Ix6JgOJ')) {
+    $componentId = $_instance->getRenderedChildComponentId('Ix6JgOJ');
+    $componentTag = $_instance->getRenderedChildComponentTagName('Ix6JgOJ');
     $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
-    $_instance->preserveRenderedChild('s7oxqjK');
+    $_instance->preserveRenderedChild('Ix6JgOJ');
 } else {
     $response = \Livewire\Livewire::mount('pharmacy::products.related-create', []);
     $html = $response->html();
-    $_instance->logRenderedChild('s7oxqjK', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+    $_instance->logRenderedChild('Ix6JgOJ', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
 }
 echo $html;
 ?>

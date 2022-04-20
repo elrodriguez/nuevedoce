@@ -35,21 +35,42 @@
                         <span class="nav-link-text" data-i18n="nav.clientes">{{ __('pharmacy::labels.administration') }}</span>
                     </a>
                     <ul>
-                        @can('farmacia_administracion_productos')
-                        <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' ? 'active' : '' }}">
-                            <a href="javascript:void(0);" title="Administración" data-filter-tags="Administracion">
-                                <span class="nav-link-text" data-i18n="nav.clientes">{{ __('labels.products') }}</span>
+                        @can('farmacia_administracion_sintomas')
+                        <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'symptom' ? 'active' : '' }}">
+                            <a href="{{ route('pharmacy_administration_symptom') }}" title="@lang('pharmacy::labels.symptom')" data-filter-tags="@lang('pharmacy::labels.symptom')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('pharmacy::labels.symptom')">@lang('pharmacy::labels.symptom')</span>
                             </a>
-                            <ul>
-                                @can('farmacia_administracion_productos_relacionados')
-                                <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' && $path[3] == 'related' ? 'active' : '' }}">
-                                    <a href="{{ route('pharmacy_administration_products_related') }}" title="@lang('pharmacy::labels.related')" data-filter-tags="@lang('pharmacy::labels.related')">
-                                        <span class="nav-link-text" data-i18n="nav.@lang('pharmacy::labels.related')">@lang('pharmacy::labels.related')</span>
-                                    </a>
-                                </li>
-                                @endcan
-                            </ul>
                         </li>
+                        @endcan
+                        @can('farmacia_administracion_enfermedades')
+                        <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'diseases' ? 'active' : '' }}">
+                            <a href="{{ route('pharmacy_administration_diseases') }}" title="@lang('pharmacy::labels.diseases')" data-filter-tags="@lang('pharmacy::labels.diseases')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('pharmacy::labels.diseases')">@lang('pharmacy::labels.diseases')</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('farmacia_administracion_medicinas')
+                        <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'medicines' ? 'active' : '' }}">
+                            <a href="{{ route('pharmacy_administration_medicines') }}" title="@lang('pharmacy::labels.medicines')" data-filter-tags="@lang('pharmacy::labels.medicines')">
+                                <span class="nav-link-text" data-i18n="nav.@lang('pharmacy::labels.medicines')">@lang('pharmacy::labels.medicines')</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('farmacia_administracion_productos')
+                            <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' ? 'active' : '' }}">
+                                <a href="javascript:void(0);" title="Administración" data-filter-tags="Administracion">
+                                    <span class="nav-link-text" data-i18n="nav.clientes">{{ __('labels.products') }}</span>
+                                </a>
+                                <ul>
+                                    @can('farmacia_administracion_productos_relacionados')
+                                    <li class="{{ $path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' && $path[3] == 'related' ? 'active' : '' }}">
+                                        <a href="{{ route('pharmacy_administration_products_related') }}" title="@lang('pharmacy::labels.related')" data-filter-tags="@lang('pharmacy::labels.related')">
+                                            <span class="nav-link-text" data-i18n="nav.@lang('pharmacy::labels.related')">@lang('pharmacy::labels.related')</span>
+                                        </a>
+                                    </li>
+                                    @endcan
+                                </ul>
+                            </li>
                         @endcan
                     </ul>
                 </li>

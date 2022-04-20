@@ -251,7 +251,7 @@ class SaleNotesCreateForm extends Component
     }
 
     public function store(){
-        
+        $this->selectCorrelative($this->serie_id);
         $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
         $customer_json = Person::where('id',$this->customer_id)->first();
         $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id)->where('state',true)->first()->id;

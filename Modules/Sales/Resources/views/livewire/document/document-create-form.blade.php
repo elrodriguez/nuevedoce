@@ -298,7 +298,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3 offset-md-9">
-                        <button type="button" class="btn btn-primary btn-block waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm()">
+                        <button type="button" class="btn btn-primary btn-block waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm">
                             <span wire:loading wire:target="validateForm" wire:loading.class="spinner-border spinner-border-sm" wire:loading.class.remove="fal fa-check" class="fal fa-check mr-2" role="status" aria-hidden="true"></span>
                             <span>{{ __('sales::labels.generate') }}</span>
                         </button>

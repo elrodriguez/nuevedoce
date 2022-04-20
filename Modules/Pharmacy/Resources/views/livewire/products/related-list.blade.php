@@ -24,9 +24,9 @@
                         </span>
                     @endif
                 </div>
-                <input wire:keydown.enter="seriesSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
+                <input wire:keydown.enter="searchRelated" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Escriba aquí...">
                 <div class="input-group-append">
-                    <button wire:click="seriesSearch" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
+                    <button wire:click="searchRelated" class="btn btn-default waves-effect waves-themed" type="button">Buscar</button>
                     @can('ventas_administration_series_nuevo')
                     <a href="{{ route('pharmacy_administration_products_related_create') }}" class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
                     @endcan

@@ -61,21 +61,42 @@
                         <span class="nav-link-text" data-i18n="nav.clientes"><?php echo e(__('pharmacy::labels.administration')); ?></span>
                     </a>
                     <ul>
-                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_productos')): ?>
-                        <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' ? 'active' : ''); ?>">
-                            <a href="javascript:void(0);" title="Administración" data-filter-tags="Administracion">
-                                <span class="nav-link-text" data-i18n="nav.clientes"><?php echo e(__('labels.products')); ?></span>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_sintomas')): ?>
+                        <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'symptom' ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('pharmacy_administration_symptom')); ?>" title="<?php echo app('translator')->get('pharmacy::labels.symptom'); ?>" data-filter-tags="<?php echo app('translator')->get('pharmacy::labels.symptom'); ?>">
+                                <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('pharmacy::labels.symptom'); ?>"><?php echo app('translator')->get('pharmacy::labels.symptom'); ?></span>
                             </a>
-                            <ul>
-                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_productos_relacionados')): ?>
-                                <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' && $path[3] == 'related' ? 'active' : ''); ?>">
-                                    <a href="<?php echo e(route('pharmacy_administration_products_related')); ?>" title="<?php echo app('translator')->get('pharmacy::labels.related'); ?>" data-filter-tags="<?php echo app('translator')->get('pharmacy::labels.related'); ?>">
-                                        <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('pharmacy::labels.related'); ?>"><?php echo app('translator')->get('pharmacy::labels.related'); ?></span>
-                                    </a>
-                                </li>
-                                <?php endif; ?>
-                            </ul>
                         </li>
+                        <?php endif; ?>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_enfermedades')): ?>
+                        <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'diseases' ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('pharmacy_administration_diseases')); ?>" title="<?php echo app('translator')->get('pharmacy::labels.diseases'); ?>" data-filter-tags="<?php echo app('translator')->get('pharmacy::labels.diseases'); ?>">
+                                <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('pharmacy::labels.diseases'); ?>"><?php echo app('translator')->get('pharmacy::labels.diseases'); ?></span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_medicinas')): ?>
+                        <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'medicines' ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('pharmacy_administration_medicines')); ?>" title="<?php echo app('translator')->get('pharmacy::labels.medicines'); ?>" data-filter-tags="<?php echo app('translator')->get('pharmacy::labels.medicines'); ?>">
+                                <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('pharmacy::labels.medicines'); ?>"><?php echo app('translator')->get('pharmacy::labels.medicines'); ?></span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_productos')): ?>
+                            <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' ? 'active' : ''); ?>">
+                                <a href="javascript:void(0);" title="Administración" data-filter-tags="Administracion">
+                                    <span class="nav-link-text" data-i18n="nav.clientes"><?php echo e(__('labels.products')); ?></span>
+                                </a>
+                                <ul>
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('farmacia_administracion_productos_relacionados')): ?>
+                                    <li class="<?php echo e($path[0] == 'pharmacy' && $path[1] == 'administration' && $path[2] == 'products' && $path[3] == 'related' ? 'active' : ''); ?>">
+                                        <a href="<?php echo e(route('pharmacy_administration_products_related')); ?>" title="<?php echo app('translator')->get('pharmacy::labels.related'); ?>" data-filter-tags="<?php echo app('translator')->get('pharmacy::labels.related'); ?>">
+                                            <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('pharmacy::labels.related'); ?>"><?php echo app('translator')->get('pharmacy::labels.related'); ?></span>
+                                        </a>
+                                    </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
                         <?php endif; ?>
                     </ul>
                 </li>

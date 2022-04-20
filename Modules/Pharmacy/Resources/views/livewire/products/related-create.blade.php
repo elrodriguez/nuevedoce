@@ -1,10 +1,12 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-body">
-            <div class="form-row" wire:ignore.self>
+            <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">@lang('labels.product') <span class="text-danger">*</span> </label>
-                    <input data-url="{{ route('pharmacy_products_search') }}" class="form-control basicAutoComplete"  type="text" placeholder="Buscar producto" autocomplete="off" />
+                    <div wire:ignore.self>
+                        <input data-url="{{ route('pharmacy_products_search') }}" class="form-control basicAutoComplete"  type="text" placeholder="Buscar producto" autocomplete="off" />
+                    </div>
                     @error('item_id')
                     <div class="invalid-feedback-2">{{ $message }}</div>
                     @enderror

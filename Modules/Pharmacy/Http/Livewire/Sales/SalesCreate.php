@@ -35,9 +35,23 @@ use App\Models\Department;
 use App\Models\District;
 use App\Models\DocumentType;
 use App\Models\Province;
+use Exception;
+use Modules\Inventory\Entities\InvAsset;
+use Modules\Sales\Entities\SalDocument;
+use Modules\Sales\Entities\SalSaleNote;
+use Modules\Sales\Entities\SalSaleNoteItem;
+use Modules\Sales\Entities\SalSaleNotePayment;
+use Modules\Sales\Entities\SalSerie;
+use Modules\Setting\Entities\SetEstablishment;
+use Mpdf\Mpdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+use Mpdf\HTMLParserMode;
 
 class SalesCreate extends Component
 {
+    use StorageDocument;
+
     public $category_id;
     public $brand_id;
     public $products = [];
@@ -100,6 +114,8 @@ class SalesCreate extends Component
     public $districts = [];
     public $soap_type_id;
     public $stock_notes;
+    public $typePRINT;
+    public $ubl_version;
 
     use WithPagination;
 
@@ -118,6 +134,7 @@ class SalesCreate extends Component
         $this->f_expiration = Carbon::now()->format('d/m/Y');
 
         $this->soap_type_id = SetCompany::where('main',true)->first()->soap_type_id;
+        $this->ubl_version = Parameter::where('id_parameter','PRT009VUL')->value('value_default');
 
         $this->countries = Country::where('active',true)->get();
         $this->departments = Department::where('active',true)->get();
@@ -144,6 +161,7 @@ class SalesCreate extends Component
                 $this->customer_id = $this->xgenerico->value;
             }
         }
+        $this->changeSeries();
         return view('pharmacy::livewire.sales.sales-create');
     }
 
@@ -615,5 +633,581 @@ class SalesCreate extends Component
         $this->last_paternal = null;
         $this->last_maternal = null;
         $this->sex = null;
+        $this->search = null;
+    }
+
+    public function validateForm(){
+
+        $this->external_id = null;
+
+        $this->validate([
+            'document_type_id' => 'required',
+            'serie_id' => 'required',
+            'correlative' => 'unique:sal_documents,number,NULL,id,series,' . $this->serie_id,
+            'f_issuance' => 'required',
+            'f_expiration' => 'required',
+            'customer_id' => 'required'
+        ]);
+
+        $tdi = $this->document_type_id;
+        $ps = true;
+        if($tdi ==  '03' || $tdi ==  '80'){
+            $ps = true;
+        }else{
+
+            $ruc_exists = Person::where('id',$this->customer_id)
+                ->where('identity_document_type_id',6)
+                ->exists();
+
+            if($ruc_exists){
+                $ps = true;
+            }else{
+                $ps = false;
+            }
+        }
+
+        if($ps){
+            if ($this->box_items > 0) {
+                foreach($this->box_items as $key => $val)
+                {
+                    $this->validate([
+                        'box_items.'.$key.'.quantity' => 'numeric|required'
+                    ]);
+                }
+            }
+
+            $total_amount = 0;
+
+            if ($this->payment_method_types > 0) {
+                foreach($this->payment_method_types as $key => $val){
+                    $total_amount = $total_amount + $val['amount'];
+                }
+            }
+
+            if($this->total == $total_amount){
+                if($tdi == '80'){
+                    $this->typePRINT = 'sale_note';
+                    $this->storeSaleNote();
+                }else{
+                    $this->typePRINT = 'invoice';
+                    $this->storeInvoice();
+                }
+                
+            }else{
+                $this->dispatchBrowserEvent('response_payment_total_different', ['message' => Lang::get('labels.msg_totaldtc')]);
+            }
+        }else{
+            $this->dispatchBrowserEvent('response_customer_not_ruc_exists', ['message' => Lang::get('labels.msg_client_does_not_registered_ruc')]);
+        }
+
+    }
+    public function changeSeries(){
+        $this->series = SalSerie::where('document_type_id',$this->document_type_id)
+            ->where('establishment_id',$this->establishment_id)
+            ->get();
+
+        $this->serie_id = $this->series->max('id');
+        $this->selectCorrelative();
+    }
+
+    public function selectCorrelative(){
+        $serie = SalSerie::where('id',$this->serie_id)->first();
+        if($serie){
+            $this->correlative = str_pad($serie->correlative, 8, "0", STR_PAD_LEFT);
+        }else{
+            $this->correlative = str_pad(0, 8, "0", STR_PAD_LEFT);
+        }
+    }
+    public function storeInvoice(){
+
+        $this->selectCorrelative($this->serie_id);
+
+        $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
+        $customer_json = Person::where('id',$this->customer_id)->first();
+        $company = SetCompany::where('main',true)->first();
+        list($di,$mi,$yi) = explode('/',$this->f_issuance);
+        list($de,$me,$ye) = explode('/',$this->f_expiration);
+        $date_of_issue = $yi.'-'.$mi.'-'.$di;
+        $date_of_due = $ye.'-'.$me.'-'.$de;
+
+        $numberletters = new NumberNumberLetter();
+
+        $legends = json_encode(["code" => 1000, "value" => $numberletters->convertToLetter($this->total)]);
+        $this->external_id = Str::uuid()->toString();
+
+        $payments = [];
+
+        foreach($this->payment_method_types as $key => $value){
+            list($d,$m,$y) = explode('/',$value['date_of_payment']);
+            $date_of_payment = $y.'-'.$m.'-'.$d;
+            $payments[$key ] = [
+                'id' => null,
+                'document_id' => null,
+                'sale_note_id' => null,
+                'date_of_payment' => $date_of_payment,
+                'payment_method_type_id' => $value['method'],
+                'payment_destination_id' => $value['destination'],
+                'reference'=>$value['reference'],
+                'payment'=> $value['amount']
+            ];
+        }
+
+        $invoice = [
+            'operation_type_id' => '0101',
+            'date_of_due' => $date_of_due
+        ];
+        $this->total_taxes = $this->total_igv;
+        $inputDocument = [
+            'user_id' => Auth::id(),
+            'external_id' => $this->external_id,
+            'establishment_id'=> $this->establishment_id,
+            'establishment' => $establishment_json,
+            'soap_type_id' => $this->soap_type_id,
+            'state_type_id' => '01',
+            'ubl_version' => $this->ubl_version,
+            'group_id' => ($this->document_type_id == '03' ? '02' : $this->document_type_id),
+            'document_type_id' => $this->document_type_id,
+            'series' => $this->serie_id,
+            'number' => $this->correlative,
+            'date_of_issue' => $date_of_issue,
+            'time_of_issue' => Carbon::now()->toDateTimeString(),
+            'customer_id' => $this->customer_id,
+            'customer' => $customer_json,
+            'currency_type_id' => $this->currencyTypeIdActive,
+            'exchange_rate_sale' => $this->exchangeRateSale,
+            'total_prepayment' => 0,
+            'total_charge' => 0,
+            'total_discount' => $this->total_discount,
+            'total_exportation' => $this->total_exportation,
+            'total_free' => $this->total_free,
+            'total_taxed' => $this->total_taxed,
+            'total_unaffected' => $this->total_unaffected,
+            'total_exonerated' => $this->total_exonerated,
+            'total_igv' => $this->total_igv,
+            'total_base_isc' => 0,
+            'total_isc' => $this->total_isc,
+            'total_base_other_taxes' => 0,
+            'total_other_taxes' => 0,
+            'total_plastic_bag_taxes' => $this->total_plastic_bag_taxes,
+            'total_taxes' => $this->total_taxes,
+            'total_value' => $this->total_taxed,
+            'total' => $this->total,
+            'legends' => $legends,
+            'filename' => ($company->number.'-'.$this->document_type_id.'-'.$this->serie_id.'-'.((int) $this->correlative)),
+            'additional_information' => $this->additional_information,
+            'items' => $this->box_items,
+            'payments' => $payments,
+            'invoice' => $invoice,
+            'type'=>'invoice',
+            'route'=> 'sales/document',
+            'actions' => [
+                'send_email' => false,
+                'send_xml_signed' => $this->document_type_id == '03' ? false : true,
+                'format_pdf' => 'a4'
+            ],
+            'send_server' => false
+        ];
+
+        try {
+            $billing = new Billing();
+            $billing->save($inputDocument);
+            $billing->createXmlUnsigned();
+            $billing->signXmlUnsigned();
+            $billing->updateHash();
+            $billing->updateQr();
+            $billing->createPdf();
+            $billing->senderXmlSignedBill();
+
+            
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+
+
+        SalSerie::where('id',$this->serie_id)->increment('correlative');
+        $this->selectCorrelative($this->serie_id);
+        $document_old_id = SalDocument::max('id');
+
+        $user = Auth::user();
+        $activity = new Activity;
+        $activity->modelOn(SalDocument::class,$document_old_id);
+        $activity->causedBy($user);
+        $activity->routeOn(route('sales_document_create'));
+        $activity->componentOn('sales::document.document-create-form');
+        $activity->dataOld($inputDocument);
+        $activity->logType('create');
+        $activity->log('Registro el documento de venta');
+        $activity->save();
+
+        $this->clearForm();
+
+        $this->dispatchBrowserEvent('response_success_document_charges_store', ['message' => Lang::get('labels.successfully_registered')]);
+
+    }
+
+    public function clearForm(){
+        $this->f_issuance = Carbon::now()->format('d/m/Y');
+        $this->f_expiration = Carbon::now()->format('d/m/Y');
+        $this->box_items = [];
+        $this->payment_method_types = [];
+        $this->total = 0;
+        $this->payments = [];
+        $this->additional_information = null;
+    }
+
+    public function storeSaleNote(){
+        $this->selectCorrelative($this->serie_id);
+        $establishment_json = SetEstablishment::where('id',$this->establishment_id)->first();
+        $customer_json = Person::where('id',$this->customer_id)->first();
+        $this->warehouse_id = InvLocation::where('establishment_id',$this->establishment_id)->where('state',true)->first()->id;
+        //$company = SetCompany::first();
+        list($di,$mi,$yi) = explode('/',$this->f_issuance);
+        list($de,$me,$ye) = explode('/',$this->f_expiration);
+        $date_of_issue = $yi.'-'.$mi.'-'.$di;
+        //$date_of_due = $ye.'-'.$me.'-'.$de;
+
+        $numberletters = new NumberNumberLetter();
+
+        $legends = array('code' => 1000, 'value' => $numberletters->convertToLetter($this->total));
+
+        $this->external_id = Str::uuid()->toString();
+        $this->total_taxes = $this->total_igv;
+        $paid = 0;
+        foreach($this->payment_method_types as $key => $value){
+            $paid = $paid + $value['amount'];
+        }
+
+        $sale_note = SalSaleNote::create([
+            'user_id' => Auth::id(),
+            'external_id' => $this->external_id,
+            'establishment_id' => $this->establishment_id,
+            'establishment' => $establishment_json,
+            'soap_type_id' => $this->soap_type_id,
+            'state_type_id' => '01',
+            'prefix' => 'NV',
+            'series' => $this->serie_id,
+            'number' => $this->correlative,
+            'date_of_issue' => $date_of_issue,
+            'time_of_issue' => Carbon::now()->toDateTimeString(),
+            'customer_id' => $this->customer_id,
+            'customer' => $customer_json,
+            'currency_type_id' => $this->currencyTypeIdActive,
+            'exchange_rate_sale' => $this->exchangeRateSale,
+            'total_prepayment' => 0,
+            'total_charge' => 0,
+            'total_discount' => $this->total_discount,
+            'total_exportation' => $this->total_exportation,
+            'total_free' => $this->total_free,
+            'total_taxed' => $this->total_taxed,
+            'total_unaffected' => $this->total_unaffected,
+            'total_exonerated' => $this->total_exonerated,
+            'total_igv' => $this->total_igv,
+            'total_base_isc' => 0,
+            'total_isc' => $this->total_isc,
+            'total_base_other_taxes' => 0,
+            'total_other_taxes' => 0,
+            'total_taxes' => $this->total_taxes,
+            'total_value' => $this->total_taxed,
+            'total' => $this->total,
+            'legends' => $legends,
+            'total_canceled' => true,
+            'paid' => ($paid == $this->total ? true : false),
+            'observation' => $this->additional_information
+        ]);
+
+        foreach($this->box_items as $row) {
+
+            SalSaleNoteItem::create([
+                'sale_note_id' => $sale_note->id,
+                'item_id' => $row['item_id'],
+                'item' => $row['item'],
+                'quantity' => $row['quantity'],
+                'unit_value' => $row['unit_value'],
+                'affectation_igv_type_id' => $row['affectation_igv_type_id'],
+                'total_base_igv' => $row['total_base_igv'],
+                'percentage_igv' => $row['percentage_igv'],
+                'total_igv' => $row['total_igv'],
+                'system_isc_type_id' => $row['system_isc_type_id'],
+                'total_base_isc' => $row['total_base_isc'],
+                'percentage_isc' => $row['percentage_isc'],
+                'total_isc' => $row['total_isc'],
+                'total_base_other_taxes' => $row['total_base_other_taxes'],
+                'percentage_other_taxes' => $row['percentage_other_taxes'],
+                'total_other_taxes' => $row['total_other_taxes'],
+                'total_taxes' => $row['total_taxes'],
+                'price_type_id' => $row['price_type_id'],
+                'unit_price' => $row['unit_price'],
+                'total_value' => $row['total_value'],
+                'total_charge' => $row['total_charge'],
+                'total_discount' => $row['total_discount'],
+                'total' => $row['total']
+            ]);
+
+            if($this->stock_notes){
+                InvAsset::where('item_id',$row['item_id'])
+                        ->where('location_id',$this->warehouse_id)
+                        ->decrement('stock',$row['quantity']);
+                InvItem::where('id',$row['item_id'])->decrement('stock',$row['quantity']);
+                InvKardex::create([
+                    'date_of_issue' => Carbon::now()->format('Y-m-d'),
+                    'establishment_id' => $sale_note->establishment_id,
+                    'item_id' => $row['item_id'],
+                    'kardexable_id' => $sale_note->id,
+                    'kardexable_type' => SalSaleNote::class,
+                    'location_id' => $this->warehouse_id,
+                    'quantity'=> (-$row['quantity']),
+                    'detail' => 'Venta'
+                ]);
+            }
+
+        }
+        $billing = new Billing();
+        $billing->saveCashDocument($sale_note->id,'sale_note');
+
+        $this->savePayments($sale_note);
+
+        SalSerie::where('id',$this->serie_id)->increment('correlative');
+
+        $this->selectCorrelative($this->serie_id);
+        
+        $this->setFilename($sale_note);
+        $this->createPdf($sale_note,"a4");
+
+        $user = Auth::user();
+        $activity = new Activity;
+        $activity->modelOn(SalSaleNote::class,$sale_note->id);
+        $activity->causedBy($user);
+        $activity->routeOn(route('sales_documents_sale_notes_create'));
+        $activity->componentOn('sales::document.sale-notes-create-form');
+        $activity->dataOld($sale_note);
+        $activity->logType('create');
+        $activity->log('Registro nueva nota de venta');
+        $activity->save();
+
+        $this->clearForm();
+
+        $this->dispatchBrowserEvent('response_success_document_charges_store', ['msg' => Lang::get('labels.successfully_registered')]);
+
+    }
+
+    private function savePayments($sale_note){
+        list($di,$mi,$yi) = explode('/',$this->f_issuance);
+        $date_of_issue = $yi.'-'.$mi.'-'.$di;
+
+        foreach($this->payment_method_types as $key => $value){
+            if($value['amount'] > 0){
+                $payment = SalSaleNotePayment::create([
+                    'sale_note_id' => $sale_note->id,
+                    'date_of_payment' => $date_of_issue,
+                    'payment_method_type_id' => $value['method'],
+                    'payment_destination_id' => $value['destination'],
+                    'reference' => $value['reference'],
+                    'payment' => $value['amount']
+                ]);
+                $this->createGlobalPayment($payment->id,$value['destination']);
+            }
+        }
+    }
+
+    private function setFilename($sale_note){
+
+        $name = [$sale_note->series,$sale_note->number,date('Ymd')];
+        $sale_note->filename = join('-', $name);
+        $sale_note->save();
+
+    }
+
+    public function createPdf($sale_note = null, $format_pdf = null) {
+
+        ini_set("pcre.backtrack_limit", "5000000");
+        $template = new Template();
+        $pdf = new Mpdf();
+
+        $company = SetCompany::where('main',true)->first();
+        $document = $sale_note;
+
+        $base_template = Parameter::where('id_parameter','PRT003THM')->first()->value_default;
+
+        $html = $template->pdf($base_template, "sale_note", $company, $document, $format_pdf);
+
+        if (($format_pdf === 'ticket') OR ($format_pdf === 'ticket_58')) {
+
+            $width = ($format_pdf === 'ticket_58') ? 56 : 78 ;
+
+            $company_logo      = ($company->logo) ? 40 : 0;
+            $company_name      = (strlen($company->name) / 20) * 10;
+            $company_address   = (strlen($document->establishment->address) / 30) * 10;
+            $company_number    = $document->establishment->phone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->names) > '25' ? '10' : '0';
+            $customer_address  = (strlen($document->customer->address) / 200) * 10;
+            $p_order           = $document->purchase_order != '' ? '10' : '0';
+
+            $total_exportation = $document->total_exportation != '' ? '10' : '0';
+            $total_free        = $document->total_free != '' ? '10' : '0';
+            $total_unaffected  = $document->total_unaffected != '' ? '10' : '0';
+            $total_exonerated  = $document->total_exonerated != '' ? '10' : '0';
+            $total_taxed       = $document->total_taxed != '' ? '10' : '0';
+            $quantity_rows     = count($document->items);
+            $payments          = $document->payments()->count() * 2;
+
+            $extra_by_item_description = 0;
+            $discount_global = 0;
+            foreach ($document->items as $it) {
+                if(strlen(json_decode($it->item)->name)>100){
+                    $extra_by_item_description +=24;
+                }
+                if ($it->discounts) {
+                    $discount_global = $discount_global + 1;
+                }
+            }
+            $legends = $document->legends != '' ? '10' : '0';
+
+
+            $pdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => [
+                    $width,
+                    40 +
+                    (($quantity_rows * 8) + $extra_by_item_description) +
+                    ($discount_global * 3) +
+                    $company_logo +
+                    $payments +
+                    $company_name +
+                    $company_address +
+                    $company_number +
+                    $customer_name +
+                    $customer_address +
+                    $p_order +
+                    $legends +
+                    $total_exportation +
+                    $total_free +
+                    $total_unaffected +
+                    $total_exonerated +
+                    $total_taxed],
+                'margin_top' => 0,
+                'margin_right' => 2,
+                'margin_bottom' => 0,
+                'margin_left' => 2
+            ]);
+        } else if($format_pdf === 'a5'){
+
+            $company_name      = (strlen($company->name) / 20) * 10;
+            $company_address   = (strlen($document->establishment->address) / 30) * 10;
+            $company_number    = $document->establishment->phone != '' ? '10' : '0';
+            $customer_name     = strlen($document->customer->names) > '25' ? '10' : '0';
+            $customer_address  = (strlen($document->customer->address) / 200) * 10;
+            $p_order           = $document->purchase_order != '' ? '10' : '0';
+
+            $total_exportation = $document->total_exportation != '' ? '10' : '0';
+            $total_free        = $document->total_free != '' ? '10' : '0';
+            $total_unaffected  = $document->total_unaffected != '' ? '10' : '0';
+            $total_exonerated  = $document->total_exonerated != '' ? '10' : '0';
+            $total_taxed       = $document->total_taxed != '' ? '10' : '0';
+            $quantity_rows     = count($document->items);
+            $discount_global = 0;
+            foreach ($document->items as $it) {
+                if ($it->discounts) {
+                    $discount_global = $discount_global + 1;
+                }
+            }
+            $legends           = $document->legends != '' ? '10' : '0';
+
+
+            $alto = ($quantity_rows * 8) +
+                    ($discount_global * 3) +
+                    $company_name +
+                    $company_address +
+                    $company_number +
+                    $customer_name +
+                    $customer_address +
+                    $p_order +
+                    $legends +
+                    $total_exportation +
+                    $total_free +
+                    $total_unaffected +
+                    $total_exonerated +
+                    $total_taxed;
+            $diferencia = 148 - (float) $alto;
+
+            $pdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => [
+                    210,
+                    $diferencia + $alto
+                    ],
+                'margin_top' => 2,
+                'margin_right' => 5,
+                'margin_bottom' => 0,
+                'margin_left' => 5
+            ]);
+
+
+       } else {
+
+            $pdf_font_regular = env('PDF_NAME_REGULAR');
+            $pdf_font_bold = env('PDF_NAME_BOLD');
+
+            if ($pdf_font_regular != false) {
+                $defaultConfig = (new ConfigVariables())->getDefaults();
+                $fontDirs = $defaultConfig['fontDir'];
+
+                $defaultFontConfig = (new FontVariables())->getDefaults();
+                $fontData = $defaultFontConfig['fontdata'];
+
+                $pdf = new Mpdf([
+                    'fontDir' => array_merge($fontDirs, [
+                        app_path('CoreBilling'.DIRECTORY_SEPARATOR.'Templates'.
+                                                DIRECTORY_SEPARATOR.'pdf'.
+                                                DIRECTORY_SEPARATOR.$base_template.
+                                                DIRECTORY_SEPARATOR.'font')
+                    ]),
+                    'fontdata' => $fontData + [
+                        'custom_bold' => [
+                            'R' => $pdf_font_bold.'.ttf',
+                        ],
+                        'custom_regular' => [
+                            'R' => $pdf_font_regular.'.ttf',
+                        ],
+                    ]
+                ]);
+            }
+
+        }
+
+        $path_css = app_path('CoreBilling'.DIRECTORY_SEPARATOR.'Templates'.
+                                             DIRECTORY_SEPARATOR.'pdf'.
+                                             DIRECTORY_SEPARATOR.$base_template.
+                                             DIRECTORY_SEPARATOR.'style.css');
+
+        $stylesheet = file_get_contents($path_css);
+
+        $pdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
+        $pdf->WriteHTML($html, HTMLParserMode::HTML_BODY);
+
+        $footer = true;
+
+        if($footer) {
+            $html_footer = $template->pdfFooter($base_template);
+            $pdf->SetHTMLFooter($html_footer);
+        }
+
+        $this->uploadStorage($document->filename, $pdf->output('', 'S'), 'sale_note');
+    
+    }
+
+    public function createGlobalPayment($id, $destination){
+        $row['payment_destination_id'] = $destination;
+        $billing = new Billing();
+        $destination = $billing->getDestinationRecord($row);
+        $company = SetCompany::where('main',true)->first();
+
+        GlobalPayment::create([
+            'user_id' => auth()->id(),
+            'soap_type_id' => $company->soap_type_id,
+            'destination_id' => $destination['destination_id'],
+            'destination_type' => $destination['destination_type'],
+            'payment_id' => $id,
+            'payment_type' => SalSaleNotePayment::class
+        ]);
     }
 }

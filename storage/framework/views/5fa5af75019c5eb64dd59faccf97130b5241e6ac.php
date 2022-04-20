@@ -18,6 +18,7 @@
 <?php unset($__componentOriginalffde9e6d15fb644ab927a95d1432ec09268242d9); ?>
 <?php endif; ?>
     <li class="breadcrumb-item"><?php echo e(__('pharmacy::labels.module_name')); ?></li>
+    <li class="breadcrumb-item"><?php echo e(__('labels.administration')); ?></li>
     <li class="breadcrumb-item"><?php echo e(__('labels.products')); ?></li>
     <li class="breadcrumb-item active"><?php echo e(__('pharmacy::labels.related')); ?></li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block"><?php if (isset($component)) { $__componentOriginalab70499045def3ea46a51a0c5d10e7b6f1952525 = $component; } ?>
@@ -48,15 +49,15 @@
 <?php
 if (! isset($_instance)) {
     $html = \Livewire\Livewire::mount('pharmacy::products.related-list', [])->html();
-} elseif ($_instance->childHasBeenRendered('uEPvxNi')) {
-    $componentId = $_instance->getRenderedChildComponentId('uEPvxNi');
-    $componentTag = $_instance->getRenderedChildComponentTagName('uEPvxNi');
+} elseif ($_instance->childHasBeenRendered('WPZMUKb')) {
+    $componentId = $_instance->getRenderedChildComponentId('WPZMUKb');
+    $componentTag = $_instance->getRenderedChildComponentTagName('WPZMUKb');
     $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
-    $_instance->preserveRenderedChild('uEPvxNi');
+    $_instance->preserveRenderedChild('WPZMUKb');
 } else {
     $response = \Livewire\Livewire::mount('pharmacy::products.related-list', []);
     $html = $response->html();
-    $_instance->logRenderedChild('uEPvxNi', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+    $_instance->logRenderedChild('WPZMUKb', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
 }
 echo $html;
 ?>

@@ -14,6 +14,7 @@
 @section('breadcrumb')
     <x-company-name></x-company-name>
     <li class="breadcrumb-item">{{ __('pharmacy::labels.module_name') }}</li>
+    <li class="breadcrumb-item">{{ __('labels.administration') }}</li>
     <li class="breadcrumb-item">{{ __('labels.products') }}</li>
     <li class="breadcrumb-item"><a href="{{ route('pharmacy_administration_products_related') }}">{{ __('pharmacy::labels.related') }}</a></li>
     <li class="breadcrumb-item active">{{ __('labels.edit') }}</li>

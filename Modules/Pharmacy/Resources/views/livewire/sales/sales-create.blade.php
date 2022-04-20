@@ -166,10 +166,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="btn-group mb-3">
-                        @foreach ($document_types as $document_type)
-                            <button wire:click="$set('document_type_id', {{ $document_type->id }})" type="button" class="btn btn-outline-secondary waves-effect waves-themed {{ $document_type->id == $document_type_id ? 'active' : '' }}">{{ $document_type->description }}</button>
-                        @endforeach
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="document_type_id">@lang('labels.voucher_type') <span class="text-danger">*</span> </label>
+                            <select class="custom-select form-control" wire:change="changeSeries" wire:model.defer="document_type_id">
+
+                                @foreach ($document_types as $document_type)
+                                <option value="{{ $document_type->id }}">{{ $document_type->description }}</option>
+                                @endforeach
+                            </select>
+                            @error('document_type_id')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="serie_id">@lang('labels.serie') <span class="text-danger">*</span> </label>
+                            <div class="input-group">
+                                <select class="custom-select form-control" wire:change="selectCorrelative" wire:model.defer="serie_id">
+
+                                    @foreach ($series as $serie)
+                                    <option value="{{ $serie->id }}">{{ $serie->id }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">{{ $correlative }}</span>
+                                </div>
+                            </div>
+                            @error('serie_id')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                            @error('correlative')
+                            <div class="invalid-feedback-2">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
                     <div class="card border mb-g">
                         <!-- notice the additions of utility paddings and display properties on .card-header -->
@@ -258,8 +287,8 @@
                         <i class="fal fa-times-circle mr-1"></i>
                         {{ __('labels.cancel') }}
                     </button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="fal fa-donate mr-1"></i>
+                    <button type="button" class="btn btn-primary waves-effect waves-themed" wire:loading.attr="disabled" wire:click="validateForm">
+                        <span wire:loading wire:target="validateForm" wire:loading.class="spinner-border spinner-border-sm" wire:loading.class.remove="fal fa-check" class="fal fa-check mr-1" role="status" aria-hidden="true"></span>
                         <span class="mr-5">PAGAR</span>
                         <span>{{ $total }}</span>
                     </button>
@@ -383,6 +412,52 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModalprint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Imprimir</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="document_external_id" value="{{ $external_id }}">
+                    <input type="hidden" id="document_type_print" value="{{ $typePRINT }}">
+                    <div class="row js-list-filter">
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center align-items-center mb-g">
+                            <a type="button" onclick="printPDF('a4')" href="javascript:void(0)" class="rounded bg-white p-0 m-0 d-flex flex-column w-100 h-100 js-showcase-icon shadow-hover-2">
+                                <div class="rounded-top color-fusion-300 w-100 bg-primary-300">
+                                    <div class="rounded-top d-flex align-items-center justify-content-center w-100 pt-3 pb-3 pr-2 pl-2 fa-3x hover-bg">
+                                        <i class="fal fa-file"></i>
+                                    </div>
+                                </div>
+                                <div class="rounded-bottom p-1 w-100 d-flex justify-content-center align-items-center text-center">
+                                    <span class="d-block text-truncate text-muted">A4</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center align-items-center mb-g">
+                            <a type="button" onclick="printPDF('ticket')" href="javascript:void(0)" class="rounded bg-white p-0 m-0 d-flex flex-column w-100 h-100 js-showcase-icon shadow-hover-2">
+                                <div class="rounded-top color-fusion-300 w-100 bg-primary-300">
+                                    <div class="rounded-top d-flex align-items-center justify-content-center w-100 pt-3 pb-3 pr-2 pl-2 fa-3x hover-bg">
+                                        <i class="fal fa-receipt"></i>
+                                    </div>
+                                </div>
+                                <div class="rounded-bottom p-1 w-100 d-flex justify-content-center align-items-center text-center">
+                                    <span class="d-block text-truncate text-muted">Ticket</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('labels.close') }}</button>
+                    <a href="{{ route('sales_document_list') }}" type="button" class="btn btn-primary">{{ __('labels.list') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('livewire:load', function () {
             let xbody = document.querySelector('body');
@@ -412,13 +487,13 @@
         function swalAlert(msg){
             initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>¡Enhorabuena!</span>",
+                title: "<i class='{{ env('BOOTBOX_SUCCESS_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>¡Enhorabuena!</span>",
                 message: "<span><strong>{{__('labels.lbl_excellent')}}... </strong>"+msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false
             });
-            box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
+            box.find('.modal-content').css({'background-color': '{{ env("BOOTBOX_SUCCESS_COLOR") }}'});
         }
         window.addEventListener('response_clear_select_products_alert', event => {
             let showmsg = event.detail.showmsg;
@@ -434,6 +509,44 @@
             $('.basicAutoComplete').autoComplete('set', { value: id, text: title });
             $('#exampleModalClientNew').modal('hide');
             @this.set('customer_id', id);
+        }
+        window.addEventListener('response_success_document_charges_store', event => {
+           openModalPrint();
+           $('.basicAutoComplete').autoComplete('set', { value: "{{ $xgenerico->value }}", text: "{{ $xgenerico->text }}" });
+        });
+        function openModalPrint(){
+            $('#exampleModalprint').modal('show');
+        }
+        function printPDF(format){
+            let external_id = $('#document_external_id').val();
+            let typePRINT = $('#document_type_print').val();
+            window.open(`print/`+external_id+`/`+format+`/`+typePRINT, '_blank');
+        }
+        window.addEventListener('response_customer_not_ruc_exists', event => {
+            let msg = event.detail.message;
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='{{ env('BOOTBOX_ERROR_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>¡Error!</span>",
+                message: "<span><strong>No se puede continuar... </strong>"+msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': '{{ env("BOOTBOX_ERROR_COLOR") }}'});
+        });
+        window.addEventListener('response_payment_total_different', event => {
+            swalAlertError(event.detail.message);
+        });
+        function swalAlertError(msg){
+            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_off')
+            let box = bootbox.alert({
+                title: "<i class='{{ env('BOOTBOX_ERROR_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.error') }}!</span>",
+                message: "<span><strong>{{ __('setting::labels.went_wrong') }}... </strong>"+msg+"</span>",
+                centerVertical: true,
+                className: "modal-alert",
+                closeButton: false
+            });
+            box.find('.modal-content').css({'background-color': '{{ env("BOOTBOX_ERROR_COLOR") }}'});
         }
     </script>
 </div>

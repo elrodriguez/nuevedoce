@@ -81,9 +81,17 @@ unset($__errorArgs, $__bag); ?>
                     <?php if(count($products) > 0): ?>
                         <div class="bg-warning-100 border border-warning rounded">
                             <ul class="list-group p-2">
-                                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <li class="list-group-item">
-                                        <span class="nav-link-text"><?php echo e($product['name']); ?></span>
+                                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <?php echo e($product['name']); ?>
+
+                                            <div class="text-muted">
+                                                <button wire:click="removeItemRelated(<?php echo e($k); ?>)" class="btn btn-danger btn-sm btn-icon rounded-circle waves-effect waves-themed">
+                                                    <i class="fal fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </li>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
@@ -101,7 +109,7 @@ unset($__errorArgs, $__bag); ?>
             </div>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="<?php echo e(route('sales_administration_series')); ?>" type="button" class="btn btn-secondary waves-effect waves-themed">Listado</a>
+            <a href="<?php echo e(route('pharmacy_administration_products_related')); ?>" type="button" class="btn btn-secondary waves-effect waves-themed">Listado</a>
             <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">Guardar</button>
         </div>
     </div>

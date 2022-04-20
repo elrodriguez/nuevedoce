@@ -23,7 +23,7 @@ class ModulePermissionsTableSeeder extends Seeder
 
         $module = SetModule::create([
             'uuid' => Str::uuid(),
-            'logo' => 'fal fa-book-medical',
+            'logo' => 'fal fa-hand-holding-medical',
             'label' => 'Farmacia',
             'destination_route' => 'pharmacy_dashboard',
             'status' => true
@@ -33,6 +33,9 @@ class ModulePermissionsTableSeeder extends Seeder
         
         array_push($permissions,Permission::create(['name' => 'farmacia_dashboard','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'farmacia_administracion','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'farmacia_administracion_enfermedades','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'farmacia_administracion_sintomas','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'farmacia_administracion_medicinas','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'farmacia_administracion_productos','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'farmacia_administracion_productos_relacionados','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'farmacia_administracion_productos_ofertas','guard_name' => 'sanctum']));
