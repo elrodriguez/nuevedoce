@@ -75,7 +75,7 @@ class TotalDocument extends Component
             '80' => '#909090'
         );
         $dataSetPie = [];
-        if($vouchers){
+        if($vouchers && $sale_notes){
             $vs = $vouchers->toArray();
             $nv = $sale_notes->toArray();
 
