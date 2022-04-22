@@ -161,7 +161,28 @@
                 </ul>
             </li>
             @endcan
-
+            @can('inventario_movimientos')
+            <li class="{{ $path[0] == 'inventory' && $path[1] == 'movements' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" title="@lang('inventory::labels.lbl_movements')" data-filter-tags="@lang('inventory::labels.lbl_movements')">
+                    <i class="fal fa-person-dolly"></i>
+                    <span class="nav-link-text" data-i18n="nav.@lang('inventory::labels.lbl_movements')">@lang('inventory::labels.lbl_movements') & @lang('inventory::labels.lbl_movements_transfers')</span>
+                </a>
+                <ul>
+                    <li class="{{ $path[0] == 'inventory' && $path[1] == 'movements' ? 'active' : '' }}">
+                        <a href="{{ route('inventory_movements') }}" title="{{ __('inventory::labels.lbl_movements') }}" data-filter-tags="{{ __('inventory::labels.lbl_movements') }}">
+                            <span class="nav-link-text" data-i18n="nav.movimientos">{{ __('inventory::labels.lbl_movements') }}</span>
+                        </a>
+                    </li>
+                    @can('inventario_traslados')
+                        <li class="{{ $path[0] == 'inventory' && $path[1] == 'transfers' ? 'active' : '' }}">
+                            <a href="{{ route('inventory_transfers') }}" title="@lang('inventory::labels.lbl_movements_transfers')" data-filter-tags="@lang('inventory::labels.lbl_movements_transfers')">
+                                <span class="nav-link-text" data-i18n="nav.traslados">@lang('inventory::labels.lbl_movements_transfers')</span>
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+            @endcan
             @can('inventario_kardex')
             <li class="{{ $path[0] == 'kardex' && $path[1] == 'asset' ? 'active open' : '' }}">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">

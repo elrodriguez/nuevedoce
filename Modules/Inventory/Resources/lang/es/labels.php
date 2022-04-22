@@ -106,5 +106,13 @@ return [
     'lbl_show_guide'            => 'Mostrar en Guías',
     'lbl_price_sale'            => 'Precio venta',
     'lbl_internal_code'         => 'Código Interno',
-    'lbl_sunat_code'            => 'Código Sunat'
+    'lbl_movements'             => 'Movimientos',
+    'lbl_movements_transfers'    => 'Traslados',
+    'lbl_movements_remove'      => 'Remover',
+    'lbl_movements_ingress'     => 'Ingreso',
+    'lbl_movements_exit'        => 'Salida',
+    'lbl_inventory_list'        => 'Listado de Inventario',
+    'lbl_movements_move'        => 'Trasladar',
+    'lbl_transfer_between_warehouses' => 'Traslado entre almacenes',
+    'lbl_remove_product_from_warehouse'  => 'Retirar producto de almacén'
 ];

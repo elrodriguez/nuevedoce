@@ -1,7 +1,7 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-header">
-            <div class="input-group input-group-multi-transition" wire:ignore.self>
+            <div class="input-group">
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-default dropdown-toggle waves-effect waves-themed" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo e($show); ?></button>
                     <div class="dropdown-menu" style="">
@@ -30,7 +30,9 @@
                     <option value="<?php echo e($establishment->id); ?>"><?php echo e($establishment->description); ?></option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
-                <input wire:model.defer="search" type="text" class="form-control autoCompleteItem" data-url="<?php echo e(route('inventory_kardex_items_search')); ?>" autocomplete="off" placeholder="<?php echo app('translator')->get('inventory::labels.lbl_type_here'); ?>">
+                <div wire:ignore>
+                    <input wire:model.defer="search" type="text" class="form-control autoCompleteItem" data-url="<?php echo e(route('inventory_kardex_items_search')); ?>" autocomplete="off" placeholder="<?php echo app('translator')->get('inventory::labels.lbl_type_here'); ?>">
+                </div>
                 <input type="text" class="form-control" id="custom-range" placeholder="Rango de fechas">
                 <div class="input-group-append">
                     <button wire:click="getItems" class="btn btn-default waves-effect waves-themed" type="button"><?php echo app('translator')->get('inventory::labels.btn_search'); ?></button>

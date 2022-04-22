@@ -187,7 +187,28 @@
                 </ul>
             </li>
             <?php endif; ?>
-
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('inventario_movimientos')): ?>
+            <li class="<?php echo e($path[0] == 'inventory' && $path[1] == 'movements' ? 'active open' : ''); ?>">
+                <a href="javascript:void(0);" title="<?php echo app('translator')->get('inventory::labels.lbl_movements'); ?>" data-filter-tags="<?php echo app('translator')->get('inventory::labels.lbl_movements'); ?>">
+                    <i class="fal fa-person-dolly"></i>
+                    <span class="nav-link-text" data-i18n="nav.<?php echo app('translator')->get('inventory::labels.lbl_movements'); ?>"><?php echo app('translator')->get('inventory::labels.lbl_movements'); ?> & <?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?></span>
+                </a>
+                <ul>
+                    <li class="<?php echo e($path[0] == 'inventory' && $path[1] == 'movements' ? 'active' : ''); ?>">
+                        <a href="<?php echo e(route('inventory_movements')); ?>" title="<?php echo e(__('inventory::labels.lbl_movements')); ?>" data-filter-tags="<?php echo e(__('inventory::labels.lbl_movements')); ?>">
+                            <span class="nav-link-text" data-i18n="nav.movimientos"><?php echo e(__('inventory::labels.lbl_movements')); ?></span>
+                        </a>
+                    </li>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('inventario_traslados')): ?>
+                        <li class="<?php echo e($path[0] == 'inventory' && $path[1] == 'transfers' ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('inventory_transfers')); ?>" title="<?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?>" data-filter-tags="<?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?>">
+                                <span class="nav-link-text" data-i18n="nav.traslados"><?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </li>
+            <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('inventario_kardex')): ?>
             <li class="<?php echo e($path[0] == 'kardex' && $path[1] == 'asset' ? 'active open' : ''); ?>">
                 <a href="javascript:void(0);" title="empresa" data-filter-tags="empresa">

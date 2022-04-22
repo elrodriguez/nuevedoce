@@ -106,5 +106,14 @@ return [
     'lbl_show_guide'            => 'Show in Guides',
     'lbl_price_sale'            => 'Sale price',
     'lbl_internal_code'         => 'Internal Code',
-    'lbl_sunat_code'            => 'Sunat Code'
+    'lbl_sunat_code'            => 'Sunat Code',
+    'lbl_movements'             => 'Movements',
+    'lbl_movements_transfers'    => 'Transfers',
+    'lbl_movements_remove'      => 'Remove',
+    'lbl_movements_ingress'     => 'Ingress',
+    'lbl_movements_exit'        => 'Exit',
+    'lbl_inventory_list'        => 'Inventory List',
+    'lbl_movements_move'        => 'Move',
+    'lbl_transfer_between_warehouses' => 'Transfer between warehouses',
+    'lbl_remove_product_from_warehouse'  => 'Remove product from warehouse'
 ];

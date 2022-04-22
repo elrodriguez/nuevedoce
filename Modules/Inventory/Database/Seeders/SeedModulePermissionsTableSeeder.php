@@ -63,7 +63,13 @@ class SeedModulePermissionsTableSeeder extends Seeder
         array_push($permissions,Permission::create(['name' => 'inventario_compras_nuevo','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'inventario_compras_editar','guard_name' => 'sanctum']));
         array_push($permissions,Permission::create(['name' => 'inventario_compras_eliminar','guard_name' => 'sanctum']));
-        
+        array_push($permissions,Permission::create(['name' => 'inventario_movimientos','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_movimientos_trasladar','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_movimientos_remover','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_movimientos_ingreso','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_movimientos_salida','guard_name' => 'sanctum']));
+        array_push($permissions,Permission::create(['name' => 'inventario_traslados','guard_name' => 'sanctum']));
+
         $role = Role::find(1);
 
         foreach($permissions as $permission){

@@ -7,7 +7,7 @@
                         <label class="form-label" for="description">@lang('inventory::labels.description') <span class="text-danger">*</span> </label>
                         <input wire:model="description" type="text" class="form-control" id="description" required="">
                         @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
@@ -17,7 +17,7 @@
                             <label class="custom-control-label" for="status">Activo</label>
                         </div>
                         @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

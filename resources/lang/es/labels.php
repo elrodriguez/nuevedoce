@@ -367,6 +367,7 @@ return [
     'kardex_report' => 'Reporte kardex',
     'entry_kardex' => 'Entrada',
     'exit_kardex' => 'Salida',
+    'exit' => 'Salida',
     'inventory_report' => 'Reporte inventario',
     'the_selected_files_are_pdf' => 'Los archivos seleccionados deben ser solo pdf',
     'curricula' => 'Curricula',

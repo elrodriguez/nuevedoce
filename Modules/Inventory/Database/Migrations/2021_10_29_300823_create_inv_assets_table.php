@@ -15,7 +15,7 @@ class CreateInvAssetsTable extends Migration
     {
         Schema::create('inv_assets', function (Blueprint $table) {
             $table->id();
-            $table->string('patrimonial_code');
+            $table->string('patrimonial_code')->nullable();
             $table->unsignedBigInteger('item_id')->nullable();
             $table->unsignedBigInteger('asset_type_id')->nullable();
             $table->char('state', 2)->default('00')->comment('00=inactivo,01=activo,02=en reparacion,03=en evento,04=perdido,05=de baja');;

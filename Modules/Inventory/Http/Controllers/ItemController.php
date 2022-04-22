@@ -59,7 +59,7 @@ class ItemController extends Controller
 
     public function autocomplete(Request $request){
         $search = $request->input('q');
-        $customers    = InvItem::where('status', true)
+        $items    = InvItem::where('status', true)
             ->select(
                 'id AS value',
                 'name AS text',
@@ -69,6 +69,19 @@ class ItemController extends Controller
             ->where('part','=','1')
             ->get();
             
-        return response()->json($customers, 200);
+        return response()->json($items, 200);
+    }
+
+    public function searchProducts(Request $request){
+        $search = $request->input('q');
+        $items = InvItem::where('item_type_id', '01')
+            ->select(
+                'id AS value',
+                'name AS text'
+            )
+            ->where('name','like','%'.$search.'%')
+            ->get();
+            
+        return response()->json($items, 200);
     }
 }

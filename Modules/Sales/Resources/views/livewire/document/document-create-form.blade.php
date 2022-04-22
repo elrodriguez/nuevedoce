@@ -488,7 +488,6 @@
             }).datepicker('setDate','0');
 
             $('.basicAutoComplete').autoComplete().on('autocomplete.select', function (evt, item) {
-                //console.log(item.value)
                 selectCustomer(item.value);
             });
 
