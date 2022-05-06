@@ -21,7 +21,10 @@
 <?php unset($__componentOriginalffde9e6d15fb644ab927a95d1432ec09268242d9); ?>
 <?php endif; ?>
     <li class="breadcrumb-item"><?php echo app('translator')->get('inventory::labels.lbl_inventory'); ?></li>
-    <li class="breadcrumb-item active"><?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?></li>
+    <li class="breadcrumb-item">
+        <a href="<?php echo e(route('inventory_transfers_create')); ?>"><?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?></a>
+    </li>
+    <li class="breadcrumb-item active"><?php echo app('translator')->get('labels.new'); ?></li>
     <li class="position-absolute pos-top pos-right d-none d-sm-block">
         <?php if (isset($component)) { $__componentOriginalab70499045def3ea46a51a0c5d10e7b6f1952525 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\JsGetDate::class, [] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
@@ -41,37 +44,33 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('subheader'); ?>
     <h1 class="subheader-title">
-        <i class="fal fa-person-dolly"></i></i> <?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?><sup
-            class='badge badge-primary fw-500'><?php echo app('translator')->get('labels.list'); ?></sup>
+        <i class="fal fa-person-dolly"></i></i> <?php echo app('translator')->get('inventory::labels.lbl_movements_transfers'); ?>
+        <sup class='badge badge-primary fw-500'><?php echo app('translator')->get('labels.new'); ?></sup>
     </h1>
     <div class="subheader-block">
-        <?php echo app('translator')->get('labels.list'); ?>
+        <?php echo app('translator')->get('labels.new'); ?>
     </div>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <?php
 if (! isset($_instance)) {
-    $html = \Livewire\Livewire::mount('inventory::transfers.transfers-list', [])->html();
-} elseif ($_instance->childHasBeenRendered('TXR5ig3')) {
-    $componentId = $_instance->getRenderedChildComponentId('TXR5ig3');
-    $componentTag = $_instance->getRenderedChildComponentTagName('TXR5ig3');
+    $html = \Livewire\Livewire::mount('inventory::transfers.transfers-create', [])->html();
+} elseif ($_instance->childHasBeenRendered('BvUoZkG')) {
+    $componentId = $_instance->getRenderedChildComponentId('BvUoZkG');
+    $componentTag = $_instance->getRenderedChildComponentTagName('BvUoZkG');
     $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
-    $_instance->preserveRenderedChild('TXR5ig3');
+    $_instance->preserveRenderedChild('BvUoZkG');
 } else {
-    $response = \Livewire\Livewire::mount('inventory::transfers.transfers-list', []);
+    $response = \Livewire\Livewire::mount('inventory::transfers.transfers-create', []);
     $html = $response->html();
-    $_instance->logRenderedChild('TXR5ig3', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+    $_instance->logRenderedChild('BvUoZkG', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
 }
 echo $html;
 ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
-    <script src="<?php echo e(url('themes/smart-admin/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js')); ?>"></script>
-    <script
-        src="<?php echo e(url('themes/smart-admin/js/formplugins/bootstrap-datepicker/locales/bootstrap-datepicker.' . Lang::locale() . '.min.js')); ?>">
-    </script>
     <script src="<?php echo e(url('themes/smart-admin/js/formplugins/autocomplete-bootstrap/bootstrap-autocomplete.min.js')); ?>"
         defer></script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('inventory::layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\nuevedoce\Modules/Inventory\Resources/views/transfers/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('inventory::layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\nuevedoce\Modules/Inventory\Resources/views/transfers/create.blade.php ENDPATH**/ ?>

@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Entities\InvKardex;
 use Modules\Inventory\Entities\InvLocation;
 use Modules\Inventory\Entities\InvPurchase;
@@ -37,8 +39,9 @@ class PurchaseCreate extends Component
     public $establishment_id;
     public $store_id;
 
-    public function mount(){
-        $this->document_types = DocumentType::whereIn('id',['01','03','GU75'])
+    public function mount()
+    {
+        $this->document_types = DocumentType::whereIn('id', ['01', '03', 'GU75'])
             ->select(
                 'id',
                 'description'
@@ -52,7 +55,7 @@ class PurchaseCreate extends Component
             )
             ->get();
 
-        $this->establishments = SetEstablishment::where('state',true)
+        $this->establishments = SetEstablishment::where('state', true)
             ->select(
                 'id',
                 'name'
@@ -62,8 +65,9 @@ class PurchaseCreate extends Component
         $this->getStores();
     }
 
-    public function getStores(){
-        $this->stores = InvLocation::where('establishment_id',$this->establishment_id)
+    public function getStores()
+    {
+        $this->stores = InvLocation::where('establishment_id', $this->establishment_id)
             ->where('state', true)->get();
     }
 
@@ -72,7 +76,8 @@ class PurchaseCreate extends Component
         return view('inventory::livewire.purchase.purchase-create');
     }
 
-    public function save(){
+    public function save()
+    {
         $this->validate([
             'supplier_id' => 'required',
             'document_type_id' => 'required',
@@ -123,8 +128,10 @@ class PurchaseCreate extends Component
                         'kardexable_type' => InvPurchase::class,
                         'detail' => 'Compra'
                     ]);
-                }
 
+                    InvItem::find($row['item_id'])->increment('stock', $row['amount']);
+                    InvAsset::where('item_id', $row['item_id'])->where('location_id', $this->store_id)->increment('stock', $row['amount']);
+                }
             }
 
             $this->items = [];
@@ -139,12 +146,13 @@ class PurchaseCreate extends Component
 
             $this->dispatchBrowserEvent('inv-purchase-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
             $this->clearForm();
-        }else{
+        } else {
             $this->dispatchBrowserEvent('inv-purchase-save-not', ['msg' => Lang::get('inventory::labels.msg_0011')]);
         }
     }
 
-    public function saveItem(){
+    public function saveItem()
+    {
         $this->validate([
             'item_text' => 'required|min:3',
             'item_id' => 'required',
@@ -183,9 +191,10 @@ class PurchaseCreate extends Component
         }
     }
 
-    public function deleteItem($id){
+    public function deleteItem($id)
+    {
         $items_aux = [];
-        if(count($this->items) > 0){
+        if (count($this->items) > 0) {
             foreach ($this->items as $row) {
                 if ($row['item_id'] != $id) {
                     $items_aux[] = $row;
@@ -196,7 +205,8 @@ class PurchaseCreate extends Component
         $this->dispatchBrowserEvent('inv-purchase-save', ['msg' => Lang::get('inventory::labels.msg_delete')]);
     }
 
-    public function clearForm(){
+    public function clearForm()
+    {
         $this->document_type_id = 'GU75';
         $this->date_of_issue = null;
         $this->serie = null;

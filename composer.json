@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "barryvdh/laravel-dompdf": "^1.0",
         "elibyy/tcpdf-laravel": "^9.0.0",
         "elrod/user-activity": "^1.1",

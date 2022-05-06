@@ -12,6 +12,7 @@ use App\Models\District;
 use App\Models\Province;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
+
 class EstablishmentCreate extends Component
 {
     public $companies;
@@ -34,12 +35,13 @@ class EstablishmentCreate extends Component
     public $departments = [];
     public $provinces = [];
     public $districts = [];
-    public $state;
+    public $state = true;
 
-    public function mount(){
+    public function mount()
+    {
         $this->companies = SetCompany::all();
-        $this->countries = Country::where('active',true)->get();
-        $this->departments = Department::where('active',true)->get();
+        $this->countries = Country::where('active', true)->get();
+        $this->departments = Department::where('active', true)->get();
     }
 
     public function render()
@@ -47,7 +49,8 @@ class EstablishmentCreate extends Component
         return view('setting::livewire.establishment.establishment-create');
     }
 
-    public function save(){
+    public function save()
+    {
 
         $this->validate([
             'address' => 'required|max:255'
@@ -72,7 +75,7 @@ class EstablishmentCreate extends Component
         ]);
 
         $activity = new Activity;
-        $activity->modelOn(SetEstablishment::class,$establishment->id,'set_establishments');
+        $activity->modelOn(SetEstablishment::class, $establishment->id, 'set_establishments');
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('setting_establishment_create'));
         $activity->logType('create');
@@ -83,7 +86,8 @@ class EstablishmentCreate extends Component
         $this->dispatchBrowserEvent('set-establishmente-save', ['msg' => Lang::get('setting::labels.msg_success')]);
     }
 
-    public function clearForm(){
+    public function clearForm()
+    {
         $this->address = null;
         $this->email = null;
         $this->phone = null;
@@ -99,14 +103,16 @@ class EstablishmentCreate extends Component
         $this->name = null;
     }
 
-    public function getProvinves(){
-        $this->provinces = Province::where('department_id',$this->department_id)
-            ->where('active',true)->get();
+    public function getProvinves()
+    {
+        $this->provinces = Province::where('department_id', $this->department_id)
+            ->where('active', true)->get();
         $this->districts = [];
     }
 
-    public function getPDistricts(){
-        $this->districts = District::where('province_id',$this->province_id)
-            ->where('active',true)->get();
+    public function getPDistricts()
+    {
+        $this->districts = District::where('province_id', $this->province_id)
+            ->where('active', true)->get();
     }
 }

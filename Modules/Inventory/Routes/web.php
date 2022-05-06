@@ -11,22 +11,22 @@
 |
 */
 
-Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(function() {
+Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(function () {
     Route::get('dashboard', 'InventoryController@index')->name('inventory_dashboard');
 
-    Route::group(['prefix' => 'category'], function() {
+    Route::group(['prefix' => 'category'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_categorias'])->get('list', 'CategoryController@index')->name('inventory_category');
         Route::middleware(['middleware' => 'role_or_permission:inventario_categorias_nuevo'])->get('create', 'CategoryController@create')->name('inventory_category_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_categorias_editar'])->get('edit/{id}', 'CategoryController@edit')->name('inventory_category_edit');
     });
 
-    Route::group(['prefix' => 'brand'], function() {
+    Route::group(['prefix' => 'brand'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_marcas'])->get('list', 'BrandController@index')->name('inventory_brand');
         Route::middleware(['middleware' => 'role_or_permission:inventario_marcas_nuevo'])->get('create', 'BrandController@create')->name('inventory_brand_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_marcas_editar'])->get('edit/{id}', 'BrandController@edit')->name('inventory_brand_edit');
     });
 
-    Route::group(['prefix' => 'item'], function() {
+    Route::group(['prefix' => 'item'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_items'])->get('list', 'ItemController@index')->name('inventory_item');
         Route::middleware(['middleware' => 'role_or_permission:inventario_items_nuevo'])->get('create', 'ItemController@create')->name('inventory_item_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_items_editar'])->get('edit/{id}', 'ItemController@edit')->name('inventory_item_edit');
@@ -40,37 +40,39 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::get('download_example', 'ItemController@getDownload')->name('inventory_item_download_example');
     });
 
-    Route::group(['prefix' => 'asset'], function() {
+    Route::group(['prefix' => 'asset'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos'])->get('list', 'AssetController@index')->name('inventory_asset');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_nuevo'])->get('create', 'AssetController@create')->name('inventory_asset_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_activos_editar'])->get('edit/{id}', 'AssetController@edit')->name('inventory_asset_edit');
         Route::get('search', 'AssetController@autocomplete')->name('inventory_asset_search');
         Route::middleware(['middleware' => 'role_or_permission:inventario_items_parte'])->get('part_list/{item_id}/{asset_id}', 'AssetController@parts')->name('inventory_asset_part');
     });
-    
-    Route::group(['prefix' => 'kardex'], function() {
+
+    Route::group(['prefix' => 'kardex'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_kardex_items_stock'])->get('item_stock', 'KardexController@itemsstock')->name('inventory_kardex_items_stock');
         Route::get('search_item', 'KardexController@autocompleteItems')->name('inventory_kardex_items_search');
         Route::middleware(['middleware' => 'role_or_permission:inventario_kardex_active_codes'])->get('active_codes', 'KardexController@activecodes')->name('inventory_kardex_active_codes');
     });
 
-    Route::group(['prefix' => 'location'], function() {
+    Route::group(['prefix' => 'location'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones'])->get('list', 'LocationController@index')->name('inventory_location');
         Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones_nuevo'])->get('create', 'LocationController@create')->name('inventory_location_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_ubicaciones_editar'])->get('edit/{id}', 'LocationController@edit')->name('inventory_location_edit');
     });
 
-    Route::group(['prefix' => 'purchase'], function() {
+    Route::group(['prefix' => 'purchase'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_compras'])->get('list', 'PurchaseController@index')->name('inventory_purchase');
         Route::middleware(['middleware' => 'role_or_permission:inventario_compras_nuevo'])->get('create', 'PurchaseController@create')->name('inventory_purchase_create');
         Route::middleware(['middleware' => 'role_or_permission:inventario_compras_editar'])->get('edit/{id}', 'PurchaseController@edit')->name('inventory_purchase_edit');
         Route::get('search', 'PurchaseController@autocomplete')->name('inventory_purchase_search');
     });
 
-    Route::group(['prefix' => 'movements'], function() {
+    Route::group(['prefix' => 'movements'], function () {
         Route::middleware(['middleware' => 'role_or_permission:inventario_movimientos'])->get('list', 'MovementsController@index')->name('inventory_movements');
     });
-    Route::group(['prefix' => 'transfers'], function() {
+    Route::group(['prefix' => 'transfers'], function () {
+        Route::get('search', 'TransfersController@autoCompleteProduc')->name('inventory_transfers_search');
         Route::middleware(['middleware' => 'role_or_permission:inventario_traslados'])->get('list', 'TransfersController@index')->name('inventory_transfers');
+        Route::middleware(['middleware' => 'role_or_permission:inventario_traslados_nuevo'])->get('create', 'TransfersController@create')->name('inventory_transfers_create');
     });
 });

@@ -37,6 +37,7 @@ class ItemCreateGeneric extends Component
     public $digemid;
     public $purchase_price;
     public $sunat_code;
+    public $item_type_id = '01';
 
     //images
     public $images = [];
@@ -48,10 +49,11 @@ class ItemCreateGeneric extends Component
     public $categories;
     public $unit_measures = [];
 
-    public function mount(){
-        $this->categories = InvCategory::where('status',true)->get();
-        $this->brands = InvBrand::where('status',true)->get();
-        $this->unit_measures = InvUnitMeasure::where('state',true)->get();
+    public function mount()
+    {
+        $this->categories = InvCategory::where('status', true)->get();
+        $this->brands = InvBrand::where('status', true)->get();
+        $this->unit_measures = InvUnitMeasure::where('state', true)->get();
     }
 
     public function render()
@@ -59,7 +61,8 @@ class ItemCreateGeneric extends Component
         return view('inventory::livewire.item.item-create-generic');
     }
 
-    public function save(){
+    public function save()
+    {
         //dd($this->image->getClientOriginalName());
         $this->validate([
             'name' => 'required|min:3|max:255',
@@ -88,7 +91,9 @@ class ItemCreateGeneric extends Component
             'unit_measure_id' => $this->unit_measure_id,
             'brand_id' => $this->brand_id,
             'currency_type_id' => $this->currency_id,
-            'person_create'=> Auth::user()->person_id
+            'person_create' => Auth::user()->person_id,
+            'sale_affectation_igv_type_id' => $this->affectation_igv_type_id,
+            'item_type_id' => $this->item_type_id
         ]);
 
         InvKardex::create([
@@ -110,45 +115,46 @@ class ItemCreateGeneric extends Component
         ]);
 
         $activity = new Activity;
-        $activity->modelOn(InvItem::class, $this->item_save->id,'inv_items');
+        $activity->modelOn(InvItem::class, $this->item_save->id, 'inv_items');
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('inventory_item_create'));
         $activity->logType('create');
         $activity->log('Se creó un nuevo Item');
         $activity->save();
 
-        if($this->image){
+        if ($this->image) {
             $imagen_name = $this->image->getClientOriginalName();
             $this->extension_photo = $this->image->extension();
             InvItemFile::create([
                 'name' => $imagen_name,
-                'route' => 'storage/items_images/'.$this->item_save->id.'/'.$imagen_name,
+                'route' => 'storage/items_images/' . $this->item_save->id . '/' . $imagen_name,
                 'extension' => $this->extension_photo,
                 'item_id' => $this->item_save->id
             ]);
 
-            $this->image->storeAs('items_images/'.$this->item_save->id.'/', $imagen_name,'public');
+            $this->image->storeAs('items_images/' . $this->item_save->id . '/', $imagen_name, 'public');
         }
 
         $this->clearForm();
         $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
     }
 
-    public function clearForm(){
-         $this->name = null;
-         $this->description = null;
-         $this->price = null;
-         $this->purchase_price = null;
-         $this->internal_id = null;
-         $this->sunat_code = null;
-         $this->stock = null;
-         $this->stock_min = 1;
-         $this->status = true;
-         $this->digemid = null;
-         $this->category_id = null;
-         $this->unit_measure_id = 'NIU';
-         $this->brand_id = 1;
-         $this->currency_id = 'PEN';
-         $this->image = null;
+    public function clearForm()
+    {
+        $this->name = null;
+        $this->description = null;
+        $this->price = null;
+        $this->purchase_price = null;
+        $this->internal_id = null;
+        $this->sunat_code = null;
+        $this->stock = null;
+        $this->stock_min = 1;
+        $this->status = true;
+        $this->digemid = null;
+        $this->category_id = null;
+        $this->unit_measure_id = 'NIU';
+        $this->brand_id = 1;
+        $this->currency_id = 'PEN';
+        $this->image = null;
     }
 }
