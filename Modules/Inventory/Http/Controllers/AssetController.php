@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Http\Controllers;
 
+use App\Models\Parameter;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -16,7 +17,8 @@ class AssetController extends Controller
      */
     public function index()
     {
-        return view('inventory::asset.index');
+        $PRT0001GN = Parameter::where('id_parameter', 'PRT0001GN')->first()->value_default;
+        return view('inventory::asset.index')->with('interfaz', $PRT0001GN);
     }
 
     /**
@@ -35,26 +37,28 @@ class AssetController extends Controller
      */
     public function edit($id)
     {
-        return view('inventory::asset.edit')->with('id',$id);
+        return view('inventory::asset.edit')->with('id', $id);
     }
 
-    public function autocomplete(Request $request){
+    public function autocomplete(Request $request)
+    {
         $search = $request->input('q');
         $customers    = InvItem::where('status', true)
             ->select(
                 'id AS value',
                 DB::raw('CONCAT(name," ",IFNULL(description,"")) AS text')
             )
-            ->where('name','like','%'.$search.'%')
+            ->where('name', 'like', '%' . $search . '%')
             //->where('part','=','0')
             //->where('item_id','=',NULL)
             ->get();
         return response()->json($customers, 200);
     }
 
-    public function parts($item_id,$asset_id){
+    public function parts($item_id, $asset_id)
+    {
         return view('inventory::asset.parts')
-                    ->with('item_id',$item_id)
-                    ->with('asset_id',$asset_id);
+            ->with('item_id', $item_id)
+            ->with('asset_id', $asset_id);
     }
 }

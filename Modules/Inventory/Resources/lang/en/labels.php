@@ -93,16 +93,16 @@ return [
     'lbl_document_type' => 'Document Type',
     'lbl_date_of_issue' => 'Date of Issue',
     'lbl_total'         => 'Total',
-    'lbl_purchase_price'=> 'Purchase Price',
+    'lbl_purchase_price' => 'Purchase Price',
     'lbl_establishment' => 'Establishment',
     'lbl_store'         => 'Store',
     'lbl_supplier'      => 'Supplier',
     'lbl_assets_with_code' => 'Assets with code',
     'lbl_accessory'     => 'Accessory',
     'lbl_asset'         => 'Asset',
-    'lbl_location_store'=> 'locations (Warehouses)',
+    'lbl_location_store' => 'locations (Warehouses)',
     'lbl_assets_with_code' => 'Assets with code',
-    'lbl_documents_purchases'=> 'documentos (Compras)',
+    'lbl_documents_purchases' => 'documentos (Compras)',
     'lbl_show_guide'            => 'Show in Guides',
     'lbl_price_sale'            => 'Sale price',
     'lbl_internal_code'         => 'Internal Code',
@@ -115,5 +115,6 @@ return [
     'lbl_inventory_list'        => 'Inventory List',
     'lbl_movements_move'        => 'Move',
     'lbl_transfer_between_warehouses' => 'Transfer between warehouses',
-    'lbl_remove_product_from_warehouse'  => 'Remove product from warehouse'
+    'lbl_remove_product_from_warehouse'  => 'Remove product from warehouse',
+    'lbl_sunat_code' => 'Sunat Code'
 ];

@@ -93,16 +93,16 @@ return [
     'lbl_document_type' => 'Tipo de Documento',
     'lbl_date_of_issue' => 'Fecha de Emisión',
     'lbl_total'         => 'Total',
-    'lbl_purchase_price'=> 'Precio de Compra',
+    'lbl_purchase_price' => 'Precio de Compra',
     'lbl_establishment' => 'Establecimiento',
     'lbl_store'         => 'Almacén',
     'lbl_supplier'      => 'Proveedor',
     'lbl_assets_with_code' => 'Activos con Código',
     'lbl_accessory'     => 'Accesorio',
     'lbl_asset'         => 'Activo',
-    'lbl_location_store'=> 'localizaciones (Almacenes)',
+    'lbl_location_store' => 'localizaciones (Almacenes)',
     'lbl_assets_with_code' => 'Activos con código',
-    'lbl_documents_purchases'=> 'documentos (Compras)',
+    'lbl_documents_purchases' => 'documentos (Compras)',
     'lbl_show_guide'            => 'Mostrar en Guías',
     'lbl_price_sale'            => 'Precio venta',
     'lbl_internal_code'         => 'Código Interno',
@@ -114,5 +114,6 @@ return [
     'lbl_inventory_list'        => 'Listado de Inventario',
     'lbl_movements_move'        => 'Trasladar',
     'lbl_transfer_between_warehouses' => 'Traslado entre almacenes',
-    'lbl_remove_product_from_warehouse'  => 'Retirar producto de almacén'
+    'lbl_remove_product_from_warehouse'  => 'Retirar producto de almacén',
+    'lbl_sunat_code' => 'Código Sunat'
 ];
