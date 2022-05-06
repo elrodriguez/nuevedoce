@@ -24,21 +24,21 @@ class CreateInvLocationsTable extends Migration
         });
 
         DB::table('inv_locations')->insert([
-            ['establishment_id' => 1,'name' => 'Almacen Oficina Principal','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 1','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 2','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 3','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 4','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 5','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 6','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 7','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 8','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 9','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 10','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 11','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 12','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 13','state' => true],
-            ['establishment_id' => 1,'name' => 'Rack 14','state' => true]
+            ['establishment_id' => 1, 'name' => 'Almacen Oficina Principal', 'state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 1','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 2','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 3','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 4','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 5','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 6','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 7','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 8','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 9','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 10','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 11','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 12','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 13','state' => true],
+            // ['establishment_id' => 1,'name' => 'Rack 14','state' => true]
         ]);
     }
 
