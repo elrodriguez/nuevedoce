@@ -45,6 +45,7 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th class="text-center">{{ __('labels.actions') }}</th>
+                            <th class="text-center">{{ __('labels.date') }}</th>
                             <th>{{ __('labels.origin_warehouse') }}</th>
                             <th>{{ __('labels.destination_warehouse') }}</th>
                             <th>{{ __('labels.detail') }}</th>
@@ -52,48 +53,27 @@
                         </tr>
                     </thead>
                     <tbody class="">
-                        @foreach ($transfers as $key => $company)
+                        @foreach ($transfers as $key => $transfer)
                             <tr>
                                 <td class="text-center align-middle">{{ $key + 1 }}</td>
-                                <td class="text-center tdw-50 align-middle">
-                                    <div class="btn-group">
-                                        <button type="button"
-                                            class="btn btn-secondary rounded-circle btn-icon waves-effect waves-themed"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <i class="fal fa-cogs"></i>
-                                        </button>
-                                        <div class="dropdown-menu"
-                                            style="position: absolute; will-change: top, left; top: 35px; left: 0px;"
-                                            x-placement="bottom-start">
-                                            @can('configuraciones_establecimientos_editar')
-                                                <a href="{{ route('setting_company_edit', $company->id) }}"
-                                                    class="dropdown-item">
-                                                    <i class="fal fa-pencil-alt mr-1"></i>{{ __('labels.edit') }}
-                                                </a>
-                                            @endcan
-                                            @can('configuraciones_empresas_entorno_del_sistema')
-                                                <a href="{{ route('setting_company_system_environment', $company->id) }}"
-                                                    class="dropdown-item">
-                                                    <i
-                                                        class="fal fa-tools mr-1"></i>{{ __('setting::labels.system_environment') }}
-                                                </a>
-                                            @endcan
-                                            @can('configuraciones_establecimientos_eliminar')
-                                                <div class="dropdown-divider"></div>
-                                                <button onclick="confirmDelete({{ $company->id }})" type="button"
-                                                    class="dropdown-item text-danger">
-                                                    <i class="fal fa-trash-alt mr-1"></i>{{ __('labels.delete') }}
-                                                </button>
-                                            @endcan
-                                        </div>
-                                    </div>
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('inventory_transfers_export_pdf', $transfer->id) }}"
+                                        class="btn btn-primary btn-icon waves-effect waves-themed" type="button">
+                                        <i class="fal fa-print"></i>
+                                    </a>
                                 </td>
-                                <td class="align-middle">{{ $company->name }}</td>
-                                <td class="align-middle">{{ $company->number }}</td>
-                                <td class="align-middle">{{ $company->tradename }}</td>
-                                <td class="align-middle">{{ $company->phone }}</td>
-                                <td class="align-middle">{{ $company->email }}</td>
-                                <td class="align-middle">{{ $company->representative_name }}</td>
+                                <td class="text-center align-middle">
+                                    {{ \Carbon\Carbon::parse($transfer->created_at)->format('d/m/Y') }}
+                                </td>
+                                <td class="align-middle">{{ $transfer->origin_name }}</td>
+                                <td class="align-middle">{{ $transfer->destination_name }}</td>
+                                <td class="align-middle">{{ $transfer->description }}</td>
+                                <td class="text-right align-middle">
+                                    <button wire:click="$emit('openModalProductsTransfer',{{ $transfer->id }})"
+                                        class="btn btn-warning waves-effect waves-themed" type="button">
+                                        {{ $transfer->quantity }}
+                                    </button>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -101,65 +81,36 @@
             </div>
         </div>
         <div class="card-footer  pb-0 d-flex flex-row align-items-center">
-            {{-- <div class="ml-auto">{{ $transfers->links() }}</div> --}}
+            <div class="ml-auto">{{ $transfers->links() }}</div>
         </div>
     </div>
     <script type="text/javascript">
-        function confirmDelete(id) {
-            initApp.playSound('{{ url('themes/smart-admin/media/sound') }}', 'bigbox')
-            let box = bootbox.confirm({
-                title: "<i class='fal fa-times-circle text-danger mr-2'></i> ¿Desea eliminar estos datos?",
-                message: "<span><strong>Advertencia: </strong> ¡Esta acción no se puede deshacer!</span>",
-                centerVertical: true,
-                swapButtonOrder: true,
-                buttons: {
-                    confirm: {
-                        label: 'Si',
-                        className: 'btn-danger shadow-0'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-default'
-                    }
-                },
-                className: "modal-alert",
-                closeButton: false,
-                callback: function(result) {
-                    if (result) {
-                        @this.deleteCompanies(id)
-                    }
-                }
-            });
-            box.find('.modal-content').css({
-                'background-color': 'rgba(255, 0, 0, 0.5)'
-            });
-        }
         document.addEventListener('set-company-delete', event => {
             let res = event.detail.res;
 
             if (res == 'success') {
                 initApp.playSound('{{ url('themes/smart-admin/media/sound') }}', 'voice_on')
                 let box = bootbox.alert({
-                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.success') }}!</span>",
+                    title: "<i class='{{ env('BOOTBOX_SUCCESS_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.success') }}!</span>",
                     message: "<span><strong>{{ __('setting::labels.excellent') }}... </strong>{{ __('setting::labels.msg_delete') }}</span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false
                 });
                 box.find('.modal-content').css({
-                    'background-color': 'rgba(122, 85, 7, 0.5)'
+                    'background-color': '{{ env('BOOTBOX_SUCCESS_COLOR') }}'
                 });
             } else {
                 initApp.playSound('{{ url('themes/smart-admin/media/sound') }}', 'voice_off')
                 let box = bootbox.alert({
-                    title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.error') }}!</span>",
+                    title: "<i class='{{ env('BOOTBOX_ERROR_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.error') }}!</span>",
                     message: "<span><strong>{{ __('setting::labels.went_wrong') }}... </strong>{{ __('setting::labels.msg_not_peptra') }}</span>",
                     centerVertical: true,
                     className: "modal-alert",
                     closeButton: false
                 });
                 box.find('.modal-content').css({
-                    'background-color': 'rgba(122, 85, 7, 0.5)'
+                    'background-color': '{{ env('BOOTBOX_ERROR_COLOR') }}'
                 });
             }
         });

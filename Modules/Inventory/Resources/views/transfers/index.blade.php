@@ -24,6 +24,7 @@
 @endsection
 @section('content')
     <livewire:inventory::transfers.transfers-list />
+    <livewire:inventory::transfers.transfers-products-modal />
 @endsection
 @section('script')
     <script src="{{ url('themes/smart-admin/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>

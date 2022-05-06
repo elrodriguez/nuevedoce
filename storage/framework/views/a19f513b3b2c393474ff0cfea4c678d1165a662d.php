@@ -29,14 +29,16 @@ unset($__errorArgs, $__bag); ?>
                     <div class="form-group">
                         <label class="form-label"
                             for="simpleinput"><?php echo e(__('labels.destination_warehouse')); ?></label>
-                        <select wire:model="destination_warehouse_id" class="custom-select form-control">
-                            <option value=""><?php echo e(__('labels.to_select')); ?></option>
-                            <?php $__currentLoopData = $warehouses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $warehouse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option <?php echo e($warehouse->id == $warehouse_id ? 'disabled' : ''); ?>
+                        <div wire:ignore>
+                            <select wire:model="destination_warehouse_id" class="custom-select form-control">
+                                <option value=""><?php echo e(__('labels.to_select')); ?></option>
+                                <?php $__currentLoopData = $warehouses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $warehouse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option <?php echo e($warehouse->id == $warehouse_id ? 'disabled' : ''); ?>
 
-                                    value="<?php echo e($warehouse->id); ?>"><?php echo e($warehouse->description); ?></option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
+                                        value="<?php echo e($warehouse->id); ?>"><?php echo e($warehouse->description); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
                         <?php $__errorArgs = ['destination_warehouse_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

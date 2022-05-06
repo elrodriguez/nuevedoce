@@ -52,15 +52,30 @@
     <?php
 if (! isset($_instance)) {
     $html = \Livewire\Livewire::mount('inventory::transfers.transfers-list', [])->html();
-} elseif ($_instance->childHasBeenRendered('TXR5ig3')) {
-    $componentId = $_instance->getRenderedChildComponentId('TXR5ig3');
-    $componentTag = $_instance->getRenderedChildComponentTagName('TXR5ig3');
+} elseif ($_instance->childHasBeenRendered('bNq8VuW')) {
+    $componentId = $_instance->getRenderedChildComponentId('bNq8VuW');
+    $componentTag = $_instance->getRenderedChildComponentTagName('bNq8VuW');
     $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
-    $_instance->preserveRenderedChild('TXR5ig3');
+    $_instance->preserveRenderedChild('bNq8VuW');
 } else {
     $response = \Livewire\Livewire::mount('inventory::transfers.transfers-list', []);
     $html = $response->html();
-    $_instance->logRenderedChild('TXR5ig3', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+    $_instance->logRenderedChild('bNq8VuW', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
+}
+echo $html;
+?>
+    <?php
+if (! isset($_instance)) {
+    $html = \Livewire\Livewire::mount('inventory::transfers.transfers-products-modal', [])->html();
+} elseif ($_instance->childHasBeenRendered('n3oawGS')) {
+    $componentId = $_instance->getRenderedChildComponentId('n3oawGS');
+    $componentTag = $_instance->getRenderedChildComponentTagName('n3oawGS');
+    $html = \Livewire\Livewire::dummyMount($componentId, $componentTag);
+    $_instance->preserveRenderedChild('n3oawGS');
+} else {
+    $response = \Livewire\Livewire::mount('inventory::transfers.transfers-products-modal', []);
+    $html = $response->html();
+    $_instance->logRenderedChild('n3oawGS', $response->id(), \Livewire\Livewire::getRootElementTagName($html));
 }
 echo $html;
 ?>

@@ -74,5 +74,6 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('inventory')->group(func
         Route::get('search', 'TransfersController@autoCompleteProduc')->name('inventory_transfers_search');
         Route::middleware(['middleware' => 'role_or_permission:inventario_traslados'])->get('list', 'TransfersController@index')->name('inventory_transfers');
         Route::middleware(['middleware' => 'role_or_permission:inventario_traslados_nuevo'])->get('create', 'TransfersController@create')->name('inventory_transfers_create');
+        Route::get('export/pdf/{id}', 'TransfersController@exportTransferPDF')->name('inventory_transfers_export_pdf');
     });
 });

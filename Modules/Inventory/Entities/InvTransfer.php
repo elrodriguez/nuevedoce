@@ -9,8 +9,10 @@ class InvTransfer extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
+    protected $fillable = [
+        'description', 'warehouse_id', 'warehouse_destination_id', 'quantity'
+    ];
+
     protected static function newFactory()
     {
         return \Modules\Inventory\Database\factories\InvTransferFactory::new();

@@ -21,13 +21,15 @@
                     <div class="form-group">
                         <label class="form-label"
                             for="simpleinput">{{ __('labels.destination_warehouse') }}</label>
-                        <select wire:model="destination_warehouse_id" class="custom-select form-control">
-                            <option value="">{{ __('labels.to_select') }}</option>
-                            @foreach ($warehouses as $warehouse)
-                                <option {{ $warehouse->id == $warehouse_id ? 'disabled' : '' }}
-                                    value="{{ $warehouse->id }}">{{ $warehouse->description }}</option>
-                            @endforeach
-                        </select>
+                        <div wire:ignore>
+                            <select wire:model="destination_warehouse_id" class="custom-select form-control">
+                                <option value="">{{ __('labels.to_select') }}</option>
+                                @foreach ($warehouses as $warehouse)
+                                    <option {{ $warehouse->id == $warehouse_id ? 'disabled' : '' }}
+                                        value="{{ $warehouse->id }}">{{ $warehouse->description }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         @error('destination_warehouse_id')
                             <div class="invalid-feedback-2">{{ $message }}</div>
                         @enderror
@@ -75,7 +77,7 @@
                             <tr>
                                 <td class="text-center align-middle">
                                     <button wire:click="removeProduct({{ $key }})"
-                                        class="btn btn-danger btn-sm btn-icon waves-effect waves-themed">
+                                        class="btn btn-danger btn-sm btn-icon waves-effect waves-themed" type="button">
                                         <i class="fal fa-times"></i>
                                     </button>
                                 </td>
@@ -114,12 +116,34 @@
     </div>
     <script>
         window.addEventListener('response_transfer_store', event => {
-            swalAlert(event.detail.title, event.detail.message, event.detail.icon);
-        });
+            let res = event.detail.icon;
 
-        function swalAlert(title, msg, icon) {
-            Swal.fire(title, msg, icon);
-        }
+            if (res == 'success') {
+                initApp.playSound('{{ url('themes/smart-admin/media/sound') }}', 'voice_on')
+                let box = bootbox.alert({
+                    title: "<i class='{{ env('BOOTBOX_SUCCESS_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.success') }}!</span>",
+                    message: "<span><strong>{{ __('setting::labels.excellent') }}... </strong>{{ __('setting::labels.msg_delete') }}</span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({
+                    'background-color': '{{ env('BOOTBOX_SUCCESS_COLOR') }}'
+                });
+            } else {
+                initApp.playSound('{{ url('themes/smart-admin/media/sound') }}', 'voice_off')
+                let box = bootbox.alert({
+                    title: "<i class='{{ env('BOOTBOX_ERROR_ICON') }} text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('setting::labels.error') }}!</span>",
+                    message: "<span><strong>{{ __('setting::labels.went_wrong') }}... </strong>{{ __('setting::labels.msg_not_peptra') }}</span>",
+                    centerVertical: true,
+                    className: "modal-alert",
+                    closeButton: false
+                });
+                box.find('.modal-content').css({
+                    'background-color': '{{ env('BOOTBOX_ERROR_COLOR') }}'
+                });
+            }
+        });
 
         document.addEventListener('livewire:load', function() {
             $('.basicAutoComplete').autoComplete({

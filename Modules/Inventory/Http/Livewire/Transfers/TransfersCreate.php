@@ -2,13 +2,16 @@
 
 namespace Modules\Inventory\Http\Livewire\Transfers;
 
+use Carbon\Carbon;
 use Elrod\UserActivity\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Inventory\Entities\InvAsset;
+use Modules\Inventory\Entities\InvKardex;
 use Modules\Inventory\Entities\InvLocation;
+use Modules\Inventory\Entities\InvTransfer;
 
 class TransfersCreate extends Component
 {
@@ -70,85 +73,79 @@ class TransfersCreate extends Component
         ]);
 
         if ($this->warehouse_id === $this->destination_warehouse_id) {
-            $pass = false;
             $title = 'Error';
             $icon = 'error';
             $msg = 'El almacén destino no puede ser igual al de origen';
         }
 
-        $inventoriestransfer = InventoriesTransf::create([
+        $inventoriestransfer = InvTransfer::create([
             'description' => $this->detail,
             'warehouse_id' => $this->warehouse_id,
             'warehouse_destination_id' => $this->destination_warehouse_id,
             'quantity' =>  count($this->products),
         ]);
 
-        $inventory = null;
+        $lo = InvLocation::find($this->warehouse_id);
+        $ld = InvLocation::find($this->destination_warehouse_id);
 
         foreach ($this->products as $key => $product) {
 
             if ($product['stock'] > $product['quantity']) {
-                $inventory = Inventory::create([
-                    'type' => 2,
-                    'description' => 'Traslado',
-                    'item_id' => $product['id'],
-                    'warehouse_id' => $this->warehouse_id,
-                    'warehouse_destination_id' => $this->destination_warehouse_id,
-                    'quantity' => $product['quantity'],
-                    'detail' => $this->detail,
-                    'inventories_transfer_id' => $inventoriestransfer->id
-                ]);
 
-                $itemwarehouse_destination = ItemWarehouse::where('item_id', '=', $product['id'])
-                    ->where('warehouse_id', '=', $this->destination_warehouse_id)
+                $itemwarehouse_destination = InvAsset::where('item_id', '=', $product['id'])
+                    ->where('location_id', '=', $this->destination_warehouse_id)
                     ->first();
 
                 if ($itemwarehouse_destination) {
                     $itemwarehouse_destination->increment('stock', $product['quantity']);
                 } else {
-                    ItemWarehouse::create([
+                    InvAsset::create([
                         'item_id' => $product['id'],
-                        'warehouse_id' => $this->destination_warehouse_id,
+                        'location_id' => $this->destination_warehouse_id,
                         'stock' => $product['quantity']
                     ]);
                 }
 
-                ItemWarehouse::where('item_id', '=', $product['id'])
-                    ->where('warehouse_id', '=', $this->warehouse_id)
+                InvAsset::where('item_id', '=', $product['id'])
+                    ->where('location_id', '=', $this->warehouse_id)
                     ->decrement('stock', $product['quantity']);
 
-                InventoryKardex::create([
+                InvKardex::create([
                     'date_of_issue' => Carbon::now()->format('Y-m-d'),
+                    'establishment_id' => $lo->establishment_id,
                     'item_id' => $product['id'],
-                    'inventory_kardexable_id' => $inventory->id,
-                    'inventory_kardexable_type' => Inventory::class,
-                    'warehouse_id' => $this->warehouse_id,
-                    'quantity' => (-$product['quantity'])
+                    'kardexable_id' => $inventoriestransfer->id,
+                    'kardexable_type' => InvTransfer::class,
+                    'quantity' => (-$product['quantity']),
+                    'detail' => 'Traslado',
+                    'location_id' => $this->warehouse_id,
                 ]);
 
-                InventoryKardex::create([
+                InvKardex::create([
                     'date_of_issue' => Carbon::now()->format('Y-m-d'),
+                    'establishment_id' => $ld->establishment_id,
                     'item_id' => $product['id'],
-                    'inventory_kardexable_id' => $inventory->id,
-                    'inventory_kardexable_type' => Inventory::class,
-                    'warehouse_id' => $this->destination_warehouse_id,
-                    'quantity' => $product['quantity']
+                    'kardexable_id' => $inventoriestransfer->id,
+                    'kardexable_type' => InvTransfer::class,
+                    'quantity' => $product['quantity'],
+                    'detail' => 'Traslado',
+                    'location_id' => $this->destination_warehouse_id,
                 ]);
             }
         }
 
-        if ($inventory) {
+        if ($inventoriestransfer) {
             $title = Lang::get('messages.congratulations');
             $icon = 'success';
             $msg = 'Traslado creado con éxito';
 
             $user = Auth::user();
             $activity = new Activity;
-            $activity->modelOn(Inventory::class, $inventory->id);
+            $activity->modelOn(InvTransfer::class, $inventoriestransfer->id);
             $activity->causedBy($user);
             $activity->routeOn(route('inventory_transfers_create'));
             $activity->componentOn('inventory::transfers.transfers-create');
-            $activity->dataOld($inventory);
+            $activity->dataOld($inventoriestransfer);
             $activity->logType('transfer');
             $activity->log($msg);
             $activity->save();
