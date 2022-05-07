@@ -38,9 +38,14 @@ class SalSaleNoteItem extends Model
         'kardex_id',
         'warehouse_id'
     ];
-    
+
     protected static function newFactory()
     {
         return \Modules\Sales\Database\factories\SalSaleNoteItemFactory::new();
+    }
+
+    public function sale_note()
+    {
+        return $this->belongsTo(SalSaleNote::class, 'sale_note_id');
     }
 }

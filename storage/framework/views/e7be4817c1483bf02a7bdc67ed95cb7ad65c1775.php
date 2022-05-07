@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="application/pdf; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {{-- <title>Reporte - {{ $cash->user->name }} - {{ $cash->date_opening }} {{ $cash->time_opening }}</title> --}}
+    
     <style>
         html {
             font-family: sans-serif;
@@ -70,42 +70,45 @@
         <table>
             <tr>
                 <td class="width-custom">
-                    <p><strong>Empresa: </strong>{{ $company->name }}</p>
+                    <p><strong>Empresa: </strong><?php echo e($company->name); ?></p>
                 </td>
                 <td class="td-custom">
-                    <p><strong>Fecha reporte: </strong>{{ date('Y-m-d') }}</p>
+                    <p><strong>Fecha reporte: </strong><?php echo e(date('Y-m-d')); ?></p>
                 </td>
             </tr>
             <tr>
                 <td class="td-custom">
-                    <p><strong>Ruc: </strong>{{ $company->number }}</p>
+                    <p><strong>Ruc: </strong><?php echo e($company->number); ?></p>
                 </td>
                 <td class="width-custom">
-                    <p><strong>Establecimiento: </strong>{{ $establishment->address }} -
-                        {{ $establishment->department->description }} - {{ $establishment->district->description }}
+                    <p><strong>Establecimiento: </strong><?php echo e($establishment->address); ?> -
+                        <?php echo e($establishment->department->description); ?> - <?php echo e($establishment->district->description); ?>
+
                     </p>
                 </td>
             </tr>
 
             <tr>
                 <td class="td-custom">
-                    <p><strong>Vendedor: </strong>{{ $cash->user->name }}</p>
+                    <p><strong>Vendedor: </strong><?php echo e($cash->user->name); ?></p>
                 </td>
                 <td class="td-custom">
-                    <p><strong>Fecha y hora apertura: </strong>{{ $cash->date_opening }} {{ $cash->time_opening }}
+                    <p><strong>Fecha y hora apertura: </strong><?php echo e($cash->date_opening); ?> <?php echo e($cash->time_opening); ?>
+
                     </p>
                 </td>
             </tr>
             <tr>
                 <td class="td-custom">
-                    <p><strong>Estado de caja: </strong>{{ $cash->state ? 'Aperturada' : 'Cerrada' }}</p>
+                    <p><strong>Estado de caja: </strong><?php echo e($cash->state ? 'Aperturada' : 'Cerrada'); ?></p>
                 </td>
-                @if (!$cash->state)
+                <?php if(!$cash->state): ?>
                     <td class="td-custom">
-                        <p><strong>Fecha y hora cierre: </strong>{{ $cash->date_closed }} {{ $cash->time_closed }}
+                        <p><strong>Fecha y hora cierre: </strong><?php echo e($cash->date_closed); ?> <?php echo e($cash->time_closed); ?>
+
                         </p>
                     </td>
-                @endif
+                <?php endif; ?>
             </tr>
             <tr>
                 <td colspan="2" class="td-custom">
@@ -116,7 +119,7 @@
 
         </table>
     </div>
-    @if ($documents->count())
+    <?php if($documents->count()): ?>
         <div class="">
             <div class=" ">
                 <table class="">
@@ -130,23 +133,24 @@
                     </thead>
                     <tbody>
 
-                        @foreach ($documents as $item)
+                        <?php $__currentLoopData = $documents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td class="celda">{{ $loop->iteration }}</td>
-                                <td class="celda">{{ $item['description'] }}</td>
-                                <td class="celda">{{ $item['quantity'] }}</td>
-                                <td class="celda">{{ $item['number_full'] }}</td>
+                                <td class="celda"><?php echo e($loop->iteration); ?></td>
+                                <td class="celda"><?php echo e($item['description']); ?></td>
+                                <td class="celda"><?php echo e($item['quantity']); ?></td>
+                                <td class="celda"><?php echo e($item['number_full']); ?></td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
         </div>
-    @else
+    <?php else: ?>
         <div class="callout callout-info">
             <p>No se encontraron registros.</p>
         </div>
-    @endif
+    <?php endif; ?>
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\nuevedoce\Modules/Sales\Resources/views/cash/report_product_excel.blade.php ENDPATH**/ ?>

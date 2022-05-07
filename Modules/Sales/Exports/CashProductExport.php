@@ -11,26 +11,37 @@ class CashProductExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 
-    public function documents($documents) {
+    public function documents($documents)
+    {
         $this->documents = $documents;
         return $this;
     }
 
-    public function company($company) {
+    public function company($company)
+    {
         $this->company = $company;
         return $this;
     }
 
-    public function cash($cash) {
+    public function cash($cash)
+    {
         $this->cash = $cash;
         return $this;
     }
 
-    public function view(): View {
+    public function establishment($establishment)
+    {
+        $this->establishment = $establishment;
+        return $this;
+    }
+
+    public function view(): View
+    {
         return view('sales::cash.report_product_excel', [
-            'documents' => $this->documents,
-            'company'   => $this->company,
-            'cash'      => $this->cash
+            'documents'     => $this->documents,
+            'company'       => $this->company,
+            'cash'          => $this->cash,
+            'establishment' => $this->establishment
         ]);
     }
 }
