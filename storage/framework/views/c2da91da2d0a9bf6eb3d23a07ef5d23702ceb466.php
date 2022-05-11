@@ -52,6 +52,10 @@
             </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
+
+    <div class="mb-3  pb-0 d-flex flex-row align-items-center">
+        <div class="ml-auto"><?php echo e($commands->links()); ?></div>
+    </div>
     <script>
         document.addEventListener('livewire:load', function() {
 

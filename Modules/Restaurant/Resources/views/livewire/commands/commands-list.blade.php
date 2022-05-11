@@ -51,6 +51,10 @@
             </div>
         @endforeach
     </div>
+
+    <div class="mb-3  pb-0 d-flex flex-row align-items-center">
+        <div class="ml-auto">{{ $commands->links() }}</div>
+    </div>
     <script>
         document.addEventListener('livewire:load', function() {
 

@@ -113,6 +113,6 @@ class CommandsList extends Component
                 'rest_commands.has_igv',
                 'rest_commands.web_show'
             ])
-            ->paginate(20);
+            ->paginate(10);
     }
 }
