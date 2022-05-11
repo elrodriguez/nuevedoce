@@ -5,6 +5,7 @@ namespace Modules\Restaurant\Http\Livewire\Categories;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Inventory\Entities\InvCategory;
+use Modules\Restaurant\Entities\RestCategoryCommand;
 use Modules\Setting\Entities\SetModule;
 
 class CategoriesList extends Component
@@ -34,15 +35,14 @@ class CategoriesList extends Component
 
     public function getCategories()
     {
-        return InvCategory::where('description', 'like', '%' . $this->search . '%')
-            ->where('module_id', $this->module_id)
+        return RestCategoryCommand::where('description', 'like', '%' . $this->search . '%')
             ->paginate($this->show);
     }
 
     public function deleteCategory($id)
     {
         try {
-            InvCategory::find($id)->delete();
+            RestCategoryCommand::find($id)->delete();
             $res = 'success';
         } catch (\Illuminate\Database\QueryException $e) {
             $res = 'error';

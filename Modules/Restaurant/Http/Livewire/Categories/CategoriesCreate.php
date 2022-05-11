@@ -5,6 +5,7 @@ namespace Modules\Restaurant\Http\Livewire\Categories;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Inventory\Entities\InvCategory;
+use Modules\Restaurant\Entities\RestCategoryCommand;
 use Modules\Setting\Entities\SetModule;
 
 class CategoriesCreate extends Component
@@ -13,11 +14,9 @@ class CategoriesCreate extends Component
     public $status = true;
     public $category_id;
     public $categories = [];
-    public $module_id;
 
     public function mount()
     {
-        $this->module_id = SetModule::where('uuid', 'rest')->value('id');
         $this->categories = $this->getCategories();
     }
     public function render()
@@ -38,11 +37,10 @@ class CategoriesCreate extends Component
         }
 
 
-        InvCategory::create([
+        RestCategoryCommand::create([
             'category_id'   => $category_id,
             'description'   => $this->description,
-            'status'        => $this->status ? true : false,
-            'module_id'     => $this->module_id
+            'status'        => $this->status ? true : false
         ]);
 
         $this->clearForm();
@@ -58,8 +56,7 @@ class CategoriesCreate extends Component
 
     public function getCategories()
     {
-        $categories = InvCategory::where('module_id', $this->module_id)
-            ->whereNull('category_id')
+        $categories = RestCategoryCommand::whereNull('category_id')
             ->get();
 
         $data = [];
@@ -77,8 +74,7 @@ class CategoriesCreate extends Component
 
     public function getSubCategories($id)
     {
-        $subcategories = InvCategory::where('module_id', $this->module_id)
-            ->where('category_id', $id)
+        $subcategories = RestCategoryCommand::where('category_id', $id)
             ->get();
 
         $data = [];

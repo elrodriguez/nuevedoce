@@ -27,7 +27,7 @@ class ModulePermissionsTableSeeder extends Seeder
 
         $module = SetModule::create([
             'uuid' => 'rest',
-            'logo' => 'fal fa-burger-soda',
+            'logo' => 'fal fa-utensils',
             'label' => 'Restaurante',
             'destination_route' => 'restaurant_dashboard',
             'status' => true

@@ -11,5 +11,7 @@ return  [
     'tables'                    => 'Tables',
     'chairs'                    => 'Chairs',
     'occupied'                  => 'Occupied',
-    'floor'                     => 'Floor'
+    'floor'                     => 'Floor',
+    'includes_igv'              => 'includes IGV',
+    'show_website'              => 'Show on website'
 ];

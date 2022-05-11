@@ -37,7 +37,7 @@
                         type="button">Buscar</button>
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('restaurante_administracion_categorias_nuevo')): ?>
                         <a href="<?php echo e(route('restaurant_categories_create')); ?>"
-                            class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
+                            class="btn btn-success waves-effect waves-themed" type="button"><?php echo e(__('labels.new')); ?></a>
                     <?php endif; ?>
                 </div>
             </div>

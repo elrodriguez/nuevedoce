@@ -23,7 +23,7 @@ class CommandsController extends Controller
      */
     public function create()
     {
-        return view('restaurant::commands,create');
+        return view('restaurant::commands.create');
     }
 
 

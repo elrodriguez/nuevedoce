@@ -5,6 +5,7 @@ namespace Modules\Restaurant\Http\Livewire\Categories;
 use Illuminate\Support\Facades\Lang;
 use Livewire\Component;
 use Modules\Inventory\Entities\InvCategory;
+use Modules\Restaurant\Entities\RestCategoryCommand;
 use Modules\Setting\Entities\SetModule;
 
 class CategoriesEdit extends Component
@@ -25,7 +26,7 @@ class CategoriesEdit extends Component
         $this->module_id = SetModule::where('uuid', 'rest')->value('id');
         $this->categories = $this->getCategories();
 
-        $this->category = InvCategory::find($category_id);
+        $this->category = RestCategoryCommand::find($category_id);
 
         $this->category_id_old = $this->category->category_id;
         $this->description = $this->category->description;
@@ -63,8 +64,7 @@ class CategoriesEdit extends Component
 
     public function getCategories()
     {
-        $categories = InvCategory::where('module_id', $this->module_id)
-            ->whereNull('category_id')
+        $categories = RestCategoryCommand::whereNull('category_id')
             ->get();
 
         $data = [];
@@ -82,8 +82,7 @@ class CategoriesEdit extends Component
 
     public function getSubCategories($id)
     {
-        $subcategories = InvCategory::where('module_id', $this->module_id)
-            ->where('category_id', $id)
+        $subcategories = RestCategoryCommand::where('category_id', $id)
             ->get();
 
         $data = [];

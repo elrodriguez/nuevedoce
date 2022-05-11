@@ -11,5 +11,7 @@ return  [
     'tables'                    => 'Mesas',
     'chairs'                    => 'Sillas',
     'occupied'                  => 'Ocupado',
-    'floor'                     => 'Piso/Ubicación'
+    'floor'                     => 'Piso/Ubicación',
+    'includes_igv'              => 'Incluye IGV',
+    'show_website'              => 'Mostrar en la página web'
 ];

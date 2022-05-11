@@ -36,7 +36,7 @@
                         type="button">Buscar</button>
                     @can('restaurante_administracion_categorias_nuevo')
                         <a href="{{ route('restaurant_categories_create') }}"
-                            class="btn btn-success waves-effect waves-themed" type="button">Nuevo</a>
+                            class="btn btn-success waves-effect waves-themed" type="button">{{ __('labels.new') }}</a>
                     @endcan
                 </div>
             </div>
