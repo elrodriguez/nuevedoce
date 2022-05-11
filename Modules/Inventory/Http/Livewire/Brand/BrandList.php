@@ -14,13 +14,14 @@ class BrandList extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public function mount(){
+    public function mount()
+    {
         $this->show = 10;
     }
 
     public function render()
     {
-        return view('inventory::livewire.brand.brand-list',['brands'=>$this->getBrands()]);
+        return view('inventory::livewire.brand.brand-list', ['brands' => $this->getBrands()]);
     }
 
     public function brandSearch()
@@ -28,12 +29,14 @@ class BrandList extends Component
         $this->resetPage();
     }
 
-    public function getBrands(){
-        return InvBrand::where('description','like','%'.$this->search.'%')
+    public function getBrands()
+    {
+        return InvBrand::where('description', 'like', '%' . $this->search . '%')
             ->paginate($this->show);
     }
 
-    public function deleteBrand($id){
+    public function deleteBrand($id)
+    {
         try {
             InvBrand::find($id)->delete();
             $res = 'success';

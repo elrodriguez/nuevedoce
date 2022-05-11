@@ -14,14 +14,15 @@ class CategoryList extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public function mount(){
+    public function mount()
+    {
         $this->show = 10;
     }
 
     public function render()
     {
 
-        return view('inventory::livewire.category.category-list',['categories'=>$this->getCategories()]);
+        return view('inventory::livewire.category.category-list', ['categories' => $this->getCategories()]);
     }
 
     public function categorySearch()
@@ -29,12 +30,14 @@ class CategoryList extends Component
         $this->resetPage();
     }
 
-    public function getCategories(){
-        return InvCategory::where('description','like','%'.$this->search.'%')
+    public function getCategories()
+    {
+        return InvCategory::where('description', 'like', '%' . $this->search . '%')
             ->paginate($this->show);
     }
 
-    public function deleteCategory($id){
+    public function deleteCategory($id)
+    {
         try {
             InvCategory::find($id)->delete();
             $res = 'success';
@@ -42,7 +45,5 @@ class CategoryList extends Component
             $res = 'error';
         }
         $this->dispatchBrowserEvent('set-category-delete', ['res' => $res]);
-
     }
-
 }

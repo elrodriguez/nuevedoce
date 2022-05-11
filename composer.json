@@ -23,6 +23,7 @@
         "mpdf/mpdf": "^8.0.17",
         "mpdf/qrcode": "^1.2.0",
         "nwidart/laravel-modules": "^8.2",
+        "rap2hpoutre/laravel-log-viewer": "^2.2",
         "robrichards/xmlseclibs": "^3.1",
         "spatie/laravel-permission": "^5.1"
     },

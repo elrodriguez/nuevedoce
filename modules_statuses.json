@@ -7,5 +7,6 @@
     "Staff": true,
     "Sale": true,
     "Sales": true,
-    "Pharmacy": true
+    "Pharmacy": true,
+    "Restaurant": true
 }
