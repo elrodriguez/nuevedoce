@@ -1,12 +1,7 @@
 {
-    "System": true,
     "Setting": true,
     "Inventory": true,
     "TransferService": true,
-    "Lend": true,
     "Staff": true,
-    "Sale": true,
-    "Sales": true,
-    "Pharmacy": true,
-    "Restaurant": true
+    "Sales": true
 }
