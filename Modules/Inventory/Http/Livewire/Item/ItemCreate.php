@@ -56,10 +56,11 @@ class ItemCreate extends Component
 
     public $parts_item = [];
 
-    public function mount(){
-        $this->categories = InvCategory::where('status',true)->get();
-        $this->brands = InvBrand::where('status',true)->get();
-        $this->unit_measures = InvUnitMeasure::where('state',true)->get();
+    public function mount()
+    {
+        $this->categories = InvCategory::where('status', true)->get();
+        $this->brands = InvBrand::where('status', true)->get();
+        $this->unit_measures = InvUnitMeasure::where('state', true)->get();
     }
 
     public function render()
@@ -67,7 +68,8 @@ class ItemCreate extends Component
         return view('inventory::livewire.item.item-create');
     }
 
-    public function save(){
+    public function save()
+    {
 
         $this->validate([
             'name' => 'required|min:3|max:255',
@@ -81,7 +83,7 @@ class ItemCreate extends Component
             'images.*' => 'image|max:1024'
         ]);
 
-        if($this->part){
+        if ($this->part) {
             $this->number_parts = 0;
         }
 
@@ -93,13 +95,13 @@ class ItemCreate extends Component
             'width' => $this->width,
             'high' => $this->high,
             'long' => $this->long,
-            'number_parts' => ($this->number_parts == null?0:$this->number_parts),
+            'number_parts' => ($this->number_parts == null ? 0 : $this->number_parts),
             'status' => $this->status,
             'item_id' => $this->item_id,
             'category_id' => $this->category_id,
             'unit_measure_id' => $this->unit_measure_id,
             'brand_id' => $this->brand_id,
-            'person_create'=> Auth::user()->person_id
+            'person_create' => Auth::user()->person_id
         ]);
 
         InvKardex::create([
@@ -112,8 +114,8 @@ class ItemCreate extends Component
         ]);
 
         #Save item parts
-        if(count($this->parts_item) > 0){
-            foreach ($this->parts_item as $row){
+        if (count($this->parts_item) > 0) {
+            foreach ($this->parts_item as $row) {
                 InvItemPart::create([
                     'item_id'       => $this->item_save->id,
                     'part_id'       => $row['id'],
@@ -127,31 +129,32 @@ class ItemCreate extends Component
         $this->parts_item = [];
 
         $activity = new Activity;
-        $activity->modelOn(InvItem::class, $this->item_save->id,'inv_items');
+        $activity->modelOn(InvItem::class, $this->item_save->id, 'inv_items');
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('inventory_item_create'));
         $activity->logType('create');
         $activity->log('Se creó un nuevo Item');
         $activity->save();
 
-        if($this->image){
+        if ($this->image) {
             $this->extension_photo = $this->image->extension();
-
+            $route_img = 'item_images/Activo_' . $this->item_save->id . '/';
             InvItemFile::create([
-                'name' => $this->image->getClientOriginalName(),
-                'route' => 'items_images/'.$this->name.'/',
+                'name' => $this->item_save->id . '.' . $this->extension_photo,
+                'route' => $route_img . $this->item_save->id . '.' . $this->extension_photo,
                 'extension' => $this->extension_photo,
                 'item_id' => $this->item_save->id
             ]);
 
-            $this->image->storeAs('items_images/'.$this->name.'/', $this->item_save->id.'.'.$this->extension_photo,'public');
+            $this->image->storeAs($route_img, $this->item_save->id . '.' . $this->extension_photo, 'public');
         }
 
         $this->clearForm();
         $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_success')]);
     }
 
-    public function savePart(){
+    public function savePart()
+    {
 
         $this->validate([
             'part_text' => 'required|min:3',
@@ -159,7 +162,7 @@ class ItemCreate extends Component
             'amount' => 'required|integer|between:1,9999'
         ]);
 
-        if($this->number_parts > count($this->parts_item)) {
+        if ($this->number_parts > count($this->parts_item)) {
 
             if (!$this->part) {
                 $existe = false;
@@ -205,30 +208,32 @@ class ItemCreate extends Component
                 $this->amount = 1;
                 $this->dispatchBrowserEvent('set-item-save-not', ['msg' => Lang::get('inventory::labels.msg_0008'), 'part_count' => $this->parts_item_count]);
             }
-        }else{
+        } else {
             $this->dispatchBrowserEvent('set-item-save-not', ['msg' => Lang::get('inventory::labels.msg_0010'), 'part_count' => $this->parts_item_count]);
         }
     }
 
-    public function deletePart($id){
-        if(!$this->part){
+    public function deletePart($id)
+    {
+        if (!$this->part) {
             $parts_item_aux = [];
-            if(count($this->parts_item) > 0){
+            if (count($this->parts_item) > 0) {
                 foreach ($this->parts_item as $row) {
                     if ($row['id'] != $id) {
                         $parts_item_aux[] = $row;
-                    }else{
+                    } else {
                         $this->weight = $this->weight - ($row['weight'] * $row['amount']);
                     }
                 }
             }
             $this->parts_item = $parts_item_aux;
             $this->parts_item_count = count($this->parts_item);
-            $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_delete'), 'part_count'=> $this->parts_item_count]);
+            $this->dispatchBrowserEvent('set-item-save', ['msg' => Lang::get('inventory::labels.msg_delete'), 'part_count' => $this->parts_item_count]);
         }
     }
 
-    public function clearForm(){
+    public function clearForm()
+    {
         $this->name = null;
         $this->description = null;
         $this->part = false;

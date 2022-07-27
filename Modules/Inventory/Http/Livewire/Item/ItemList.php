@@ -11,6 +11,7 @@ use Modules\Inventory\Entities\InvItem;
 use Modules\Inventory\Imports\ItemsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Livewire\WithFileUploads;
+
 class ItemList extends Component
 {
     public $show;
@@ -23,13 +24,14 @@ class ItemList extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public function mount(){
+    public function mount()
+    {
         $this->show = 10;
     }
 
     public function render()
     {
-        return view('inventory::livewire.item.item-list', ['items'=>$this->getItems()]);
+        return view('inventory::livewire.item.item-list', ['items' => $this->getItems()]);
     }
 
     public function itemSearch()
@@ -37,9 +39,10 @@ class ItemList extends Component
         $this->resetPage();
     }
 
-    public function getItems(){
-        return InvItem::where('inv_items.name','like','%'.$this->search.'%')
-            ->leftJoin('inv_categories', 'category_id', 'inv_categories.id')
+    public function getItems()
+    {
+        return InvItem::where('inv_items.name', 'like', '%' . $this->search . '%')
+            ->leftJoin('inv_categories', 'inv_items.category_id', 'inv_categories.id')
             ->leftJoin('inv_brands', 'brand_id', 'inv_brands.id')
             ->leftJoin('inv_unit_measures', 'unit_measure_id', 'inv_unit_measures.id')
             ->select(
@@ -61,13 +64,14 @@ class ItemList extends Component
             ->paginate($this->show);
     }
 
-    public function deleteItem($id){
+    public function deleteItem($id)
+    {
         try {
             $item = InvItem::find($id);
 
             $activity = new activity;
             $activity->log('Se eliminó el item');
-            $activity->modelOn(InvItem::class,$id,'inv_item');
+            $activity->modelOn(InvItem::class, $id, 'inv_item');
             $activity->dataOld($item);
             $activity->logType('delete');
             $activity->causedBy(Auth::user());
@@ -81,12 +85,13 @@ class ItemList extends Component
         $this->dispatchBrowserEvent('set-item-delete', ['res' => $res]);
     }
 
-    public function import(){
+    public function import()
+    {
         //dd($this->file_excel);
         try {
-            if($this->file_excel){
-                
-                if(Excel::import(new ItemsImport, $this->file_excel)) {
+            if ($this->file_excel) {
+
+                if (Excel::import(new ItemsImport, $this->file_excel)) {
                     $this->loading_import = true;
                 } else {
                     $this->loading_import = false;
