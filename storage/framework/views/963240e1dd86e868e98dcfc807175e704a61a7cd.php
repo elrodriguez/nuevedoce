@@ -1,52 +1,94 @@
 <div>
     <div class="card mb-g rounded-top">
         <div class="card-body">
-            <form class="needs-validation {{ $errors->any()?'was-validated':'' }}" novalidate="">
+            <form class="needs-validation <?php echo e($errors->any()?'was-validated':''); ?>" novalidate="">
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="name">@lang('transferservice::labels.lbl_name') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="name"><?php echo app('translator')->get('transferservice::labels.lbl_name'); ?> <span class="text-danger">*</span> </label>
                         <input wire:model="name" type="text" class="form-control" id="name" required="">
-                        @error('name')
-                        <div class="invalid-feedback-2">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div class="invalid-feedback-2"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="address">@lang('transferservice::labels.lbl_address') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="address"><?php echo app('translator')->get('transferservice::labels.lbl_address'); ?> <span class="text-danger">*</span> </label>
                         <input wire:model="address" type="text" class="form-control" id="address" required="">
-                        @error('address')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['address'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="reference">@lang('transferservice::labels.lbl_reference') <span class="text-danger">*</span> </label>
+                        <label class="form-label" for="reference"><?php echo app('translator')->get('transferservice::labels.lbl_reference'); ?> <span class="text-danger">*</span> </label>
                         <input wire:model="reference" type="text" class="form-control" id="reference" required="">
-                        @error('reference')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['reference'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="col-md-2 mb-3" wire:ignore>
-                        <label class="form-label" for="latitude">@lang('transferservice::labels.lbl_latitude')</label>
+                        <label class="form-label" for="latitude"><?php echo app('translator')->get('transferservice::labels.lbl_latitude'); ?></label>
                         <input wire:model.defer="latitude" type="text" class="form-control" id="latitude">
-                        @error('latitude')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['latitude'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="col-md-2 mb-3" wire:ignore>
-                        <label class="form-label" for="longitude">@lang('transferservice::labels.lbl_longitude') </label>
+                        <label class="form-label" for="longitude"><?php echo app('translator')->get('transferservice::labels.lbl_longitude'); ?> </label>
                         <input wire:model.defer="longitude" type="text" class="form-control" id="longitude">
-                        @error('longitude')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['longitude'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">@lang('transferservice::labels.lbl_state') <span class="text-danger">*</span> </label>
+                        <label class="form-label"><?php echo app('translator')->get('transferservice::labels.lbl_state'); ?> <span class="text-danger">*</span> </label>
                         <div class="custom-control custom-checkbox">
                             <input wire:model="state" type="checkbox" class="custom-control-input" id="state" checked="">
-                            <label class="custom-control-label" for="state">@lang('transferservice::labels.lbl_active')</label>
+                            <label class="custom-control-label" for="state"><?php echo app('translator')->get('transferservice::labels.lbl_active'); ?></label>
                         </div>
-                        @error('state')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['state'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div class="invalid-feedback"><?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="col-md-12 mb-3">
                         <input id="pac-input" class="form-control" type="text" placeholder="Search Box"/>
@@ -57,16 +99,16 @@
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
-            <a href="{{ route('service_locals_index')}}" type="button" class="btn btn-secondary waves-effect waves-themed">@lang('transferservice::buttons.btn_list')</a>
-            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed">@lang('transferservice::buttons.btn_save')</button>
+            <a href="<?php echo e(route('service_locals_index')); ?>" type="button" class="btn btn-secondary waves-effect waves-themed"><?php echo app('translator')->get('transferservice::buttons.btn_list'); ?></a>
+            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed"><?php echo app('translator')->get('transferservice::buttons.btn_save'); ?></button>
         </div>
     </div>
     <script type="text/javascript">
         document.addEventListener('ser-locals-save', event => {
-            initApp.playSound('{{ url("themes/smart-admin/media/sound") }}', 'voice_on')
+            initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'voice_on')
             let box = bootbox.alert({
-                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'>{{ __('transferservice::labels.lbl_success')}}!</span>",
-                message: "<span><strong>{{__('transferservice::labels.lbl_excellent')}}... </strong>"+event.detail.msg+"</span>",
+                title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'><?php echo e(__('transferservice::labels.lbl_success')); ?>!</span>",
+                message: "<span><strong><?php echo e(__('transferservice::labels.lbl_excellent')); ?>... </strong>"+event.detail.msg+"</span>",
                 centerVertical: true,
                 className: "modal-alert",
                 closeButton: false
@@ -102,8 +144,8 @@
                 );
                 let valores = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
                 let latitudeLongitude = JSON.parse(valores);
-                @this.set('latitude', latitudeLongitude.lat);
-                @this.set('longitude', latitudeLongitude.lng);
+                window.livewire.find('<?php echo e($_instance->id); ?>').set('latitude', latitudeLongitude.lat);
+                window.livewire.find('<?php echo e($_instance->id); ?>').set('longitude', latitudeLongitude.lng);
                 infoWindow.open(map);
             });
 
@@ -174,3 +216,4 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMtl5gJVvCZucrsOuDomP9wJog5qopRiI&callback=initMap&libraries=places&v=weekly&channel=2" async></script>
 </div>
+<?php /**PATH C:\laragon\www\nuevedoce\Modules/TransferService\Resources/views/livewire/locals/locals-create.blade.php ENDPATH**/ ?>

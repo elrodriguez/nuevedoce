@@ -26,14 +26,14 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="longitude">@lang('transferservice::labels.lbl_latitude') <span class="text-danger">*</span> </label>
-                        <input wire:model="longitude" type="text" class="form-control" id="longitude" readonly>
+                        <input wire:model="longitude" type="text" class="form-control" id="longitude" >
                         @error('longitude')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="latitude">@lang('transferservice::labels.lbl_longitude') </label>
-                        <input wire:model="latitude" type="text" class="form-control" id="latitude" readonly>
+                        <input wire:model="latitude" type="text" class="form-control" id="latitude" >
                         @error('latitude')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -87,7 +87,7 @@
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: {{ $this->zoom_map }},
                 mapTypeControl: true,
-                mapTypeId: 'satellite',
+                //mapTypeId: 'satellite',
                 center: myLatlng,
             });
             // Create the initial InfoWindow.

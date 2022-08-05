@@ -26,7 +26,7 @@
                 </div>
                 <input wire:keydown.enter="localsSearch" wire:model.defer="search" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="{{__('transferservice::labels.lbl_type_here')}}">
                 <div class="input-group-append">
-                    <button wire:click="customersSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_search')</button>
+                    <button wire:click="localsSearch" class="btn btn-default waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_search')</button>
                     @can('serviciodetraslados_locales_nuevo')
                         <a href="{{ route('service_locals_create') }}" class="btn btn-success waves-effect waves-themed" type="button">@lang('transferservice::buttons.btn_new')</a>
                     @endcan
