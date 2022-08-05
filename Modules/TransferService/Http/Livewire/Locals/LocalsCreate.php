@@ -22,7 +22,8 @@ class LocalsCreate extends Component
         return view('transferservice::livewire.locals.locals-create');
     }
 
-    public function save(){
+    public function save()
+    {
         $this->validate([
             'name' => 'required|min:3|max:255',
             'address' => 'required|min:3|max:255',
@@ -33,14 +34,14 @@ class LocalsCreate extends Component
             'name' => $this->name,
             'address' => $this->address,
             'reference' => $this->reference,
-            //'longitude' => $this->longitude,
-            //'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
             'state' => $this->state,
             'person_create' =>  Auth::user()->person_id
         ]);
 
         $activity = new Activity;
-        $activity->modelOn(SerLocal::class,$local->id,'ser_locals');
+        $activity->modelOn(SerLocal::class, $local->id, 'ser_locals');
         $activity->causedBy(Auth::user());
         $activity->routeOn(route('service_locals_create'));
         $activity->logType('create');
@@ -51,7 +52,8 @@ class LocalsCreate extends Component
         $this->clearForm();
     }
 
-    public function clearForm(){
+    public function clearForm()
+    {
         $this->name = null;
         $this->address = null;
         $this->reference = null;

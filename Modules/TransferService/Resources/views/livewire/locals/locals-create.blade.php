@@ -26,14 +26,14 @@
                     </div>
                     <div class="col-md-2 mb-3" wire:ignore>
                         <label class="form-label" for="latitude">@lang('transferservice::labels.lbl_latitude')</label>
-                        <input wire:model.defer="latitude" type="text" class="form-control" id="latitude">
+                        <input wire:model="latitude" type="text" class="form-control" id="latitude">
                         @error('latitude')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-2 mb-3" wire:ignore>
                         <label class="form-label" for="longitude">@lang('transferservice::labels.lbl_longitude') </label>
-                        <input wire:model.defer="longitude" type="text" class="form-control" id="longitude">
+                        <input wire:model="longitude" type="text" class="form-control" id="longitude">
                         @error('longitude')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -49,7 +49,7 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <input id="pac-input" class="form-control" type="text" placeholder="Search Box"/>
+                        <input id="pac-input" class="form-control mt-3" type="text" placeholder="Search Box"/>
                         <div id="map" style="height: 400px;" wire:ignore></div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
         function initMap() {
             const myLatlng = { lat: -9.189967, lng: -75.015152 };
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 5,
+                zoom: 14,
                 mapTypeControl: true,
                 //mapTypeId: 'satellite',
                 center: myLatlng,

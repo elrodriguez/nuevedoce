@@ -45,10 +45,10 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                     </div>
-                    <div class="col-md-2 mb-3" wire:ignore>
-                        <label class="form-label" for="latitude"><?php echo app('translator')->get('transferservice::labels.lbl_latitude'); ?></label>
-                        <input wire:model="latitude" type="text" class="form-control" id="latitude">
-                        <?php $__errorArgs = ['latitude'];
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="longitude"><?php echo app('translator')->get('transferservice::labels.lbl_latitude'); ?> <span class="text-danger">*</span> </label>
+                        <input wire:model="longitude" type="text" class="form-control" id="longitude" >
+                        <?php $__errorArgs = ['longitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -59,10 +59,10 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                     </div>
-                    <div class="col-md-2 mb-3" wire:ignore>
-                        <label class="form-label" for="longitude"><?php echo app('translator')->get('transferservice::labels.lbl_longitude'); ?> </label>
-                        <input wire:model="longitude" type="text" class="form-control" id="longitude">
-                        <?php $__errorArgs = ['longitude'];
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="latitude"><?php echo app('translator')->get('transferservice::labels.lbl_longitude'); ?> </label>
+                        <input wire:model="latitude" type="text" class="form-control" id="latitude" >
+                        <?php $__errorArgs = ['latitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -90,21 +90,23 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <input id="pac-input" class="form-control mt-3" type="text" placeholder="Search Box"/>
-                        <div id="map" style="height: 400px;" wire:ignore></div>
-                    </div>
                 </div>
-                
+                <input
+                    id="pac-input"
+                    class="controls"
+                    type="text"
+                    placeholder="Search Box"
+                />
+                <div id="map" style="height: 400px;" wire:ignore></div>
             </form>
         </div>
         <div class="card-footer d-flex flex-row align-items-center">
             <a href="<?php echo e(route('service_locals_index')); ?>" type="button" class="btn btn-secondary waves-effect waves-themed"><?php echo app('translator')->get('transferservice::buttons.btn_list'); ?></a>
-            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed"><?php echo app('translator')->get('transferservice::buttons.btn_save'); ?></button>
+            <button wire:click="save" wire:loading.attr="disabled" type="button" class="btn btn-info ml-auto waves-effect waves-themed"><?php echo app('translator')->get('transferservice::buttons.btn_to_update'); ?></button>
         </div>
     </div>
     <script type="text/javascript">
-        document.addEventListener('ser-locals-save', event => {
+        document.addEventListener('ser-locals-edit', event => {
             initApp.playSound('<?php echo e(url("themes/smart-admin/media/sound")); ?>', 'voice_on')
             let box = bootbox.alert({
                 title: "<i class='fal fa-check-circle text-warning mr-2'></i> <span class='text-warning fw-500'><?php echo e(__('transferservice::labels.lbl_success')); ?>!</span>",
@@ -115,18 +117,24 @@ unset($__errorArgs, $__bag); ?>
             });
             box.find('.modal-content').css({'background-color': 'rgba(122, 85, 7, 0.5)'});
         });
+        document.addEventListener('livewire:load', function () {
+            if(<?php echo e($this->zoom_map); ?> == 5){
+                window.livewire.find('<?php echo e($_instance->id); ?>').set('latitude', '');
+                window.livewire.find('<?php echo e($_instance->id); ?>').set('longitude', '');
+            }
+        });
 
         function initMap() {
-            const myLatlng = { lat: -9.189967, lng: -75.015152 };
+            const myLatlng = { lat: <?php echo e($this->latitude); ?>, lng: <?php echo e($this->longitude); ?> };
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 14,
+                zoom: <?php echo e($this->zoom_map); ?>,
                 mapTypeControl: true,
                 //mapTypeId: 'satellite',
                 center: myLatlng,
             });
             // Create the initial InfoWindow.
             let infoWindow = new google.maps.InfoWindow({
-                content: "Haga clic en el mapa para obtener Lat / Lng!",
+                content: "Lat: <?php echo e($this->latitude); ?>, Lng:<?php echo e($this->longitude); ?>",
                 position: myLatlng,
             });
 
@@ -149,7 +157,6 @@ unset($__errorArgs, $__bag); ?>
                 infoWindow.open(map);
             });
 
-            //
             // Create the search box and link it to the UI element.
             const input = document.getElementById("pac-input");
             const searchBox = new google.maps.places.SearchBox(input);
@@ -216,4 +223,4 @@ unset($__errorArgs, $__bag); ?>
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMtl5gJVvCZucrsOuDomP9wJog5qopRiI&callback=initMap&libraries=places&v=weekly&channel=2" async></script>
 </div>
-<?php /**PATH C:\laragon\www\nuevedoce\Modules/TransferService\Resources/views/livewire/locals/locals-create.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\nuevedoce\Modules/TransferService\Resources/views/livewire/locals/locals-edit.blade.php ENDPATH**/ ?>
